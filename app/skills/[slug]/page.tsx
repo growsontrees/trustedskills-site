@@ -1,0 +1,306 @@
+import { getAllSkills, getSkillBySlug, TIER_CONFIG, PLATFORM_CONFIG } from "@/lib/skills";
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { CopyButton } from "@/components/CopyButton";
+import type { Metadata } from "next";
+
+interface Props {
+  params: { slug: string };
+}
+
+export async function generateStaticParams() {
+  const skills = getAllSkills();
+  return skills.map((skill) => ({ slug: skill.slug }));
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const skill = getSkillBySlug(params.slug);
+  if (!skill) return {};
+  return {
+    title: skill.name,
+    description: skill.description,
+    openGraph: {
+      title: `${skill.name} — TrustedSkills`,
+      description: skill.description,
+    },
+  };
+}
+
+export default function SkillDetailPage({ params }: Props) {
+  const skill = getSkillBySlug(params.slug);
+  if (!skill) notFound();
+
+  const tier = TIER_CONFIG[skill.verified];
+  const allSkills = getAllSkills();
+  const related = allSkills
+    .filter((s) => s.slug !== skill.slug && s.category === skill.category)
+    .slice(0, 3);
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="mb-6">
+        <Link
+          href="/skills"
+          className="text-sm text-gray-500 hover:text-gray-300 transition-colors flex items-center gap-1"
+        >
+          ← Back to Skills
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Main content */}
+        <div className="lg:col-span-2 space-y-8">
+          {/* Header */}
+          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+            <div className="flex items-start gap-4 mb-4">
+              <span className="text-5xl">{skill.emoji}</span>
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-wrap items-center gap-3 mb-1">
+                  <h1 className="text-2xl font-bold text-white">{skill.name}</h1>
+                  <div
+                    className={`inline-flex items-center gap-1.5 text-sm px-3 py-1 rounded-full border ${tier.bg} ${tier.border} ${tier.color}`}
+                  >
+                    <span>{tier.icon}</span>
+                    <span>{tier.label}</span>
+                  </div>
+                </div>
+                <div className="text-sm text-gray-500">
+                  by{" "}
+                  <span className="text-gray-300 font-medium">{skill.author}</span>
+                  {" · "}
+                  v{skill.version}
+                  {" · "}
+                  {skill.license}
+                </div>
+              </div>
+            </div>
+
+            <p className="text-gray-300 leading-relaxed mb-6">{skill.description}</p>
+
+            {/* Install command */}
+            <div className="bg-gray-950 border border-gray-700 rounded-xl p-4">
+              <div className="text-xs text-gray-500 mb-2 font-medium">Install Command</div>
+              <div className="flex items-center gap-3">
+                <div className="flex-1 font-mono text-sm text-emerald-400 min-w-0">
+                  <span className="text-gray-600 select-none">$ </span>
+                  {skill.installCmd}
+                </div>
+                <CopyButton text={skill.installCmd} label="Copy" />
+              </div>
+            </div>
+          </div>
+
+          {/* Tags */}
+          <div>
+            <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">Tags</h2>
+            <div className="flex flex-wrap gap-2">
+              {skill.tags.map((tag) => (
+                <Link
+                  key={tag}
+                  href={`/skills?q=${tag}`}
+                  className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition-colors font-mono"
+                >
+                  #{tag}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Requirements */}
+          {(skill.requires.bins.length > 0 ||
+            skill.requires.env.length > 0 ||
+            skill.requires.config.length > 0) && (
+            <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+              <h2 className="font-semibold text-white mb-4">Requirements</h2>
+              <div className="space-y-4">
+                {skill.requires.bins.length > 0 && (
+                  <div>
+                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-2">
+                      Required Binaries
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {skill.requires.bins.map((bin) => (
+                        <span
+                          key={bin}
+                          className="text-xs font-mono bg-gray-800 text-gray-300 px-2.5 py-1 rounded-md"
+                        >
+                          {bin}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {skill.requires.env.length > 0 && (
+                  <div>
+                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-2">
+                      Environment Variables
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {skill.requires.env.map((env) => (
+                        <span
+                          key={env}
+                          className="text-xs font-mono bg-orange-900/30 border border-orange-800 text-orange-300 px-2.5 py-1 rounded-md"
+                        >
+                          {env}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {skill.requires.config.length > 0 && (
+                  <div>
+                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-2">
+                      Config Keys
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {skill.requires.config.map((cfg) => (
+                        <span
+                          key={cfg}
+                          className="text-xs font-mono bg-blue-900/30 border border-blue-800 text-blue-300 px-2.5 py-1 rounded-md"
+                        >
+                          {cfg}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Related skills */}
+          {related.length > 0 && (
+            <div>
+              <h2 className="font-semibold text-white mb-4">Related Skills</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {related.map((s) => {
+                  const t = TIER_CONFIG[s.verified];
+                  return (
+                    <Link
+                      key={s.slug}
+                      href={`/skills/${s.slug}`}
+                      className="flex items-center gap-3 p-3 bg-gray-900 hover:bg-gray-800 border border-gray-800 hover:border-gray-700 rounded-xl transition-all"
+                    >
+                      <span className="text-2xl">{s.emoji}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-gray-200 text-sm truncate">{s.name}</div>
+                        <div className="text-xs text-gray-500">{t.icon} {t.label}</div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Sidebar */}
+        <div className="space-y-6">
+          {/* Metadata card */}
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+            <h2 className="font-semibold text-white mb-4">Details</h2>
+            <dl className="space-y-3 text-sm">
+              <div className="flex justify-between gap-2">
+                <dt className="text-gray-500">Version</dt>
+                <dd className="text-gray-300 font-mono">v{skill.version}</dd>
+              </div>
+              <div className="flex justify-between gap-2">
+                <dt className="text-gray-500">License</dt>
+                <dd className="text-gray-300">{skill.license}</dd>
+              </div>
+              <div className="flex justify-between gap-2">
+                <dt className="text-gray-500">Author</dt>
+                <dd className="text-gray-300">{skill.author}</dd>
+              </div>
+              <div className="flex justify-between gap-2">
+                <dt className="text-gray-500">Installs</dt>
+                <dd className="text-gray-300">
+                  {skill.installs >= 1000
+                    ? `${(skill.installs / 1000).toFixed(1)}k`
+                    : skill.installs}
+                </dd>
+              </div>
+              <div className="flex justify-between gap-2">
+                <dt className="text-gray-500">Updated</dt>
+                <dd className="text-gray-300">
+                  {new Date(skill.updated_at).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </dd>
+              </div>
+              <div className="flex justify-between gap-2">
+                <dt className="text-gray-500">Published</dt>
+                <dd className="text-gray-300">
+                  {new Date(skill.published_at).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </dd>
+              </div>
+            </dl>
+
+            {skill.repoUrl && (
+              <div className="mt-4 pt-4 border-t border-gray-800">
+                <a
+                  href={skill.repoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                  </svg>
+                  View Source
+                </a>
+              </div>
+            )}
+          </div>
+
+          {/* Platforms */}
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+            <h2 className="font-semibold text-white mb-3">Supported Platforms</h2>
+            <div className="flex flex-wrap gap-2">
+              {skill.platforms.map((platform) => {
+                const config = PLATFORM_CONFIG[platform] || {
+                  label: platform,
+                  color: "text-gray-400",
+                  bg: "bg-gray-800",
+                };
+                return (
+                  <span
+                    key={platform}
+                    className={`text-sm px-3 py-1.5 rounded-lg font-medium ${config.bg} ${config.color}`}
+                  >
+                    {config.label}
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Verification */}
+          <div
+            className={`border rounded-xl p-5 ${tier.bg} ${tier.border}`}
+          >
+            <h2 className="font-semibold text-white mb-2 flex items-center gap-2">
+              {tier.icon} {tier.label}
+            </h2>
+            <p className={`text-sm ${tier.color}`}>{tier.description}</p>
+          </div>
+
+          {/* Install again */}
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+            <h2 className="font-semibold text-white mb-3">Quick Install</h2>
+            <div className="font-mono text-xs text-emerald-400 bg-gray-950 rounded-lg p-3 mb-3 break-all">
+              {skill.installCmd}
+            </div>
+            <CopyButton text={skill.installCmd} label="Copy Command" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
