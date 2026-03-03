@@ -4,8 +4,8 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: '30 */6 * * *'  # Every 6h, offset 30min from registry scraper
-  workflow_dispatch:         # Manual trigger
+    - cron: '30 */6 * * *'  # Every 6h, 30min after registry scraper
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -26,19 +26,22 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Fetch latest skills index
+      - name: Fetch latest skills index from registry
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node scripts/fetch-index.mjs
 
       - name: Build static site
-        run: npm run build
+        run: npx next build
         env:
           NEXT_TELEMETRY_DISABLED: 1
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: pages deploy out --project-name=trustedskills --commit-dirty=true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        run: |
+          npx wrangler pages deploy out \
+            --project-name=trustedskills \
+            --commit-dirty=true \
+            --branch=main
