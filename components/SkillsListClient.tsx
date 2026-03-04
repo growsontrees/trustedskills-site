@@ -41,8 +41,10 @@ export function SkillsListClient({ skills, categories }: SkillsListClientProps) 
         (s) =>
           s.name.toLowerCase().includes(q) ||
           s.description.toLowerCase().includes(q) ||
-          s.tags.some((t) => t.toLowerCase().includes(q)) ||
-          s.author.toLowerCase().includes(q)
+          s.author.toLowerCase().includes(q) ||
+          s.category.toLowerCase().includes(q) ||
+          (s.tags && s.tags.some((t) => t.toLowerCase().includes(q))) ||
+          (s.platforms && s.platforms.some((p) => p.toLowerCase().includes(q)))
       );
     }
 

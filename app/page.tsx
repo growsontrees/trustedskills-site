@@ -4,15 +4,6 @@ import { SkillCard } from "@/components/SkillCard";
 import { PlatformSelector } from "@/components/PlatformSelector";
 import { HeroInstallCommand } from "@/components/HeroInstallCommand";
 
-const PLATFORM_PILLS = [
-  { emoji: "🦀", label: "OpenClaw" },
-  { emoji: "💬", label: "Claude Desktop" },
-  { emoji: "🤖", label: "OpenAI" },
-  { emoji: "🖱️", label: "Cursor" },
-  { emoji: "🔌", label: "MCP" },
-  { emoji: "📝", label: "VS Code" },
-];
-
 export default function HomePage() {
   const skills = getAllSkills();
   const featured = getFeaturedSkills();
@@ -31,11 +22,6 @@ export default function HomePage() {
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center gap-2 text-xs font-mono bg-purple-900/30 border border-purple-800/50 text-purple-300 px-3 py-1.5 rounded-full mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
-              Now in Beta · {stats.total_skills} skills · 5+ platforms
-            </div>
-
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
               <span className="text-white">The trusted registry for </span>
               <span className="text-gradient-primary">AI agent skills</span>
@@ -45,19 +31,6 @@ export default function HomePage() {
               Find, verify, and install skills for any AI agent platform.
               Cryptographically signed. Community reviewed.
             </p>
-
-            {/* Platform compatibility pills */}
-            <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
-              {PLATFORM_PILLS.map((pill) => (
-                <span
-                  key={pill.label}
-                  className="inline-flex items-center gap-1.5 text-xs bg-gray-900/80 border border-gray-700 text-gray-400 px-3 py-1.5 rounded-full"
-                >
-                  <span>{pill.emoji}</span>
-                  <span>{pill.label}</span>
-                </span>
-              ))}
-            </div>
 
             {/* Platform selector */}
             <div className="mb-8">
@@ -109,11 +82,11 @@ export default function HomePage() {
           {Object.entries(TIER_CONFIG).map(([tier, config]) => (
             <div
               key={tier}
+              title={config.description}
               className={`inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-full border ${config.bg} ${config.border} ${config.color}`}
             >
               <span>{config.icon}</span>
               <span className="font-medium">{config.label}</span>
-              <span className="text-gray-500 hidden sm:inline">— {config.description}</span>
             </div>
           ))}
         </div>
