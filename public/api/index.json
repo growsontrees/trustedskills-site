@@ -1,6 +1,6 @@
 {
   "$schema": "https://trustedskills.dev/schema/skills-index-v1.json",
-  "generated_at": "2026-03-04T00:30:13.589Z",
+  "generated_at": "2026-03-04T01:30:00Z",
   "schema_version": "1",
   "skills": [
     {
@@ -19,7 +19,7 @@
         "utilities"
       ],
       "category": "utilities",
-      "emoji": "🌤️",
+      "emoji": "\ud83c\udf24\ufe0f",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -54,7 +54,7 @@
         "ai"
       ],
       "category": "ai",
-      "emoji": "🖼️",
+      "emoji": "\ud83d\uddbc\ufe0f",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -91,7 +91,7 @@
         "openai"
       ],
       "category": "media",
-      "emoji": "🎙️",
+      "emoji": "\ud83c\udf99\ufe0f",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -130,7 +130,7 @@
         "debug"
       ],
       "category": "dev",
-      "emoji": "🏥",
+      "emoji": "\ud83c\udfe5",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -165,7 +165,7 @@
         "dev"
       ],
       "category": "dev",
-      "emoji": "🔨",
+      "emoji": "\ud83d\udd28",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -200,7 +200,7 @@
         "meta"
       ],
       "category": "utilities",
-      "emoji": "🧠",
+      "emoji": "\ud83e\udde0",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -235,7 +235,7 @@
         "integration"
       ],
       "category": "dev",
-      "emoji": "⚡",
+      "emoji": "\u26a1",
       "license": "MIT",
       "platforms": [
         "openclaw",
@@ -273,7 +273,7 @@
         "research"
       ],
       "category": "web",
-      "emoji": "🔍",
+      "emoji": "\ud83d\udd0d",
       "license": "MIT",
       "platforms": [
         "openclaw",
@@ -309,7 +309,7 @@
         "sandbox"
       ],
       "category": "dev",
-      "emoji": "💻",
+      "emoji": "\ud83d\udcbb",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -347,7 +347,7 @@
         "dev"
       ],
       "category": "dev",
-      "emoji": "🐙",
+      "emoji": "\ud83d\udc19",
       "license": "MIT",
       "platforms": [
         "openclaw",
@@ -386,7 +386,7 @@
         "data"
       ],
       "category": "data",
-      "emoji": "📄",
+      "emoji": "\ud83d\udcc4",
       "license": "Apache-2.0",
       "platforms": [
         "openclaw",
@@ -422,7 +422,7 @@
         "productivity"
       ],
       "category": "productivity",
-      "emoji": "📅",
+      "emoji": "\ud83d\udcc5",
       "license": "MIT",
       "platforms": [
         "openclaw",
@@ -463,7 +463,7 @@
         "stable-diffusion"
       ],
       "category": "media",
-      "emoji": "🍌",
+      "emoji": "\ud83c\udf4c",
       "license": "MIT",
       "platforms": [
         "openclaw",
@@ -497,7 +497,7 @@
         "dev-ops"
       ],
       "category": "coding",
-      "emoji": "🤝",
+      "emoji": "\ud83e\udd1d",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -520,7 +520,7 @@
     {
       "slug": "clawd-cursor",
       "name": "Clawd Cursor",
-      "description": "AI desktop agent — control any app on Windows/macOS from your OpenClaw agent. Send natural language tasks and it handles opening apps, clicking buttons, typing text, and navigating browsers.",
+      "description": "AI desktop agent \u2014 control any app on Windows/macOS from your OpenClaw agent. Send natural language tasks and it handles opening apps, clicking buttons, typing text, and navigating browsers.",
       "version": "0.6.3",
       "author": "AmrDab",
       "tags": [
@@ -532,7 +532,7 @@
         "macos"
       ],
       "category": "utilities",
-      "emoji": "🖱️",
+      "emoji": "\ud83d\uddb1\ufe0f",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -553,7 +553,7 @@
     {
       "slug": "nemp-memory",
       "name": "Nemp Memory",
-      "description": "Persistent local memory for AI agents. Save, recall, and search project decisions as local JSON. Zero cloud, zero infrastructure — works offline.",
+      "description": "Persistent local memory for AI agents. Save, recall, and search project decisions as local JSON. Zero cloud, zero infrastructure \u2014 works offline.",
       "version": "1.0.0",
       "author": "SukinShetty",
       "tags": [
@@ -564,7 +564,7 @@
         "offline"
       ],
       "category": "utilities",
-      "emoji": "🧠",
+      "emoji": "\ud83e\udde0",
       "license": "MIT",
       "platforms": [
         "openclaw",
@@ -597,7 +597,7 @@
         "code-review"
       ],
       "category": "data",
-      "emoji": "🔬",
+      "emoji": "\ud83d\udd2c",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -630,7 +630,7 @@
         "reddit"
       ],
       "category": "data",
-      "emoji": "🕷️",
+      "emoji": "\ud83d\udd77\ufe0f",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -665,7 +665,7 @@
         "transcription"
       ],
       "category": "media",
-      "emoji": "📱",
+      "emoji": "\ud83d\udcf1",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -701,7 +701,7 @@
         "worktree"
       ],
       "category": "coding",
-      "emoji": "🚀",
+      "emoji": "\ud83d\ude80",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -724,7 +724,7 @@
     {
       "slug": "xint",
       "name": "X Intelligence (xint)",
-      "description": "X Intelligence CLI — search, analyze, monitor, and engage on X/Twitter. Real-time search, AI-powered analysis, sentiment reports, bookmarks, trending topics, and following management.",
+      "description": "X Intelligence CLI \u2014 search, analyze, monitor, and engage on X/Twitter. Real-time search, AI-powered analysis, sentiment reports, bookmarks, trending topics, and following management.",
       "version": "1.0.0",
       "author": "0xNyk",
       "tags": [
@@ -737,7 +737,7 @@
         "sentiment"
       ],
       "category": "communication",
-      "emoji": "🐦",
+      "emoji": "\ud83d\udc26",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -770,7 +770,7 @@
         "rag"
       ],
       "category": "productivity",
-      "emoji": "🔖",
+      "emoji": "\ud83d\udd16",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -805,7 +805,7 @@
         "local"
       ],
       "category": "media",
-      "emoji": "🎨",
+      "emoji": "\ud83c\udfa8",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -840,7 +840,7 @@
         "progressive"
       ],
       "category": "utilities",
-      "emoji": "🔌",
+      "emoji": "\ud83d\udd0c",
       "license": "MIT",
       "platforms": [
         "openclaw",
@@ -873,7 +873,7 @@
         "notes"
       ],
       "category": "productivity",
-      "emoji": "📚",
+      "emoji": "\ud83d\udcda",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -906,7 +906,7 @@
         "real-time"
       ],
       "category": "utilities",
-      "emoji": "🕸️",
+      "emoji": "\ud83d\udd78\ufe0f",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -942,7 +942,7 @@
         "beautify"
       ],
       "category": "coding",
-      "emoji": "🎨",
+      "emoji": "\ud83c\udfa8",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -977,7 +977,7 @@
         "chinese"
       ],
       "category": "utilities",
-      "emoji": "🗂️",
+      "emoji": "\ud83d\uddc2\ufe0f",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1013,7 +1013,7 @@
         "blockchain"
       ],
       "category": "data",
-      "emoji": "🔭",
+      "emoji": "\ud83d\udd2d",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1048,7 +1048,7 @@
         "local"
       ],
       "category": "utilities",
-      "emoji": "🧩",
+      "emoji": "\ud83e\udde9",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1084,7 +1084,7 @@
         "residential"
       ],
       "category": "utilities",
-      "emoji": "🌐",
+      "emoji": "\ud83c\udf10",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1120,7 +1120,7 @@
         "local"
       ],
       "category": "data",
-      "emoji": "🧬",
+      "emoji": "\ud83e\uddec",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1155,7 +1155,7 @@
         "sprints"
       ],
       "category": "productivity",
-      "emoji": "📋",
+      "emoji": "\ud83d\udccb",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1191,7 +1191,7 @@
         "patchright"
       ],
       "category": "coding",
-      "emoji": "🎭",
+      "emoji": "\ud83c\udfad",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1214,7 +1214,7 @@
     {
       "slug": "faster-whisper",
       "name": "Faster Whisper",
-      "description": "Local speech-to-text using faster-whisper — 4-6x faster than OpenAI Whisper with identical accuracy. GPU acceleration, SRT/VTT/TTML subtitles, speaker diarization, and chapter detection.",
+      "description": "Local speech-to-text using faster-whisper \u2014 4-6x faster than OpenAI Whisper with identical accuracy. GPU acceleration, SRT/VTT/TTML subtitles, speaker diarization, and chapter detection.",
       "version": "1.5.1",
       "author": "ThePlasmak",
       "tags": [
@@ -1227,7 +1227,7 @@
         "local"
       ],
       "category": "media",
-      "emoji": "🎤",
+      "emoji": "\ud83c\udfa4",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1249,7 +1249,7 @@
     },
     {
       "slug": "learn",
-      "name": "Learn — Find & Install Skills",
+      "name": "Learn \u2014 Find & Install Skills",
       "description": "Discover, install, and manage AI agent skills from agentskill.sh. Search for capabilities mid-session, install extensions, and scan for security issues.",
       "version": "2.0.0",
       "author": "agentskill-sh",
@@ -1262,7 +1262,7 @@
         "agent"
       ],
       "category": "utilities",
-      "emoji": "📦",
+      "emoji": "\ud83d\udce6",
       "license": "MIT",
       "platforms": [
         "openclaw",
@@ -1296,7 +1296,7 @@
         "notification"
       ],
       "category": "utilities",
-      "emoji": "🔄",
+      "emoji": "\ud83d\udd04",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1334,7 +1334,7 @@
         "visualization"
       ],
       "category": "utilities",
-      "emoji": "🖥️",
+      "emoji": "\ud83d\udda5\ufe0f",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1359,7 +1359,7 @@
     {
       "slug": "telegram-voice-group",
       "name": "Telegram Voice Group",
-      "description": "Send voice bubble messages to Telegram groups and topics using Microsoft Edge-TTS. Context isolation per topic — different topics use different conversation histories.",
+      "description": "Send voice bubble messages to Telegram groups and topics using Microsoft Edge-TTS. Context isolation per topic \u2014 different topics use different conversation histories.",
       "version": "1.0.0",
       "author": "sanwecn",
       "tags": [
@@ -1372,7 +1372,7 @@
         "edge-tts"
       ],
       "category": "communication",
-      "emoji": "🔊",
+      "emoji": "\ud83d\udd0a",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1408,7 +1408,7 @@
         "grocery"
       ],
       "category": "productivity",
-      "emoji": "🍽️",
+      "emoji": "\ud83c\udf7d\ufe0f",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1443,7 +1443,7 @@
         "universal"
       ],
       "category": "data",
-      "emoji": "🔍",
+      "emoji": "\ud83d\udd0d",
       "license": "MIT",
       "platforms": [
         "openclaw",
@@ -1469,7 +1469,7 @@
     {
       "slug": "unbound-md",
       "name": "Unbound.md Human Services",
-      "description": "Access human services for autonomous agents — banking, employment, physical tasks, and more. Pay with USDC. No API key required.",
+      "description": "Access human services for autonomous agents \u2014 banking, employment, physical tasks, and more. Pay with USDC. No API key required.",
       "version": "1.0.0",
       "author": "lfglabs-dev",
       "tags": [
@@ -1481,7 +1481,7 @@
         "real-world"
       ],
       "category": "utilities",
-      "emoji": "🤝",
+      "emoji": "\ud83e\udd1d",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1498,68 +1498,230 @@
       "lastUpdated": "2026-02-13",
       "installs": 0,
       "verified": "community"
+    },
+    {
+      "slug": "ai-humanizer",
+      "name": "AI Humanizer",
+      "description": "Detect and remove AI writing patterns from text, making it sound natural and human. Based on 24 pattern detectors and 500+ vocabulary substitutions from Wikipedia's Signs of AI Writing guide.",
+      "version": "1.0.0",
+      "author": "brandonwise",
+      "homepage": "https://trustedskills.dev/skills/ai-humanizer",
+      "source_repo": "https://github.com/brandonwise/humanizer",
+      "tags": [
+        "humanizer",
+        "writing",
+        "ai-detection",
+        "rewrite",
+        "text",
+        "content"
+      ],
+      "category": "utilities",
+      "emoji": "\u270d\ufe0f",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "mcp"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install ai-humanizer",
+      "repoUrl": "https://github.com/brandonwise/humanizer",
+      "published_at": "2026-02-01T00:00:00Z",
+      "updated_at": "2026-02-27T00:00:00Z",
+      "stars": 10,
+      "language": "JavaScript",
+      "lastUpdated": "2026-02-27",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "obsidian-skills",
+      "name": "Obsidian Skills",
+      "description": "Teach your AI agent to work natively with Obsidian. Covers Markdown formatting rules, Bases (Obsidian's native database layer), JSON Canvas diagrams, and the Obsidian CLI for full vault automation. Works with any agent platform.",
+      "version": "1.0.0",
+      "author": "kepano",
+      "homepage": "https://trustedskills.dev/skills/obsidian-skills",
+      "source_repo": "https://github.com/kepano/obsidian-skills",
+      "tags": [
+        "obsidian",
+        "pkm",
+        "knowledge-management",
+        "notes",
+        "markdown",
+        "vault",
+        "second-brain"
+      ],
+      "category": "productivity",
+      "emoji": "\ud83d\udd2e",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "mcp",
+        "claude"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install obsidian-skills",
+      "repoUrl": "https://github.com/kepano/obsidian-skills",
+      "published_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-03-04T00:00:00Z",
+      "stars": 12072,
+      "language": null,
+      "lastUpdated": "2026-03-04",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "agent-second-brain",
+      "name": "Agent Second Brain",
+      "description": "Voice-note-to-knowledge-base pipeline. Send voice notes to Telegram \u2192 AI organizes them into a structured knowledge base with tasks in Todoist and daily reports. Features Ebbinghaus spaced-repetition decay, vault health scoring, and knowledge graph. Runs on OpenClaw.",
+      "version": "1.0.0",
+      "author": "smixs",
+      "homepage": "https://trustedskills.dev/skills/agent-second-brain",
+      "source_repo": "https://github.com/smixs/agent-second-brain",
+      "tags": [
+        "pkm",
+        "second-brain",
+        "obsidian",
+        "knowledge-management",
+        "telegram",
+        "todoist",
+        "spaced-repetition",
+        "memory"
+      ],
+      "category": "productivity",
+      "emoji": "\ud83e\udde0",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "claude"
+      ],
+      "requires": {
+        "bins": [
+          "python3"
+        ],
+        "env": [
+          "TELEGRAM_BOT_TOKEN",
+          "TODOIST_API_KEY"
+        ],
+        "config": []
+      },
+      "installCmd": "openclaw skills install agent-second-brain",
+      "repoUrl": "https://github.com/smixs/agent-second-brain",
+      "published_at": "2026-02-01T00:00:00Z",
+      "updated_at": "2026-03-03T00:00:00Z",
+      "stars": 152,
+      "language": "Python",
+      "lastUpdated": "2026-03-03",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "arrowhead",
+      "name": "Arrowhead \u2014 Obsidian Search",
+      "description": "Fast Obsidian-aware semantic search for AI agents. Query your Obsidian vault by content, tags, backlinks, and metadata. Makes your AI agent a true knowledge assistant \u2014 without sending vault data to the cloud.",
+      "version": "1.0.0",
+      "author": "totocaster",
+      "homepage": "https://trustedskills.dev/skills/arrowhead",
+      "source_repo": "https://github.com/totocaster/arrowhead",
+      "tags": [
+        "obsidian",
+        "search",
+        "pkm",
+        "knowledge-management",
+        "vault",
+        "local",
+        "second-brain"
+      ],
+      "category": "productivity",
+      "emoji": "\ud83c\udff9",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "mcp"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install arrowhead",
+      "repoUrl": "https://github.com/totocaster/arrowhead",
+      "published_at": "2026-02-01T00:00:00Z",
+      "updated_at": "2026-03-01T00:00:00Z",
+      "stars": 32,
+      "language": "Rust",
+      "lastUpdated": "2026-03-01",
+      "installs": 0,
+      "verified": "community"
     }
   ],
   "categories": [
     {
       "slug": "utilities",
       "name": "Utilities",
-      "emoji": "🔧",
-      "count": 13
+      "emoji": "\ud83d\udd27",
+      "count": 14
     },
     {
       "slug": "ai",
       "name": "AI & Models",
-      "emoji": "🤖",
+      "emoji": "\ud83e\udd16",
       "count": 1
     },
     {
       "slug": "media",
       "name": "Media & Audio",
-      "emoji": "🎬",
+      "emoji": "\ud83c\udfac",
       "count": 5
     },
     {
       "slug": "dev",
       "name": "Development",
-      "emoji": "💻",
+      "emoji": "\ud83d\udcbb",
       "count": 5
     },
     {
       "slug": "web",
       "name": "Web & Search",
-      "emoji": "🌐",
+      "emoji": "\ud83c\udf10",
       "count": 1
     },
     {
       "slug": "data",
       "name": "Data & Research",
-      "emoji": "📊",
+      "emoji": "\ud83d\udcca",
       "count": 6
     },
     {
       "slug": "productivity",
       "name": "Productivity",
-      "emoji": "⚡",
-      "count": 5
+      "emoji": "\u26a1",
+      "count": 8
     },
     {
       "slug": "communication",
       "name": "Communication",
-      "emoji": "💬",
+      "emoji": "\ud83d\udcac",
       "count": 2
     },
     {
       "slug": "coding",
       "name": "Coding",
-      "emoji": "🧑‍💻",
+      "emoji": "\ud83e\uddd1\u200d\ud83d\udcbb",
       "count": 4
     }
   ],
   "stats": {
-    "total_skills": 42,
+    "total_skills": 46,
     "total_installs": 26150,
-    "total_authors": 31,
-    "last_updated": "2026-03-04T00:30:13.589Z"
+    "total_authors": 35,
+    "last_updated": "2026-03-04T01:30:00Z"
   }
 }
