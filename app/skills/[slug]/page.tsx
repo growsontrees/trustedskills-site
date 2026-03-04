@@ -271,30 +271,7 @@ export default function SkillDetailPage({ params }: Props) {
             )}
           </div>
 
-          {/* Platforms */}
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-            <h2 className="font-semibold text-white mb-3">Supported Platforms</h2>
-            <div className="flex flex-wrap gap-2">
-              {skill.platforms.map((platform) => {
-                const config = PLATFORM_CONFIG[platform] || {
-                  label: platform,
-                  color: "text-gray-400",
-                  bg: "bg-gray-800",
-                };
-                return (
-                  <span
-                    key={platform}
-                    className={`text-sm px-3 py-1.5 rounded-lg font-medium ${config.bg} ${config.color}`}
-                  >
-                    {config.label}
-                  </span>
-                );
-              })}
-            </div>
-            <p className="text-xs text-gray-600 mt-3">
-              Tabs above show install instructions for each platform, including MCP config blocks.
-            </p>
-          </div>
+
 
           {/* Verification */}
           <div
