@@ -55,3 +55,172 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #475569;
 }
+
+/* ── Doc Article Content Styling ──────────────────────────────────────────── */
+.doc-content {
+  color: #d1d5db; /* gray-300 */
+  line-height: 1.75;
+  font-size: 0.9375rem;
+}
+
+.doc-content h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f9fafb;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #1f2937;
+}
+
+.doc-content h2:first-child {
+  margin-top: 0;
+}
+
+.doc-content h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #f3f4f6;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.doc-content h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e5e7eb;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.doc-content p {
+  margin-bottom: 1.25rem;
+}
+
+.doc-content ul,
+.doc-content ol {
+  margin-bottom: 1.25rem;
+  padding-left: 1.5rem;
+}
+
+.doc-content ul {
+  list-style-type: disc;
+}
+
+.doc-content ol {
+  list-style-type: decimal;
+}
+
+.doc-content li {
+  margin-bottom: 0.4rem;
+  padding-left: 0.25rem;
+}
+
+.doc-content li::marker {
+  color: #6b7280;
+}
+
+.doc-content strong {
+  font-weight: 600;
+  color: #f9fafb;
+}
+
+.doc-content em {
+  font-style: italic;
+  color: #e5e7eb;
+}
+
+.doc-content a {
+  color: #a78bfa;
+  text-decoration: underline;
+  text-decoration-color: #6d28d9;
+  text-underline-offset: 2px;
+  transition: color 0.15s;
+}
+
+.doc-content a:hover {
+  color: #c4b5fd;
+}
+
+.doc-content code {
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-size: 0.85em;
+  background: #111827;
+  border: 1px solid #374151;
+  color: #a78bfa;
+  padding: 0.15em 0.4em;
+  border-radius: 0.3em;
+}
+
+.doc-content pre {
+  background: #030712;
+  border: 1px solid #1f2937;
+  border-radius: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+.doc-content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #34d399;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.doc-content blockquote {
+  border-left: 3px solid #7c3aed;
+  padding-left: 1.25rem;
+  margin: 1.5rem 0;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.doc-content .table-container {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.doc-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.doc-content thead tr {
+  background: #111827;
+}
+
+.doc-content th {
+  text-align: left;
+  padding: 0.625rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b7280;
+  border-bottom: 1px solid #1f2937;
+}
+
+.doc-content td {
+  padding: 0.625rem 1rem;
+  border-bottom: 1px solid #111827;
+  color: #d1d5db;
+  vertical-align: top;
+}
+
+.doc-content tr:last-child td {
+  border-bottom: none;
+}
+
+.doc-content tbody tr:hover {
+  background: #0f172a;
+}
+
+.doc-content hr {
+  border: none;
+  border-top: 1px solid #1f2937;
+  margin: 2rem 0;
+}
