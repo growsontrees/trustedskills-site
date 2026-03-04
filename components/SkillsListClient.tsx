@@ -173,7 +173,7 @@ export function SkillsListClient({
                   type="search"
                   value={query}
                   onChange={(e) => handleQueryChange(e.target.value)}
-                  placeholder="Filter skills..."
+                  placeholder="Search skills..."
                   className="w-full bg-gray-900 border border-gray-700 focus:border-purple-600 rounded-lg pl-9 pr-3 py-2 text-sm text-gray-200 placeholder-gray-600 outline-none transition-colors"
                 />
               </div>
@@ -264,15 +264,56 @@ export function SkillsListClient({
             <div className="text-center py-20">
               <div className="text-4xl mb-4">🔍</div>
               <h3 className="text-lg font-semibold text-gray-300 mb-2">No skills found</h3>
-              <p className="text-gray-500 text-sm">
+              <p className="text-gray-500 text-sm mb-6">
                 Try adjusting your search or filters.
               </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <a
+                  href="https://github.com/growsontrees/trustedskills-registry/issues/new?template=skill-request.md&title=Skill+Request:+&labels=skill-request"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-purple-900/50 hover:bg-purple-800/60 border border-purple-700 text-purple-300 text-sm rounded-lg transition-colors"
+                >
+                  💡 Request a skill
+                </a>
+                <a
+                  href="/submit"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 text-sm rounded-lg transition-colors"
+                >
+                  📦 Submit a skill
+                </a>
+              </div>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
               {filtered.map((skill) => (
                 <SkillCard key={skill.slug} skill={skill} />
               ))}
+            </div>
+          )}
+
+          {/* Can't find CTA — always shown below results */}
+          {filtered.length > 0 && (
+            <div className="mt-12 pt-8 border-t border-gray-800 text-center">
+              <p className="text-gray-500 text-sm mb-4">
+                Can&#39;t find what you need?
+              </p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <a
+                  href="https://github.com/growsontrees/trustedskills-registry/issues/new?template=skill-request.md&title=Skill+Request:+&labels=skill-request"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-purple-900/50 hover:bg-purple-800/60 border border-purple-700 text-purple-300 text-sm rounded-lg transition-colors"
+                >
+                  💡 Request a skill
+                </a>
+                <a
+                  href="/submit"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 text-sm rounded-lg transition-colors"
+                >
+                  📦 Submit a skill
+                </a>
+              </div>
             </div>
           )}
         </div>
