@@ -1,6 +1,6 @@
 {
   "$schema": "https://trustedskills.dev/schema/skills-index-v1.json",
-  "generated_at": "2026-03-04T06:43:26.605Z",
+  "generated_at": "2026-03-04T12:52:20.231Z",
   "schema_version": "1",
   "skills": [
     {
@@ -39,7 +39,10 @@
       "stars": 0,
       "language": null,
       "installs": 2890,
-      "verified": "verified"
+      "verified": "verified",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "github-assistant",
@@ -113,7 +116,151 @@
       "stars": 0,
       "language": null,
       "installs": 980,
-      "verified": "verified"
+      "verified": "verified",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
+    },
+    {
+      "slug": "content-humanizer",
+      "name": "Content Humanizer",
+      "description": "Rewrites AI-generated content to sound natural, human, and conversational. Removes AI clichés, varies sentence structure, adds personality and real-world grounding.",
+      "category": "utilities",
+      "platforms": [
+        "openclaw",
+        "mcp",
+        "claude"
+      ],
+      "author": "trustedskills",
+      "version": "1.0.0",
+      "verified": "verified",
+      "installCmd": "openclaw skills install content-humanizer",
+      "repoUrl": "https://github.com/growsontrees/trustedskills-registry",
+      "stars": 0,
+      "language": "JavaScript",
+      "tags": [
+        "humanizer",
+        "writing",
+        "ai-content",
+        "rewrite",
+        "natural-language"
+      ],
+      "lastUpdated": "2026-03-04",
+      "installs": 0,
+      "emoji": "✍️",
+      "homepage": "https://trustedskills.dev/skills/content-humanizer",
+      "source_repo": "https://github.com/growsontrees/trustedskills-registry",
+      "license": "MIT",
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "published_at": "2026-03-04T10:00:00Z",
+      "updated_at": "2026-03-04T10:00:00Z",
+      "verifiedCommit": "ca6047d4dc086c8531e4525be5f24d2bbcc50432",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/growsontrees/trustedskills-registry/archive/ca6047d4dc086c8531e4525be5f24d2bbcc50432.tar.gz"
+    },
+    {
+      "slug": "seo-eeat-checker",
+      "name": "SEO EEAT Checker",
+      "description": "Audits content for Google's E-E-A-T signals (Experience, Expertise, Authoritativeness, Trustworthiness). Adds author bios, last-updated dates, real-world examples, FAQ schema, and trust signals to articles.",
+      "category": "seo",
+      "platforms": [
+        "openclaw",
+        "mcp",
+        "claude"
+      ],
+      "author": "trustedskills",
+      "version": "1.0.0",
+      "verified": "verified",
+      "installCmd": "openclaw skills install seo-eeat-checker",
+      "repoUrl": "https://github.com/growsontrees/trustedskills-registry",
+      "stars": 0,
+      "language": "JavaScript",
+      "tags": [
+        "seo",
+        "eeat",
+        "content",
+        "schema",
+        "author",
+        "trustworthiness",
+        "google"
+      ],
+      "lastUpdated": "2026-03-04",
+      "installs": 0,
+      "emoji": "🎯",
+      "homepage": "https://trustedskills.dev/skills/seo-eeat-checker",
+      "source_repo": "https://github.com/growsontrees/trustedskills-registry",
+      "license": "MIT",
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "published_at": "2026-03-04T10:00:00Z",
+      "updated_at": "2026-03-04T10:00:00Z",
+      "verifiedCommit": "ca6047d4dc086c8531e4525be5f24d2bbcc50432",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/growsontrees/trustedskills-registry/archive/ca6047d4dc086c8531e4525be5f24d2bbcc50432.tar.gz"
+    },
+    {
+      "slug": "cloudflare-pages-deploy",
+      "name": "Cloudflare Pages Deploy",
+      "description": "Deploy Next.js static sites to Cloudflare Pages via Wrangler when not GitHub-connected. Handles build, deploy, URL verification, and common build errors.",
+      "category": "dev",
+      "platforms": [
+        "openclaw"
+      ],
+      "author": "trustedskills",
+      "version": "1.0.0",
+      "verified": "verified",
+      "installCmd": "openclaw skills install cloudflare-pages-deploy",
+      "repoUrl": "https://github.com/growsontrees/trustedskills-registry",
+      "stars": 0,
+      "language": "Bash",
+      "tags": [
+        "cloudflare",
+        "pages",
+        "wrangler",
+        "deploy",
+        "nextjs",
+        "ci-cd"
+      ],
+      "lastUpdated": "2026-03-04",
+      "installs": 0,
+      "verifiedCommit": "ca6047d4dc086c8531e4525be5f24d2bbcc50432",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/growsontrees/trustedskills-registry/archive/ca6047d4dc086c8531e4525be5f24d2bbcc50432.tar.gz"
+    },
+    {
+      "slug": "nextjs-static-content",
+      "name": "Next.js Static Content Builder",
+      "description": "Safely generate HTML content for Next.js static export TypeScript files. Prevents template literal errors, handles shell var escaping, and pre-expands map() calls.",
+      "category": "dev",
+      "platforms": [
+        "openclaw"
+      ],
+      "author": "trustedskills",
+      "version": "1.0.0",
+      "verified": "verified",
+      "installCmd": "openclaw skills install nextjs-static-content",
+      "repoUrl": "https://github.com/growsontrees/trustedskills-registry",
+      "stars": 0,
+      "language": "TypeScript",
+      "tags": [
+        "nextjs",
+        "typescript",
+        "template-literal",
+        "static-export",
+        "build"
+      ],
+      "lastUpdated": "2026-03-04",
+      "installs": 0,
+      "verifiedCommit": "ca6047d4dc086c8531e4525be5f24d2bbcc50432",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/growsontrees/trustedskills-registry/archive/ca6047d4dc086c8531e4525be5f24d2bbcc50432.tar.gz"
     },
     {
       "slug": "pdf-reader",
@@ -187,7 +334,10 @@
       "stars": 0,
       "language": null,
       "installs": 420,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "nano-banana-prompts",
@@ -222,7 +372,10 @@
       "language": "TypeScript",
       "lastUpdated": "2026-03-03",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "c7424860398f1890398cad4136934a09f3ff4167",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/YouMind-OpenLab/nano-banana-pro-prompts-recommend-skill/archive/c7424860398f1890398cad4136934a09f3ff4167.tar.gz"
     },
     {
       "slug": "team-tasks",
@@ -257,7 +410,10 @@
       "language": "Python",
       "lastUpdated": "2026-03-03",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "c9ef7384a1ae9005f3744e3f8be8449fcf8903b1",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/win4r/team-tasks/archive/c9ef7384a1ae9005f3744e3f8be8449fcf8903b1.tar.gz"
     },
     {
       "slug": "clawd-cursor",
@@ -290,7 +446,10 @@
       "language": "TypeScript",
       "lastUpdated": "2026-03-03",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "abf959aea1142e1d8011a137fbff7af53fe5c49b",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/AmrDab/clawd-cursor/archive/abf959aea1142e1d8011a137fbff7af53fe5c49b.tar.gz"
     },
     {
       "slug": "nemp-memory",
@@ -323,7 +482,10 @@
       "language": "PowerShell",
       "lastUpdated": "2026-03-03",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "5f3e48af5129d00fb28c7e8b27e03aeb3b89ed28",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/SukinShetty/Nemp-memory/archive/5f3e48af5129d00fb28c7e8b27e03aeb3b89ed28.tar.gz"
     },
     {
       "slug": "github-explorer",
@@ -355,7 +517,10 @@
       "language": null,
       "lastUpdated": "2026-03-02",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "91674af894b50d50859106298cf618c2471768fc",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/blessonism/github-explorer-skill/archive/91674af894b50d50859106298cf618c2471768fc.tar.gz"
     },
     {
       "slug": "decodo-scraper",
@@ -390,7 +555,10 @@
       "language": "Python",
       "lastUpdated": "2026-03-03",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "16e1f63758a23a4237594307c902cc2bd06ab400",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/Decodo/decodo-openclaw-skill/archive/16e1f63758a23a4237594307c902cc2bd06ab400.tar.gz"
     },
     {
       "slug": "youtube-to-shorts",
@@ -426,7 +594,10 @@
       "language": null,
       "lastUpdated": "2026-02-06",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "e18b1aa6bdc79192f9f83d7eb4ce161cb988b41e",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/uxjoseph/youtube-to-shorts/archive/e18b1aa6bdc79192f9f83d7eb4ce161cb988b41e.tar.gz"
     },
     {
       "slug": "claude-code-dispatch",
@@ -461,7 +632,10 @@
       "language": "Shell",
       "lastUpdated": "2026-03-03",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "c323fd714bdd91f6cb784414d973391bfd7660ea",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/win4r/claude-code-dispatch/archive/c323fd714bdd91f6cb784414d973391bfd7660ea.tar.gz"
     },
     {
       "slug": "xint",
@@ -495,7 +669,10 @@
       "language": "TypeScript",
       "lastUpdated": "2026-03-03",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "c8ddaf145471dd41d67b77c857bc9c624435817e",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/0xNyk/xint/archive/c8ddaf145471dd41d67b77c857bc9c624435817e.tar.gz"
     },
     {
       "slug": "karakeep-semantic",
@@ -530,7 +707,10 @@
       "language": "TypeScript",
       "lastUpdated": "2026-03-03",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "ed1fa2d4d26af7cf4a4222ba74e4d0c099932c48",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/jamesbrooksco/karakeep-semantic-search/archive/ed1fa2d4d26af7cf4a4222ba74e4d0c099932c48.tar.gz"
     },
     {
       "slug": "comfyui-zimage",
@@ -565,7 +745,10 @@
       "language": "Python",
       "lastUpdated": "2026-01-23",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "6d203bc7b47d808ad1c970d51996f0059fd5db19",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/norsizu/comfyui-zimage-skill/archive/6d203bc7b47d808ad1c970d51996f0059fd5db19.tar.gz"
     },
     {
       "slug": "agentic-mcp",
@@ -599,7 +782,10 @@
       "language": "TypeScript",
       "lastUpdated": "2026-02-08",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7d7ebbed34aeb6fead9a7f3c1904e47b937567c1",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/cablate/Agentic-MCP-Skill/archive/7d7ebbed34aeb6fead9a7f3c1904e47b937567c1.tar.gz"
     },
     {
       "slug": "openclaw-loom",
@@ -631,7 +817,10 @@
       "language": "TypeScript",
       "lastUpdated": "2026-02-25",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "2c0f2be96a1d8f1a7e71556d3975fcc000ac4c0f",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/pepicrft/openclaw-plugin-loom/archive/2c0f2be96a1d8f1a7e71556d3975fcc000ac4c0f.tar.gz"
     },
     {
       "slug": "matrix-agents",
@@ -667,7 +856,10 @@
       "language": "Shell",
       "lastUpdated": "2026-02-25",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7c2ba65fddd86f4cb4677ad7f15ca0b3c3d50c62",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/zscole/matrix-agents/archive/7c2ba65fddd86f4cb4677ad7f15ca0b3c3d50c62.tar.gz"
     },
     {
       "slug": "gitpretty",
@@ -702,7 +894,10 @@
       "language": "Shell",
       "lastUpdated": "2026-03-03",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "a5c772e6a1f726d1549068db3e2150f126c599ee",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/nirholas/gitpretty/archive/a5c772e6a1f726d1549068db3e2150f126c599ee.tar.gz"
     },
     {
       "slug": "wechat-dedup",
@@ -737,7 +932,10 @@
       "language": "Python",
       "lastUpdated": "2026-02-09",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "71aed8ba9f28f7ce85bf541e84f4e501fac3d9ad",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/rolandwonglonam/wechat-dedup/archive/71aed8ba9f28f7ce85bf541e84f4e501fac3d9ad.tar.gz"
     },
     {
       "slug": "defillama-watchdog",
@@ -773,7 +971,10 @@
       "language": "Python",
       "lastUpdated": "2026-02-11",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "03c5cb221dff68d18abef2f1310c676b2a771ab6",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/Neros0/defillama-watchdog/archive/03c5cb221dff68d18abef2f1310c676b2a771ab6.tar.gz"
     },
     {
       "slug": "qras",
@@ -808,7 +1009,10 @@
       "language": "Python",
       "lastUpdated": "2026-02-09",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "a1b6e5a05e981f7bd9f3bf8a4e0f00c229c37046",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/anvie/qras/archive/a1b6e5a05e981f7bd9f3bf8a4e0f00c229c37046.tar.gz"
     },
     {
       "slug": "human-browser",
@@ -844,7 +1048,10 @@
       "language": "JavaScript",
       "lastUpdated": "2026-03-03",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "2a0d02632d3e33d629f9e1d57df3579e6196f7a8",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/al1enjesus/human-browser/archive/2a0d02632d3e33d629f9e1d57df3579e6196f7a8.tar.gz"
     },
     {
       "slug": "personal-genomics",
@@ -880,7 +1087,10 @@
       "language": "Python",
       "lastUpdated": "2026-02-09",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "9ea4c8c73bc201f45e39b694a88d714d871f9f9a",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/wkyleg/personal-genomics/archive/9ea4c8c73bc201f45e39b694a88d714d871f9f9a.tar.gz"
     },
     {
       "slug": "jira-ai",
@@ -915,7 +1125,10 @@
       "language": "TypeScript",
       "lastUpdated": "2026-02-24",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "51fce8c03c8b94396f38ab048bdb4318ad2a61ed",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/festoinc/jira-ai/archive/51fce8c03c8b94396f38ab048bdb4318ad2a61ed.tar.gz"
     },
     {
       "slug": "playwright-undetected",
@@ -951,7 +1164,10 @@
       "language": "Python",
       "lastUpdated": "2026-01-13",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "c02dd1099da4f92e9e66758e54988704e9a315f3",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/dalbit-mir/playwright-undetected-skill/archive/c02dd1099da4f92e9e66758e54988704e9a315f3.tar.gz"
     },
     {
       "slug": "faster-whisper",
@@ -987,7 +1203,10 @@
       "language": "Python",
       "lastUpdated": "2026-03-01",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "1c8d6a682c56813a540640babe49d9b270ea708c",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/ThePlasmak/faster-whisper/archive/1c8d6a682c56813a540640babe49d9b270ea708c.tar.gz"
     },
     {
       "slug": "learn",
@@ -1021,7 +1240,10 @@
       "language": null,
       "lastUpdated": "2026-02-28",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "3d9ae7bedea5055a42947eead863951c424face0",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/agentskill-sh/learn/archive/3d9ae7bedea5055a42947eead863951c424face0.tar.gz"
     },
     {
       "slug": "restart-guard",
@@ -1059,7 +1281,10 @@
       "language": "Python",
       "lastUpdated": "2026-03-02",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "96c32cf27648d1227bf3ad43c489b26f8b2e7703",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/Zjianru/restart-guard/archive/96c32cf27648d1227bf3ad43c489b26f8b2e7703.tar.gz"
     },
     {
       "slug": "glance-dashboard",
@@ -1096,7 +1321,10 @@
       "language": "TypeScript",
       "lastUpdated": "2026-03-01",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "976e11b23c9c000165cffde80f80c32ab6f408e0",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/acfranzen/glance/archive/976e11b23c9c000165cffde80f80c32ab6f408e0.tar.gz"
     },
     {
       "slug": "telegram-voice-group",
@@ -1133,7 +1361,10 @@
       "language": "JavaScript",
       "lastUpdated": "2026-02-19",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "55ab139d8379fd5f576820e6437ba29bf31d7f05",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/sanwecn/telegram-voice-group/archive/55ab139d8379fd5f576820e6437ba29bf31d7f05.tar.gz"
     },
     {
       "slug": "feast",
@@ -1168,7 +1399,10 @@
       "language": "Python",
       "lastUpdated": "2026-02-22",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "eed0e6a1e8b45fee0ac92120de32e49d2136cf47",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/smadgerano/feast/archive/eed0e6a1e8b45fee0ac92120de32e49d2136cf47.tar.gz"
     },
     {
       "slug": "agent-deep-research",
@@ -1206,7 +1440,10 @@
       "language": "Python",
       "lastUpdated": "2026-02-25",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "1b90f0df29b3053b9599ff0c9ffe1a3ababe321c",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/24601/agent-deep-research/archive/1b90f0df29b3053b9599ff0c9ffe1a3ababe321c.tar.gz"
     },
     {
       "slug": "unbound-md",
@@ -1239,7 +1476,10 @@
       "language": "TypeScript",
       "lastUpdated": "2026-02-13",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "5ef4071485d06b3516b9a5b8507ec279045e8877",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/lfglabs-dev/unbound.md/archive/5ef4071485d06b3516b9a5b8507ec279045e8877.tar.gz"
     },
     {
       "slug": "ai-humanizer",
@@ -1277,7 +1517,10 @@
       "language": "JavaScript",
       "lastUpdated": "2026-02-27",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "42b871f290247e6c1c144de63eb7f11c372603bd",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/brandonwise/humanizer/archive/42b871f290247e6c1c144de63eb7f11c372603bd.tar.gz"
     },
     {
       "slug": "obsidian-skills",
@@ -1317,7 +1560,10 @@
       "language": null,
       "lastUpdated": "2026-03-04",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "bb9ec95e1b59c3471bd6fd77a78a4042430bfac3",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/kepano/obsidian-skills/archive/bb9ec95e1b59c3471bd6fd77a78a4042430bfac3.tar.gz"
     },
     {
       "slug": "agent-second-brain",
@@ -1362,7 +1608,10 @@
       "language": "Python",
       "lastUpdated": "2026-03-03",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "625f0b37d008db1f8f699943c4073d421f6283f4",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/smixs/agent-second-brain/archive/625f0b37d008db1f8f699943c4073d421f6283f4.tar.gz"
     },
     {
       "slug": "arrowhead",
@@ -1401,7 +1650,10 @@
       "language": "Rust",
       "lastUpdated": "2026-03-01",
       "installs": 0,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "d0dd9b7c25450ae483b732801a4c9237163e1a48",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/totocaster/arrowhead/archive/d0dd9b7c25450ae483b732801a4c9237163e1a48.tar.gz"
     },
     {
       "slug": "1password",
@@ -1429,7 +1681,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254469,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "apple-notes",
@@ -1457,7 +1712,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254469,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "apple-reminders",
@@ -1485,7 +1743,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254469,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "bear-notes",
@@ -1513,7 +1774,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254469,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "blogwatcher",
@@ -1541,7 +1805,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254469,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "blucli",
@@ -1569,7 +1836,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254469,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "bluebubbles",
@@ -1599,7 +1869,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254470,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "camsnap",
@@ -1627,7 +1900,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254470,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "clawhub",
@@ -1655,7 +1931,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254470,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "coding-agent",
@@ -1683,7 +1962,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254470,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "discord",
@@ -1713,7 +1995,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254469,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "eightctl",
@@ -1741,7 +2026,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254469,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "gemini",
@@ -1769,7 +2057,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254469,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "gh-issues",
@@ -1797,7 +2088,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254469,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "gifgrep",
@@ -1825,7 +2119,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254469,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "github",
@@ -1853,7 +2150,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254469,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "gog",
@@ -1881,7 +2181,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254469,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "goplaces",
@@ -1909,7 +2212,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254469,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "himalaya",
@@ -1937,7 +2243,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254470,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "imsg",
@@ -1965,7 +2274,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254470,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "mcporter",
@@ -1993,7 +2305,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254470,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "model-usage",
@@ -2021,7 +2336,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254470,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "nano-banana-pro",
@@ -2049,7 +2367,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254470,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "nano-pdf",
@@ -2077,7 +2398,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254470,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "notion",
@@ -2105,7 +2429,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254470,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "obsidian",
@@ -2133,7 +2460,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254471,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "openai-whisper-api",
@@ -2161,7 +2491,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254471,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "openai-whisper",
@@ -2189,7 +2522,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254471,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "openhue",
@@ -2217,7 +2553,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254471,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "oracle",
@@ -2245,7 +2584,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254471,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "ordercli",
@@ -2273,7 +2615,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254471,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "peekaboo",
@@ -2301,7 +2646,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254471,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "sag",
@@ -2329,7 +2677,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254471,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "session-logs",
@@ -2360,7 +2711,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254471,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "sherpa-onnx-tts",
@@ -2388,7 +2742,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254472,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "slack",
@@ -2418,7 +2775,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254472,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "songsee",
@@ -2446,7 +2806,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254472,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "sonoscli",
@@ -2474,7 +2837,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254472,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "spotify-player",
@@ -2502,7 +2868,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254472,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "summarize",
@@ -2530,7 +2899,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254472,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "things-mac",
@@ -2558,7 +2930,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254472,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "tmux",
@@ -2586,7 +2961,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254472,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "trello",
@@ -2614,7 +2992,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254472,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "video-frames",
@@ -2642,7 +3023,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254472,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "voice-call",
@@ -2670,7 +3054,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254472,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "wacli",
@@ -2698,7 +3085,10 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254472,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "xurl",
@@ -2726,7 +3116,755 @@
       "updated_at": "2026-03-03T04:43:07Z",
       "installs": 0,
       "stars": 254472,
-      "verified": "community"
+      "verified": "community",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
+    },
+    {
+      "slug": "google-analytics-mcp",
+      "name": "Google Analytics MCP",
+      "description": "Connect Google Analytics 4 to Claude, Cursor, and other MCP clients. Query GA4 traffic, user behavior, and conversion data using natural language. Supports 200+ dimensions and metrics via the GA Data API.",
+      "version": "1.0.0",
+      "author": "surendranb",
+      "homepage": "https://trustedskills.dev/skills/google-analytics-mcp",
+      "source_repo": "https://github.com/surendranb/google-analytics-mcp",
+      "tags": [
+        "google-analytics",
+        "ga4",
+        "analytics",
+        "seo",
+        "reporting",
+        "data"
+      ],
+      "category": "seo",
+      "emoji": "📊",
+      "license": "MIT",
+      "platforms": [
+        "mcp",
+        "claude",
+        "cursor",
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "python3"
+        ],
+        "env": [
+          "GOOGLE_APPLICATION_CREDENTIALS",
+          "GA4_PROPERTY_ID"
+        ],
+        "config": []
+      },
+      "installCmd": "pip install google-analytics-mcp",
+      "repoUrl": "https://github.com/surendranb/google-analytics-mcp",
+      "published_at": "2026-03-04T00:00:00Z",
+      "updated_at": "2026-03-04T00:00:00Z",
+      "stars": 185,
+      "language": "Python",
+      "installs": 0,
+      "verified": "community",
+      "lastUpdated": "2026-03-04",
+      "verifiedCommit": "791103c9b3c50d1074947c16b912e20e8db59433",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/surendranb/google-analytics-mcp/archive/791103c9b3c50d1074947c16b912e20e8db59433.tar.gz"
+    },
+    {
+      "slug": "gsc-mcp",
+      "name": "Google Search Console MCP",
+      "description": "Connect Google Search Console to Claude, Cursor, and other AI clients. Query search analytics, inspect URLs, manage sitemaps, and find indexing issues through natural language. 460+ stars, 19 tools.",
+      "version": "1.0.0",
+      "author": "AminForou",
+      "homepage": "https://trustedskills.dev/skills/gsc-mcp",
+      "source_repo": "https://github.com/AminForou/mcp-gsc",
+      "tags": [
+        "google-search-console",
+        "gsc",
+        "seo",
+        "search-analytics",
+        "indexing",
+        "sitemap"
+      ],
+      "category": "seo",
+      "emoji": "🔍",
+      "license": "MIT",
+      "platforms": [
+        "mcp",
+        "claude",
+        "cursor",
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "python3"
+        ],
+        "env": [
+          "GSC_CREDENTIALS_PATH"
+        ],
+        "config": []
+      },
+      "installCmd": "git clone https://github.com/AminForou/mcp-gsc.git && cd mcp-gsc && pip install -r requirements.txt",
+      "repoUrl": "https://github.com/AminForou/mcp-gsc",
+      "published_at": "2026-03-04T00:00:00Z",
+      "updated_at": "2026-03-04T00:00:00Z",
+      "stars": 460,
+      "language": "Python",
+      "installs": 0,
+      "verified": "community",
+      "lastUpdated": "2026-03-04",
+      "verifiedCommit": "87258d86b38ddf4b55e3c3c019c32b21c73aa223",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/AminForou/mcp-gsc/archive/87258d86b38ddf4b55e3c3c019c32b21c73aa223.tar.gz"
+    },
+    {
+      "slug": "search-console-mcp",
+      "name": "Search Console MCP (GSC + GA4 + Bing)",
+      "description": "All-in-one MCP server combining Google Search Console, Google Analytics 4, and Bing Webmaster Tools. Built-in SEO intelligence: opportunity matrix, cannibalization detection, anomaly alerts. Zero-config multi-account.",
+      "version": "1.13.2",
+      "author": "saurabhsharma2u",
+      "homepage": "https://trustedskills.dev/skills/search-console-mcp",
+      "source_repo": "https://github.com/saurabhsharma2u/search-console-mcp",
+      "tags": [
+        "google-search-console",
+        "ga4",
+        "bing",
+        "seo",
+        "analytics",
+        "reporting",
+        "mcp"
+      ],
+      "category": "seo",
+      "emoji": "🔎",
+      "license": "MIT",
+      "platforms": [
+        "mcp",
+        "claude",
+        "cursor",
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "node"
+        ],
+        "env": [
+          "GOOGLE_APPLICATION_CREDENTIALS"
+        ],
+        "config": []
+      },
+      "installCmd": "npx -y search-console-mcp",
+      "repoUrl": "https://github.com/saurabhsharma2u/search-console-mcp",
+      "published_at": "2026-03-04T00:00:00Z",
+      "updated_at": "2026-03-04T00:00:00Z",
+      "stars": 35,
+      "language": "JavaScript",
+      "installs": 0,
+      "verified": "community",
+      "lastUpdated": "2026-03-04",
+      "verifiedCommit": "c2460fa4ee09be2420448c4fab4d9dc1af48cc6a",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/saurabhsharma2u/search-console-mcp/archive/c2460fa4ee09be2420448c4fab4d9dc1af48cc6a.tar.gz"
+    },
+    {
+      "slug": "claude-seo",
+      "name": "Claude SEO Suite",
+      "description": "Complete SEO skill suite for Claude Code — 11 skills covering technical SEO, content, schema, competitor analysis, images, geo, and more.",
+      "version": "latest",
+      "author": "AgriciDaniel",
+      "homepage": "https://trustedskills.dev/skills/claude-seo",
+      "source_repo": "https://github.com/AgriciDaniel/claude-seo",
+      "tags": [
+        "seo",
+        "technical-seo",
+        "content",
+        "schema",
+        "competitor-analysis",
+        "collection"
+      ],
+      "category": "seo",
+      "type": "collection",
+      "skillCount": 11,
+      "emoji": "🔍",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "claude"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "git clone https://github.com/AgriciDaniel/claude-seo && cd claude-seo && ./install.sh",
+      "repoUrl": "https://github.com/AgriciDaniel/claude-seo",
+      "published_at": "2026-03-04T00:00:00Z",
+      "updated_at": "2026-03-04T00:00:00Z",
+      "stars": 1518,
+      "language": "Python",
+      "installs": 0,
+      "verified": "community",
+      "lastUpdated": "2026-03-04",
+      "verifiedCommit": "323e105ac84abeab4c5d294f9e464a734d6cbd79",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/AgriciDaniel/claude-seo/archive/323e105ac84abeab4c5d294f9e464a734d6cbd79.tar.gz"
+    },
+    {
+      "slug": "seo-audit",
+      "name": "SEO Audit",
+      "description": "Full website SEO audit with parallel subagent delegation. Crawls up to 500 pages, detects business type, delegates to 6 specialists, generates health score.",
+      "version": "1.0.0",
+      "author": "AgriciDaniel",
+      "homepage": "https://trustedskills.dev/skills/seo-audit",
+      "source_repo": "https://github.com/AgriciDaniel/claude-seo",
+      "tags": [
+        "seo",
+        "audit",
+        "technical-seo",
+        "crawl",
+        "health-score",
+        "subagents"
+      ],
+      "category": "seo",
+      "emoji": "🔍",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "claude"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install seo-audit",
+      "repoUrl": "https://github.com/AgriciDaniel/claude-seo",
+      "published_at": "2026-03-04T00:00:00Z",
+      "updated_at": "2026-03-04T00:00:00Z",
+      "stars": 1518,
+      "language": "Python",
+      "installs": 0,
+      "verified": "community",
+      "lastUpdated": "2026-03-04",
+      "collectionSlug": "claude-seo",
+      "collectionName": "Claude SEO Suite",
+      "verifiedCommit": "323e105ac84abeab4c5d294f9e464a734d6cbd79",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/AgriciDaniel/claude-seo/archive/323e105ac84abeab4c5d294f9e464a734d6cbd79.tar.gz"
+    },
+    {
+      "slug": "seo-competitor-pages",
+      "name": "SEO Competitor Pages",
+      "description": "Generate SEO-optimized competitor comparison and alternatives pages. Covers \"X vs Y\" layouts, \"alternatives to X\" pages, feature matrices, schema markup, and conversion optimization.",
+      "version": "1.0.0",
+      "author": "AgriciDaniel",
+      "homepage": "https://trustedskills.dev/skills/seo-competitor-pages",
+      "source_repo": "https://github.com/AgriciDaniel/claude-seo",
+      "tags": [
+        "seo",
+        "competitor-analysis",
+        "comparison-pages",
+        "content",
+        "conversion"
+      ],
+      "category": "seo",
+      "emoji": "🔍",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "claude"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install seo-competitor-pages",
+      "repoUrl": "https://github.com/AgriciDaniel/claude-seo",
+      "published_at": "2026-03-04T00:00:00Z",
+      "updated_at": "2026-03-04T00:00:00Z",
+      "stars": 1518,
+      "language": "Python",
+      "installs": 0,
+      "verified": "community",
+      "lastUpdated": "2026-03-04",
+      "collectionSlug": "claude-seo",
+      "collectionName": "Claude SEO Suite",
+      "verifiedCommit": "323e105ac84abeab4c5d294f9e464a734d6cbd79",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/AgriciDaniel/claude-seo/archive/323e105ac84abeab4c5d294f9e464a734d6cbd79.tar.gz"
+    },
+    {
+      "slug": "seo-content",
+      "name": "SEO Content",
+      "description": "Content quality and E-E-A-T analysis with AI citation readiness assessment.",
+      "version": "1.0.0",
+      "author": "AgriciDaniel",
+      "homepage": "https://trustedskills.dev/skills/seo-content",
+      "source_repo": "https://github.com/AgriciDaniel/claude-seo",
+      "tags": [
+        "seo",
+        "content",
+        "eeat",
+        "ai-citation",
+        "readability",
+        "content-quality"
+      ],
+      "category": "seo",
+      "emoji": "🔍",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "claude"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install seo-content",
+      "repoUrl": "https://github.com/AgriciDaniel/claude-seo",
+      "published_at": "2026-03-04T00:00:00Z",
+      "updated_at": "2026-03-04T00:00:00Z",
+      "stars": 1518,
+      "language": "Python",
+      "installs": 0,
+      "verified": "community",
+      "lastUpdated": "2026-03-04",
+      "collectionSlug": "claude-seo",
+      "collectionName": "Claude SEO Suite",
+      "verifiedCommit": "323e105ac84abeab4c5d294f9e464a734d6cbd79",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/AgriciDaniel/claude-seo/archive/323e105ac84abeab4c5d294f9e464a734d6cbd79.tar.gz"
+    },
+    {
+      "slug": "seo-geo",
+      "name": "SEO GEO",
+      "description": "Optimize content for AI Overviews (formerly SGE), ChatGPT web search, Perplexity, and other AI-powered search experiences. Generative Engine Optimization (GEO) analysis including brand mention signals, AI crawler accessibility, llms.txt compliance, passage-level citability scoring, and platform-specific optimization.",
+      "version": "1.0.0",
+      "author": "AgriciDaniel",
+      "homepage": "https://trustedskills.dev/skills/seo-geo",
+      "source_repo": "https://github.com/AgriciDaniel/claude-seo",
+      "tags": [
+        "seo",
+        "geo",
+        "ai-overviews",
+        "generative-engine-optimization",
+        "llms-txt",
+        "perplexity",
+        "chatgpt"
+      ],
+      "category": "seo",
+      "emoji": "🔍",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "claude"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install seo-geo",
+      "repoUrl": "https://github.com/AgriciDaniel/claude-seo",
+      "published_at": "2026-03-04T00:00:00Z",
+      "updated_at": "2026-03-04T00:00:00Z",
+      "stars": 1518,
+      "language": "Python",
+      "installs": 0,
+      "verified": "community",
+      "lastUpdated": "2026-03-04",
+      "collectionSlug": "claude-seo",
+      "collectionName": "Claude SEO Suite",
+      "verifiedCommit": "323e105ac84abeab4c5d294f9e464a734d6cbd79",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/AgriciDaniel/claude-seo/archive/323e105ac84abeab4c5d294f9e464a734d6cbd79.tar.gz"
+    },
+    {
+      "slug": "seo-hreflang",
+      "name": "SEO Hreflang",
+      "description": "Hreflang and international SEO audit, validation, and generation. Detects common mistakes, validates language/region codes, and generates correct hreflang implementations.",
+      "version": "1.0.0",
+      "author": "AgriciDaniel",
+      "homepage": "https://trustedskills.dev/skills/seo-hreflang",
+      "source_repo": "https://github.com/AgriciDaniel/claude-seo",
+      "tags": [
+        "seo",
+        "hreflang",
+        "international-seo",
+        "i18n",
+        "multi-language",
+        "multi-region"
+      ],
+      "category": "seo",
+      "emoji": "🔍",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "claude"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install seo-hreflang",
+      "repoUrl": "https://github.com/AgriciDaniel/claude-seo",
+      "published_at": "2026-03-04T00:00:00Z",
+      "updated_at": "2026-03-04T00:00:00Z",
+      "stars": 1518,
+      "language": "Python",
+      "installs": 0,
+      "verified": "community",
+      "lastUpdated": "2026-03-04",
+      "collectionSlug": "claude-seo",
+      "collectionName": "Claude SEO Suite",
+      "verifiedCommit": "323e105ac84abeab4c5d294f9e464a734d6cbd79",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/AgriciDaniel/claude-seo/archive/323e105ac84abeab4c5d294f9e464a734d6cbd79.tar.gz"
+    },
+    {
+      "slug": "seo-images",
+      "name": "SEO Images",
+      "description": "Image optimization analysis for SEO and performance. Checks alt text, file sizes, formats, responsive images, lazy loading, and CLS prevention.",
+      "version": "1.0.0",
+      "author": "AgriciDaniel",
+      "homepage": "https://trustedskills.dev/skills/seo-images",
+      "source_repo": "https://github.com/AgriciDaniel/claude-seo",
+      "tags": [
+        "seo",
+        "images",
+        "alt-text",
+        "webp",
+        "performance",
+        "cls",
+        "lazy-loading"
+      ],
+      "category": "seo",
+      "emoji": "🔍",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "claude"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install seo-images",
+      "repoUrl": "https://github.com/AgriciDaniel/claude-seo",
+      "published_at": "2026-03-04T00:00:00Z",
+      "updated_at": "2026-03-04T00:00:00Z",
+      "stars": 1518,
+      "language": "Python",
+      "installs": 0,
+      "verified": "community",
+      "lastUpdated": "2026-03-04",
+      "collectionSlug": "claude-seo",
+      "collectionName": "Claude SEO Suite",
+      "verifiedCommit": "323e105ac84abeab4c5d294f9e464a734d6cbd79",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/AgriciDaniel/claude-seo/archive/323e105ac84abeab4c5d294f9e464a734d6cbd79.tar.gz"
+    },
+    {
+      "slug": "seo-page",
+      "name": "SEO Page",
+      "description": "Deep single-page SEO analysis covering on-page elements, content quality, technical meta tags, schema, images, and performance.",
+      "version": "1.0.0",
+      "author": "AgriciDaniel",
+      "homepage": "https://trustedskills.dev/skills/seo-page",
+      "source_repo": "https://github.com/AgriciDaniel/claude-seo",
+      "tags": [
+        "seo",
+        "on-page-seo",
+        "page-analysis",
+        "meta-tags",
+        "schema",
+        "performance"
+      ],
+      "category": "seo",
+      "emoji": "🔍",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "claude"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install seo-page",
+      "repoUrl": "https://github.com/AgriciDaniel/claude-seo",
+      "published_at": "2026-03-04T00:00:00Z",
+      "updated_at": "2026-03-04T00:00:00Z",
+      "stars": 1518,
+      "language": "Python",
+      "installs": 0,
+      "verified": "community",
+      "lastUpdated": "2026-03-04",
+      "collectionSlug": "claude-seo",
+      "collectionName": "Claude SEO Suite",
+      "verifiedCommit": "323e105ac84abeab4c5d294f9e464a734d6cbd79",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/AgriciDaniel/claude-seo/archive/323e105ac84abeab4c5d294f9e464a734d6cbd79.tar.gz"
+    },
+    {
+      "slug": "seo-plan",
+      "name": "SEO Plan",
+      "description": "Strategic SEO planning for new or existing websites. Industry-specific templates, competitive analysis, content strategy, and implementation roadmap.",
+      "version": "1.0.0",
+      "author": "AgriciDaniel",
+      "homepage": "https://trustedskills.dev/skills/seo-plan",
+      "source_repo": "https://github.com/AgriciDaniel/claude-seo",
+      "tags": [
+        "seo",
+        "strategy",
+        "planning",
+        "content-strategy",
+        "roadmap",
+        "competitive-analysis"
+      ],
+      "category": "seo",
+      "emoji": "🔍",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "claude"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install seo-plan",
+      "repoUrl": "https://github.com/AgriciDaniel/claude-seo",
+      "published_at": "2026-03-04T00:00:00Z",
+      "updated_at": "2026-03-04T00:00:00Z",
+      "stars": 1518,
+      "language": "Python",
+      "installs": 0,
+      "verified": "community",
+      "lastUpdated": "2026-03-04",
+      "collectionSlug": "claude-seo",
+      "collectionName": "Claude SEO Suite",
+      "verifiedCommit": "323e105ac84abeab4c5d294f9e464a734d6cbd79",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/AgriciDaniel/claude-seo/archive/323e105ac84abeab4c5d294f9e464a734d6cbd79.tar.gz"
+    },
+    {
+      "slug": "seo-programmatic",
+      "name": "SEO Programmatic",
+      "description": "Programmatic SEO planning and analysis for pages generated at scale from data sources. Covers template engines, URL patterns, internal linking automation, thin content safeguards, and index bloat prevention.",
+      "version": "1.0.0",
+      "author": "AgriciDaniel",
+      "homepage": "https://trustedskills.dev/skills/seo-programmatic",
+      "source_repo": "https://github.com/AgriciDaniel/claude-seo",
+      "tags": [
+        "seo",
+        "programmatic-seo",
+        "scale",
+        "templates",
+        "thin-content",
+        "index-management"
+      ],
+      "category": "seo",
+      "emoji": "🔍",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "claude"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install seo-programmatic",
+      "repoUrl": "https://github.com/AgriciDaniel/claude-seo",
+      "published_at": "2026-03-04T00:00:00Z",
+      "updated_at": "2026-03-04T00:00:00Z",
+      "stars": 1518,
+      "language": "Python",
+      "installs": 0,
+      "verified": "community",
+      "lastUpdated": "2026-03-04",
+      "collectionSlug": "claude-seo",
+      "collectionName": "Claude SEO Suite",
+      "verifiedCommit": "323e105ac84abeab4c5d294f9e464a734d6cbd79",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/AgriciDaniel/claude-seo/archive/323e105ac84abeab4c5d294f9e464a734d6cbd79.tar.gz"
+    },
+    {
+      "slug": "seo-schema",
+      "name": "SEO Schema",
+      "description": "Detect, validate, and generate Schema.org structured data. JSON-LD format preferred.",
+      "version": "1.0.0",
+      "author": "AgriciDaniel",
+      "homepage": "https://trustedskills.dev/skills/seo-schema",
+      "source_repo": "https://github.com/AgriciDaniel/claude-seo",
+      "tags": [
+        "seo",
+        "schema",
+        "structured-data",
+        "json-ld",
+        "rich-results",
+        "schema-org"
+      ],
+      "category": "seo",
+      "emoji": "🔍",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "claude"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install seo-schema",
+      "repoUrl": "https://github.com/AgriciDaniel/claude-seo",
+      "published_at": "2026-03-04T00:00:00Z",
+      "updated_at": "2026-03-04T00:00:00Z",
+      "stars": 1518,
+      "language": "Python",
+      "installs": 0,
+      "verified": "community",
+      "lastUpdated": "2026-03-04",
+      "collectionSlug": "claude-seo",
+      "collectionName": "Claude SEO Suite",
+      "verifiedCommit": "323e105ac84abeab4c5d294f9e464a734d6cbd79",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/AgriciDaniel/claude-seo/archive/323e105ac84abeab4c5d294f9e464a734d6cbd79.tar.gz"
+    },
+    {
+      "slug": "seo-sitemap",
+      "name": "SEO Sitemap",
+      "description": "Analyze existing XML sitemaps or generate new ones with industry templates. Validates format, URLs, and structure.",
+      "version": "1.0.0",
+      "author": "AgriciDaniel",
+      "homepage": "https://trustedskills.dev/skills/seo-sitemap",
+      "source_repo": "https://github.com/AgriciDaniel/claude-seo",
+      "tags": [
+        "seo",
+        "sitemap",
+        "xml-sitemap",
+        "crawlability",
+        "indexability"
+      ],
+      "category": "seo",
+      "emoji": "🔍",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "claude"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install seo-sitemap",
+      "repoUrl": "https://github.com/AgriciDaniel/claude-seo",
+      "published_at": "2026-03-04T00:00:00Z",
+      "updated_at": "2026-03-04T00:00:00Z",
+      "stars": 1518,
+      "language": "Python",
+      "installs": 0,
+      "verified": "community",
+      "lastUpdated": "2026-03-04",
+      "collectionSlug": "claude-seo",
+      "collectionName": "Claude SEO Suite",
+      "verifiedCommit": "323e105ac84abeab4c5d294f9e464a734d6cbd79",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/AgriciDaniel/claude-seo/archive/323e105ac84abeab4c5d294f9e464a734d6cbd79.tar.gz"
+    },
+    {
+      "slug": "seo-technical",
+      "name": "SEO Technical",
+      "description": "Technical SEO audit across 8 categories: crawlability, indexability, security, URL structure, mobile, Core Web Vitals, structured data, and JavaScript rendering.",
+      "version": "1.0.0",
+      "author": "AgriciDaniel",
+      "homepage": "https://trustedskills.dev/skills/seo-technical",
+      "source_repo": "https://github.com/AgriciDaniel/claude-seo",
+      "tags": [
+        "seo",
+        "technical-seo",
+        "crawlability",
+        "core-web-vitals",
+        "robots-txt",
+        "javascript-rendering"
+      ],
+      "category": "seo",
+      "emoji": "🔍",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "claude"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install seo-technical",
+      "repoUrl": "https://github.com/AgriciDaniel/claude-seo",
+      "published_at": "2026-03-04T00:00:00Z",
+      "updated_at": "2026-03-04T00:00:00Z",
+      "stars": 1518,
+      "language": "Python",
+      "installs": 0,
+      "verified": "community",
+      "lastUpdated": "2026-03-04",
+      "collectionSlug": "claude-seo",
+      "collectionName": "Claude SEO Suite",
+      "verifiedCommit": "323e105ac84abeab4c5d294f9e464a734d6cbd79",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/AgriciDaniel/claude-seo/archive/323e105ac84abeab4c5d294f9e464a734d6cbd79.tar.gz"
+    },
+    {
+      "slug": "clawsec",
+      "name": "ClawSec Security Suite",
+      "description": "A complete security skill suite for OpenClaw's and NanoClaw agents (and variants). Protect your SOUL.md with drift detection, live security recommendations, automated audits, and skill integrity verification.",
+      "version": "latest",
+      "author": "prompt-security",
+      "homepage": "https://trustedskills.dev/skills/clawsec",
+      "source_repo": "https://github.com/prompt-security/clawsec",
+      "tags": [
+        "security",
+        "audit",
+        "soul-guardian",
+        "drift-detection",
+        "openclaw",
+        "collection"
+      ],
+      "category": "security",
+      "type": "collection",
+      "skillCount": 9,
+      "emoji": "🔒",
+      "license": "AGPL-3.0",
+      "platforms": [
+        "openclaw",
+        "nanoclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "git clone https://github.com/prompt-security/clawsec && cd clawsec && ./install.sh",
+      "repoUrl": "https://github.com/prompt-security/clawsec",
+      "published_at": "2026-03-04T00:00:00Z",
+      "updated_at": "2026-03-04T09:15:59Z",
+      "stars": 569,
+      "language": "JavaScript",
+      "installs": 0,
+      "verified": "community",
+      "lastUpdated": "2026-03-04",
+      "verifiedCommit": "79c303fa3f68f5f79be5e16fcba2ae397c4c472e",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/prompt-security/clawsec/archive/79c303fa3f68f5f79be5e16fcba2ae397c4c472e.tar.gz"
     },
     {
       "slug": "web-search",
@@ -2762,7 +3900,10 @@
       "stars": 0,
       "language": null,
       "installs": 5600,
-      "verified": "featured"
+      "verified": "featured",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "weather",
@@ -2797,7 +3938,10 @@
       "stars": 0,
       "language": null,
       "installs": 4820,
-      "verified": "featured"
+      "verified": "featured",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "openai-image-gen",
@@ -2834,7 +3978,10 @@
       "stars": 0,
       "language": null,
       "installs": 3210,
-      "verified": "featured"
+      "verified": "featured",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "healthcheck",
@@ -2869,7 +4016,10 @@
       "stars": 0,
       "language": null,
       "installs": 2450,
-      "verified": "featured"
+      "verified": "featured",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "whisper",
@@ -2908,7 +4058,10 @@
       "stars": 0,
       "language": null,
       "installs": 1890,
-      "verified": "featured"
+      "verified": "featured",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "skill-creator",
@@ -2943,7 +4096,10 @@
       "stars": 0,
       "language": null,
       "installs": 1650,
-      "verified": "featured"
+      "verified": "featured",
+      "verifiedCommit": "7b5e64ef2e369258e2a4a613b7a62db3c21e5160",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/openclaw/openclaw/archive/7b5e64ef2e369258e2a4a613b7a62db3c21e5160.tar.gz"
     },
     {
       "slug": "calendar-sync",
@@ -3012,7 +4168,10 @@
       "updated_at": "2026-03-03T13:13:48Z",
       "installs": 0,
       "stars": 1102,
-      "verified": "unverified"
+      "verified": "unverified",
+      "verifiedCommit": "c7424860398f1890398cad4136934a09f3ff4167",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/YouMind-OpenLab/nano-banana-pro-prompts-recommend-skill/archive/c7424860398f1890398cad4136934a09f3ff4167.tar.gz"
     },
     {
       "slug": "clawdcursor",
@@ -3040,7 +4199,10 @@
       "updated_at": "2026-03-03T06:37:15Z",
       "installs": 0,
       "stars": 112,
-      "verified": "unverified"
+      "verified": "unverified",
+      "verifiedCommit": "abf959aea1142e1d8011a137fbff7af53fe5c49b",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/AmrDab/clawd-cursor/archive/abf959aea1142e1d8011a137fbff7af53fe5c49b.tar.gz"
     },
     {
       "slug": "iblai-router",
@@ -3068,7 +4230,10 @@
       "updated_at": "2026-02-20T15:10:23Z",
       "installs": 0,
       "stars": 18,
-      "verified": "unverified"
+      "verified": "unverified",
+      "verifiedCommit": "1e75b80b139adfdb656b4c5b88714c5dbb45dcde",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/iblai/iblai-openclaw-router/archive/1e75b80b139adfdb656b4c5b88714c5dbb45dcde.tar.gz"
     },
     {
       "slug": "NotebookLM MCP Connector",
@@ -3096,7 +4261,10 @@
       "updated_at": "2026-02-18T03:11:06Z",
       "installs": 0,
       "stars": 1,
-      "verified": "unverified"
+      "verified": "unverified",
+      "verifiedCommit": "b9433355d275d6d2247d7e05b0785d38ae6e7dbf",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/ANONIMO432HZ/notebooklm-mcp-skill-setup/archive/b9433355d275d6d2247d7e05b0785d38ae6e7dbf.tar.gz"
     },
     {
       "slug": "ui-engineering",
@@ -3124,7 +4292,10 @@
       "updated_at": "2026-01-11T13:41:41Z",
       "installs": 0,
       "stars": 1,
-      "verified": "unverified"
+      "verified": "unverified",
+      "verifiedCommit": "e74d280ae9bed1b9e729f8bf315a07349435a0d2",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/yzfly/pro-ui-engineering-skill/archive/e74d280ae9bed1b9e729f8bf315a07349435a0d2.tar.gz"
     },
     {
       "slug": "anti-slop-writing",
@@ -3152,7 +4323,10 @@
       "updated_at": "2026-03-01T08:36:37Z",
       "installs": 0,
       "stars": 31,
-      "verified": "unverified"
+      "verified": "unverified",
+      "verifiedCommit": "d6221ff8cdc67ccbf5373c155058db8df494df22",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/adenaufal/anti-slop-writing/archive/d6221ff8cdc67ccbf5373c155058db8df494df22.tar.gz"
     },
     {
       "slug": "tgcli",
@@ -3180,7 +4354,10 @@
       "updated_at": "2026-02-02T11:22:04Z",
       "installs": 0,
       "stars": 31,
-      "verified": "unverified"
+      "verified": "unverified",
+      "verifiedCommit": "493a3e7fdbef1121b52a05cd4ba6644a8b42c8f4",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/kfastov/tgcli/archive/493a3e7fdbef1121b52a05cd4ba6644a8b42c8f4.tar.gz"
     },
     {
       "slug": "gcc",
@@ -3208,7 +4385,10 @@
       "updated_at": "2026-02-25T21:31:09Z",
       "installs": 0,
       "stars": 24,
-      "verified": "unverified"
+      "verified": "unverified",
+      "verifiedCommit": "85c85391b7a7f7463fa53e19e370b3d1530086ca",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/faugustdev/git-context-controller/archive/85c85391b7a7f7463fa53e19e370b3d1530086ca.tar.gz"
     },
     {
       "slug": "agent-skills-authoring",
@@ -3236,7 +4416,10 @@
       "updated_at": "2026-03-01T17:08:18Z",
       "installs": 0,
       "stars": 17,
-      "verified": "unverified"
+      "verified": "unverified",
+      "verifiedCommit": "78b572e2f97b6fa1794d04c732b058b53cfad4dd",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/zebbern/agent-skills-authoring/archive/78b572e2f97b6fa1794d04c732b058b53cfad4dd.tar.gz"
     },
     {
       "slug": "apple-engineer-superpowers",
@@ -3264,7 +4447,10 @@
       "updated_at": "2026-03-01T20:52:35Z",
       "installs": 0,
       "stars": 15,
-      "verified": "unverified"
+      "verified": "unverified",
+      "verifiedCommit": "8edc1ef1a0f341f4446e980834e5da3ec20c664b",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/piemonte/apple-engineer-superpowers/archive/8edc1ef1a0f341f4446e980834e5da3ec20c664b.tar.gz"
     },
     {
       "slug": "upgrade-guard",
@@ -3292,7 +4478,10 @@
       "updated_at": "2026-02-06T00:24:21Z",
       "installs": 0,
       "stars": 10,
-      "verified": "unverified"
+      "verified": "unverified",
+      "verifiedCommit": "564468d4b67d0c6418a01289fc8c22b2ba6bbd93",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/jzOcb/upgrade-guard/archive/564468d4b67d0c6418a01289fc8c22b2ba6bbd93.tar.gz"
     },
     {
       "slug": "Forge",
@@ -3320,7 +4509,10 @@
       "updated_at": "2026-02-20T05:20:04Z",
       "installs": 0,
       "stars": 9,
-      "verified": "unverified"
+      "verified": "unverified",
+      "verifiedCommit": "aee735075d6201522056799c9134b265c84cd265",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/ikennaokpala/forge/archive/aee735075d6201522056799c9134b265c84cd265.tar.gz"
     },
     {
       "slug": "config-guard",
@@ -3348,7 +4540,10 @@
       "updated_at": "2026-02-06T00:24:23Z",
       "installs": 0,
       "stars": 7,
-      "verified": "unverified"
+      "verified": "unverified",
+      "verifiedCommit": "3dcfd8d77acf64c2a4c2a13c2ec79702275a3f05",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/jzOcb/config-guard/archive/3dcfd8d77acf64c2a4c2a13c2ec79702275a3f05.tar.gz"
     },
     {
       "slug": "contributor-codebase-analyzer",
@@ -3376,7 +4571,10 @@
       "updated_at": "2026-02-24T02:30:53Z",
       "installs": 0,
       "stars": 6,
-      "verified": "unverified"
+      "verified": "unverified",
+      "verifiedCommit": "d7cce63590deae9ee249422a28bc8cb678d4dd11",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/anivar/contributor-codebase-analyzer/archive/d7cce63590deae9ee249422a28bc8cb678d4dd11.tar.gz"
     },
     {
       "slug": "ai-video-producer",
@@ -3404,7 +4602,10 @@
       "updated_at": "2026-01-09T22:20:42Z",
       "installs": 0,
       "stars": 5,
-      "verified": "unverified"
+      "verified": "unverified",
+      "verifiedCommit": "56d760af86789e68103dc552d46724dd964987ee",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/zysilm-ai/ai-video-producer-skill/archive/56d760af86789e68103dc552d46724dd964987ee.tar.gz"
     },
     {
       "slug": "claw-memory",
@@ -3432,7 +4633,10 @@
       "updated_at": "2026-03-03T15:13:24Z",
       "installs": 0,
       "stars": 5,
-      "verified": "unverified"
+      "verified": "unverified",
+      "verifiedCommit": "75777c1f874a89f71f767592cd8d0b1d135e8a9d",
+      "verifiedAt": "2026-03-04",
+      "installArchiveUrl": "https://github.com/siddontang/claw-memory/archive/75777c1f874a89f71f767592cd8d0b1d135e8a9d.tar.gz"
     }
   ],
   "categories": [
@@ -3440,7 +4644,13 @@
       "slug": "utilities",
       "name": "Utilities",
       "emoji": "🔧",
-      "count": 77
+      "count": 78
+    },
+    {
+      "slug": "seo",
+      "name": "seo",
+      "emoji": "📦",
+      "count": 17
     },
     {
       "slug": "productivity",
@@ -3449,16 +4659,16 @@
       "count": 8
     },
     {
+      "slug": "dev",
+      "name": "Development",
+      "emoji": "💻",
+      "count": 7
+    },
+    {
       "slug": "data",
       "name": "Data & Research",
       "emoji": "📊",
       "count": 6
-    },
-    {
-      "slug": "dev",
-      "name": "Development",
-      "emoji": "💻",
-      "count": 5
     },
     {
       "slug": "media",
@@ -3479,6 +4689,12 @@
       "count": 2
     },
     {
+      "slug": "security",
+      "name": "security",
+      "emoji": "📦",
+      "count": 1
+    },
+    {
       "slug": "web",
       "name": "Web & Search",
       "emoji": "🌐",
@@ -3492,9 +4708,9 @@
     }
   ],
   "stats": {
-    "total_skills": 109,
+    "total_skills": 130,
     "total_installs": 26150,
-    "total_authors": 48,
-    "last_updated": "2026-03-04T06:43:26.605Z"
+    "total_authors": 54,
+    "last_updated": "2026-03-04T12:52:20.232Z"
   }
 }

@@ -26,6 +26,10 @@ export interface Skill {
   updated_at: string;
   installs: number;
   verified: VerificationTier;
+  verifiedCommit?: string;
+  verifiedAt?: string;
+  verifiedChangedAt?: string;
+  installArchiveUrl?: string;
 }
 
 export interface Category {

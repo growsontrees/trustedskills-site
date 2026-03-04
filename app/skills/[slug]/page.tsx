@@ -119,7 +119,7 @@ export default function SkillDetailPage({ params }: Props) {
           </div>
 
           {/* Requirements */}
-          {(skill.requires.bins.length > 0 ||
+          {skill.requires && (skill.requires.bins.length > 0 ||
             skill.requires.env.length > 0 ||
             skill.requires.config.length > 0) && (
             <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
@@ -280,7 +280,47 @@ export default function SkillDetailPage({ params }: Props) {
             <h2 className="font-semibold text-white mb-2 flex items-center gap-2">
               {tier.icon} {tier.label}
             </h2>
-            <p className={`text-sm ${tier.color}`}>{tier.description}</p>
+            <p className={`text-sm ${tier.color} mb-3`}>{tier.description}</p>
+
+            {skill.verified === "verified" && skill.verifiedAt && (
+              <div className="text-xs text-emerald-400/80 mb-2">
+                Pinned on {skill.verifiedAt}
+              </div>
+            )}
+
+            {skill.verified === "community" && skill.verifiedChangedAt && (
+              <div className="text-xs text-amber-400 mb-2">
+                ⚠️ Update available · re-review needed since {skill.verifiedChangedAt}
+              </div>
+            )}
+
+            {skill.verifiedCommit && skill.repoUrl && (() => {
+              const parts = skill.repoUrl.replace("https://github.com/", "").replace(/\/$/, "").split("/");
+              const owner = parts[0];
+              const repo = parts[1];
+              const shortSha = skill.verifiedCommit.slice(0, 8);
+              const commitUrl = `https://github.com/${owner}/${repo}/commit/${skill.verifiedCommit}`;
+              return (
+                <div className="mt-2 space-y-2">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-gray-500">Pinned commit</span>
+                    <a
+                      href={commitUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-mono text-purple-400 hover:text-purple-300 transition-colors"
+                    >
+                      {shortSha}
+                    </a>
+                  </div>
+                  {skill.installArchiveUrl && (
+                    <p className="text-xs text-gray-600 leading-relaxed">
+                      Install command fetches the verified snapshot, not the live repository.
+                    </p>
+                  )}
+                </div>
+              );
+            })()}
           </div>
 
           {/* Quick Install */}

@@ -42,12 +42,24 @@ export function SkillCard({ skill, compact = false }: SkillCardProps) {
             <div className="text-xs text-gray-500">by {skill.author}</div>
           </div>
         </div>
-        <div
-          className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border flex-shrink-0 ${tier.bg} ${tier.border} ${tier.color}`}
-          title={tier.description}
-        >
-          <span>{tier.icon}</span>
-          <span className="hidden sm:inline">{tier.label}</span>
+        <div className="flex flex-col items-end gap-0.5 flex-shrink-0">
+          <div
+            className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border ${tier.bg} ${tier.border} ${tier.color}`}
+            title={tier.description}
+          >
+            <span>{tier.icon}</span>
+            <span className="hidden sm:inline">{tier.label}</span>
+          </div>
+          {skill.verified === "verified" && skill.verifiedAt && (
+            <span className="text-xs text-gray-600 hidden sm:block">
+              pinned {skill.verifiedAt}
+            </span>
+          )}
+          {skill.verified === "community" && skill.verifiedChangedAt && (
+            <span className="text-xs text-amber-600 hidden sm:block">
+              ⚠️ re-review needed
+            </span>
+          )}
         </div>
       </div>
 
