@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 
-export type PlatformKey = "openclaw" | "mcp" | "claude" | "openai" | "cursor" | "other";
+export type PlatformKey = "openclaw" | "mcp" | "claude" | "claudecode" | "openai" | "cursor" | "other";
 
 const STORAGE_KEY = "ts-platform-pref";
 const EVENT_NAME = "ts-platform-change";
@@ -10,6 +10,7 @@ export const PLATFORM_LABELS: Record<PlatformKey, string> = {
   openclaw: "OpenClaw",
   mcp: "MCP",
   claude: "Claude Desktop",
+  claudecode: "Claude Code",
   openai: "OpenAI / ChatGPT",
   cursor: "Cursor / VS Code",
   other: "Other / Exploring",
@@ -111,6 +112,13 @@ export function getPlatformInstall(
         ),
         isJson: true,
         lang: "json",
+      };
+    case "claudecode":
+      return {
+        label: "Claude Code",
+        cmd: `claude mcp add ${slug} npx -- -y @trustedskills/${slug}`,
+        isJson: false,
+        lang: "bash",
       };
     case "openai":
       return {
