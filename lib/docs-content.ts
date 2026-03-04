@@ -1527,7 +1527,7 @@ Are you not sure?
       "command": "npx",
       "args": ["-y", "@trustedskills/postgres-mcp"],
       "env": {
-        "DATABASE_URL": "${DATABASE_URL}"
+        "DATABASE_URL": "\\$&#123;DATABASE_URL&#125;"
       }
     }
   }
@@ -1612,18 +1612,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   if (name === 'celsius_to_fahrenheit') {
     const f = (args.celsius * 9/5) + 32;
     return {
-      content: [{ type: 'text', text: \`\${args.celsius}°C = \${f.toFixed(1)}°F\` }]
+      content: [{ type: 'text', text: \`\\$&#123;args.celsius&#125;°C = \\$&#123;f.toFixed(1)&#125;°F\` }]
     };
   }
   
   if (name === 'fahrenheit_to_celsius') {
     const c = (args.fahrenheit - 32) * 5/9;
     return {
-      content: [{ type: 'text', text: \`\${args.fahrenheit}°F = \${c.toFixed(1)}°C\` }]
+      content: [{ type: 'text', text: \`\\$&#123;args.fahrenheit&#125;°F = \\$&#123;c.toFixed(1)&#125;°C\` }]
     };
   }
   
-  throw new Error(\`Unknown tool: \${name}\`);
+  throw new Error(\`Unknown tool: \\$&#123;name&#125;\`);
 });
 
 // Start the server

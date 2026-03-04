@@ -1,4 +1,4 @@
-import { getAllSkills, getSkillBySlug, TIER_CONFIG, PLATFORM_CONFIG } from "@/lib/skills";
+import { getAllSkills, getSkillBySlug, TIER_CONFIG } from "@/lib/skills";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { CopyButton } from "@/components/CopyButton";

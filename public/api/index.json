@@ -1,298 +1,8 @@
 {
   "$schema": "https://trustedskills.dev/schema/skills-index-v1.json",
-  "generated_at": "2026-03-04T01:30:00Z",
+  "generated_at": "2026-03-04T06:43:26.605Z",
   "schema_version": "1",
   "skills": [
-    {
-      "slug": "weather",
-      "name": "Weather",
-      "description": "Get current weather and forecasts for any location via wttr.in or Open-Meteo. Supports hourly, daily, and current conditions.",
-      "version": "1.2.0",
-      "author": "openclaw",
-      "homepage": "https://trustedskills.dev/skills/weather",
-      "source_repo": "https://github.com/openclaw/openclaw",
-      "tags": [
-        "weather",
-        "forecast",
-        "wttr",
-        "open-meteo",
-        "utilities"
-      ],
-      "category": "utilities",
-      "emoji": "\ud83c\udf24\ufe0f",
-      "license": "MIT",
-      "platforms": [
-        "openclaw"
-      ],
-      "requires": {
-        "bins": [],
-        "env": [],
-        "config": []
-      },
-      "installCmd": "openclaw skills install weather",
-      "repoUrl": "https://github.com/openclaw/openclaw",
-      "published_at": "2025-09-01T00:00:00Z",
-      "updated_at": "2026-01-15T00:00:00Z",
-      "stars": 0,
-      "language": null,
-      "installs": 4820,
-      "verified": "featured"
-    },
-    {
-      "slug": "openai-image-gen",
-      "name": "OpenAI Image Gen",
-      "description": "Generate and edit images using OpenAI's DALL-E 3 and GPT-4o image generation APIs. Supports text-to-image, image editing, and variations.",
-      "version": "2.0.1",
-      "author": "openclaw",
-      "homepage": "https://trustedskills.dev/skills/openai-image-gen",
-      "source_repo": "https://github.com/openclaw/openclaw",
-      "tags": [
-        "image",
-        "dalle",
-        "openai",
-        "generation",
-        "ai"
-      ],
-      "category": "ai",
-      "emoji": "\ud83d\uddbc\ufe0f",
-      "license": "MIT",
-      "platforms": [
-        "openclaw"
-      ],
-      "requires": {
-        "bins": [],
-        "env": [
-          "OPENAI_API_KEY"
-        ],
-        "config": []
-      },
-      "installCmd": "openclaw skills install openai-image-gen",
-      "repoUrl": "https://github.com/openclaw/openclaw",
-      "published_at": "2025-10-01T00:00:00Z",
-      "updated_at": "2026-02-01T00:00:00Z",
-      "stars": 0,
-      "language": null,
-      "installs": 3210,
-      "verified": "featured"
-    },
-    {
-      "slug": "whisper",
-      "name": "Whisper Transcription",
-      "description": "Transcribe audio and video files to text using OpenAI Whisper. Supports 50+ languages with automatic language detection.",
-      "version": "1.1.0",
-      "author": "openclaw",
-      "homepage": "https://trustedskills.dev/skills/whisper",
-      "source_repo": "https://github.com/openclaw/openclaw",
-      "tags": [
-        "transcription",
-        "audio",
-        "whisper",
-        "speech-to-text",
-        "openai"
-      ],
-      "category": "media",
-      "emoji": "\ud83c\udf99\ufe0f",
-      "license": "MIT",
-      "platforms": [
-        "openclaw"
-      ],
-      "requires": {
-        "bins": [
-          "ffmpeg"
-        ],
-        "env": [
-          "OPENAI_API_KEY"
-        ],
-        "config": []
-      },
-      "installCmd": "openclaw skills install whisper",
-      "repoUrl": "https://github.com/openclaw/openclaw",
-      "published_at": "2025-10-15T00:00:00Z",
-      "updated_at": "2026-01-20T00:00:00Z",
-      "stars": 0,
-      "language": null,
-      "installs": 1890,
-      "verified": "featured"
-    },
-    {
-      "slug": "healthcheck",
-      "name": "Healthcheck",
-      "description": "Monitor and diagnose OpenClaw agent health, session status, tool availability, and system resources. Essential for debugging and monitoring.",
-      "version": "1.0.3",
-      "author": "openclaw",
-      "homepage": "https://trustedskills.dev/skills/healthcheck",
-      "source_repo": "https://github.com/openclaw/openclaw",
-      "tags": [
-        "monitoring",
-        "diagnostics",
-        "health",
-        "system",
-        "debug"
-      ],
-      "category": "dev",
-      "emoji": "\ud83c\udfe5",
-      "license": "MIT",
-      "platforms": [
-        "openclaw"
-      ],
-      "requires": {
-        "bins": [],
-        "env": [],
-        "config": []
-      },
-      "installCmd": "openclaw skills install healthcheck",
-      "repoUrl": "https://github.com/openclaw/openclaw",
-      "published_at": "2025-08-01T00:00:00Z",
-      "updated_at": "2025-12-10T00:00:00Z",
-      "stars": 0,
-      "language": null,
-      "installs": 2450,
-      "verified": "featured"
-    },
-    {
-      "slug": "skill-creator",
-      "name": "Skill Creator",
-      "description": "AI-powered skill scaffolding tool. Describe what you want your skill to do and get a complete SKILL.md + tool handlers generated automatically.",
-      "version": "1.3.0",
-      "author": "openclaw",
-      "homepage": "https://trustedskills.dev/skills/skill-creator",
-      "source_repo": "https://github.com/openclaw/openclaw",
-      "tags": [
-        "meta",
-        "scaffolding",
-        "create",
-        "builder",
-        "dev"
-      ],
-      "category": "dev",
-      "emoji": "\ud83d\udd28",
-      "license": "MIT",
-      "platforms": [
-        "openclaw"
-      ],
-      "requires": {
-        "bins": [],
-        "env": [],
-        "config": []
-      },
-      "installCmd": "openclaw skills install skill-creator",
-      "repoUrl": "https://github.com/openclaw/openclaw",
-      "published_at": "2025-11-01T00:00:00Z",
-      "updated_at": "2026-02-15T00:00:00Z",
-      "stars": 0,
-      "language": null,
-      "installs": 1650,
-      "verified": "featured"
-    },
-    {
-      "slug": "self-improvement",
-      "name": "Self-Improvement",
-      "description": "Captures agent learnings, errors, and corrections to enable continuous improvement. Logs to structured markdown files for review and pattern detection.",
-      "version": "1.0.0",
-      "author": "openclaw",
-      "homepage": "https://trustedskills.dev/skills/self-improvement",
-      "source_repo": "https://github.com/openclaw/openclaw",
-      "tags": [
-        "learning",
-        "memory",
-        "errors",
-        "improvement",
-        "meta"
-      ],
-      "category": "utilities",
-      "emoji": "\ud83e\udde0",
-      "license": "MIT",
-      "platforms": [
-        "openclaw"
-      ],
-      "requires": {
-        "bins": [],
-        "env": [],
-        "config": []
-      },
-      "installCmd": "openclaw skills install self-improvement",
-      "repoUrl": "https://github.com/openclaw/openclaw",
-      "published_at": "2025-12-01T00:00:00Z",
-      "updated_at": "2026-01-30T00:00:00Z",
-      "stars": 0,
-      "language": null,
-      "installs": 980,
-      "verified": "verified"
-    },
-    {
-      "slug": "n8n-builder",
-      "name": "n8n Workflow Builder",
-      "description": "Build and manage n8n automation workflows via MCP. Create, test, and deploy production-ready automations with AI guidance.",
-      "version": "1.0.0",
-      "author": "community",
-      "homepage": "https://trustedskills.dev/skills/n8n-builder",
-      "source_repo": "https://github.com/openclaw/openclaw",
-      "tags": [
-        "automation",
-        "n8n",
-        "workflows",
-        "mcp",
-        "integration"
-      ],
-      "category": "dev",
-      "emoji": "\u26a1",
-      "license": "MIT",
-      "platforms": [
-        "openclaw",
-        "mcp"
-      ],
-      "requires": {
-        "bins": [],
-        "env": [],
-        "config": [
-          "mcp.n8n"
-        ]
-      },
-      "installCmd": "openclaw skills install n8n-builder",
-      "repoUrl": "https://github.com/openclaw/openclaw",
-      "published_at": "2026-01-15T00:00:00Z",
-      "updated_at": "2026-02-20T00:00:00Z",
-      "stars": 0,
-      "language": null,
-      "installs": 420,
-      "verified": "community"
-    },
-    {
-      "slug": "web-search",
-      "name": "Web Search",
-      "description": "Search the web using DuckDuckGo, Brave Search, or Tavily. Get real-time information without hallucination. Supports structured results and full page content.",
-      "version": "1.4.0",
-      "author": "openclaw",
-      "homepage": "https://trustedskills.dev/skills/web-search",
-      "source_repo": "https://github.com/openclaw/openclaw",
-      "tags": [
-        "search",
-        "web",
-        "duckduckgo",
-        "brave",
-        "research"
-      ],
-      "category": "web",
-      "emoji": "\ud83d\udd0d",
-      "license": "MIT",
-      "platforms": [
-        "openclaw",
-        "mcp"
-      ],
-      "requires": {
-        "bins": [],
-        "env": [],
-        "config": []
-      },
-      "installCmd": "openclaw skills install web-search",
-      "repoUrl": "https://github.com/openclaw/openclaw",
-      "published_at": "2025-09-15T00:00:00Z",
-      "updated_at": "2026-02-28T00:00:00Z",
-      "stars": 0,
-      "language": null,
-      "installs": 5600,
-      "verified": "featured"
-    },
     {
       "slug": "code-runner",
       "name": "Code Runner",
@@ -309,7 +19,7 @@
         "sandbox"
       ],
       "category": "dev",
-      "emoji": "\ud83d\udcbb",
+      "emoji": "💻",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -347,7 +57,7 @@
         "dev"
       ],
       "category": "dev",
-      "emoji": "\ud83d\udc19",
+      "emoji": "🐙",
       "license": "MIT",
       "platforms": [
         "openclaw",
@@ -371,6 +81,41 @@
       "verified": "verified"
     },
     {
+      "slug": "self-improvement",
+      "name": "Self-Improvement",
+      "description": "Captures agent learnings, errors, and corrections to enable continuous improvement. Logs to structured markdown files for review and pattern detection.",
+      "version": "1.0.0",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/self-improvement",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [
+        "learning",
+        "memory",
+        "errors",
+        "improvement",
+        "meta"
+      ],
+      "category": "utilities",
+      "emoji": "🧠",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install self-improvement",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-12-01T00:00:00Z",
+      "updated_at": "2026-01-30T00:00:00Z",
+      "stars": 0,
+      "language": null,
+      "installs": 980,
+      "verified": "verified"
+    },
+    {
       "slug": "pdf-reader",
       "name": "PDF Reader",
       "description": "Extract text, tables, and metadata from PDF files. Supports OCR for scanned documents, page selection, and structured data extraction.",
@@ -386,7 +131,7 @@
         "data"
       ],
       "category": "data",
-      "emoji": "\ud83d\udcc4",
+      "emoji": "📄",
       "license": "Apache-2.0",
       "platforms": [
         "openclaw",
@@ -407,45 +152,42 @@
       "verified": "community"
     },
     {
-      "slug": "calendar-sync",
-      "name": "Calendar Sync",
-      "description": "Connect to Google Calendar and Outlook. Create events, check availability, set reminders, and manage your schedule from natural language.",
-      "version": "0.9.2",
+      "slug": "n8n-builder",
+      "name": "n8n Workflow Builder",
+      "description": "Build and manage n8n automation workflows via MCP. Create, test, and deploy production-ready automations with AI guidance.",
+      "version": "1.0.0",
       "author": "community",
-      "homepage": "https://trustedskills.dev/skills/calendar-sync",
-      "source_repo": "https://github.com/community/openclaw-calendar",
+      "homepage": "https://trustedskills.dev/skills/n8n-builder",
+      "source_repo": "https://github.com/openclaw/openclaw",
       "tags": [
-        "calendar",
-        "google",
-        "outlook",
-        "scheduling",
-        "productivity"
+        "automation",
+        "n8n",
+        "workflows",
+        "mcp",
+        "integration"
       ],
-      "category": "productivity",
-      "emoji": "\ud83d\udcc5",
+      "category": "dev",
+      "emoji": "⚡",
       "license": "MIT",
       "platforms": [
         "openclaw",
-        "mcp",
-        "openai",
-        "claude"
+        "mcp"
       ],
       "requires": {
         "bins": [],
-        "env": [
-          "GOOGLE_CLIENT_ID",
-          "GOOGLE_CLIENT_SECRET"
-        ],
-        "config": []
+        "env": [],
+        "config": [
+          "mcp.n8n"
+        ]
       },
-      "installCmd": "openclaw skills install calendar-sync",
-      "repoUrl": "https://github.com/community/openclaw-calendar",
-      "published_at": "2026-01-20T00:00:00Z",
-      "updated_at": "2026-03-01T00:00:00Z",
+      "installCmd": "openclaw skills install n8n-builder",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2026-01-15T00:00:00Z",
+      "updated_at": "2026-02-20T00:00:00Z",
       "stars": 0,
       "language": null,
-      "installs": 340,
-      "verified": "unverified"
+      "installs": 420,
+      "verified": "community"
     },
     {
       "slug": "nano-banana-prompts",
@@ -463,7 +205,7 @@
         "stable-diffusion"
       ],
       "category": "media",
-      "emoji": "\ud83c\udf4c",
+      "emoji": "🍌",
       "license": "MIT",
       "platforms": [
         "openclaw",
@@ -497,7 +239,7 @@
         "dev-ops"
       ],
       "category": "coding",
-      "emoji": "\ud83e\udd1d",
+      "emoji": "🤝",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -520,7 +262,7 @@
     {
       "slug": "clawd-cursor",
       "name": "Clawd Cursor",
-      "description": "AI desktop agent \u2014 control any app on Windows/macOS from your OpenClaw agent. Send natural language tasks and it handles opening apps, clicking buttons, typing text, and navigating browsers.",
+      "description": "AI desktop agent — control any app on Windows/macOS from your OpenClaw agent. Send natural language tasks and it handles opening apps, clicking buttons, typing text, and navigating browsers.",
       "version": "0.6.3",
       "author": "AmrDab",
       "tags": [
@@ -532,7 +274,7 @@
         "macos"
       ],
       "category": "utilities",
-      "emoji": "\ud83d\uddb1\ufe0f",
+      "emoji": "🖱️",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -553,7 +295,7 @@
     {
       "slug": "nemp-memory",
       "name": "Nemp Memory",
-      "description": "Persistent local memory for AI agents. Save, recall, and search project decisions as local JSON. Zero cloud, zero infrastructure \u2014 works offline.",
+      "description": "Persistent local memory for AI agents. Save, recall, and search project decisions as local JSON. Zero cloud, zero infrastructure — works offline.",
       "version": "1.0.0",
       "author": "SukinShetty",
       "tags": [
@@ -564,7 +306,7 @@
         "offline"
       ],
       "category": "utilities",
-      "emoji": "\ud83e\udde0",
+      "emoji": "🧠",
       "license": "MIT",
       "platforms": [
         "openclaw",
@@ -597,7 +339,7 @@
         "code-review"
       ],
       "category": "data",
-      "emoji": "\ud83d\udd2c",
+      "emoji": "🔬",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -630,7 +372,7 @@
         "reddit"
       ],
       "category": "data",
-      "emoji": "\ud83d\udd77\ufe0f",
+      "emoji": "🕷️",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -665,7 +407,7 @@
         "transcription"
       ],
       "category": "media",
-      "emoji": "\ud83d\udcf1",
+      "emoji": "📱",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -701,7 +443,7 @@
         "worktree"
       ],
       "category": "coding",
-      "emoji": "\ud83d\ude80",
+      "emoji": "🚀",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -724,7 +466,7 @@
     {
       "slug": "xint",
       "name": "X Intelligence (xint)",
-      "description": "X Intelligence CLI \u2014 search, analyze, monitor, and engage on X/Twitter. Real-time search, AI-powered analysis, sentiment reports, bookmarks, trending topics, and following management.",
+      "description": "X Intelligence CLI — search, analyze, monitor, and engage on X/Twitter. Real-time search, AI-powered analysis, sentiment reports, bookmarks, trending topics, and following management.",
       "version": "1.0.0",
       "author": "0xNyk",
       "tags": [
@@ -737,7 +479,7 @@
         "sentiment"
       ],
       "category": "communication",
-      "emoji": "\ud83d\udc26",
+      "emoji": "🐦",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -770,7 +512,7 @@
         "rag"
       ],
       "category": "productivity",
-      "emoji": "\ud83d\udd16",
+      "emoji": "🔖",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -805,7 +547,7 @@
         "local"
       ],
       "category": "media",
-      "emoji": "\ud83c\udfa8",
+      "emoji": "🎨",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -840,7 +582,7 @@
         "progressive"
       ],
       "category": "utilities",
-      "emoji": "\ud83d\udd0c",
+      "emoji": "🔌",
       "license": "MIT",
       "platforms": [
         "openclaw",
@@ -873,7 +615,7 @@
         "notes"
       ],
       "category": "productivity",
-      "emoji": "\ud83d\udcda",
+      "emoji": "📚",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -906,7 +648,7 @@
         "real-time"
       ],
       "category": "utilities",
-      "emoji": "\ud83d\udd78\ufe0f",
+      "emoji": "🕸️",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -942,7 +684,7 @@
         "beautify"
       ],
       "category": "coding",
-      "emoji": "\ud83c\udfa8",
+      "emoji": "🎨",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -977,7 +719,7 @@
         "chinese"
       ],
       "category": "utilities",
-      "emoji": "\ud83d\uddc2\ufe0f",
+      "emoji": "🗂️",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1013,7 +755,7 @@
         "blockchain"
       ],
       "category": "data",
-      "emoji": "\ud83d\udd2d",
+      "emoji": "🔭",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1048,7 +790,7 @@
         "local"
       ],
       "category": "utilities",
-      "emoji": "\ud83e\udde9",
+      "emoji": "🧩",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1084,7 +826,7 @@
         "residential"
       ],
       "category": "utilities",
-      "emoji": "\ud83c\udf10",
+      "emoji": "🌐",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1120,7 +862,7 @@
         "local"
       ],
       "category": "data",
-      "emoji": "\ud83e\uddec",
+      "emoji": "🧬",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1155,7 +897,7 @@
         "sprints"
       ],
       "category": "productivity",
-      "emoji": "\ud83d\udccb",
+      "emoji": "📋",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1191,7 +933,7 @@
         "patchright"
       ],
       "category": "coding",
-      "emoji": "\ud83c\udfad",
+      "emoji": "🎭",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1214,7 +956,7 @@
     {
       "slug": "faster-whisper",
       "name": "Faster Whisper",
-      "description": "Local speech-to-text using faster-whisper \u2014 4-6x faster than OpenAI Whisper with identical accuracy. GPU acceleration, SRT/VTT/TTML subtitles, speaker diarization, and chapter detection.",
+      "description": "Local speech-to-text using faster-whisper — 4-6x faster than OpenAI Whisper with identical accuracy. GPU acceleration, SRT/VTT/TTML subtitles, speaker diarization, and chapter detection.",
       "version": "1.5.1",
       "author": "ThePlasmak",
       "tags": [
@@ -1227,7 +969,7 @@
         "local"
       ],
       "category": "media",
-      "emoji": "\ud83c\udfa4",
+      "emoji": "🎤",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1249,7 +991,7 @@
     },
     {
       "slug": "learn",
-      "name": "Learn \u2014 Find & Install Skills",
+      "name": "Learn — Find & Install Skills",
       "description": "Discover, install, and manage AI agent skills from agentskill.sh. Search for capabilities mid-session, install extensions, and scan for security issues.",
       "version": "2.0.0",
       "author": "agentskill-sh",
@@ -1262,7 +1004,7 @@
         "agent"
       ],
       "category": "utilities",
-      "emoji": "\ud83d\udce6",
+      "emoji": "📦",
       "license": "MIT",
       "platforms": [
         "openclaw",
@@ -1296,7 +1038,7 @@
         "notification"
       ],
       "category": "utilities",
-      "emoji": "\ud83d\udd04",
+      "emoji": "🔄",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1334,7 +1076,7 @@
         "visualization"
       ],
       "category": "utilities",
-      "emoji": "\ud83d\udda5\ufe0f",
+      "emoji": "🖥️",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1359,7 +1101,7 @@
     {
       "slug": "telegram-voice-group",
       "name": "Telegram Voice Group",
-      "description": "Send voice bubble messages to Telegram groups and topics using Microsoft Edge-TTS. Context isolation per topic \u2014 different topics use different conversation histories.",
+      "description": "Send voice bubble messages to Telegram groups and topics using Microsoft Edge-TTS. Context isolation per topic — different topics use different conversation histories.",
       "version": "1.0.0",
       "author": "sanwecn",
       "tags": [
@@ -1372,7 +1114,7 @@
         "edge-tts"
       ],
       "category": "communication",
-      "emoji": "\ud83d\udd0a",
+      "emoji": "🔊",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1408,7 +1150,7 @@
         "grocery"
       ],
       "category": "productivity",
-      "emoji": "\ud83c\udf7d\ufe0f",
+      "emoji": "🍽️",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1443,7 +1185,7 @@
         "universal"
       ],
       "category": "data",
-      "emoji": "\ud83d\udd0d",
+      "emoji": "🔍",
       "license": "MIT",
       "platforms": [
         "openclaw",
@@ -1469,7 +1211,7 @@
     {
       "slug": "unbound-md",
       "name": "Unbound.md Human Services",
-      "description": "Access human services for autonomous agents \u2014 banking, employment, physical tasks, and more. Pay with USDC. No API key required.",
+      "description": "Access human services for autonomous agents — banking, employment, physical tasks, and more. Pay with USDC. No API key required.",
       "version": "1.0.0",
       "author": "lfglabs-dev",
       "tags": [
@@ -1481,7 +1223,7 @@
         "real-world"
       ],
       "category": "utilities",
-      "emoji": "\ud83e\udd1d",
+      "emoji": "🤝",
       "license": "MIT",
       "platforms": [
         "openclaw"
@@ -1516,7 +1258,7 @@
         "content"
       ],
       "category": "utilities",
-      "emoji": "\u270d\ufe0f",
+      "emoji": "✍️",
       "license": "MIT",
       "platforms": [
         "openclaw",
@@ -1555,7 +1297,7 @@
         "second-brain"
       ],
       "category": "productivity",
-      "emoji": "\ud83d\udd2e",
+      "emoji": "🔮",
       "license": "MIT",
       "platforms": [
         "openclaw",
@@ -1580,7 +1322,7 @@
     {
       "slug": "agent-second-brain",
       "name": "Agent Second Brain",
-      "description": "Voice-note-to-knowledge-base pipeline. Send voice notes to Telegram \u2192 AI organizes them into a structured knowledge base with tasks in Todoist and daily reports. Features Ebbinghaus spaced-repetition decay, vault health scoring, and knowledge graph. Runs on OpenClaw.",
+      "description": "Voice-note-to-knowledge-base pipeline. Send voice notes to Telegram → AI organizes them into a structured knowledge base with tasks in Todoist and daily reports. Features Ebbinghaus spaced-repetition decay, vault health scoring, and knowledge graph. Runs on OpenClaw.",
       "version": "1.0.0",
       "author": "smixs",
       "homepage": "https://trustedskills.dev/skills/agent-second-brain",
@@ -1596,7 +1338,7 @@
         "memory"
       ],
       "category": "productivity",
-      "emoji": "\ud83e\udde0",
+      "emoji": "🧠",
       "license": "MIT",
       "platforms": [
         "openclaw",
@@ -1624,8 +1366,8 @@
     },
     {
       "slug": "arrowhead",
-      "name": "Arrowhead \u2014 Obsidian Search",
-      "description": "Fast Obsidian-aware semantic search for AI agents. Query your Obsidian vault by content, tags, backlinks, and metadata. Makes your AI agent a true knowledge assistant \u2014 without sending vault data to the cloud.",
+      "name": "Arrowhead — Obsidian Search",
+      "description": "Fast Obsidian-aware semantic search for AI agents. Query your Obsidian vault by content, tags, backlinks, and metadata. Makes your AI agent a true knowledge assistant — without sending vault data to the cloud.",
       "version": "1.0.0",
       "author": "totocaster",
       "homepage": "https://trustedskills.dev/skills/arrowhead",
@@ -1640,7 +1382,7 @@
         "second-brain"
       ],
       "category": "productivity",
-      "emoji": "\ud83c\udff9",
+      "emoji": "🏹",
       "license": "MIT",
       "platforms": [
         "openclaw",
@@ -1660,68 +1402,2099 @@
       "lastUpdated": "2026-03-01",
       "installs": 0,
       "verified": "community"
+    },
+    {
+      "slug": "1password",
+      "name": "1password",
+      "description": "Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in (single or multi-account), or reading/injecting/running secrets via op.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/1password",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install 1password",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254469,
+      "verified": "community"
+    },
+    {
+      "slug": "apple-notes",
+      "name": "Apple Notes",
+      "description": "Manage Apple Notes via the `memo` CLI on macOS (create, view, edit, delete, search, move, and export notes). Use when a user asks OpenClaw to add a note, list notes, search notes, or manage note folders.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/apple-notes",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install apple-notes",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254469,
+      "verified": "community"
+    },
+    {
+      "slug": "apple-reminders",
+      "name": "Apple Reminders",
+      "description": "Manage Apple Reminders via remindctl CLI (list, add, edit, complete, delete). Supports lists, date filters, and JSON/plain output.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/apple-reminders",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install apple-reminders",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254469,
+      "verified": "community"
+    },
+    {
+      "slug": "bear-notes",
+      "name": "Bear Notes",
+      "description": "Create, search, and manage Bear notes via grizzly CLI.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/bear-notes",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install bear-notes",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254469,
+      "verified": "community"
+    },
+    {
+      "slug": "blogwatcher",
+      "name": "Blogwatcher",
+      "description": "Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/blogwatcher",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install blogwatcher",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254469,
+      "verified": "community"
+    },
+    {
+      "slug": "blucli",
+      "name": "Blucli",
+      "description": "BluOS CLI (blu) for discovery, playback, grouping, and volume.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/blucli",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install blucli",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254469,
+      "verified": "community"
+    },
+    {
+      "slug": "bluebubbles",
+      "name": "Bluebubbles",
+      "description": "Use when you need to send or manage iMessages via BlueBubbles (recommended iMessage integration). Calls go through the generic message tool with channel=\"bluebubbles\".",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/bluebubbles",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🫧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": [
+          "channels.bluebubbles"
+        ]
+      },
+      "installCmd": "openclaw skills install bluebubbles",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254470,
+      "verified": "community"
+    },
+    {
+      "slug": "camsnap",
+      "name": "Camsnap",
+      "description": "Capture frames or clips from RTSP/ONVIF cameras.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/camsnap",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install camsnap",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254470,
+      "verified": "community"
+    },
+    {
+      "slug": "clawhub",
+      "name": "Clawhub",
+      "description": "Use the ClawHub CLI to search, install, update, and publish agent skills from clawhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawhub CLI.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/clawhub",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install clawhub",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254470,
+      "verified": "community"
+    },
+    {
+      "slug": "coding-agent",
+      "name": "Coding Agent",
+      "description": "Delegate coding tasks to Codex, Claude Code, or Pi agents via background process. Use when: (1) building/creating new features or apps, (2) reviewing PRs (spawn in temp dir), (3) refactoring large codebases, (4) iterative coding that needs file exploration. NOT for: simple one-liner fixes (just edit), reading code (use read tool), thread-bound ACP harness requests in chat (for example spawn/run Codex or Claude Code in a Discord thread; use sessions_spawn with runtime:\"acp\"), or any work in ~/clawd workspace (never spawn agents here). Requires a bash tool that supports pty:true.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/coding-agent",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install coding-agent",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254470,
+      "verified": "community"
+    },
+    {
+      "slug": "discord",
+      "name": "Discord",
+      "description": "Discord ops via the message tool (channel=discord).",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/discord",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🎮",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": [
+          "channels.discord.token"
+        ]
+      },
+      "installCmd": "openclaw skills install discord",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254469,
+      "verified": "community"
+    },
+    {
+      "slug": "eightctl",
+      "name": "Eightctl",
+      "description": "Control Eight Sleep pods (status, temperature, alarms, schedules).",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/eightctl",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install eightctl",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254469,
+      "verified": "community"
+    },
+    {
+      "slug": "gemini",
+      "name": "Gemini",
+      "description": "Gemini CLI for one-shot Q&A, summaries, and generation.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/gemini",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install gemini",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254469,
+      "verified": "community"
+    },
+    {
+      "slug": "gh-issues",
+      "name": "Gh Issues",
+      "description": "Fetch GitHub issues, spawn sub-agents to implement fixes and open PRs, then monitor and address PR review comments. Usage: /gh-issues [owner/repo] [--label bug] [--limit 5] [--milestone v1.0] [--assignee @me] [--fork user/repo] [--watch] [--interval 5] [--reviews-only] [--cron] [--dry-run] [--model glm-5] [--notify-channel -1002381931352]",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/gh-issues",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install gh-issues",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254469,
+      "verified": "community"
+    },
+    {
+      "slug": "gifgrep",
+      "name": "Gifgrep",
+      "description": "Search GIF providers with CLI/TUI, download results, and extract stills/sheets.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/gifgrep",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install gifgrep",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254469,
+      "verified": "community"
+    },
+    {
+      "slug": "github",
+      "name": "Github",
+      "description": "GitHub operations via `gh` CLI: issues, PRs, CI runs, code review, API queries. Use when: (1) checking PR status or CI, (2) creating/commenting on issues, (3) listing/filtering PRs or issues, (4) viewing run logs. NOT for: complex web UI interactions requiring manual browser flows (use browser tooling when available), bulk operations across many repos (script with gh api), or when gh auth is not configured.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/github",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install github",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254469,
+      "verified": "community"
+    },
+    {
+      "slug": "gog",
+      "name": "Gog",
+      "description": "Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/gog",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install gog",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254469,
+      "verified": "community"
+    },
+    {
+      "slug": "goplaces",
+      "name": "Goplaces",
+      "description": "Query Google Places API (New) via the goplaces CLI for text search, place details, resolve, and reviews. Use for human-friendly place lookup or JSON output for scripts.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/goplaces",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install goplaces",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254469,
+      "verified": "community"
+    },
+    {
+      "slug": "himalaya",
+      "name": "Himalaya",
+      "description": "CLI to manage emails via IMAP/SMTP. Use `himalaya` to list, read, write, reply, forward, search, and organize emails from the terminal. Supports multiple accounts and message composition with MML (MIME Meta Language).",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/himalaya",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install himalaya",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254470,
+      "verified": "community"
+    },
+    {
+      "slug": "imsg",
+      "name": "Imsg",
+      "description": "iMessage/SMS CLI for listing chats, history, and sending messages via Messages.app.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/imsg",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install imsg",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254470,
+      "verified": "community"
+    },
+    {
+      "slug": "mcporter",
+      "name": "Mcporter",
+      "description": "Use the mcporter CLI to list, configure, auth, and call MCP servers/tools directly (HTTP or stdio), including ad-hoc servers, config edits, and CLI/type generation.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/mcporter",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install mcporter",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254470,
+      "verified": "community"
+    },
+    {
+      "slug": "model-usage",
+      "name": "Model Usage",
+      "description": "Use CodexBar CLI local cost usage to summarize per-model usage for Codex or Claude, including the current (most recent) model or a full model breakdown. Trigger when asked for model-level usage/cost data from codexbar, or when you need a scriptable per-model summary from codexbar cost JSON.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/model-usage",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install model-usage",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254470,
+      "verified": "community"
+    },
+    {
+      "slug": "nano-banana-pro",
+      "name": "Nano Banana Pro",
+      "description": "Generate or edit images via Gemini 3 Pro Image (Nano Banana Pro).",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/nano-banana-pro",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install nano-banana-pro",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254470,
+      "verified": "community"
+    },
+    {
+      "slug": "nano-pdf",
+      "name": "Nano Pdf",
+      "description": "Edit PDFs with natural-language instructions using the nano-pdf CLI.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/nano-pdf",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install nano-pdf",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254470,
+      "verified": "community"
+    },
+    {
+      "slug": "notion",
+      "name": "Notion",
+      "description": "Notion API for creating and managing pages, databases, and blocks.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/notion",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install notion",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254470,
+      "verified": "community"
+    },
+    {
+      "slug": "obsidian",
+      "name": "Obsidian",
+      "description": "Work with Obsidian vaults (plain Markdown notes) and automate via obsidian-cli.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/obsidian",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install obsidian",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254471,
+      "verified": "community"
+    },
+    {
+      "slug": "openai-whisper-api",
+      "name": "Openai Whisper Api",
+      "description": "Transcribe audio via OpenAI Audio Transcriptions API (Whisper).",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/openai-whisper-api",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install openai-whisper-api",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254471,
+      "verified": "community"
+    },
+    {
+      "slug": "openai-whisper",
+      "name": "Openai Whisper",
+      "description": "Local speech-to-text with the Whisper CLI (no API key).",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/openai-whisper",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install openai-whisper",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254471,
+      "verified": "community"
+    },
+    {
+      "slug": "openhue",
+      "name": "Openhue",
+      "description": "Control Philips Hue lights and scenes via the OpenHue CLI.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/openhue",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install openhue",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254471,
+      "verified": "community"
+    },
+    {
+      "slug": "oracle",
+      "name": "Oracle",
+      "description": "Best practices for using the oracle CLI (prompt + file bundling, engines, sessions, and file attachment patterns).",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/oracle",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install oracle",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254471,
+      "verified": "community"
+    },
+    {
+      "slug": "ordercli",
+      "name": "Ordercli",
+      "description": "Foodora-only CLI for checking past orders and active order status (Deliveroo WIP).",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/ordercli",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install ordercli",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254471,
+      "verified": "community"
+    },
+    {
+      "slug": "peekaboo",
+      "name": "Peekaboo",
+      "description": "Capture and automate macOS UI with the Peekaboo CLI.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/peekaboo",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install peekaboo",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254471,
+      "verified": "community"
+    },
+    {
+      "slug": "sag",
+      "name": "Sag",
+      "description": "ElevenLabs text-to-speech with mac-style say UX.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/sag",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install sag",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254471,
+      "verified": "community"
+    },
+    {
+      "slug": "session-logs",
+      "name": "Session Logs",
+      "description": "Search and analyze your own session logs (older/parent conversations) using jq.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/session-logs",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "📜",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "jq",
+          "rg"
+        ],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install session-logs",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254471,
+      "verified": "community"
+    },
+    {
+      "slug": "sherpa-onnx-tts",
+      "name": "Sherpa Onnx Tts",
+      "description": "Local text-to-speech via sherpa-onnx (offline, no cloud)",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/sherpa-onnx-tts",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install sherpa-onnx-tts",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254472,
+      "verified": "community"
+    },
+    {
+      "slug": "slack",
+      "name": "Slack",
+      "description": "Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/slack",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "💬",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": [
+          "channels.slack"
+        ]
+      },
+      "installCmd": "openclaw skills install slack",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254472,
+      "verified": "community"
+    },
+    {
+      "slug": "songsee",
+      "name": "Songsee",
+      "description": "Generate spectrograms and feature-panel visualizations from audio with the songsee CLI.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/songsee",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install songsee",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254472,
+      "verified": "community"
+    },
+    {
+      "slug": "sonoscli",
+      "name": "Sonoscli",
+      "description": "Control Sonos speakers (discover/status/play/volume/group).",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/sonoscli",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install sonoscli",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254472,
+      "verified": "community"
+    },
+    {
+      "slug": "spotify-player",
+      "name": "Spotify Player",
+      "description": "Terminal Spotify playback/search via spogo (preferred) or spotify_player.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/spotify-player",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install spotify-player",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254472,
+      "verified": "community"
+    },
+    {
+      "slug": "summarize",
+      "name": "Summarize",
+      "description": "Summarize or extract text/transcripts from URLs, podcasts, and local files (great fallback for “transcribe this YouTube/video”).",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/summarize",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install summarize",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254472,
+      "verified": "community"
+    },
+    {
+      "slug": "things-mac",
+      "name": "Things Mac",
+      "description": "Manage Things 3 via the `things` CLI on macOS (add/update projects+todos via URL scheme; read/search/list from the local Things database). Use when a user asks OpenClaw to add a task to Things, list inbox/today/upcoming, search tasks, or inspect projects/areas/tags.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/things-mac",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install things-mac",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254472,
+      "verified": "community"
+    },
+    {
+      "slug": "tmux",
+      "name": "Tmux",
+      "description": "Remote-control tmux sessions for interactive CLIs by sending keystrokes and scraping pane output.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/tmux",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install tmux",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254472,
+      "verified": "community"
+    },
+    {
+      "slug": "trello",
+      "name": "Trello",
+      "description": "Manage Trello boards, lists, and cards via the Trello REST API.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/trello",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install trello",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254472,
+      "verified": "community"
+    },
+    {
+      "slug": "video-frames",
+      "name": "Video Frames",
+      "description": "Extract frames or short clips from videos using ffmpeg.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/video-frames",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install video-frames",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254472,
+      "verified": "community"
+    },
+    {
+      "slug": "voice-call",
+      "name": "Voice Call",
+      "description": "Start voice calls via the OpenClaw voice-call plugin.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/voice-call",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install voice-call",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254472,
+      "verified": "community"
+    },
+    {
+      "slug": "wacli",
+      "name": "Wacli",
+      "description": "Send WhatsApp messages to other people or search/sync WhatsApp history via the wacli CLI (not for normal user chats).",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/wacli",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install wacli",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254472,
+      "verified": "community"
+    },
+    {
+      "slug": "xurl",
+      "name": "Xurl",
+      "description": "A CLI tool for making authenticated requests to the X (Twitter) API. Use this skill when you need to post tweets, reply, quote, search, read posts, manage followers, send DMs, upload media, or interact with any X API v2 endpoint.",
+      "version": "2026.3.2",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/xurl",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install xurl",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-24T10:16:47Z",
+      "updated_at": "2026-03-03T04:43:07Z",
+      "installs": 0,
+      "stars": 254472,
+      "verified": "community"
+    },
+    {
+      "slug": "web-search",
+      "name": "Web Search",
+      "description": "Search the web using DuckDuckGo, Brave Search, or Tavily. Get real-time information without hallucination. Supports structured results and full page content.",
+      "version": "1.4.0",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/web-search",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [
+        "search",
+        "web",
+        "duckduckgo",
+        "brave",
+        "research"
+      ],
+      "category": "web",
+      "emoji": "🔍",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "mcp"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install web-search",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-09-15T00:00:00Z",
+      "updated_at": "2026-02-28T00:00:00Z",
+      "stars": 0,
+      "language": null,
+      "installs": 5600,
+      "verified": "featured"
+    },
+    {
+      "slug": "weather",
+      "name": "Weather",
+      "description": "Get current weather and forecasts for any location via wttr.in or Open-Meteo. Supports hourly, daily, and current conditions.",
+      "version": "1.2.0",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/weather",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [
+        "weather",
+        "forecast",
+        "wttr",
+        "open-meteo",
+        "utilities"
+      ],
+      "category": "utilities",
+      "emoji": "🌤️",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install weather",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-09-01T00:00:00Z",
+      "updated_at": "2026-01-15T00:00:00Z",
+      "stars": 0,
+      "language": null,
+      "installs": 4820,
+      "verified": "featured"
+    },
+    {
+      "slug": "openai-image-gen",
+      "name": "OpenAI Image Gen",
+      "description": "Generate and edit images using OpenAI's DALL-E 3 and GPT-4o image generation APIs. Supports text-to-image, image editing, and variations.",
+      "version": "2.0.1",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/openai-image-gen",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [
+        "image",
+        "dalle",
+        "openai",
+        "generation",
+        "ai"
+      ],
+      "category": "ai",
+      "emoji": "🖼️",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [
+          "OPENAI_API_KEY"
+        ],
+        "config": []
+      },
+      "installCmd": "openclaw skills install openai-image-gen",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-10-01T00:00:00Z",
+      "updated_at": "2026-02-01T00:00:00Z",
+      "stars": 0,
+      "language": null,
+      "installs": 3210,
+      "verified": "featured"
+    },
+    {
+      "slug": "healthcheck",
+      "name": "Healthcheck",
+      "description": "Monitor and diagnose OpenClaw agent health, session status, tool availability, and system resources. Essential for debugging and monitoring.",
+      "version": "1.0.3",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/healthcheck",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [
+        "monitoring",
+        "diagnostics",
+        "health",
+        "system",
+        "debug"
+      ],
+      "category": "dev",
+      "emoji": "🏥",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install healthcheck",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-08-01T00:00:00Z",
+      "updated_at": "2025-12-10T00:00:00Z",
+      "stars": 0,
+      "language": null,
+      "installs": 2450,
+      "verified": "featured"
+    },
+    {
+      "slug": "whisper",
+      "name": "Whisper Transcription",
+      "description": "Transcribe audio and video files to text using OpenAI Whisper. Supports 50+ languages with automatic language detection.",
+      "version": "1.1.0",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/whisper",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [
+        "transcription",
+        "audio",
+        "whisper",
+        "speech-to-text",
+        "openai"
+      ],
+      "category": "media",
+      "emoji": "🎙️",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "ffmpeg"
+        ],
+        "env": [
+          "OPENAI_API_KEY"
+        ],
+        "config": []
+      },
+      "installCmd": "openclaw skills install whisper",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-10-15T00:00:00Z",
+      "updated_at": "2026-01-20T00:00:00Z",
+      "stars": 0,
+      "language": null,
+      "installs": 1890,
+      "verified": "featured"
+    },
+    {
+      "slug": "skill-creator",
+      "name": "Skill Creator",
+      "description": "AI-powered skill scaffolding tool. Describe what you want your skill to do and get a complete SKILL.md + tool handlers generated automatically.",
+      "version": "1.3.0",
+      "author": "openclaw",
+      "homepage": "https://trustedskills.dev/skills/skill-creator",
+      "source_repo": "https://github.com/openclaw/openclaw",
+      "tags": [
+        "meta",
+        "scaffolding",
+        "create",
+        "builder",
+        "dev"
+      ],
+      "category": "dev",
+      "emoji": "🔨",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install skill-creator",
+      "repoUrl": "https://github.com/openclaw/openclaw",
+      "published_at": "2025-11-01T00:00:00Z",
+      "updated_at": "2026-02-15T00:00:00Z",
+      "stars": 0,
+      "language": null,
+      "installs": 1650,
+      "verified": "featured"
+    },
+    {
+      "slug": "calendar-sync",
+      "name": "Calendar Sync",
+      "description": "Connect to Google Calendar and Outlook. Create events, check availability, set reminders, and manage your schedule from natural language.",
+      "version": "0.9.2",
+      "author": "community",
+      "homepage": "https://trustedskills.dev/skills/calendar-sync",
+      "source_repo": "https://github.com/community/openclaw-calendar",
+      "tags": [
+        "calendar",
+        "google",
+        "outlook",
+        "scheduling",
+        "productivity"
+      ],
+      "category": "productivity",
+      "emoji": "📅",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "mcp",
+        "openai",
+        "claude"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [
+          "GOOGLE_CLIENT_ID",
+          "GOOGLE_CLIENT_SECRET"
+        ],
+        "config": []
+      },
+      "installCmd": "openclaw skills install calendar-sync",
+      "repoUrl": "https://github.com/community/openclaw-calendar",
+      "published_at": "2026-01-20T00:00:00Z",
+      "updated_at": "2026-03-01T00:00:00Z",
+      "stars": 0,
+      "language": null,
+      "installs": 340,
+      "verified": "unverified"
+    },
+    {
+      "slug": "nano-banana-pro-prompts-recommend-skill",
+      "name": "Nano Banana Pro Prompts Recommend Skill",
+      "description": "|",
+      "version": "1.0.0",
+      "author": "YouMind-OpenLab",
+      "homepage": "https://trustedskills.dev/skills/nano-banana-pro-prompts-recommend-skill",
+      "source_repo": "https://github.com/YouMind-OpenLab/nano-banana-pro-prompts-recommend-skill",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install nano-banana-pro-prompts-recommend-skill",
+      "repoUrl": "https://github.com/YouMind-OpenLab/nano-banana-pro-prompts-recommend-skill",
+      "published_at": "2026-01-21T07:15:20Z",
+      "updated_at": "2026-03-03T13:13:48Z",
+      "installs": 0,
+      "stars": 1102,
+      "verified": "unverified"
+    },
+    {
+      "slug": "clawdcursor",
+      "name": "Clawdcursor",
+      "description": ">",
+      "version": "0.6.3",
+      "author": "AmrDab",
+      "homepage": "https://trustedskills.dev/skills/clawdcursor",
+      "source_repo": "https://github.com/AmrDab/clawd-cursor",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install clawdcursor",
+      "repoUrl": "https://github.com/AmrDab/clawd-cursor",
+      "published_at": "2026-02-19T12:50:57Z",
+      "updated_at": "2026-03-03T06:37:15Z",
+      "installs": 0,
+      "stars": 112,
+      "verified": "unverified"
+    },
+    {
+      "slug": "iblai-router",
+      "name": "Iblai Router",
+      "description": "Cost-optimizing model router for OpenClaw. Automatically routes each request to the cheapest capable Claude model (Haiku/Sonnet/Opus) using weighted scoring. Use when setting up smart model routing, reducing API costs, or configuring multi-tier LLM routing. Supports Anthropic models directly and OpenAI/Google models via OpenRouter.",
+      "version": "1.4.0",
+      "author": "iblai",
+      "homepage": "https://trustedskills.dev/skills/iblai-router",
+      "source_repo": "https://github.com/iblai/iblai-openclaw-router",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install iblai-router",
+      "repoUrl": "https://github.com/iblai/iblai-openclaw-router",
+      "published_at": "2026-02-16T20:38:06Z",
+      "updated_at": "2026-02-20T15:10:23Z",
+      "installs": 0,
+      "stars": 18,
+      "verified": "unverified"
+    },
+    {
+      "slug": "NotebookLM MCP Connector",
+      "name": "NotebookLM MCP Connector",
+      "description": "Guía completa para instalar, configurar y autenticar el servidor MCP de NotebookLM, incluyendo métodos automáticos y manuales.",
+      "version": "1.0.0",
+      "author": "ANONIMO432HZ",
+      "homepage": "https://trustedskills.dev/skills/NotebookLM MCP Connector",
+      "source_repo": "https://github.com/ANONIMO432HZ/notebooklm-mcp-skill-setup",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install NotebookLM MCP Connector",
+      "repoUrl": "https://github.com/ANONIMO432HZ/notebooklm-mcp-skill-setup",
+      "published_at": "2026-02-17T22:49:55Z",
+      "updated_at": "2026-02-18T03:11:06Z",
+      "installs": 0,
+      "stars": 1,
+      "verified": "unverified"
+    },
+    {
+      "slug": "ui-engineering",
+      "name": "Ui Engineering",
+      "description": "Expert system for creating high-quality, brand-aligned user interfaces. Use this skill when asked to design websites, create components, or implement specific visual styles. It contains specifications for major tech companies, design trends, and specific site types like blogs or presentations.",
+      "version": "1.0.0",
+      "author": "yzfly",
+      "homepage": "https://trustedskills.dev/skills/ui-engineering",
+      "source_repo": "https://github.com/yzfly/pro-ui-engineering-skill",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install ui-engineering",
+      "repoUrl": "https://github.com/yzfly/pro-ui-engineering-skill",
+      "published_at": "2026-01-11T13:38:50Z",
+      "updated_at": "2026-01-11T13:41:41Z",
+      "installs": 0,
+      "stars": 1,
+      "verified": "unverified"
+    },
+    {
+      "slug": "anti-slop-writing",
+      "name": "Anti Slop Writing",
+      "description": "Write text that avoids all known AI writing patterns and passes human detection. Use when writing articles, essays, blog posts, social media copy, or any content that must read as authentically human. Triggers on requests to write naturally, avoid AI slop, avoid AI detection, humanize writing, write like a human, or make text sound authentic.",
+      "version": "1.2.0",
+      "author": "adenaufal",
+      "homepage": "https://trustedskills.dev/skills/anti-slop-writing",
+      "source_repo": "https://github.com/adenaufal/anti-slop-writing",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install anti-slop-writing",
+      "repoUrl": "https://github.com/adenaufal/anti-slop-writing",
+      "published_at": "2026-02-28T19:45:28Z",
+      "updated_at": "2026-03-01T08:36:37Z",
+      "installs": 0,
+      "stars": 31,
+      "verified": "unverified"
+    },
+    {
+      "slug": "tgcli",
+      "name": "Tgcli",
+      "description": "Telegram CLI for reading/searching messages, syncing archives, and sending or downloading files. Use when the user asks about Telegram chats, messages, contacts, groups, or files.",
+      "version": "2.0.8",
+      "author": "kfastov",
+      "homepage": "https://trustedskills.dev/skills/tgcli",
+      "source_repo": "https://github.com/kfastov/tgcli",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install tgcli",
+      "repoUrl": "https://github.com/kfastov/tgcli",
+      "published_at": "2025-03-19T14:48:50Z",
+      "updated_at": "2026-02-02T11:22:04Z",
+      "installs": 0,
+      "stars": 31,
+      "verified": "unverified"
+    },
+    {
+      "slug": "gcc",
+      "name": "Gcc",
+      "description": "Git Context Controller (GCC) - Manages agent memory as a versioned file system under .GCC/. This skill should be used when working on multi-step projects that benefit from structured memory persistence, milestone tracking, branching for alternative approaches, and cross-session context recovery. Triggers on /gcc commands or natural language like 'commit this progress', 'branch to try an alternative', 'merge results', 'recover context'.",
+      "version": "1.0.0",
+      "author": "faugustdev",
+      "homepage": "https://trustedskills.dev/skills/gcc",
+      "source_repo": "https://github.com/faugustdev/git-context-controller",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install gcc",
+      "repoUrl": "https://github.com/faugustdev/git-context-controller",
+      "published_at": "2026-02-25T21:11:32Z",
+      "updated_at": "2026-02-25T21:31:09Z",
+      "installs": 0,
+      "stars": 24,
+      "verified": "unverified"
+    },
+    {
+      "slug": "agent-skills-authoring",
+      "name": "Agent Skills Authoring",
+      "description": ">-",
+      "version": "1.0.0",
+      "author": "zebbern",
+      "homepage": "https://trustedskills.dev/skills/agent-skills-authoring",
+      "source_repo": "https://github.com/zebbern/agent-skills-authoring",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install agent-skills-authoring",
+      "repoUrl": "https://github.com/zebbern/agent-skills-authoring",
+      "published_at": "2026-01-11T20:21:46Z",
+      "updated_at": "2026-03-01T17:08:18Z",
+      "installs": 0,
+      "stars": 17,
+      "verified": "unverified"
+    },
+    {
+      "slug": "apple-engineer-superpowers",
+      "name": "Apple Engineer Superpowers",
+      "description": "Use when writing Swift code for Apple platforms - iOS, macOS, visionOS. Covers Swift 6 concurrency, actors, Sendable, async/await, SwiftUI, MVVM architecture, Metal GPU programming, RealityKit ECS, visionOS scenes, interpolation/animation, advanced collection types, property wrappers, Combine bridging, error handling, testing, and API design patterns.",
+      "version": "1.0.0",
+      "author": "piemonte",
+      "homepage": "https://trustedskills.dev/skills/apple-engineer-superpowers",
+      "source_repo": "https://github.com/piemonte/apple-engineer-superpowers",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install apple-engineer-superpowers",
+      "repoUrl": "https://github.com/piemonte/apple-engineer-superpowers",
+      "published_at": "2026-02-28T00:15:30Z",
+      "updated_at": "2026-03-01T20:52:35Z",
+      "installs": 0,
+      "stars": 15,
+      "verified": "unverified"
+    },
+    {
+      "slug": "upgrade-guard",
+      "name": "Upgrade Guard",
+      "description": "Safe OpenClaw upgrades with snapshot, pre-flight checks, controlled upgrade steps, post-verification, and emergency rollback. Never lose your working system to a bad update again.",
+      "version": "1.0.0",
+      "author": "jzOcb",
+      "homepage": "https://trustedskills.dev/skills/upgrade-guard",
+      "source_repo": "https://github.com/jzOcb/upgrade-guard",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install upgrade-guard",
+      "repoUrl": "https://github.com/jzOcb/upgrade-guard",
+      "published_at": "2026-02-04T14:51:29Z",
+      "updated_at": "2026-02-06T00:24:21Z",
+      "installs": 0,
+      "stars": 10,
+      "verified": "unverified"
+    },
+    {
+      "slug": "Forge",
+      "name": "Forge",
+      "description": "Autonomous quality engineering swarm that forges production-ready code through continuous behavioral verification, exhaustive E2E testing, and self-healing fix loops. Combines DDD+ADR+TDD methodology with BDD/Gherkin specifications, 7 quality gates, defect prediction, chaos testing, and cross-context dependency awareness. Architecture-agnostic - works with monoliths, microservices, modular monoliths, and any bounded-context topology.",
+      "version": "1.1.0",
+      "author": "ikennaokpala",
+      "homepage": "https://trustedskills.dev/skills/Forge",
+      "source_repo": "https://github.com/ikennaokpala/forge",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install Forge",
+      "repoUrl": "https://github.com/ikennaokpala/forge",
+      "published_at": "2026-02-07T07:58:30Z",
+      "updated_at": "2026-02-20T05:20:04Z",
+      "installs": 0,
+      "stars": 9,
+      "verified": "unverified"
+    },
+    {
+      "slug": "config-guard",
+      "name": "Config Guard",
+      "description": "Prevent OpenClaw config changes from crashing the gateway. Auto-backup, schema validation, critical field checks, and auto-rollback. Use before any config.apply, config.patch, or openclaw.json edit.",
+      "version": "1.0.0",
+      "author": "jzOcb",
+      "homepage": "https://trustedskills.dev/skills/config-guard",
+      "source_repo": "https://github.com/jzOcb/config-guard",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install config-guard",
+      "repoUrl": "https://github.com/jzOcb/config-guard",
+      "published_at": "2026-02-04T14:39:37Z",
+      "updated_at": "2026-02-06T00:24:23Z",
+      "installs": 0,
+      "stars": 7,
+      "verified": "unverified"
+    },
+    {
+      "slug": "contributor-codebase-analyzer",
+      "name": "Contributor Codebase Analyzer",
+      "description": ">",
+      "version": "1.0.0",
+      "author": "anivar",
+      "homepage": "https://trustedskills.dev/skills/contributor-codebase-analyzer",
+      "source_repo": "https://github.com/anivar/contributor-codebase-analyzer",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install contributor-codebase-analyzer",
+      "repoUrl": "https://github.com/anivar/contributor-codebase-analyzer",
+      "published_at": "2026-01-30T00:09:31Z",
+      "updated_at": "2026-02-24T02:30:53Z",
+      "installs": 0,
+      "stars": 6,
+      "verified": "unverified"
+    },
+    {
+      "slug": "ai-video-producer",
+      "name": "Ai Video Producer",
+      "description": ">",
+      "version": "1.0.0",
+      "author": "zysilm-ai",
+      "homepage": "https://trustedskills.dev/skills/ai-video-producer",
+      "source_repo": "https://github.com/zysilm-ai/ai-video-producer-skill",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install ai-video-producer",
+      "repoUrl": "https://github.com/zysilm-ai/ai-video-producer-skill",
+      "published_at": "2025-12-28T06:57:20Z",
+      "updated_at": "2026-01-09T22:20:42Z",
+      "installs": 0,
+      "stars": 5,
+      "verified": "unverified"
+    },
+    {
+      "slug": "claw-memory",
+      "name": "Claw Memory",
+      "description": "Shared memory service for AI agents (OpenClaw, KimiClaw, NanoClaw, etc). Use when user asks to store, retrieve, search, or share memories across agent instances. Also use for importing existing memory files (MEMORY.md, daily notes) into the shared service.",
+      "version": "1.0.0",
+      "author": "siddontang",
+      "homepage": "https://trustedskills.dev/skills/claw-memory",
+      "source_repo": "https://github.com/siddontang/claw-memory",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install claw-memory",
+      "repoUrl": "https://github.com/siddontang/claw-memory",
+      "published_at": "2026-02-27T11:09:20Z",
+      "updated_at": "2026-03-03T15:13:24Z",
+      "installs": 0,
+      "stars": 5,
+      "verified": "unverified"
     }
   ],
   "categories": [
     {
       "slug": "utilities",
       "name": "Utilities",
-      "emoji": "\ud83d\udd27",
-      "count": 14
-    },
-    {
-      "slug": "ai",
-      "name": "AI & Models",
-      "emoji": "\ud83e\udd16",
-      "count": 1
-    },
-    {
-      "slug": "media",
-      "name": "Media & Audio",
-      "emoji": "\ud83c\udfac",
-      "count": 5
-    },
-    {
-      "slug": "dev",
-      "name": "Development",
-      "emoji": "\ud83d\udcbb",
-      "count": 5
-    },
-    {
-      "slug": "web",
-      "name": "Web & Search",
-      "emoji": "\ud83c\udf10",
-      "count": 1
-    },
-    {
-      "slug": "data",
-      "name": "Data & Research",
-      "emoji": "\ud83d\udcca",
-      "count": 6
+      "emoji": "🔧",
+      "count": 77
     },
     {
       "slug": "productivity",
       "name": "Productivity",
-      "emoji": "\u26a1",
+      "emoji": "⚡",
       "count": 8
+    },
+    {
+      "slug": "data",
+      "name": "Data & Research",
+      "emoji": "📊",
+      "count": 6
+    },
+    {
+      "slug": "dev",
+      "name": "Development",
+      "emoji": "💻",
+      "count": 5
+    },
+    {
+      "slug": "media",
+      "name": "Media & Audio",
+      "emoji": "🎬",
+      "count": 5
+    },
+    {
+      "slug": "coding",
+      "name": "coding",
+      "emoji": "📦",
+      "count": 4
     },
     {
       "slug": "communication",
       "name": "Communication",
-      "emoji": "\ud83d\udcac",
+      "emoji": "💬",
       "count": 2
     },
     {
-      "slug": "coding",
-      "name": "Coding",
-      "emoji": "\ud83e\uddd1\u200d\ud83d\udcbb",
-      "count": 4
+      "slug": "web",
+      "name": "Web & Search",
+      "emoji": "🌐",
+      "count": 1
+    },
+    {
+      "slug": "ai",
+      "name": "AI & Models",
+      "emoji": "🤖",
+      "count": 1
     }
   ],
   "stats": {
-    "total_skills": 46,
+    "total_skills": 109,
     "total_installs": 26150,
-    "total_authors": 35,
-    "last_updated": "2026-03-04T01:30:00Z"
+    "total_authors": 48,
+    "last_updated": "2026-03-04T06:43:26.605Z"
   }
 }
