@@ -43,6 +43,7 @@ export default function RootLayout({
               </Link>
               <div className="flex items-center gap-6 text-sm text-gray-400">
                 <Link href="/skills" className="hover:text-white transition-colors">Browse</Link>
+                <Link href="/reviews" className="hover:text-white transition-colors">Reviews</Link>
                 <Link href="/submit" className="hover:text-white transition-colors">Submit</Link>
                 <Link href="/docs" className="hover:text-white transition-colors">Docs</Link>
                 {/* Developer API link — raw JSON index, not an MCP server endpoint */}
@@ -80,6 +81,7 @@ export default function RootLayout({
               </div>
               <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-gray-500">
                 <Link href="/skills" className="hover:text-gray-300 transition-colors">Browse Skills</Link>
+                <Link href="/reviews" className="hover:text-gray-300 transition-colors">Reviews</Link>
                 <Link href="/submit" className="hover:text-gray-300 transition-colors">Submit a Skill</Link>
                 <Link href="/docs" className="hover:text-gray-300 transition-colors">Docs</Link>
                 <a
