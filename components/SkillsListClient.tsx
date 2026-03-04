@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Skill, Category, TIER_CONFIG, PLATFORM_CONFIG } from "@/lib/skills";
 import { SkillCard } from "@/components/SkillCard";
 import { usePlatform, PlatformKey } from "@/hooks/usePlatform";
@@ -25,10 +25,11 @@ export function SkillsListClient({
   initialCategory = "all",
 }: SkillsListClientProps) {
   const router = useRouter();
-  const [query, setQuery] = useState(initialQuery);
-  const [activeCategory, setActiveCategory] = useState<string>(initialCategory);
+  const searchParams = useSearchParams();
+  const [query, setQuery] = useState(() => searchParams.get("q") ?? initialQuery);
+  const [activeCategory, setActiveCategory] = useState<string>(() => searchParams.get("category") ?? initialCategory);
   const [activePlatform, setActivePlatform] = useState<string>("all");
-  const [activeTier, setActiveTier] = useState<string>(initialTier);
+  const [activeTier, setActiveTier] = useState<string>(() => searchParams.get("tier") ?? initialTier);
   const [sort, setSort] = useState<"installs" | "updated" | "name">("installs");
 
   // Sync platform preference: when the user picks a platform in the selector,

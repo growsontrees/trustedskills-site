@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { getAllSkills, getCategories, getStats } from "@/lib/skills";
 import { SkillsListClient } from "@/components/SkillsListClient";
 import type { Metadata } from "next";
@@ -7,11 +8,7 @@ export const metadata: Metadata = {
   description: "Browse all AI agent skills — humanizer, Obsidian, code runners, and more. Filter by platform, category, and verification tier.",
 };
 
-export default function SkillsPage({
-  searchParams,
-}: {
-  searchParams: { q?: string; tier?: string; category?: string };
-}) {
+export default function SkillsPage() {
   const skills = getAllSkills();
   const categories = getCategories();
   const stats = getStats();
@@ -24,13 +21,12 @@ export default function SkillsPage({
           {stats.total_skills} skills available · {(stats.total_installs / 1000).toFixed(1)}k total installs
         </p>
       </div>
-      <SkillsListClient
-        skills={skills}
-        categories={categories}
-        initialQuery={searchParams.q ?? ""}
-        initialTier={searchParams.tier ?? "all"}
-        initialCategory={searchParams.category ?? "all"}
-      />
+      <Suspense fallback={<div className="text-gray-500 py-12 text-center">Loading skills...</div>}>
+        <SkillsListClient
+          skills={skills}
+          categories={categories}
+        />
+      </Suspense>
     </div>
   );
 }

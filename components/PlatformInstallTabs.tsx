@@ -185,6 +185,7 @@ function McpGuide({ slug }: { slug: string }) {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function OpenAIGuide({ repoUrl, slug }: { repoUrl: string; slug: string }) {
   return (
     <div className="bg-yellow-900/20 border border-yellow-800/50 rounded-xl p-5 space-y-3">
