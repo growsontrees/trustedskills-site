@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Browse Skills",
-  description: "Browse all AI agent skills. Filter by platform, category, and verification tier.",
+  description: "Browse all AI agent skills — humanizer, Obsidian, code runners, and more. Filter by platform, category, and verification tier.",
 };
 
 export default function SkillsPage({
