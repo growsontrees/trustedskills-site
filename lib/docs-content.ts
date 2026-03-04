@@ -1103,7 +1103,7 @@ claude                # start a session
     "postgres": {
       "command": "npx",
       "args": ["-y", "@trustedskills/postgres-mcp"],
-      "env": { "DATABASE_URL": "${DATABASE_URL}" }
+      "env": { "DATABASE_URL": "$&#123;DATABASE_URL&#125;" }
     }
   }
 }</code></pre>
@@ -1111,7 +1111,7 @@ claude                # start a session
 <p>Each developer sets their own <code>DATABASE_URL</code> in their shell or a gitignored <code>.env</code> file. The config commits safely — no actual credentials in the repo.</p>
 
 <div class="warning-box">
-  <strong>⚠️ Don't commit secrets:</strong> Once a key is in git history, it's compromised — even if you delete it later. Always use <code>${VAR_NAME}</code> references and set the actual values locally. Add <code>.env</code> to your <code>.gitignore</code>.
+  <strong>⚠️ Don't commit secrets:</strong> Once a key is in git history, it's compromised — even if you delete it later. Always use <code>$&#123;VAR_NAME&#125;</code> references and set the actual values locally. Add <code>.env</code> to your <code>.gitignore</code>.
 </div>
 
 <h2>Global vs Project: The Decision Matrix</h2>
@@ -1149,13 +1149,13 @@ claude                # start a session
 <p>Project config takes precedence. The project version is used when you're working in that project. This lets you override global defaults on a per-project basis.</p>
 
 <h3>Can I commit the project config to git without exposing secrets?</h3>
-<p>Yes — use <code>${VAR_NAME}</code> references and keep actual values in your local shell environment or a gitignored <code>.env</code> file. The config file itself contains no secrets.</p>
+<p>Yes — use <code>$&#123;VAR_NAME&#125;</code> references and keep actual values in your local shell environment or a gitignored <code>.env</code> file. The config file itself contains no secrets.</p>
 
 <h3>How do I add a project-scoped skill via the CLI?</h3>
 <p>Use the <code>--project</code> flag: <code>claude mcp add my-tool --project -- npx -y @package/name</code>. This writes to <code>.claude/settings.json</code> in your current directory.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What happens if the same skill is in both global and project config?","acceptedAnswer":{"@type":"Answer","text":"Project config takes precedence when you're in that project."}},{"@type":"Question","name":"Can I commit project config without exposing secrets?","acceptedAnswer":{"@type":"Answer","text":"Yes — use ${VAR_NAME} references. Set actual values in your local shell or a gitignored .env file."}},{"@type":"Question","name":"How do I add a project-scoped skill via CLI?","acceptedAnswer":{"@type":"Answer","text":"claude mcp add my-tool --project -- npx -y @package/name"}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What happens if the same skill is in both global and project config?","acceptedAnswer":{"@type":"Answer","text":"Project config takes precedence when you're in that project."}},{"@type":"Question","name":"Can I commit project config without exposing secrets?","acceptedAnswer":{"@type":"Answer","text":"Yes — use $&#123;VAR_NAME&#125; references. Set actual values in your local shell or a gitignored .env file."}},{"@type":"Question","name":"How do I add a project-scoped skill via CLI?","acceptedAnswer":{"@type":"Answer","text":"claude mcp add my-tool --project -- npx -y @package/name"}}]}
 </script>
     `,
   },
@@ -1846,7 +1846,7 @@ nvm install --lts</code></pre>
 
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
-  <p>Global config = personal tools and credentials, available everywhere on your machine. Project config = team tools, committed to git, only active in that project. Never put actual API keys in project config — use <code>${ENV_VAR}</code> references instead. Project config overrides global when names clash.</p>
+  <p>Global config = personal tools and credentials, available everywhere on your machine. Project config = team tools, committed to git, only active in that project. Never put actual API keys in project config — use <code>$&#123;ENV_VAR&#125;</code> references instead. Project config overrides global when names clash.</p>
 </div>
 
 <p class="article-intro">The question of "should this skill be global or project-scoped?" comes up every time you add something new. Get it wrong and you end up with personal credentials in a git repo (bad) or a useful tool missing from half your projects (annoying). Here's the framework we use.</p>
@@ -1869,7 +1869,7 @@ Not sure?
 
 <div class="experience-callout">
   <div class="experience-label">🔬 From the field</div>
-  <p>We accidentally committed a GitHub personal access token in a project config file once. GitHub's secret scanning caught it and invalidated the token within minutes — then sent an alert. Annoying but not catastrophic. The lesson: don't put any real credential in a committed file, even "just for testing". Use <code>${GITHUB_TOKEN}</code> and set the value locally.</p>
+  <p>We accidentally committed a GitHub personal access token in a project config file once. GitHub's secret scanning caught it and invalidated the token within minutes — then sent an alert. Annoying but not catastrophic. The lesson: don't put any real credential in a committed file, even "just for testing". Use <code>$&#123;GITHUB_TOKEN&#125;</code> and set the value locally.</p>
 </div>
 
 <h2>Config Locations: Every Platform</h2>
@@ -1921,7 +1921,7 @@ openclaw skills install weather --project</code></pre>
   <li>Each developer sets up their own global config with personal tools</li>
   <li>Create a project config with team tools — no personal credentials</li>
   <li>Commit the project config to git</li>
-  <li>Use <code>${VAR_NAME}</code> references for anything that varies per developer</li>
+  <li>Use <code>$&#123;VAR_NAME&#125;</code> references for anything that varies per developer</li>
   <li>Document the required env vars in your README</li>
 </ol>
 
@@ -1931,7 +1931,7 @@ openclaw skills install weather --project</code></pre>
     "postgres": {
       "command": "npx",
       "args": ["-y", "@trustedskills/postgres-mcp"],
-      "env": { "DATABASE_URL": "${DATABASE_URL}" }
+      "env": { "DATABASE_URL": "$&#123;DATABASE_URL&#125;" }
     }
   }
 }</code></pre>
@@ -1954,13 +1954,13 @@ openclaw skills install weather --project</code></pre>
 <p>Add the skill config to your project's config file and commit it to git. Every team member who clones the repo gets it automatically.</p>
 
 <h3>What's the safest way to handle API keys in project config?</h3>
-<p>Use <code>${VAR_NAME}</code> references. Set actual values in each developer's local environment or a gitignored <code>.env</code> file. The committed config file contains zero secrets.</p>
+<p>Use <code>$&#123;VAR_NAME&#125;</code> references. Set actual values in each developer's local environment or a gitignored <code>.env</code> file. The committed config file contains zero secrets.</p>
 
 <h3>Does Claude Desktop support project-level config?</h3>
 <p>No — it's global only. For project-level skill management, use Claude Code or Cursor, which both support project config files.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can the same skill be in both global and project config?","acceptedAnswer":{"@type":"Answer","text":"Yes. Project config takes precedence."}},{"@type":"Question","name":"How do I share MCP skills with my team?","acceptedAnswer":{"@type":"Answer","text":"Add to project config and commit to git."}},{"@type":"Question","name":"What's the safest way to handle API keys?","acceptedAnswer":{"@type":"Answer","text":"Use ${VAR_NAME} references. Set actual values in local .env (gitignored)."}},{"@type":"Question","name":"Does Claude Desktop support project-level config?","acceptedAnswer":{"@type":"Answer","text":"No — global only. Use Claude Code or Cursor for project-level config."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can the same skill be in both global and project config?","acceptedAnswer":{"@type":"Answer","text":"Yes. Project config takes precedence."}},{"@type":"Question","name":"How do I share MCP skills with my team?","acceptedAnswer":{"@type":"Answer","text":"Add to project config and commit to git."}},{"@type":"Question","name":"What's the safest way to handle API keys?","acceptedAnswer":{"@type":"Answer","text":"Use $&#123;VAR_NAME&#125; references. Set actual values in local .env (gitignored)."}},{"@type":"Question","name":"Does Claude Desktop support project-level config?","acceptedAnswer":{"@type":"Answer","text":"No — global only. Use Claude Code or Cursor for project-level config."}}]}
 </script>
     `,
   },
@@ -2050,18 +2050,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   if (name === 'celsius_to_fahrenheit') {
     const f = (args.celsius * 9/5) + 32;
     return {
-      content: [{ type: 'text', text: \`\${args.celsius}°C = \${f.toFixed(1)}°F\` }]
+      content: [{ type: 'text', text: \`\$&#123;args.celsius&#125;°C = \$&#123;f.toFixed(1)&#125;°F\` }]
     };
   }
 
   if (name === 'fahrenheit_to_celsius') {
     const c = (args.fahrenheit - 32) * 5/9;
     return {
-      content: [{ type: 'text', text: \`\${args.fahrenheit}°F = \${c.toFixed(1)}°C\` }]
+      content: [{ type: 'text', text: \`\$&#123;args.fahrenheit&#125;°F = \$&#123;c.toFixed(1)&#125;°C\` }]
     };
   }
 
-  throw new Error(\`Unknown tool: \${name}\`);
+  throw new Error(\`Unknown tool: \$&#123;name&#125;\`);
 });
 
 const transport = new StdioServerTransport();

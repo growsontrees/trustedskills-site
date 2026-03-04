@@ -124,27 +124,90 @@ export const reviews: Review[] = [
 
     <h3 class="text-lg font-semibold text-gray-100 mb-3">12 Sub-Skills</h3>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
-      ${[
-        ["🔍", "seo-audit", "Full site orchestrator — spawns all other subagents in parallel"],
-        ["📄", "seo-page", "Deep single-page analysis (meta, content, internal links)"],
-        ["⚙️", "seo-technical", "8-category technical audit: crawlability, indexability, CWV, mobile"],
-        ["✍️", "seo-content", "E-E-A-T content quality, expertise signals, content gaps"],
-        ["🏷️", "seo-schema", "Schema.org detection, validation, and generation"],
-        ["🖼️", "seo-images", "Alt text, WebP/AVIF format, lazy loading, file size"],
-        ["🗺️", "seo-sitemap", "XML sitemap analysis and generation with industry templates"],
-        ["🤖", "seo-geo", "AI Overviews, ChatGPT, Perplexity GEO optimization"],
-        ["📋", "seo-plan", "Strategic SEO planning (SaaS, local, ecommerce, publisher, agency)"],
-        ["📊", "seo-programmatic", "Programmatic SEO with quality gates — warns at 100+, stops at 500+ pages"],
-        ["⚔️", "seo-competitor-pages", "X vs Y and alternatives comparison pages"],
-        ["🌐", "seo-hreflang", "Multi-language hreflang validation and generation"],
-      ].map(([icon, name, desc]) => `
-      <div class="bg-gray-800 rounded-xl p-4 flex items-start gap-3">
-        <span class="text-xl mt-0.5">${icon}</span>
+            <div class="bg-gray-800 rounded-xl p-4 flex items-start gap-3">
+        <span class="text-xl mt-0.5">🔍</span>
         <div>
-          <code class="text-sm text-blue-300 font-mono">${name}</code>
-          <p class="text-xs text-gray-400 mt-1">${desc}</p>
+          <code class="text-sm text-blue-300 font-mono">seo-audit</code>
+          <p class="text-xs text-gray-400 mt-1">Full site orchestrator — spawns all other subagents in parallel</p>
         </div>
-      </div>`).join("")}
+      </div>
+      <div class="bg-gray-800 rounded-xl p-4 flex items-start gap-3">
+        <span class="text-xl mt-0.5">📄</span>
+        <div>
+          <code class="text-sm text-blue-300 font-mono">seo-page</code>
+          <p class="text-xs text-gray-400 mt-1">Deep single-page analysis (meta, content, internal links)</p>
+        </div>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-4 flex items-start gap-3">
+        <span class="text-xl mt-0.5">⚙️</span>
+        <div>
+          <code class="text-sm text-blue-300 font-mono">seo-technical</code>
+          <p class="text-xs text-gray-400 mt-1">8-category technical audit: crawlability, indexability, CWV, mobile</p>
+        </div>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-4 flex items-start gap-3">
+        <span class="text-xl mt-0.5">✍️</span>
+        <div>
+          <code class="text-sm text-blue-300 font-mono">seo-content</code>
+          <p class="text-xs text-gray-400 mt-1">E-E-A-T content quality, expertise signals, content gaps</p>
+        </div>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-4 flex items-start gap-3">
+        <span class="text-xl mt-0.5">🏷️</span>
+        <div>
+          <code class="text-sm text-blue-300 font-mono">seo-schema</code>
+          <p class="text-xs text-gray-400 mt-1">Schema.org detection, validation, and generation</p>
+        </div>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-4 flex items-start gap-3">
+        <span class="text-xl mt-0.5">🖼️</span>
+        <div>
+          <code class="text-sm text-blue-300 font-mono">seo-images</code>
+          <p class="text-xs text-gray-400 mt-1">Alt text, WebP/AVIF format, lazy loading, file size</p>
+        </div>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-4 flex items-start gap-3">
+        <span class="text-xl mt-0.5">🗺️</span>
+        <div>
+          <code class="text-sm text-blue-300 font-mono">seo-sitemap</code>
+          <p class="text-xs text-gray-400 mt-1">XML sitemap analysis and generation with industry templates</p>
+        </div>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-4 flex items-start gap-3">
+        <span class="text-xl mt-0.5">🤖</span>
+        <div>
+          <code class="text-sm text-blue-300 font-mono">seo-geo</code>
+          <p class="text-xs text-gray-400 mt-1">AI Overviews, ChatGPT, Perplexity GEO optimization</p>
+        </div>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-4 flex items-start gap-3">
+        <span class="text-xl mt-0.5">📋</span>
+        <div>
+          <code class="text-sm text-blue-300 font-mono">seo-plan</code>
+          <p class="text-xs text-gray-400 mt-1">Strategic SEO planning (SaaS, local, ecommerce, publisher, agency)</p>
+        </div>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-4 flex items-start gap-3">
+        <span class="text-xl mt-0.5">📊</span>
+        <div>
+          <code class="text-sm text-blue-300 font-mono">seo-programmatic</code>
+          <p class="text-xs text-gray-400 mt-1">Programmatic SEO with quality gates — warns at 100+, stops at 500+ pages</p>
+        </div>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-4 flex items-start gap-3">
+        <span class="text-xl mt-0.5">⚔️</span>
+        <div>
+          <code class="text-sm text-blue-300 font-mono">seo-competitor-pages</code>
+          <p class="text-xs text-gray-400 mt-1">X vs Y and alternatives comparison pages</p>
+        </div>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-4 flex items-start gap-3">
+        <span class="text-xl mt-0.5">🌐</span>
+        <div>
+          <code class="text-sm text-blue-300 font-mono">seo-hreflang</code>
+          <p class="text-xs text-gray-400 mt-1">Multi-language hreflang validation and generation</p>
+        </div>
+      </div>
     </div>
 
     <h3 class="text-lg font-semibold text-gray-100 mb-3">6 Subagents</h3>
@@ -418,26 +481,71 @@ export const reviews: Review[] = [
   <section class="mb-10">
     <h2 class="text-2xl font-bold text-white mb-4">Verdict Score</h2>
     <div class="space-y-4">
-      ${[
-        ["🔧", "Ease of Install", 4, "One-command curl install is great. Playwright optional setup adds a step. Windows support is a nice touch."],
-        ["📚", "Documentation", 5, "Exceptional — README covers every command with examples. Installation guide, MCP guide, and commands reference are all thorough."],
-        ["🔬", "Depth", 5, "12 sub-skills, 6 subagents, GEO coverage, schema deprecation awareness, E-E-A-T per 2025 QRG — this is the most complete SEO skill available."],
-        ["🔄", "Maintenance", 4, "v1.2.0 shipped with community contributions. Young project but actively maintained. Deducting 1 point for newness."],
-        ["🖥️", "Platform Support", 3, "Claude Code only for easy install. Other platforms need manual adaptation. Would be 5/5 with proper multi-platform support."],
-      ].map(([icon, label, score, note]) => `
+            <div class="bg-gray-800 rounded-xl p-5">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span>🔧</span>
+            <span class="font-semibold text-gray-100">Ease of Install</span>
+          </div>
+          <span class="text-xl font-bold text-white">4/5</span>
+        </div>
+        <div class="w-full bg-gray-700 rounded-full h-2 mb-3">
+          <div class="bg-emerald-500 h-2 rounded-full" style="width: 80%"></div>
+        </div>
+        <p class="text-gray-400 text-sm">One-command curl install is great. Playwright optional setup adds a step. Windows support is a nice touch.</p>
+      </div>
       <div class="bg-gray-800 rounded-xl p-5">
         <div class="flex items-center justify-between mb-2">
           <div class="flex items-center gap-2">
-            <span>${icon}</span>
-            <span class="font-semibold text-gray-100">${label}</span>
+            <span>📚</span>
+            <span class="font-semibold text-gray-100">Documentation</span>
           </div>
-          <span class="text-xl font-bold text-white">${score}/5</span>
+          <span class="text-xl font-bold text-white">5/5</span>
         </div>
         <div class="w-full bg-gray-700 rounded-full h-2 mb-3">
-          <div class="bg-emerald-500 h-2 rounded-full" style="width: ${(Number(score)/5)*100}%"></div>
+          <div class="bg-emerald-500 h-2 rounded-full" style="width: 100%"></div>
         </div>
-        <p class="text-gray-400 text-sm">${note}</p>
-      </div>`).join("")}
+        <p class="text-gray-400 text-sm">Exceptional — README covers every command with examples. Installation guide, MCP guide, and commands reference are all thorough.</p>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-5">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span>🔬</span>
+            <span class="font-semibold text-gray-100">Depth</span>
+          </div>
+          <span class="text-xl font-bold text-white">5/5</span>
+        </div>
+        <div class="w-full bg-gray-700 rounded-full h-2 mb-3">
+          <div class="bg-emerald-500 h-2 rounded-full" style="width: 100%"></div>
+        </div>
+        <p class="text-gray-400 text-sm">12 sub-skills, 6 subagents, GEO coverage, schema deprecation awareness, E-E-A-T per 2025 QRG — this is the most complete SEO skill available.</p>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-5">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span>🔄</span>
+            <span class="font-semibold text-gray-100">Maintenance</span>
+          </div>
+          <span class="text-xl font-bold text-white">4/5</span>
+        </div>
+        <div class="w-full bg-gray-700 rounded-full h-2 mb-3">
+          <div class="bg-emerald-500 h-2 rounded-full" style="width: 80%"></div>
+        </div>
+        <p class="text-gray-400 text-sm">v1.2.0 shipped with community contributions. Young project but actively maintained. Deducting 1 point for newness.</p>
+      </div>
+      <div class="bg-gray-800 rounded-xl p-5">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span>🖥️</span>
+            <span class="font-semibold text-gray-100">Platform Support</span>
+          </div>
+          <span class="text-xl font-bold text-white">3/5</span>
+        </div>
+        <div class="w-full bg-gray-700 rounded-full h-2 mb-3">
+          <div class="bg-emerald-500 h-2 rounded-full" style="width: 60%"></div>
+        </div>
+        <p class="text-gray-400 text-sm">Claude Code only for easy install. Other platforms need manual adaptation. Would be 5/5 with proper multi-platform support.</p>
+      </div>
     </div>
     <div class="mt-6 bg-emerald-950 border border-emerald-700 rounded-2xl p-6 text-center">
       <div class="text-5xl font-bold text-emerald-400 mb-2">4.4/5</div>
