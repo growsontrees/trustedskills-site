@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { getPlatformInstall, PlatformKey } from "@/hooks/usePlatform";
+import { PlatformKey } from "@/hooks/usePlatform";
 import { CopyButton } from "@/components/CopyButton";
 import { usePlatform } from "@/hooks/usePlatform";
 
@@ -15,68 +15,214 @@ interface Props {
 const ALL_TABS: { key: PlatformKey; emoji: string; label: string }[] = [
   { key: "openclaw", emoji: "🦀", label: "OpenClaw" },
   { key: "claude", emoji: "💬", label: "Claude Desktop" },
+  { key: "claudecode", emoji: "⌨️", label: "Claude Code" },
   { key: "cursor", emoji: "🖱️", label: "Cursor / VS Code" },
   { key: "mcp", emoji: "🔌", label: "MCP (generic)" },
   { key: "openai", emoji: "🤖", label: "OpenAI" },
 ];
 
-const STEP_GUIDES: Record<PlatformKey, { steps: string[]; note?: string }> = {
-  openclaw: {
-    steps: [
-      "Open your terminal.",
-      "Run the install command below.",
-      "The skill is immediately available to your OpenClaw agent.",
-    ],
-  },
-  claude: {
-    steps: [
-      'Open Claude Desktop → Settings → "Developer" tab.',
-      'Click "Edit Config" to open claude_desktop_config.json.',
-      'Add the JSON block below into the mcpServers section.',
-      "Save the file and restart Claude Desktop.",
-    ],
-    note: "Claude Desktop MCP integration requires Claude Desktop ≥ v0.10.",
-  },
-  cursor: {
-    steps: [
-      "Open your project root or global Cursor/VS Code config.",
-      "Create or edit ~/.cursor/mcp.json (Cursor) or add to VS Code settings.json.",
-      "Paste the JSON block below into your MCP servers config.",
-      "Reload Cursor or VS Code — the skill tools will appear in the AI pane.",
-    ],
-    note: "For VS Code, add the mcp.servers block to your settings.json under the MCP extension.",
-  },
-  mcp: {
-    steps: [
-      "Locate your MCP host's config file (e.g. mcp.json or server config).",
-      "Add the JSON block below to the mcpServers section.",
-      "Restart your MCP host to pick up the new server.",
-    ],
-    note: "Works with any MCP-compatible client. Requires Node.js 18+.",
-  },
-  openai: {
-    steps: [
-      "OpenAI plugin support is coming soon.",
-      "In the meantime, download the skill spec from the repository link below and use it manually as a function definition.",
-    ],
-    note: "OpenAI's plugin/GPT store model doesn't have a universal install command. We'll update this page when support is available.",
-  },
-  other: {
-    steps: [
-      "Download the skill source from the GitHub repository.",
-      "Follow the README for platform-specific setup.",
-      "Open an issue on the repo if you need help with your platform.",
-    ],
-  },
-};
+function StepNumber({ n }: { n: number }) {
+  return (
+    <span className="flex-shrink-0 w-5 h-5 rounded-full bg-purple-900/50 border border-purple-800 text-purple-300 text-xs flex items-center justify-center font-bold mt-0.5">
+      {n}
+    </span>
+  );
+}
+
+function CodeBlock({ label, code }: { label: string; code: string }) {
+  return (
+    <div className="bg-gray-950 border border-gray-700 rounded-xl overflow-hidden">
+      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-700">
+        <span className="text-xs text-gray-500 font-mono">{label}</span>
+        <CopyButton text={code} label="Copy" />
+      </div>
+      <pre className="p-4 text-sm font-mono text-emerald-400 whitespace-pre-wrap leading-relaxed overflow-x-auto">
+        {code}
+      </pre>
+    </div>
+  );
+}
+
+function OpenClawGuide({ installCmd }: { installCmd: string }) {
+  return (
+    <div className="space-y-4">
+      <div className="flex items-start gap-3 text-sm text-gray-400">
+        <StepNumber n={1} />
+        <span>Run this command in your terminal. The skill is immediately available.</span>
+      </div>
+      <CodeBlock label="terminal" code={installCmd} />
+    </div>
+  );
+}
+
+function ClaudeDesktopGuide({ slug }: { slug: string }) {
+  const configJson = JSON.stringify(
+    { mcpServers: { [slug]: { command: "npx", args: ["-y", `@trustedskills/${slug}`] } } },
+    null, 2
+  );
+  return (
+    <div className="space-y-5">
+      <div className="flex items-start gap-3 text-sm text-gray-400">
+        <StepNumber n={1} />
+        <div>
+          <p className="mb-2 font-medium text-gray-300">Find your config file</p>
+          <div className="text-xs font-mono bg-gray-950 rounded-lg p-3 border border-gray-700 space-y-1">
+            <div><span className="text-blue-400">Mac:</span> <span className="text-gray-300 select-all">~/Library/Application Support/Claude/claude_desktop_config.json</span></div>
+            <div><span className="text-cyan-400">Windows:</span> <span className="text-gray-300 select-all">%APPDATA%\Claude\claude_desktop_config.json</span></div>
+            <div><span className="text-green-400">Linux:</span> <span className="text-gray-300 select-all">~/.config/Claude/claude_desktop_config.json</span></div>
+          </div>
+        </div>
+      </div>
+      <div className="flex items-start gap-3 text-sm text-gray-400">
+        <StepNumber n={2} />
+        <div className="flex-1 min-w-0">
+          <p className="mb-2 font-medium text-gray-300">
+            Add this to the <code className="text-purple-300 bg-gray-800 px-1 rounded">mcpServers</code> section
+          </p>
+          <CodeBlock label="claude_desktop_config.json" code={configJson} />
+        </div>
+      </div>
+      <div className="flex items-start gap-3 text-sm text-gray-400">
+        <StepNumber n={3} />
+        <span>Save the file and <strong className="text-gray-200">restart Claude Desktop</strong>. The skill will appear in the tools menu.</span>
+      </div>
+      <p className="text-xs text-gray-500 border-l-2 border-gray-700 pl-3">
+        Requires Claude Desktop ≥ v0.10 with Developer mode enabled.
+      </p>
+    </div>
+  );
+}
+
+function ClaudeCodeGuide({ slug }: { slug: string }) {
+  const cliCmd = `claude mcp add ${slug} npx -- -y @trustedskills/${slug}`;
+  const configJson = JSON.stringify(
+    { mcpServers: { [slug]: { command: "npx", args: ["-y", `@trustedskills/${slug}`] } } },
+    null, 2
+  );
+  return (
+    <div className="space-y-5">
+      <div className="flex items-start gap-3 text-sm text-gray-400">
+        <StepNumber n={1} />
+        <div className="flex-1 min-w-0">
+          <p className="mb-2 font-medium text-gray-300">Run in terminal (recommended)</p>
+          <CodeBlock label="terminal" code={cliCmd} />
+        </div>
+      </div>
+      <div className="flex items-start gap-3 text-sm text-gray-400">
+        <StepNumber n={2} />
+        <div className="flex-1 min-w-0">
+          <p className="mb-2 text-gray-400">
+            Or manually add to <code className="text-purple-300 bg-gray-800 px-1 rounded">~/.claude/settings.json</code>
+          </p>
+          <CodeBlock label="~/.claude/settings.json" code={configJson} />
+        </div>
+      </div>
+      <p className="text-xs text-gray-500 border-l-2 border-gray-700 pl-3">
+        Requires Claude Code (claude CLI). Run <code className="text-gray-400">claude --version</code> to verify your install.
+      </p>
+    </div>
+  );
+}
+
+function CursorGuide({ slug }: { slug: string }) {
+  const configJson = JSON.stringify(
+    { mcp: { servers: { [slug]: { command: "npx", args: ["-y", `@trustedskills/${slug}`] } } } },
+    null, 2
+  );
+  return (
+    <div className="space-y-5">
+      <div className="flex items-start gap-3 text-sm text-gray-400">
+        <StepNumber n={1} />
+        <div>
+          <p className="font-medium text-gray-300">Open (or create) your MCP config file</p>
+          <div className="mt-2 text-xs font-mono bg-gray-950 rounded-lg p-3 border border-gray-700 space-y-1">
+            <div><span className="text-cyan-400">Cursor:</span> <span className="text-gray-300 select-all">~/.cursor/mcp.json</span> <span className="text-gray-500">(create if missing)</span></div>
+            <div><span className="text-blue-400">VS Code:</span> <span className="text-gray-300 select-all">~/.vscode/settings.json</span> <span className="text-gray-500">(under mcp.servers)</span></div>
+          </div>
+        </div>
+      </div>
+      <div className="flex items-start gap-3 text-sm text-gray-400">
+        <StepNumber n={2} />
+        <div className="flex-1 min-w-0">
+          <p className="mb-2 font-medium text-gray-300">Paste this into the file</p>
+          <CodeBlock label="~/.cursor/mcp.json" code={configJson} />
+        </div>
+      </div>
+      <div className="flex items-start gap-3 text-sm text-gray-400">
+        <StepNumber n={3} />
+        <span>Save and <strong className="text-gray-200">restart Cursor</strong> (or reload VS Code window). The skill tools appear in the AI pane.</span>
+      </div>
+    </div>
+  );
+}
+
+function McpGuide({ slug }: { slug: string }) {
+  const configJson = JSON.stringify(
+    { mcpServers: { [slug]: { command: "npx", args: ["-y", `@trustedskills/${slug}`] } } },
+    null, 2
+  );
+  return (
+    <div className="space-y-5">
+      <div className="flex items-start gap-3 text-sm text-gray-400">
+        <StepNumber n={1} />
+        <span>Locate your MCP host config file (e.g. <code className="text-gray-300 bg-gray-800 px-1 rounded">mcp.json</code> or your client settings).</span>
+      </div>
+      <div className="flex items-start gap-3 text-sm text-gray-400">
+        <StepNumber n={2} />
+        <div className="flex-1 min-w-0">
+          <p className="mb-2">Add this to the <code className="text-purple-300 bg-gray-800 px-1 rounded">mcpServers</code> section</p>
+          <CodeBlock label="mcp config" code={configJson} />
+        </div>
+      </div>
+      <div className="flex items-start gap-3 text-sm text-gray-400">
+        <StepNumber n={3} />
+        <span>Restart your MCP host to pick up the new skill.</span>
+      </div>
+      <div className="text-xs text-gray-500 border-l-2 border-gray-700 pl-3">
+        Works with: <span className="text-gray-400">Claude Desktop, Cursor, VS Code, Zed, Continue,</span> and any MCP-compatible client. Requires Node.js 18+.
+      </div>
+    </div>
+  );
+}
+
+function OpenAIGuide({ repoUrl, slug }: { repoUrl: string; slug: string }) {
+  return (
+    <div className="bg-yellow-900/20 border border-yellow-800/50 rounded-xl p-5 space-y-3">
+      <p className="text-sm text-yellow-400/90 font-medium">⏳ OpenAI direct integration coming soon</p>
+      <p className="text-sm text-gray-400">
+        OpenAI does not yet have a universal skill install flow. Meanwhile, use this skill via the{" "}
+        <strong className="text-gray-300">MCP (generic) tab</strong> — it works with Claude Desktop, Cursor, VS Code, and any MCP-compatible client.
+      </p>
+      {repoUrl && (
+        <a
+          href={repoUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 transition-colors"
+        >
+          📥 View repository / download spec →
+        </a>
+      )}
+    </div>
+  );
+}
 
 export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms }: Props) {
   const { platform: storedPlatform } = usePlatform();
   const defaultTab = (storedPlatform as PlatformKey | null) ?? "openclaw";
   const [activeTab, setActiveTab] = useState<PlatformKey>(defaultTab);
 
-  const install = getPlatformInstall(slug, installCmd, repoUrl, activeTab);
-  const guide = STEP_GUIDES[activeTab] ?? STEP_GUIDES["openclaw"];
+  function renderGuide() {
+    switch (activeTab) {
+      case "openclaw":   return <OpenClawGuide installCmd={installCmd} />;
+      case "claude":     return <ClaudeDesktopGuide slug={slug} />;
+      case "claudecode": return <ClaudeCodeGuide slug={slug} />;
+      case "cursor":     return <CursorGuide slug={slug} />;
+      case "mcp":        return <McpGuide slug={slug} />;
+      case "openai":     return <OpenAIGuide repoUrl={repoUrl} slug={slug} />;
+      default:           return <OpenClawGuide installCmd={installCmd} />;
+    }
+  }
 
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
@@ -87,7 +233,11 @@ export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms }: Pr
         <div className="flex flex-wrap gap-1 border-b border-gray-800 -mx-5 px-5 pb-0">
           {ALL_TABS.map((tab) => {
             const isActive = activeTab === tab.key;
-            const isSupported = platforms.includes(tab.key) || tab.key === "openclaw";
+            const isSupported =
+              platforms.includes(tab.key) ||
+              tab.key === "openclaw" ||
+              tab.key === "mcp" ||
+              tab.key === "claudecode";
             return (
               <button
                 key={tab.key}
@@ -101,79 +251,14 @@ export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms }: Pr
               >
                 <span>{tab.emoji}</span>
                 <span>{tab.label}</span>
-                {!isSupported && (
-                  <span className="text-gray-700 text-[10px]">?</span>
-                )}
+                {!isSupported && <span className="text-gray-700 text-[10px]">?</span>}
               </button>
             );
           })}
         </div>
       </div>
 
-      <div className="p-5 space-y-4">
-        {/* Steps */}
-        <ol className="space-y-2">
-          {guide.steps.map((step, i) => (
-            <li key={i} className="flex items-start gap-3 text-sm text-gray-400">
-              <span className="flex-shrink-0 w-5 h-5 rounded-full bg-purple-900/50 border border-purple-800 text-purple-300 text-xs flex items-center justify-center font-bold mt-0.5">
-                {i + 1}
-              </span>
-              {step}
-            </li>
-          ))}
-        </ol>
-
-        {/* Command / config block or coming soon */}
-        {install.isComingSoon ? (
-          <div className="bg-yellow-900/20 border border-yellow-800/50 rounded-xl p-4 space-y-3">
-            <p className="text-sm text-yellow-400/90 font-medium">⏳ Coming soon</p>
-            <p className="text-sm text-gray-400">
-              OpenAI plugin support is on our roadmap. In the meantime, you can download
-              the skill spec to use manually as a function definition.
-            </p>
-            {repoUrl && (
-              <a
-                href={repoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 transition-colors"
-              >
-                📥 Download OpenAPI spec / view repository →
-              </a>
-            )}
-          </div>
-        ) : (
-          <div className="bg-gray-950 border border-gray-700 rounded-xl overflow-hidden">
-            <div className="flex items-center justify-between px-4 py-2 border-b border-gray-700">
-              <span className="text-xs text-gray-500 font-mono">
-                {install.isJson
-                  ? activeTab === "claude"
-                    ? "claude_desktop_config.json"
-                    : activeTab === "cursor"
-                    ? "~/.cursor/mcp.json  or  settings.json"
-                    : "JSON config"
-                  : "terminal"}
-              </span>
-              <CopyButton text={install.cmd} label="Copy" />
-            </div>
-            <pre className="p-4 text-sm font-mono overflow-x-auto text-emerald-400 whitespace-pre-wrap leading-relaxed">
-              {install.cmd}
-            </pre>
-            {activeTab === "mcp" && (
-              <div className="px-4 pb-3">
-                <span className="text-xs text-gray-500">Works with any MCP-compatible client</span>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Note */}
-        {guide.note && (
-          <p className="text-xs text-gray-500 border-l-2 border-gray-700 pl-3 leading-relaxed">
-            {guide.note}
-          </p>
-        )}
-      </div>
+      <div className="p-5">{renderGuide()}</div>
     </div>
   );
 }
