@@ -32,19 +32,19 @@ const STEP_GUIDES: Record<PlatformKey, { steps: string[]; note?: string }> = {
     steps: [
       'Open Claude Desktop → Settings → "Developer" tab.',
       'Click "Edit Config" to open claude_desktop_config.json.',
-      "Paste the JSON block below into the mcpServers section.",
+      'Add the JSON block below into the mcpServers section.',
       "Save the file and restart Claude Desktop.",
     ],
-    note: "Claude Desktop MCP integration requires Claude Desktop ≥ v0.10. Native TrustedSkills marketplace support is on our roadmap.",
+    note: "Claude Desktop MCP integration requires Claude Desktop ≥ v0.10.",
   },
   cursor: {
     steps: [
-      "Open your project root or global Cursor config.",
-      'Create or edit .cursor/mcp.json (project) or ~/.cursor/mcp.json (global).',
-      "Paste the JSON block below into the mcpServers section.",
-      "Reload Cursor — the skill tools will appear in the AI pane.",
+      "Open your project root or global Cursor/VS Code config.",
+      "Create or edit ~/.cursor/mcp.json (Cursor) or add to VS Code settings.json.",
+      "Paste the JSON block below into your MCP servers config.",
+      "Reload Cursor or VS Code — the skill tools will appear in the AI pane.",
     ],
-    note: "VS Code users: use the MCP extension and follow the same JSON config format.",
+    note: "For VS Code, add the mcp.servers block to your settings.json under the MCP extension.",
   },
   mcp: {
     steps: [
@@ -52,15 +52,14 @@ const STEP_GUIDES: Record<PlatformKey, { steps: string[]; note?: string }> = {
       "Add the JSON block below to the mcpServers section.",
       "Restart your MCP host to pick up the new server.",
     ],
-    note: "The @trustedskills/<slug>-mcp package wraps this skill as a standard MCP server. Requires Node.js 18+.",
+    note: "Works with any MCP-compatible client. Requires Node.js 18+.",
   },
   openai: {
     steps: [
-      "Download the OpenAI function spec JSON from the repository link.",
-      "Import the function definitions into your OpenAI assistant or tools array.",
-      "Call the functions as you would any OpenAI tool.",
+      "OpenAI plugin support is coming soon.",
+      "In the meantime, download the skill spec from the repository link below and use it manually as a function definition.",
     ],
-    note: "OpenAI function spec files are community-contributed. Check the repository for availability.",
+    note: "OpenAI's plugin/GPT store model doesn't have a universal install command. We'll update this page when support is available.",
   },
   other: {
     steps: [
@@ -124,18 +123,49 @@ export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms }: Pr
           ))}
         </ol>
 
-        {/* Command / config block */}
-        <div className="bg-gray-950 border border-gray-700 rounded-xl overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-2 border-b border-gray-700">
-            <span className="text-xs text-gray-500 font-mono">
-              {install.isJson ? "JSON config" : "terminal"}
-            </span>
-            <CopyButton text={install.cmd} label="Copy" />
+        {/* Command / config block or coming soon */}
+        {install.isComingSoon ? (
+          <div className="bg-yellow-900/20 border border-yellow-800/50 rounded-xl p-4 space-y-3">
+            <p className="text-sm text-yellow-400/90 font-medium">⏳ Coming soon</p>
+            <p className="text-sm text-gray-400">
+              OpenAI plugin support is on our roadmap. In the meantime, you can download
+              the skill spec to use manually as a function definition.
+            </p>
+            {repoUrl && (
+              <a
+                href={repoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 transition-colors"
+              >
+                📥 Download OpenAPI spec / view repository →
+              </a>
+            )}
           </div>
-          <pre className="p-4 text-sm font-mono overflow-x-auto text-emerald-400 whitespace-pre-wrap leading-relaxed">
-            {install.cmd}
-          </pre>
-        </div>
+        ) : (
+          <div className="bg-gray-950 border border-gray-700 rounded-xl overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-2 border-b border-gray-700">
+              <span className="text-xs text-gray-500 font-mono">
+                {install.isJson
+                  ? activeTab === "claude"
+                    ? "claude_desktop_config.json"
+                    : activeTab === "cursor"
+                    ? "~/.cursor/mcp.json  or  settings.json"
+                    : "JSON config"
+                  : "terminal"}
+              </span>
+              <CopyButton text={install.cmd} label="Copy" />
+            </div>
+            <pre className="p-4 text-sm font-mono overflow-x-auto text-emerald-400 whitespace-pre-wrap leading-relaxed">
+              {install.cmd}
+            </pre>
+            {activeTab === "mcp" && (
+              <div className="px-4 pb-3">
+                <span className="text-xs text-gray-500">Works with any MCP-compatible client</span>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Note */}
         {guide.note && (

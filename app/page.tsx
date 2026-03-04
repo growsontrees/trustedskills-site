@@ -3,6 +3,7 @@ import { getAllSkills, getCategories, getFeaturedSkills, getStats, TIER_CONFIG }
 import { SkillCard } from "@/components/SkillCard";
 import { PlatformSelector } from "@/components/PlatformSelector";
 import { HeroInstallCommand } from "@/components/HeroInstallCommand";
+import { SearchBar } from "@/components/SearchBar";
 
 export default function HomePage() {
   const skills = getAllSkills();
@@ -27,10 +28,15 @@ export default function HomePage() {
               <span className="text-gradient-primary">AI agent skills</span>
             </h1>
 
-            <p className="text-xl text-gray-400 mb-6 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
               Find, verify, and install skills for any AI agent platform.
               Cryptographically signed. Community reviewed.
             </p>
+
+            {/* Search box */}
+            <div className="w-full max-w-2xl mx-auto mb-8">
+              <SearchBar placeholder="Search skills..." />
+            </div>
 
             {/* Platform selector */}
             <div className="mb-8">
@@ -76,18 +82,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Trust badges info */}
+      {/* Trust tier badges — centered, clickable, filter skills */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-3 justify-center">
           {Object.entries(TIER_CONFIG).map(([tier, config]) => (
-            <div
+            <Link
               key={tier}
+              href={`/skills?tier=${tier}`}
               title={config.description}
-              className={`inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-full border ${config.bg} ${config.border} ${config.color}`}
+              className={`inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-full border ${config.bg} ${config.border} ${config.color} hover:opacity-80 transition-opacity cursor-pointer`}
             >
               <span>{config.icon}</span>
               <span className="font-medium">{config.label}</span>
-            </div>
+            </Link>
           ))}
         </div>
       </section>

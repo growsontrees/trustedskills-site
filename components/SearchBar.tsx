@@ -3,7 +3,13 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export function SearchBar({ defaultValue = "" }: { defaultValue?: string }) {
+export function SearchBar({
+  defaultValue = "",
+  placeholder = "Search skills...",
+}: {
+  defaultValue?: string;
+  placeholder?: string;
+}) {
   const [value, setValue] = useState(defaultValue);
   const router = useRouter();
 
@@ -28,7 +34,7 @@ export function SearchBar({ defaultValue = "" }: { defaultValue?: string }) {
           type="search"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="Search skills — weather, image, search, code..."
+          placeholder={placeholder}
           className="w-full bg-gray-900 border border-gray-700 hover:border-gray-600 focus:border-purple-600 focus:ring-2 focus:ring-purple-600/20 rounded-xl pl-12 pr-4 py-3.5 text-gray-200 placeholder-gray-500 outline-none transition-all"
         />
         {value && (

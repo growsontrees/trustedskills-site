@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { Skill, Category, TIER_CONFIG, PLATFORM_CONFIG } from "@/lib/skills";
 import { SkillCard } from "@/components/SkillCard";
 import { usePlatform, PlatformKey } from "@/hooks/usePlatform";
@@ -11,18 +12,44 @@ const TIERS = ["featured", "verified", "community", "unverified"] as const;
 interface SkillsListClientProps {
   skills: Skill[];
   categories: Category[];
+  initialQuery?: string;
+  initialTier?: string;
+  initialCategory?: string;
 }
 
-export function SkillsListClient({ skills, categories }: SkillsListClientProps) {
-  const [query, setQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState<string>("all");
+export function SkillsListClient({
+  skills,
+  categories,
+  initialQuery = "",
+  initialTier = "all",
+  initialCategory = "all",
+}: SkillsListClientProps) {
+  const router = useRouter();
+  const [query, setQuery] = useState(initialQuery);
+  const [activeCategory, setActiveCategory] = useState<string>(initialCategory);
   const [activePlatform, setActivePlatform] = useState<string>("all");
-  const [activeTier, setActiveTier] = useState<string>("all");
+  const [activeTier, setActiveTier] = useState<string>(initialTier);
   const [sort, setSort] = useState<"installs" | "updated" | "name">("installs");
 
   // Sync platform preference: when the user picks a platform in the selector,
   // pre-fill the filter here (but only once on mount, then user can override).
   const { setPlatform } = usePlatform();
+
+  /** Push updated query params to the URL so filters are bookmarkable. */
+  const syncUrl = useCallback(
+    (overrides: { q?: string; tier?: string; category?: string }) => {
+      const params = new URLSearchParams();
+      const q = overrides.q !== undefined ? overrides.q : query;
+      const tier = overrides.tier !== undefined ? overrides.tier : activeTier;
+      const category = overrides.category !== undefined ? overrides.category : activeCategory;
+      if (q) params.set("q", q);
+      if (tier && tier !== "all") params.set("tier", tier);
+      if (category && category !== "all") params.set("category", category);
+      const qs = params.toString();
+      router.replace(qs ? `/skills?${qs}` : "/skills", { scroll: false });
+    },
+    [router, query, activeTier, activeCategory]
+  );
 
   function handlePlatformFilter(platform: string) {
     setActivePlatform(platform);
@@ -30,6 +57,21 @@ export function SkillsListClient({ skills, categories }: SkillsListClientProps) 
     if (platform !== "all") {
       setPlatform(platform as PlatformKey);
     }
+  }
+
+  function handleTierFilter(tier: string) {
+    setActiveTier(tier);
+    syncUrl({ tier });
+  }
+
+  function handleCategoryFilter(category: string) {
+    setActiveCategory(category);
+    syncUrl({ category });
+  }
+
+  function handleQueryChange(q: string) {
+    setQuery(q);
+    syncUrl({ q });
   }
 
   const filtered = useMemo(() => {
@@ -130,7 +172,7 @@ export function SkillsListClient({ skills, categories }: SkillsListClientProps) 
                 <input
                   type="search"
                   value={query}
-                  onChange={(e) => setQuery(e.target.value)}
+                  onChange={(e) => handleQueryChange(e.target.value)}
                   placeholder="Filter skills..."
                   className="w-full bg-gray-900 border border-gray-700 focus:border-purple-600 rounded-lg pl-9 pr-3 py-2 text-sm text-gray-200 placeholder-gray-600 outline-none transition-colors"
                 />
@@ -146,7 +188,7 @@ export function SkillsListClient({ skills, categories }: SkillsListClientProps) 
                 {[{ slug: "all", name: "All", emoji: "🔍", count: skills.length }, ...categories].map((cat) => (
                   <button
                     key={cat.slug}
-                    onClick={() => setActiveCategory(cat.slug)}
+                    onClick={() => handleCategoryFilter(cat.slug)}
                     className={`w-full text-left flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-colors ${
                       activeCategory === cat.slug
                         ? "bg-purple-900/50 text-purple-200 border border-purple-800"
@@ -168,7 +210,7 @@ export function SkillsListClient({ skills, categories }: SkillsListClientProps) 
               </label>
               <div className="space-y-1">
                 <button
-                  onClick={() => setActiveTier("all")}
+                  onClick={() => handleTierFilter("all")}
                   className={`w-full text-left flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-colors ${
                     activeTier === "all"
                       ? "bg-purple-900/50 text-purple-200"
@@ -182,7 +224,7 @@ export function SkillsListClient({ skills, categories }: SkillsListClientProps) 
                   return (
                     <button
                       key={tier}
-                      onClick={() => setActiveTier(tier)}
+                      onClick={() => handleTierFilter(tier)}
                       className={`w-full text-left flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-colors ${
                         activeTier === tier
                           ? `${config.bg} ${config.color}`

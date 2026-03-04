@@ -54,18 +54,37 @@ export function getPlatformInstall(
   installCmd: string,
   repoUrl: string,
   platform: PlatformKey | null
-): { label: string; cmd: string; isJson: boolean; lang: string } {
+): { label: string; cmd: string; isJson: boolean; lang: string; isComingSoon?: boolean } {
   switch (platform) {
     case "mcp":
-    case "cursor":
       return {
-        label: platform === "cursor" ? "Cursor / VS Code" : "MCP",
+        label: "MCP (generic)",
         cmd: JSON.stringify(
           {
             mcpServers: {
               [slug]: {
                 command: "npx",
-                args: ["-y", `@trustedskills/${slug}-mcp`],
+                args: ["-y", `@trustedskills/${slug}`],
+              },
+            },
+          },
+          null,
+          2
+        ),
+        isJson: true,
+        lang: "json",
+      };
+    case "cursor":
+      return {
+        label: "Cursor / VS Code",
+        cmd: JSON.stringify(
+          {
+            mcp: {
+              servers: {
+                [slug]: {
+                  command: "npx",
+                  args: ["-y", `@trustedskills/${slug}`],
+                },
               },
             },
           },
@@ -78,16 +97,28 @@ export function getPlatformInstall(
     case "claude":
       return {
         label: "Claude Desktop",
-        cmd: `claude mcp add ${slug} --command "npx -y @trustedskills/${slug}-mcp"`,
-        isJson: false,
-        lang: "bash",
+        cmd: JSON.stringify(
+          {
+            mcpServers: {
+              [slug]: {
+                command: "npx",
+                args: ["-y", `@trustedskills/${slug}`],
+              },
+            },
+          },
+          null,
+          2
+        ),
+        isJson: true,
+        lang: "json",
       };
     case "openai":
       return {
-        label: "OpenAI",
-        cmd: `# Download the function spec:\ncurl -sL ${repoUrl || `https://github.com/trustedskills/${slug}`}/raw/main/openai-spec.json`,
+        label: "OpenAI / ChatGPT",
+        cmd: `Coming soon — OpenAI plugin support is on our roadmap.\nIn the meantime, download the skill spec to use manually:\n${repoUrl || `https://github.com/trustedskills/${slug}`}`,
         isJson: false,
-        lang: "bash",
+        lang: "text",
+        isComingSoon: true,
       };
     case "other":
       return {
