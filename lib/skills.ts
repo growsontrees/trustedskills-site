@@ -106,14 +106,15 @@ export const TIER_CONFIG: Record<VerificationTier, {
     color: "text-yellow-400",
     bg: "bg-yellow-900/30",
     border: "border-yellow-800",
-    description: "Recommended by OpenClaw team.",
+    description: "Editorially selected — recommended for any platform.",
   },
 };
 
 export const PLATFORM_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
-  openclaw: { label: "OpenClaw", color: "text-purple-400", bg: "bg-purple-900/30" },
-  mcp: { label: "MCP", color: "text-blue-400", bg: "bg-blue-900/30" },
-  openai: { label: "OpenAI", color: "text-green-400", bg: "bg-green-900/30" },
-  claude: { label: "Claude", color: "text-orange-400", bg: "bg-orange-900/30" },
-  huggingface: { label: "HuggingFace", color: "text-yellow-400", bg: "bg-yellow-900/30" },
+  openclaw:    { label: "OpenClaw",       color: "text-purple-400",  bg: "bg-purple-900/30" },
+  mcp:         { label: "MCP",            color: "text-blue-400",    bg: "bg-blue-900/30" },
+  openai:      { label: "OpenAI",         color: "text-green-400",   bg: "bg-green-900/30" },
+  claude:      { label: "Claude",         color: "text-orange-400",  bg: "bg-orange-900/30" },
+  cursor:      { label: "Cursor / VS Code", color: "text-cyan-400",  bg: "bg-cyan-900/30" },
+  huggingface: { label: "HuggingFace",    color: "text-yellow-400",  bg: "bg-yellow-900/30" },
 };

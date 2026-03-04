@@ -2,6 +2,7 @@ import { getAllSkills, getSkillBySlug, TIER_CONFIG, PLATFORM_CONFIG } from "@/li
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { CopyButton } from "@/components/CopyButton";
+import { PlatformInstallTabs } from "@/components/PlatformInstallTabs";
 import type { Metadata } from "next";
 
 interface Props {
@@ -77,9 +78,12 @@ export default function SkillDetailPage({ params }: Props) {
 
             <p className="text-gray-300 leading-relaxed mb-6">{skill.description}</p>
 
-            {/* Install command */}
+            {/* Default install command (OpenClaw) */}
             <div className="bg-gray-950 border border-gray-700 rounded-xl p-4">
-              <div className="text-xs text-gray-500 mb-2 font-medium">Install Command</div>
+              <div className="text-xs text-gray-500 mb-2 font-medium">
+                OpenClaw install
+                <span className="ml-2 text-gray-600 font-normal">— see all platforms below</span>
+              </div>
               <div className="flex items-center gap-3">
                 <div className="flex-1 font-mono text-sm text-emerald-400 min-w-0">
                   <span className="text-gray-600 select-none">$ </span>
@@ -89,6 +93,14 @@ export default function SkillDetailPage({ params }: Props) {
               </div>
             </div>
           </div>
+
+          {/* Platform Install Tabs */}
+          <PlatformInstallTabs
+            slug={skill.slug}
+            installCmd={skill.installCmd}
+            repoUrl={skill.repoUrl}
+            platforms={skill.platforms}
+          />
 
           {/* Tags */}
           <div>
@@ -279,6 +291,9 @@ export default function SkillDetailPage({ params }: Props) {
                 );
               })}
             </div>
+            <p className="text-xs text-gray-600 mt-3">
+              Tabs above show install instructions for each platform, including MCP config blocks.
+            </p>
           </div>
 
           {/* Verification */}
@@ -291,9 +306,10 @@ export default function SkillDetailPage({ params }: Props) {
             <p className={`text-sm ${tier.color}`}>{tier.description}</p>
           </div>
 
-          {/* Install again */}
+          {/* Quick Install */}
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-            <h2 className="font-semibold text-white mb-3">Quick Install</h2>
+            <h2 className="font-semibold text-white mb-1">Quick Install (OpenClaw)</h2>
+            <p className="text-xs text-gray-600 mb-3">See the tabs above for Claude Desktop, Cursor, MCP, and more.</p>
             <div className="font-mono text-xs text-emerald-400 bg-gray-950 rounded-lg p-3 mb-3 break-all">
               {skill.installCmd}
             </div>

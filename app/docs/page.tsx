@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Documentation",
-  description: "TrustedSkills documentation — learn how to install, use, and build AI agent skills.",
+  description: "TrustedSkills documentation — learn how to install, use, and build AI agent skills for OpenClaw, MCP, Claude Desktop, Cursor, and OpenAI.",
 };
 
 const DOC_SECTIONS = [
@@ -14,7 +14,7 @@ const DOC_SECTIONS = [
       {
         title: "Installation Guide",
         slug: "install",
-        desc: "How to install and manage OpenClaw skills using the CLI.",
+        desc: "How to install skills using the CLI or platform config.",
       },
       {
         title: "Quick Start",
@@ -77,19 +77,19 @@ const DOC_SECTIONS = [
       {
         title: "Claude & OpenAI",
         slug: "adapters",
-        desc: "Platform adapters for Claude and OpenAI tool calling.",
+        desc: "Platform adapters for Claude Desktop and OpenAI tool calling.",
       },
     ],
   },
 ];
 
 const QUICK_REFERENCE = [
-  { cmd: "openclaw skills install <slug>", desc: "Install a skill by slug" },
-  { cmd: "openclaw skills install <url>", desc: "Install from URL" },
-  { cmd: "openclaw skills list", desc: "List installed skills" },
-  { cmd: "openclaw skills update", desc: "Update all skills" },
-  { cmd: "openclaw skills remove <slug>", desc: "Remove a skill" },
-  { cmd: "openclaw skills verify <slug>", desc: "Verify integrity" },
+  { platform: "OpenClaw",     cmd: "openclaw skills install <slug>",                desc: "Install a skill" },
+  { platform: "OpenClaw",     cmd: "openclaw skills list",                           desc: "List installed skills" },
+  { platform: "OpenClaw",     cmd: "openclaw skills update",                         desc: "Update all skills" },
+  { platform: "OpenClaw",     cmd: "openclaw skills remove <slug>",                  desc: "Remove a skill" },
+  { platform: "Claude Code",  cmd: "claude mcp add <name> --command \"npx -y @trustedskills/<slug>-mcp\"", desc: "Add via Claude Code CLI" },
+  { platform: "MCP / Cursor", cmd: "# Paste JSON config block into mcp.json",        desc: "Use JSON config tab on skill page" },
 ];
 
 export default function DocsPage() {
@@ -98,28 +98,48 @@ export default function DocsPage() {
       <div className="mb-10">
         <h1 className="text-3xl font-bold text-white mb-3">Documentation</h1>
         <p className="text-gray-400 text-lg">
-          Everything you need to use, build, and publish OpenClaw skills.
+          Everything you need to use, build, and publish AI agent skills — across any platform.
         </p>
       </div>
 
-      {/* Quick CLI Reference */}
+      {/* ─── MCP / Claude Desktop notice ─── */}
+      <div className="bg-blue-950/40 border border-blue-800/60 rounded-2xl p-6 mb-10">
+        <h2 className="font-semibold text-blue-200 mb-3 flex items-center gap-2">
+          <span>💬</span> Claude Desktop / MCP Integration
+        </h2>
+        <div className="space-y-3 text-sm text-blue-200/80">
+          <p>
+            <strong className="text-blue-200">The JSON Index at <code className="bg-blue-900/40 px-1.5 py-0.5 rounded font-mono">/api/index.json</code> is for developers building custom integrations</strong> — it is not an MCP server endpoint and cannot be pasted directly into Claude Desktop as a marketplace URL.
+          </p>
+          <p>
+            To install a TrustedSkills skill in Claude Desktop today, use the{" "}
+            <strong className="text-blue-200">MCP tab</strong> on any skill&apos;s detail page — it shows the exact JSON config block to paste into your{" "}
+            <code className="bg-blue-900/40 px-1.5 py-0.5 rounded font-mono">claude_desktop_config.json</code>.
+          </p>
+          <div className="bg-blue-950/60 border border-blue-800/40 rounded-xl p-4 font-mono text-xs text-blue-300">
+            {`// claude_desktop_config.json — example\n{\n  "mcpServers": {\n    "weather": {\n      "command": "npx",\n      "args": ["-y", "@trustedskills/weather-mcp"]\n    }\n  }\n}`}
+          </div>
+          <p className="text-blue-300/70">
+            🗺️ <strong className="text-blue-300">Roadmap:</strong> A native MCP server discovery endpoint (compatible with Claude Desktop&apos;s marketplace URL field) is on our roadmap. Until then, use the per-skill JSON config blocks.
+          </p>
+        </div>
+      </div>
+
+      {/* Quick CLI / Platform Reference */}
       <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-10">
         <h2 className="font-semibold text-white mb-4 flex items-center gap-2">
-          <span>💻</span> Quick CLI Reference
+          <span>💻</span> Quick Install Reference
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          {QUICK_REFERENCE.map((item) => (
-            <div key={item.cmd} className="flex items-start gap-3">
-              <code className="text-xs font-mono bg-gray-950 border border-gray-700 text-emerald-400 px-2.5 py-1.5 rounded-lg flex-shrink-0">
+        <div className="space-y-3">
+          {QUICK_REFERENCE.map((item, i) => (
+            <div key={i} className="flex items-start gap-3 flex-wrap sm:flex-nowrap">
+              <span className="text-xs bg-gray-800 border border-gray-700 text-gray-500 px-2 py-1 rounded font-medium flex-shrink-0 w-28 text-center">
+                {item.platform}
+              </span>
+              <code className="text-xs font-mono bg-gray-950 border border-gray-700 text-emerald-400 px-2.5 py-1.5 rounded-lg flex-1 break-all">
                 {item.cmd}
               </code>
-            </div>
-          ))}
-        </div>
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-2">
-          {QUICK_REFERENCE.map((item) => (
-            <div key={item.cmd + "-desc"} className="text-xs text-gray-500 pl-2">
-              {item.desc}
+              <span className="text-xs text-gray-500 flex-shrink-0 hidden sm:block w-44">{item.desc}</span>
             </div>
           ))}
         </div>
@@ -127,12 +147,16 @@ export default function DocsPage() {
 
       {/* API quick access */}
       <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-10">
-        <h2 className="font-semibold text-white mb-4 flex items-center gap-2">
-          <span>🔌</span> Registry API
+        <h2 className="font-semibold text-white mb-1 flex items-center gap-2">
+          <span>🔌</span> Registry API (Developer JSON Index)
         </h2>
+        <p className="text-xs text-gray-500 mb-4">
+          Machine-readable skills index for building custom integrations, tooling, and dashboards.
+          <strong className="text-gray-400"> Not an MCP server endpoint</strong> — see the MCP tab on skill pages for Claude Desktop config.
+        </p>
         <div className="space-y-3">
           {[
-            { method: "GET", path: "/api/index.json", desc: "Full skills index" },
+            { method: "GET", path: "/api/index.json", desc: "Full skills index (JSON)" },
           ].map((endpoint) => (
             <div key={endpoint.path} className="flex items-center gap-3">
               <span className="text-xs font-mono bg-emerald-900/30 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded">
@@ -199,10 +223,11 @@ export default function DocsPage() {
             </thead>
             <tbody className="divide-y divide-gray-800">
               {[
-                { field: "name", type: "string", desc: "Unique slug identifier (lowercase, hyphens only)" },
-                { field: "description", type: "string", desc: "One-line description (10-500 characters)" },
-                { field: "version", type: "semver", desc: "Semantic version (e.g. 1.0.0)" },
-                { field: "metadata", type: "JSON", desc: "Optional OpenClaw-specific config (emoji, requires, etc.)" },
+                { field: "name",        type: "string",  desc: "Unique slug identifier (lowercase, hyphens only)" },
+                { field: "description", type: "string",  desc: "One-line description (10-500 characters)" },
+                { field: "version",     type: "semver",  desc: "Semantic version (e.g. 1.0.0)" },
+                { field: "platforms",   type: "array",   desc: "Supported platforms: openclaw, mcp, claude, openai, cursor, huggingface" },
+                { field: "metadata",    type: "JSON",    desc: "Optional platform-specific config (emoji, requires, etc.)" },
               ].map((row) => (
                 <tr key={row.field}>
                   <td className="py-3 pr-6">
@@ -234,7 +259,7 @@ export default function DocsPage() {
           </Link>
           <span className="text-gray-700">·</span>
           <a
-            href="https://github.com/openclaw/openclaw/discussions"
+            href="https://github.com/growsontrees/trustedskills-registry/discussions"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-purple-400 hover:text-purple-300 transition-colors"

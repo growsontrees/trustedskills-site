@@ -1,6 +1,6 @@
 {
   "$schema": "https://trustedskills.dev/schema/skills-index-v1.json",
-  "generated_at": "2026-03-03T19:00:00Z",
+  "generated_at": "2026-03-04T00:30:13.589Z",
   "schema_version": "1",
   "skills": [
     {
@@ -11,11 +11,19 @@
       "author": "openclaw",
       "homepage": "https://trustedskills.dev/skills/weather",
       "source_repo": "https://github.com/openclaw/openclaw",
-      "tags": ["weather", "forecast", "wttr", "open-meteo", "utilities"],
+      "tags": [
+        "weather",
+        "forecast",
+        "wttr",
+        "open-meteo",
+        "utilities"
+      ],
       "category": "utilities",
       "emoji": "🌤️",
       "license": "MIT",
-      "platforms": ["openclaw"],
+      "platforms": [
+        "openclaw"
+      ],
       "requires": {
         "bins": [],
         "env": [],
@@ -25,6 +33,8 @@
       "repoUrl": "https://github.com/openclaw/openclaw",
       "published_at": "2025-09-01T00:00:00Z",
       "updated_at": "2026-01-15T00:00:00Z",
+      "stars": 0,
+      "language": null,
       "installs": 4820,
       "verified": "featured"
     },
@@ -36,20 +46,32 @@
       "author": "openclaw",
       "homepage": "https://trustedskills.dev/skills/openai-image-gen",
       "source_repo": "https://github.com/openclaw/openclaw",
-      "tags": ["image", "dalle", "openai", "generation", "ai"],
+      "tags": [
+        "image",
+        "dalle",
+        "openai",
+        "generation",
+        "ai"
+      ],
       "category": "ai",
       "emoji": "🖼️",
       "license": "MIT",
-      "platforms": ["openclaw"],
+      "platforms": [
+        "openclaw"
+      ],
       "requires": {
         "bins": [],
-        "env": ["OPENAI_API_KEY"],
+        "env": [
+          "OPENAI_API_KEY"
+        ],
         "config": []
       },
       "installCmd": "openclaw skills install openai-image-gen",
       "repoUrl": "https://github.com/openclaw/openclaw",
       "published_at": "2025-10-01T00:00:00Z",
       "updated_at": "2026-02-01T00:00:00Z",
+      "stars": 0,
+      "language": null,
       "installs": 3210,
       "verified": "featured"
     },
@@ -61,20 +83,34 @@
       "author": "openclaw",
       "homepage": "https://trustedskills.dev/skills/whisper",
       "source_repo": "https://github.com/openclaw/openclaw",
-      "tags": ["transcription", "audio", "whisper", "speech-to-text", "openai"],
+      "tags": [
+        "transcription",
+        "audio",
+        "whisper",
+        "speech-to-text",
+        "openai"
+      ],
       "category": "media",
       "emoji": "🎙️",
       "license": "MIT",
-      "platforms": ["openclaw"],
+      "platforms": [
+        "openclaw"
+      ],
       "requires": {
-        "bins": ["ffmpeg"],
-        "env": ["OPENAI_API_KEY"],
+        "bins": [
+          "ffmpeg"
+        ],
+        "env": [
+          "OPENAI_API_KEY"
+        ],
         "config": []
       },
       "installCmd": "openclaw skills install whisper",
       "repoUrl": "https://github.com/openclaw/openclaw",
       "published_at": "2025-10-15T00:00:00Z",
       "updated_at": "2026-01-20T00:00:00Z",
+      "stars": 0,
+      "language": null,
       "installs": 1890,
       "verified": "featured"
     },
@@ -86,11 +122,19 @@
       "author": "openclaw",
       "homepage": "https://trustedskills.dev/skills/healthcheck",
       "source_repo": "https://github.com/openclaw/openclaw",
-      "tags": ["monitoring", "diagnostics", "health", "system", "debug"],
+      "tags": [
+        "monitoring",
+        "diagnostics",
+        "health",
+        "system",
+        "debug"
+      ],
       "category": "dev",
       "emoji": "🏥",
       "license": "MIT",
-      "platforms": ["openclaw"],
+      "platforms": [
+        "openclaw"
+      ],
       "requires": {
         "bins": [],
         "env": [],
@@ -100,6 +144,8 @@
       "repoUrl": "https://github.com/openclaw/openclaw",
       "published_at": "2025-08-01T00:00:00Z",
       "updated_at": "2025-12-10T00:00:00Z",
+      "stars": 0,
+      "language": null,
       "installs": 2450,
       "verified": "featured"
     },
@@ -111,11 +157,19 @@
       "author": "openclaw",
       "homepage": "https://trustedskills.dev/skills/skill-creator",
       "source_repo": "https://github.com/openclaw/openclaw",
-      "tags": ["meta", "scaffolding", "create", "builder", "dev"],
+      "tags": [
+        "meta",
+        "scaffolding",
+        "create",
+        "builder",
+        "dev"
+      ],
       "category": "dev",
       "emoji": "🔨",
       "license": "MIT",
-      "platforms": ["openclaw"],
+      "platforms": [
+        "openclaw"
+      ],
       "requires": {
         "bins": [],
         "env": [],
@@ -125,6 +179,8 @@
       "repoUrl": "https://github.com/openclaw/openclaw",
       "published_at": "2025-11-01T00:00:00Z",
       "updated_at": "2026-02-15T00:00:00Z",
+      "stars": 0,
+      "language": null,
       "installs": 1650,
       "verified": "featured"
     },
@@ -136,11 +192,19 @@
       "author": "openclaw",
       "homepage": "https://trustedskills.dev/skills/self-improvement",
       "source_repo": "https://github.com/openclaw/openclaw",
-      "tags": ["learning", "memory", "errors", "improvement", "meta"],
+      "tags": [
+        "learning",
+        "memory",
+        "errors",
+        "improvement",
+        "meta"
+      ],
       "category": "utilities",
       "emoji": "🧠",
       "license": "MIT",
-      "platforms": ["openclaw"],
+      "platforms": [
+        "openclaw"
+      ],
       "requires": {
         "bins": [],
         "env": [],
@@ -150,6 +214,8 @@
       "repoUrl": "https://github.com/openclaw/openclaw",
       "published_at": "2025-12-01T00:00:00Z",
       "updated_at": "2026-01-30T00:00:00Z",
+      "stars": 0,
+      "language": null,
       "installs": 980,
       "verified": "verified"
     },
@@ -161,20 +227,33 @@
       "author": "community",
       "homepage": "https://trustedskills.dev/skills/n8n-builder",
       "source_repo": "https://github.com/openclaw/openclaw",
-      "tags": ["automation", "n8n", "workflows", "mcp", "integration"],
+      "tags": [
+        "automation",
+        "n8n",
+        "workflows",
+        "mcp",
+        "integration"
+      ],
       "category": "dev",
       "emoji": "⚡",
       "license": "MIT",
-      "platforms": ["openclaw", "mcp"],
+      "platforms": [
+        "openclaw",
+        "mcp"
+      ],
       "requires": {
         "bins": [],
         "env": [],
-        "config": ["mcp.n8n"]
+        "config": [
+          "mcp.n8n"
+        ]
       },
       "installCmd": "openclaw skills install n8n-builder",
       "repoUrl": "https://github.com/openclaw/openclaw",
       "published_at": "2026-01-15T00:00:00Z",
       "updated_at": "2026-02-20T00:00:00Z",
+      "stars": 0,
+      "language": null,
       "installs": 420,
       "verified": "community"
     },
@@ -186,11 +265,20 @@
       "author": "openclaw",
       "homepage": "https://trustedskills.dev/skills/web-search",
       "source_repo": "https://github.com/openclaw/openclaw",
-      "tags": ["search", "web", "duckduckgo", "brave", "research"],
+      "tags": [
+        "search",
+        "web",
+        "duckduckgo",
+        "brave",
+        "research"
+      ],
       "category": "web",
       "emoji": "🔍",
       "license": "MIT",
-      "platforms": ["openclaw", "mcp"],
+      "platforms": [
+        "openclaw",
+        "mcp"
+      ],
       "requires": {
         "bins": [],
         "env": [],
@@ -200,6 +288,8 @@
       "repoUrl": "https://github.com/openclaw/openclaw",
       "published_at": "2025-09-15T00:00:00Z",
       "updated_at": "2026-02-28T00:00:00Z",
+      "stars": 0,
+      "language": null,
       "installs": 5600,
       "verified": "featured"
     },
@@ -211,13 +301,24 @@
       "author": "openclaw",
       "homepage": "https://trustedskills.dev/skills/code-runner",
       "source_repo": "https://github.com/openclaw/openclaw",
-      "tags": ["code", "execution", "python", "javascript", "sandbox"],
+      "tags": [
+        "code",
+        "execution",
+        "python",
+        "javascript",
+        "sandbox"
+      ],
       "category": "dev",
       "emoji": "💻",
       "license": "MIT",
-      "platforms": ["openclaw"],
+      "platforms": [
+        "openclaw"
+      ],
       "requires": {
-        "bins": ["python3", "node"],
+        "bins": [
+          "python3",
+          "node"
+        ],
         "env": [],
         "config": []
       },
@@ -225,6 +326,8 @@
       "repoUrl": "https://github.com/openclaw/openclaw",
       "published_at": "2025-10-20T00:00:00Z",
       "updated_at": "2026-01-25T00:00:00Z",
+      "stars": 0,
+      "language": null,
       "installs": 2890,
       "verified": "verified"
     },
@@ -236,20 +339,34 @@
       "author": "community",
       "homepage": "https://trustedskills.dev/skills/github-assistant",
       "source_repo": "https://github.com/community/openclaw-github",
-      "tags": ["github", "git", "pr", "issues", "dev"],
+      "tags": [
+        "github",
+        "git",
+        "pr",
+        "issues",
+        "dev"
+      ],
       "category": "dev",
       "emoji": "🐙",
       "license": "MIT",
-      "platforms": ["openclaw", "mcp", "claude"],
+      "platforms": [
+        "openclaw",
+        "mcp",
+        "claude"
+      ],
       "requires": {
         "bins": [],
-        "env": ["GITHUB_TOKEN"],
+        "env": [
+          "GITHUB_TOKEN"
+        ],
         "config": []
       },
       "installCmd": "openclaw skills install github-assistant",
       "repoUrl": "https://github.com/community/openclaw-github",
       "published_at": "2025-12-10T00:00:00Z",
       "updated_at": "2026-02-10T00:00:00Z",
+      "stars": 0,
+      "language": null,
       "installs": 1120,
       "verified": "verified"
     },
@@ -261,11 +378,20 @@
       "author": "community",
       "homepage": "https://trustedskills.dev/skills/pdf-reader",
       "source_repo": "https://github.com/community/openclaw-pdf",
-      "tags": ["pdf", "documents", "ocr", "extraction", "data"],
+      "tags": [
+        "pdf",
+        "documents",
+        "ocr",
+        "extraction",
+        "data"
+      ],
       "category": "data",
       "emoji": "📄",
       "license": "Apache-2.0",
-      "platforms": ["openclaw", "mcp"],
+      "platforms": [
+        "openclaw",
+        "mcp"
+      ],
       "requires": {
         "bins": [],
         "env": [],
@@ -275,6 +401,8 @@
       "repoUrl": "https://github.com/community/openclaw-pdf",
       "published_at": "2026-01-05T00:00:00Z",
       "updated_at": "2026-02-15T00:00:00Z",
+      "stars": 0,
+      "language": null,
       "installs": 780,
       "verified": "community"
     },
@@ -286,37 +414,1152 @@
       "author": "community",
       "homepage": "https://trustedskills.dev/skills/calendar-sync",
       "source_repo": "https://github.com/community/openclaw-calendar",
-      "tags": ["calendar", "google", "outlook", "scheduling", "productivity"],
+      "tags": [
+        "calendar",
+        "google",
+        "outlook",
+        "scheduling",
+        "productivity"
+      ],
       "category": "productivity",
       "emoji": "📅",
       "license": "MIT",
-      "platforms": ["openclaw", "mcp", "openai", "claude"],
+      "platforms": [
+        "openclaw",
+        "mcp",
+        "openai",
+        "claude"
+      ],
       "requires": {
         "bins": [],
-        "env": ["GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET"],
+        "env": [
+          "GOOGLE_CLIENT_ID",
+          "GOOGLE_CLIENT_SECRET"
+        ],
         "config": []
       },
       "installCmd": "openclaw skills install calendar-sync",
       "repoUrl": "https://github.com/community/openclaw-calendar",
       "published_at": "2026-01-20T00:00:00Z",
       "updated_at": "2026-03-01T00:00:00Z",
+      "stars": 0,
+      "language": null,
       "installs": 340,
       "verified": "unverified"
+    },
+    {
+      "slug": "nano-banana-prompts",
+      "name": "Nano Banana Pro Prompts",
+      "description": "Recommend suitable prompts from 10,000+ Nano Banana Pro image generation prompts based on user needs. Works with Gemini, GPT Image, Midjourney, DALL-E, Flux, and Stable Diffusion.",
+      "version": "1.0.0",
+      "author": "YouMind-OpenLab",
+      "tags": [
+        "image-generation",
+        "prompts",
+        "ai-art",
+        "gemini",
+        "dalle",
+        "midjourney",
+        "stable-diffusion"
+      ],
+      "category": "media",
+      "emoji": "🍌",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "claude"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install nano-banana-prompts",
+      "repoUrl": "https://github.com/YouMind-OpenLab/nano-banana-pro-prompts-recommend-skill",
+      "stars": 1100,
+      "language": "TypeScript",
+      "lastUpdated": "2026-03-03",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "team-tasks",
+      "name": "Team Tasks",
+      "description": "Coordinate multi-agent development pipelines using shared JSON task files. Supports Linear, DAG, and Debate modes for AI agent orchestration across code, test, docs, and monitor agents.",
+      "version": "1.0.0",
+      "author": "win4r",
+      "tags": [
+        "multi-agent",
+        "pipeline",
+        "coordination",
+        "dag",
+        "parallel",
+        "dev-ops"
+      ],
+      "category": "coding",
+      "emoji": "🤝",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "python3"
+        ],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install team-tasks",
+      "repoUrl": "https://github.com/win4r/team-tasks",
+      "stars": 349,
+      "language": "Python",
+      "lastUpdated": "2026-03-03",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "clawd-cursor",
+      "name": "Clawd Cursor",
+      "description": "AI desktop agent — control any app on Windows/macOS from your OpenClaw agent. Send natural language tasks and it handles opening apps, clicking buttons, typing text, and navigating browsers.",
+      "version": "0.6.3",
+      "author": "AmrDab",
+      "tags": [
+        "desktop",
+        "automation",
+        "cursor",
+        "ui-control",
+        "windows",
+        "macos"
+      ],
+      "category": "utilities",
+      "emoji": "🖱️",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install clawd-cursor",
+      "repoUrl": "https://github.com/AmrDab/clawd-cursor",
+      "stars": 112,
+      "language": "TypeScript",
+      "lastUpdated": "2026-03-03",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "nemp-memory",
+      "name": "Nemp Memory",
+      "description": "Persistent local memory for AI agents. Save, recall, and search project decisions as local JSON. Zero cloud, zero infrastructure — works offline.",
+      "version": "1.0.0",
+      "author": "SukinShetty",
+      "tags": [
+        "memory",
+        "persistence",
+        "local",
+        "json",
+        "offline"
+      ],
+      "category": "utilities",
+      "emoji": "🧠",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "claude"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install nemp-memory",
+      "repoUrl": "https://github.com/SukinShetty/Nemp-memory",
+      "stars": 73,
+      "language": "PowerShell",
+      "lastUpdated": "2026-03-03",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "github-explorer",
+      "name": "GitHub Explorer",
+      "description": "Deep multi-source analysis of GitHub projects. Covers architecture, community health, competitive landscape, and cross-platform knowledge. Outputs structured research reports.",
+      "version": "1.0.0",
+      "author": "blessonism",
+      "tags": [
+        "github",
+        "analysis",
+        "research",
+        "open-source",
+        "code-review"
+      ],
+      "category": "data",
+      "emoji": "🔬",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install github-explorer",
+      "repoUrl": "https://github.com/blessonism/github-explorer-skill",
+      "stars": 46,
+      "language": null,
+      "lastUpdated": "2026-03-02",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "decodo-scraper",
+      "name": "Decodo Scraper",
+      "description": "Search Google, scrape web pages, Amazon product pages, YouTube subtitles, or Reddit using the Decodo Web Scraping API. No manual parsing needed.",
+      "version": "1.0.0",
+      "author": "Decodo",
+      "tags": [
+        "scraping",
+        "web",
+        "google",
+        "amazon",
+        "youtube",
+        "reddit"
+      ],
+      "category": "data",
+      "emoji": "🕷️",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [
+          "DECODO_AUTH_TOKEN"
+        ],
+        "config": []
+      },
+      "installCmd": "openclaw skills install decodo-scraper",
+      "repoUrl": "https://github.com/Decodo/decodo-openclaw-skill",
+      "stars": 39,
+      "language": "Python",
+      "lastUpdated": "2026-03-03",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "youtube-to-shorts",
+      "name": "YouTube to Shorts",
+      "description": "Convert YouTube videos to vertical short-form clips using yt-dlp, FFmpeg, and Whisper. Auto-detects highlights, crops to 9:16, and overlays subtitles.",
+      "version": "1.0.0",
+      "author": "uxjoseph",
+      "tags": [
+        "youtube",
+        "shorts",
+        "video",
+        "ffmpeg",
+        "whisper",
+        "transcription"
+      ],
+      "category": "media",
+      "emoji": "📱",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "yt-dlp",
+          "ffmpeg"
+        ],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install youtube-to-shorts",
+      "repoUrl": "https://github.com/uxjoseph/youtube-to-shorts",
+      "stars": 33,
+      "language": null,
+      "lastUpdated": "2026-02-06",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "claude-code-dispatch",
+      "name": "Claude Code Dispatch",
+      "description": "Dispatch development tasks to Claude Code with automatic callback on completion. Supports Agent Teams for parallel dev+test, cost controls, model fallback, and MCP integration.",
+      "version": "1.0.0",
+      "author": "win4r",
+      "tags": [
+        "claude",
+        "dispatch",
+        "automation",
+        "multi-agent",
+        "git",
+        "worktree"
+      ],
+      "category": "coding",
+      "emoji": "🚀",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "bash"
+        ],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install claude-code-dispatch",
+      "repoUrl": "https://github.com/win4r/claude-code-dispatch",
+      "stars": 24,
+      "language": "Shell",
+      "lastUpdated": "2026-03-03",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "xint",
+      "name": "X Intelligence (xint)",
+      "description": "X Intelligence CLI — search, analyze, monitor, and engage on X/Twitter. Real-time search, AI-powered analysis, sentiment reports, bookmarks, trending topics, and following management.",
+      "version": "1.0.0",
+      "author": "0xNyk",
+      "tags": [
+        "twitter",
+        "x",
+        "social-media",
+        "monitoring",
+        "cli",
+        "search",
+        "sentiment"
+      ],
+      "category": "communication",
+      "emoji": "🐦",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install xint",
+      "repoUrl": "https://github.com/0xNyk/xint",
+      "stars": 20,
+      "language": "TypeScript",
+      "lastUpdated": "2026-03-03",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "karakeep-semantic",
+      "name": "Karakeep Semantic Search",
+      "description": "Semantic search sidecar for Karakeep bookmarks. Find bookmarks by meaning, not just keywords. Uses vector embeddings for intent-aware retrieval.",
+      "version": "1.0.0",
+      "author": "jamesbrooksco",
+      "tags": [
+        "bookmarks",
+        "search",
+        "semantic",
+        "karakeep",
+        "embeddings",
+        "rag"
+      ],
+      "category": "productivity",
+      "emoji": "🔖",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [
+          "KARAKEEP_SEMANTIC_URL"
+        ],
+        "config": []
+      },
+      "installCmd": "openclaw skills install karakeep-semantic",
+      "repoUrl": "https://github.com/jamesbrooksco/karakeep-semantic-search",
+      "stars": 19,
+      "language": "TypeScript",
+      "lastUpdated": "2026-03-03",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "comfyui-zimage",
+      "name": "ComfyUI Z-Image",
+      "description": "Z-Image Manga/Illustration Generation using local ComfyUI. High-quality anime/manga art with quick preview and high-res upscale modes. No cloud API needed.",
+      "version": "1.0.0",
+      "author": "norsizu",
+      "tags": [
+        "comfyui",
+        "image-generation",
+        "manga",
+        "anime",
+        "stable-diffusion",
+        "local"
+      ],
+      "category": "media",
+      "emoji": "🎨",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "python3"
+        ],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install comfyui-zimage",
+      "repoUrl": "https://github.com/norsizu/comfyui-zimage-skill",
+      "stars": 17,
+      "language": "Python",
+      "lastUpdated": "2026-01-23",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "agentic-mcp",
+      "name": "Agentic MCP",
+      "description": "Three-layer progressive MCP client with Socket daemon. Query available tools, call MCP servers efficiently, and manage daemon processes. Reduces token overhead with lazy loading.",
+      "version": "1.0.0",
+      "author": "cablate",
+      "tags": [
+        "mcp",
+        "agent",
+        "tools",
+        "socket",
+        "daemon",
+        "progressive"
+      ],
+      "category": "utilities",
+      "emoji": "🔌",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "mcp"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install agentic-mcp",
+      "repoUrl": "https://github.com/cablate/Agentic-MCP-Skill",
+      "stars": 17,
+      "language": "TypeScript",
+      "lastUpdated": "2026-02-08",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "openclaw-loom",
+      "name": "Loom Learning Graph",
+      "description": "Build and expand a personal knowledge graph with spaced repetition reviews. Organizes learning paths as atomic nodes with prerequisites, unlocks, and check-yourself prompts.",
+      "version": "1.0.0",
+      "author": "pepicrft",
+      "tags": [
+        "learning",
+        "knowledge-graph",
+        "spaced-repetition",
+        "education",
+        "notes"
+      ],
+      "category": "productivity",
+      "emoji": "📚",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install openclaw-loom",
+      "repoUrl": "https://github.com/pepicrft/openclaw-plugin-loom",
+      "stars": 16,
+      "language": "TypeScript",
+      "lastUpdated": "2026-02-25",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "matrix-agents",
+      "name": "Matrix Agents",
+      "description": "Multi-agent coordination via self-hosted Matrix/Synapse. Run multiple OpenClaw instances that communicate in real-time with zero cloud dependencies.",
+      "version": "1.0.0",
+      "author": "zscole",
+      "tags": [
+        "multi-agent",
+        "matrix",
+        "synapse",
+        "self-hosted",
+        "coordination",
+        "real-time"
+      ],
+      "category": "utilities",
+      "emoji": "🕸️",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "docker",
+          "python3"
+        ],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install matrix-agents",
+      "repoUrl": "https://github.com/zscole/matrix-agents",
+      "stars": 16,
+      "language": "Shell",
+      "lastUpdated": "2026-02-25",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "gitpretty",
+      "name": "GitPretty",
+      "description": "Beautify git repositories with emoji commits, visual log views, and workflow automation. Smart emoji auto-detection from commit messages, branch management, and release tags.",
+      "version": "1.0.0",
+      "author": "nirholas",
+      "tags": [
+        "git",
+        "emoji",
+        "commits",
+        "workflow",
+        "log",
+        "beautify"
+      ],
+      "category": "coding",
+      "emoji": "🎨",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "git"
+        ],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install gitpretty",
+      "repoUrl": "https://github.com/nirholas/gitpretty",
+      "stars": 11,
+      "language": "Shell",
+      "lastUpdated": "2026-03-03",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "wechat-dedup",
+      "name": "WeChat Dedup",
+      "description": "Deduplicate WeChat documents (PDF, Word) using content fingerprinting. Identifies duplicates by file hash, preserves the oldest copy, and moves duplicates to an isolated folder.",
+      "version": "1.0.0",
+      "author": "rolandwonglonam",
+      "tags": [
+        "wechat",
+        "deduplication",
+        "cleanup",
+        "files",
+        "pdf",
+        "chinese"
+      ],
+      "category": "utilities",
+      "emoji": "🗂️",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "python3"
+        ],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install wechat-dedup",
+      "repoUrl": "https://github.com/rolandwonglonam/wechat-dedup",
+      "stars": 10,
+      "language": "Python",
+      "lastUpdated": "2026-02-09",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "defillama-watchdog",
+      "name": "DeFiLlama Watchdog",
+      "description": "DeFi protocol monitoring with alerts for TVL drops, capital rotation, hacks, bridge surges, token unlocks, and revenue changes. Runs on demand or scheduled.",
+      "version": "1.0.0",
+      "author": "Neros0",
+      "tags": [
+        "defi",
+        "defillama",
+        "tvl",
+        "monitoring",
+        "alerts",
+        "crypto",
+        "blockchain"
+      ],
+      "category": "data",
+      "emoji": "🔭",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "python3"
+        ],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install defillama-watchdog",
+      "repoUrl": "https://github.com/Neros0/defillama-watchdog",
+      "stars": 8,
+      "language": "Python",
+      "lastUpdated": "2026-02-11",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "qras",
+      "name": "QRAS Semantic Memory",
+      "description": "Semantic memory search using Qdrant + Ollama embeddings (QRAS). Use as primary method for recalling workspace files, notes, decisions, and prior work before falling back to built-in search.",
+      "version": "1.0.0",
+      "author": "anvie",
+      "tags": [
+        "rag",
+        "memory",
+        "qdrant",
+        "embeddings",
+        "semantic-search",
+        "local"
+      ],
+      "category": "utilities",
+      "emoji": "🧩",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "python3"
+        ],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install qras",
+      "repoUrl": "https://github.com/anvie/qras",
+      "stars": 8,
+      "language": "Python",
+      "lastUpdated": "2026-02-09",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "human-browser",
+      "name": "Human Browser",
+      "description": "Stealth Playwright browser with residential proxy for AI agents. Bypasses Cloudflare, DataDome, PerimeterX, and other anti-bot systems. Drop-in replacement for chromium.launch().",
+      "version": "1.0.0",
+      "author": "al1enjesus",
+      "tags": [
+        "browser",
+        "playwright",
+        "stealth",
+        "proxy",
+        "scraping",
+        "anti-bot",
+        "residential"
+      ],
+      "category": "utilities",
+      "emoji": "🌐",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "node"
+        ],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install human-browser",
+      "repoUrl": "https://github.com/al1enjesus/human-browser",
+      "stars": 7,
+      "language": "JavaScript",
+      "lastUpdated": "2026-03-03",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "personal-genomics",
+      "name": "Personal Genomics",
+      "description": "Local DNA analysis with 1600+ markers across 30 categories. Privacy-first genetic analysis including population comparison and ancient DNA signal detection. All analysis runs locally.",
+      "version": "4.4.0",
+      "author": "wkyleg",
+      "tags": [
+        "genomics",
+        "dna",
+        "genetics",
+        "health",
+        "analysis",
+        "privacy",
+        "local"
+      ],
+      "category": "data",
+      "emoji": "🧬",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "python3"
+        ],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install personal-genomics",
+      "repoUrl": "https://github.com/wkyleg/personal-genomics",
+      "stars": 6,
+      "language": "Python",
+      "lastUpdated": "2026-02-09",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "jira-ai",
+      "name": "Jira AI CLI",
+      "description": "AI-friendly CLI for Jira designed for token efficiency and security. Manage issues, sprints, and projects with significantly fewer tokens than Jira MCP. Restricts AI actions to permitted operations.",
+      "version": "1.0.0",
+      "author": "festoinc",
+      "tags": [
+        "jira",
+        "project-management",
+        "cli",
+        "productivity",
+        "agile",
+        "sprints"
+      ],
+      "category": "productivity",
+      "emoji": "📋",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "node"
+        ],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install jira-ai",
+      "repoUrl": "https://github.com/festoinc/jira-ai",
+      "stars": 5,
+      "language": "TypeScript",
+      "lastUpdated": "2026-02-24",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "playwright-undetected",
+      "name": "Playwright Undetected",
+      "description": "Patchright-based browser automation with bot detection bypass. For localhost testing, dev servers, web app QA, screenshots, and UI interactions without being blocked.",
+      "version": "1.0.0",
+      "author": "dalbit-mir",
+      "tags": [
+        "playwright",
+        "browser",
+        "automation",
+        "bot-detection",
+        "testing",
+        "e2e",
+        "patchright"
+      ],
+      "category": "coding",
+      "emoji": "🎭",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "python3"
+        ],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install playwright-undetected",
+      "repoUrl": "https://github.com/dalbit-mir/playwright-undetected-skill",
+      "stars": 4,
+      "language": "Python",
+      "lastUpdated": "2026-01-13",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "faster-whisper",
+      "name": "Faster Whisper",
+      "description": "Local speech-to-text using faster-whisper — 4-6x faster than OpenAI Whisper with identical accuracy. GPU acceleration, SRT/VTT/TTML subtitles, speaker diarization, and chapter detection.",
+      "version": "1.5.1",
+      "author": "ThePlasmak",
+      "tags": [
+        "whisper",
+        "transcription",
+        "speech-to-text",
+        "gpu",
+        "subtitles",
+        "diarization",
+        "local"
+      ],
+      "category": "media",
+      "emoji": "🎤",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "python3"
+        ],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install faster-whisper",
+      "repoUrl": "https://github.com/ThePlasmak/faster-whisper",
+      "stars": 4,
+      "language": "Python",
+      "lastUpdated": "2026-03-01",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "learn",
+      "name": "Learn — Find & Install Skills",
+      "description": "Discover, install, and manage AI agent skills from agentskill.sh. Search for capabilities mid-session, install extensions, and scan for security issues.",
+      "version": "2.0.0",
+      "author": "agentskill-sh",
+      "tags": [
+        "skills",
+        "discovery",
+        "install",
+        "meta",
+        "security",
+        "agent"
+      ],
+      "category": "utilities",
+      "emoji": "📦",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "claude"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install learn",
+      "repoUrl": "https://github.com/agentskill-sh/learn",
+      "stars": 4,
+      "language": null,
+      "lastUpdated": "2026-02-28",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "restart-guard",
+      "name": "Restart Guard",
+      "description": "Safe OpenClaw gateway restart with state-machine verification. Preserves context across restarts and sends post-restart ACK via Telegram, Discord, Slack, or custom webhook.",
+      "version": "2.2.0",
+      "author": "Zjianru",
+      "tags": [
+        "gateway",
+        "restart",
+        "monitoring",
+        "safety",
+        "watchdog",
+        "notification"
+      ],
+      "category": "utilities",
+      "emoji": "🔄",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "python3",
+          "curl"
+        ],
+        "env": [
+          "GATEWAY_AUTH_TOKEN"
+        ],
+        "config": []
+      },
+      "installCmd": "openclaw skills install restart-guard",
+      "repoUrl": "https://github.com/Zjianru/restart-guard",
+      "stars": 4,
+      "language": "Python",
+      "lastUpdated": "2026-03-02",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "glance-dashboard",
+      "name": "Glance Dashboard",
+      "description": "Create, update, and manage Glance dashboard widgets with natural language. Track metrics, display API data, show stats, and monitor usage visually.",
+      "version": "1.0.0",
+      "author": "acfranzen",
+      "tags": [
+        "dashboard",
+        "widgets",
+        "monitoring",
+        "metrics",
+        "glance",
+        "visualization"
+      ],
+      "category": "utilities",
+      "emoji": "🖥️",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "curl"
+        ],
+        "env": [
+          "GLANCE_URL"
+        ],
+        "config": []
+      },
+      "installCmd": "openclaw skills install glance-dashboard",
+      "repoUrl": "https://github.com/acfranzen/glance",
+      "stars": 3,
+      "language": "TypeScript",
+      "lastUpdated": "2026-03-01",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "telegram-voice-group",
+      "name": "Telegram Voice Group",
+      "description": "Send voice bubble messages to Telegram groups and topics using Microsoft Edge-TTS. Context isolation per topic — different topics use different conversation histories.",
+      "version": "1.0.0",
+      "author": "sanwecn",
+      "tags": [
+        "telegram",
+        "voice",
+        "tts",
+        "groups",
+        "topics",
+        "chinese",
+        "edge-tts"
+      ],
+      "category": "communication",
+      "emoji": "🔊",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "ffmpeg",
+          "edge-tts"
+        ],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install telegram-voice-group",
+      "repoUrl": "https://github.com/sanwecn/telegram-voice-group",
+      "stars": 2,
+      "language": "JavaScript",
+      "lastUpdated": "2026-02-19",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "feast",
+      "name": "Feast",
+      "description": "Comprehensive meal planning with cultural themes, authentic recipes, intelligent shopping lists, and surprise cuisine reveals. Tracks dietary goals, nutrition, and meal history.",
+      "version": "1.0.0",
+      "author": "smadgerano",
+      "tags": [
+        "meal-planning",
+        "recipes",
+        "cooking",
+        "food",
+        "nutrition",
+        "grocery"
+      ],
+      "category": "productivity",
+      "emoji": "🍽️",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [
+          "python3"
+        ],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install feast",
+      "repoUrl": "https://github.com/smadgerano/feast",
+      "stars": 1,
+      "language": "Python",
+      "lastUpdated": "2026-02-22",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "agent-deep-research",
+      "name": "Agent Deep Research",
+      "description": "Async deep research via Gemini Interactions API. RAG-ground queries on local files, preview costs with --dry-run, get structured JSON output. Universal skill for 30+ AI agents.",
+      "version": "1.0.0",
+      "author": "24601",
+      "tags": [
+        "research",
+        "gemini",
+        "rag",
+        "grounding",
+        "structured-output",
+        "universal"
+      ],
+      "category": "data",
+      "emoji": "🔍",
+      "license": "MIT",
+      "platforms": [
+        "openclaw",
+        "claude"
+      ],
+      "requires": {
+        "bins": [
+          "uv"
+        ],
+        "env": [
+          "GOOGLE_API_KEY"
+        ],
+        "config": []
+      },
+      "installCmd": "openclaw skills install agent-deep-research",
+      "repoUrl": "https://github.com/24601/agent-deep-research",
+      "stars": 1,
+      "language": "Python",
+      "lastUpdated": "2026-02-25",
+      "installs": 0,
+      "verified": "community"
+    },
+    {
+      "slug": "unbound-md",
+      "name": "Unbound.md Human Services",
+      "description": "Access human services for autonomous agents — banking, employment, physical tasks, and more. Pay with USDC. No API key required.",
+      "version": "1.0.0",
+      "author": "lfglabs-dev",
+      "tags": [
+        "human-services",
+        "payments",
+        "usdc",
+        "autonomous",
+        "agents",
+        "real-world"
+      ],
+      "category": "utilities",
+      "emoji": "🤝",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install unbound-md",
+      "repoUrl": "https://github.com/lfglabs-dev/unbound.md",
+      "stars": 1,
+      "language": "TypeScript",
+      "lastUpdated": "2026-02-13",
+      "installs": 0,
+      "verified": "community"
     }
   ],
   "categories": [
-    {"slug": "utilities", "name": "Utilities", "emoji": "🔧", "count": 2},
-    {"slug": "ai", "name": "AI & Models", "emoji": "🤖", "count": 1},
-    {"slug": "media", "name": "Media & Audio", "emoji": "🎬", "count": 1},
-    {"slug": "dev", "name": "Development", "emoji": "💻", "count": 4},
-    {"slug": "web", "name": "Web & Search", "emoji": "🌐", "count": 1},
-    {"slug": "data", "name": "Data & Research", "emoji": "📊", "count": 1},
-    {"slug": "productivity", "name": "Productivity", "emoji": "⚡", "count": 1}
+    {
+      "slug": "utilities",
+      "name": "Utilities",
+      "emoji": "🔧",
+      "count": 13
+    },
+    {
+      "slug": "ai",
+      "name": "AI & Models",
+      "emoji": "🤖",
+      "count": 1
+    },
+    {
+      "slug": "media",
+      "name": "Media & Audio",
+      "emoji": "🎬",
+      "count": 5
+    },
+    {
+      "slug": "dev",
+      "name": "Development",
+      "emoji": "💻",
+      "count": 5
+    },
+    {
+      "slug": "web",
+      "name": "Web & Search",
+      "emoji": "🌐",
+      "count": 1
+    },
+    {
+      "slug": "data",
+      "name": "Data & Research",
+      "emoji": "📊",
+      "count": 6
+    },
+    {
+      "slug": "productivity",
+      "name": "Productivity",
+      "emoji": "⚡",
+      "count": 5
+    },
+    {
+      "slug": "communication",
+      "name": "Communication",
+      "emoji": "💬",
+      "count": 2
+    },
+    {
+      "slug": "coding",
+      "name": "Coding",
+      "emoji": "🧑‍💻",
+      "count": 4
+    }
   ],
   "stats": {
-    "total_skills": 12,
+    "total_skills": 42,
     "total_installs": 26150,
-    "total_authors": 3,
-    "last_updated": "2026-03-03T19:00:00Z"
+    "total_authors": 31,
+    "last_updated": "2026-03-04T00:30:13.589Z"
   }
 }

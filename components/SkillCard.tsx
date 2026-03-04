@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Skill, TIER_CONFIG, PLATFORM_CONFIG } from "@/lib/skills";
 import { useState } from "react";
+import { usePlatform, getPlatformInstall, PLATFORM_LABELS } from "@/hooks/usePlatform";
 
 interface SkillCardProps {
   skill: Skill;
@@ -11,14 +12,20 @@ interface SkillCardProps {
 
 export function SkillCard({ skill, compact = false }: SkillCardProps) {
   const [copied, setCopied] = useState(false);
+  const { platform, mounted } = usePlatform();
   const tier = TIER_CONFIG[skill.verified];
+
+  const install = getPlatformInstall(skill.slug, skill.installCmd, skill.repoUrl, platform);
 
   function handleCopy(e: React.MouseEvent) {
     e.preventDefault();
-    navigator.clipboard.writeText(skill.installCmd);
+    navigator.clipboard.writeText(install.cmd);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }
+
+  // Label shown on the install button
+  const platformLabel = mounted && platform ? PLATFORM_LABELS[platform] : null;
 
   return (
     <Link
@@ -84,9 +91,14 @@ export function SkillCard({ skill, compact = false }: SkillCardProps) {
         </div>
         <button
           onClick={handleCopy}
-          className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white px-3 py-1 rounded-lg transition-colors flex-shrink-0"
+          className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white px-3 py-1 rounded-lg transition-colors flex-shrink-0 whitespace-nowrap"
+          title={`Copy install command for ${platformLabel ?? "OpenClaw"}`}
         >
-          {copied ? "Copied!" : "Install"}
+          {copied
+            ? "Copied!"
+            : platformLabel
+            ? `Install (${platformLabel})`
+            : "Install"}
         </button>
       </div>
     </Link>

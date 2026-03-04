@@ -1,8 +1,17 @@
 import Link from "next/link";
 import { getAllSkills, getCategories, getFeaturedSkills, getStats, TIER_CONFIG } from "@/lib/skills";
 import { SkillCard } from "@/components/SkillCard";
-import { SearchBar } from "@/components/SearchBar";
-import { PlatformChips } from "@/components/PlatformChips";
+import { PlatformSelector } from "@/components/PlatformSelector";
+import { HeroInstallCommand } from "@/components/HeroInstallCommand";
+
+const PLATFORM_PILLS = [
+  { emoji: "🦀", label: "OpenClaw" },
+  { emoji: "💬", label: "Claude Desktop" },
+  { emoji: "🤖", label: "OpenAI" },
+  { emoji: "🖱️", label: "Cursor" },
+  { emoji: "🔌", label: "MCP" },
+  { emoji: "📝", label: "VS Code" },
+];
 
 export default function HomePage() {
   const skills = getAllSkills();
@@ -24,26 +33,40 @@ export default function HomePage() {
           <div className="text-center max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 text-xs font-mono bg-purple-900/30 border border-purple-800/50 text-purple-300 px-3 py-1.5 rounded-full mb-6">
               <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
-              Now in Beta — 12 skills available
+              Now in Beta · {stats.total_skills} skills · 5+ platforms
             </div>
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
-              <span className="text-white">The marketplace for </span>
+              <span className="text-white">The trusted registry for </span>
               <span className="text-gradient-primary">AI agent skills</span>
             </h1>
 
-            <p className="text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Discover, install, and share verified skills for OpenClaw AI agents.
-              Trusted by the community — secured with cryptographic verification.
+            <p className="text-xl text-gray-400 mb-6 max-w-2xl mx-auto leading-relaxed">
+              Find, verify, and install skills for any AI agent platform.
+              Cryptographically signed. Community reviewed.
             </p>
 
-            {/* Install command */}
+            {/* Platform compatibility pills */}
+            <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
+              {PLATFORM_PILLS.map((pill) => (
+                <span
+                  key={pill.label}
+                  className="inline-flex items-center gap-1.5 text-xs bg-gray-900/80 border border-gray-700 text-gray-400 px-3 py-1.5 rounded-full"
+                >
+                  <span>{pill.emoji}</span>
+                  <span>{pill.label}</span>
+                </span>
+              ))}
+            </div>
+
+            {/* Platform selector */}
+            <div className="mb-8">
+              <PlatformSelector />
+            </div>
+
+            {/* Dynamic install command + CTA */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
-              <div className="flex items-center gap-3 bg-gray-900 border border-gray-700 rounded-xl px-5 py-3 font-mono text-sm w-full sm:w-auto">
-                <span className="text-gray-500 select-none">$</span>
-                <span className="text-emerald-400">openclaw skills install</span>
-                <span className="text-gray-300">weather</span>
-              </div>
+              <HeroInstallCommand />
               <Link
                 href="/skills"
                 className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white font-medium px-6 py-3 rounded-xl transition-colors"
@@ -72,19 +95,11 @@ export default function HomePage() {
               </div>
               <div className="w-px h-8 bg-gray-800 hidden sm:block" />
               <div className="text-center">
-                <div className="text-2xl font-bold text-white">4</div>
+                <div className="text-2xl font-bold text-white">5+</div>
                 <div className="text-gray-500">platforms</div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Search bar */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <SearchBar />
-        <div className="mt-4">
-          <PlatformChips />
         </div>
       </section>
 
@@ -160,9 +175,13 @@ export default function HomePage() {
       {/* How it works */}
       <section className="border-t border-gray-800 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-white text-center mb-12">
+          <h2 className="text-2xl font-bold text-white text-center mb-4">
             Install any skill in seconds
           </h2>
+          <p className="text-center text-gray-500 text-sm mb-12 max-w-lg mx-auto">
+            Works the same way regardless of which AI platform you use.
+            Pick your platform above to see the exact command.
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             {[
               {
@@ -174,14 +193,14 @@ export default function HomePage() {
               {
                 step: "2",
                 icon: "📋",
-                title: "Copy Command",
-                desc: "Click the install button to copy the one-line install command to your clipboard.",
+                title: "Select your platform",
+                desc: "Pick OpenClaw, Claude Desktop, Cursor, OpenAI, or MCP — we show the right install command automatically.",
               },
               {
                 step: "3",
                 icon: "✅",
                 title: "Install",
-                desc: "Paste and run in your terminal. The skill is ready to use instantly.",
+                desc: "Copy and run (or paste into your config). The skill is ready to use instantly.",
               },
             ].map((item) => (
               <div key={item.step} className="text-center">
@@ -204,8 +223,8 @@ export default function HomePage() {
         <div className="relative max-w-3xl mx-auto text-center px-4">
           <h2 className="text-3xl font-bold text-white mb-4">Built a skill? Share it.</h2>
           <p className="text-gray-400 mb-8">
-            The TrustedSkills marketplace grows with community contributions.
-            Submit your skill and reach thousands of OpenClaw users.
+            The TrustedSkills registry grows with community contributions.
+            Submit your skill and reach developers across the entire AI agent ecosystem.
           </p>
           <Link
             href="/submit"

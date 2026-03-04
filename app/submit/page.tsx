@@ -3,14 +3,14 @@ import { CopyButton } from "@/components/CopyButton";
 
 export const metadata: Metadata = {
   title: "Submit a Skill",
-  description: "Share your OpenClaw skill with the community. Learn how to submit to the TrustedSkills marketplace.",
+  description: "Share your AI agent skill with the community. Learn how to submit to the TrustedSkills registry — compatible with OpenClaw, MCP, Claude, OpenAI, and more.",
 };
 
 const SKILL_TEMPLATE = `---
 name: my-skill-name
 description: "One-line description of what your skill does (10-500 chars)"
 version: 1.0.0
-metadata: {"openclaw":{"emoji":"🔧"}}
+metadata: {"openclaw":{"emoji":"🔧"},"platforms":["openclaw","mcp"]}
 ---
 
 ## Instructions
@@ -35,8 +35,24 @@ export default function SubmitPage() {
       <div className="mb-10">
         <h1 className="text-3xl font-bold text-white mb-3">Submit a Skill</h1>
         <p className="text-gray-400 text-lg">
-          Share your OpenClaw skill with thousands of AI agent users.
+          Share your AI agent skill with developers across the entire ecosystem.
         </p>
+        <div className="flex flex-wrap gap-2 mt-3">
+          {[
+            { emoji: "🦀", label: "OpenClaw" },
+            { emoji: "🔌", label: "MCP" },
+            { emoji: "💬", label: "Claude Desktop" },
+            { emoji: "🤖", label: "OpenAI" },
+            { emoji: "🖱️", label: "Cursor / VS Code" },
+          ].map((p) => (
+            <span
+              key={p.label}
+              className="inline-flex items-center gap-1 text-xs bg-gray-900 border border-gray-700 text-gray-400 px-2.5 py-1 rounded-full"
+            >
+              {p.emoji} {p.label}
+            </span>
+          ))}
+        </div>
       </div>
 
       {/* Trust tiers overview */}
@@ -70,7 +86,7 @@ export default function SubmitPage() {
               tier: "Featured",
               color: "text-yellow-400",
               bg: "bg-yellow-900/30",
-              desc: "Editorially selected by the OpenClaw team.",
+              desc: "Editorially selected — recommended across all platforms.",
             },
           ].map((item) => (
             <div
@@ -98,8 +114,9 @@ export default function SubmitPage() {
             content: (
               <div>
                 <p className="text-gray-400 text-sm mb-4">
-                  Create a directory for your skill with a <code className="bg-gray-800 px-1.5 py-0.5 rounded text-purple-300 text-xs">SKILL.md</code> file.
-                  This is the core of every OpenClaw skill.
+                  Create a directory for your skill with a{" "}
+                  <code className="bg-gray-800 px-1.5 py-0.5 rounded text-purple-300 text-xs">SKILL.md</code> file.
+                  This is the core of every TrustedSkills skill — readable by OpenClaw, and exportable to MCP, Claude, and OpenAI formats.
                 </p>
                 <div className="bg-gray-950 rounded-xl border border-gray-700 overflow-hidden">
                   <div className="flex items-center justify-between px-4 py-2 border-b border-gray-700">
@@ -115,11 +132,38 @@ export default function SubmitPage() {
           },
           {
             step: "2",
+            title: "Declare platform support",
+            content: (
+              <div>
+                <p className="text-gray-400 text-sm mb-3">
+                  Set the <code className="bg-gray-800 px-1.5 py-0.5 rounded text-purple-300 text-xs">platforms</code> field
+                  to list which AI platforms your skill supports. Skills that support multiple platforms get wider exposure.
+                </p>
+                <div className="bg-gray-950 rounded-xl border border-gray-700 p-4 font-mono text-sm">
+                  <div className="text-blue-400">{"// In SKILL.md frontmatter metadata:"}</div>
+                  <div className="text-gray-300 mt-2">
+                    {`"platforms": ["openclaw", "mcp", "claude", "openai", "cursor"]`}
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  Supported values: <code className="bg-gray-800 px-1 py-0.5 rounded text-xs">openclaw</code>{" "}
+                  <code className="bg-gray-800 px-1 py-0.5 rounded text-xs">mcp</code>{" "}
+                  <code className="bg-gray-800 px-1 py-0.5 rounded text-xs">claude</code>{" "}
+                  <code className="bg-gray-800 px-1 py-0.5 rounded text-xs">openai</code>{" "}
+                  <code className="bg-gray-800 px-1 py-0.5 rounded text-xs">cursor</code>{" "}
+                  <code className="bg-gray-800 px-1 py-0.5 rounded text-xs">huggingface</code>
+                </p>
+              </div>
+            ),
+          },
+          {
+            step: "3",
             title: "Add tool implementations (optional)",
             content: (
               <div>
                 <p className="text-gray-400 text-sm mb-3">
-                  If your skill uses custom tools, add handler files in a <code className="bg-gray-800 px-1.5 py-0.5 rounded text-purple-300 text-xs">tools/</code> directory.
+                  If your skill uses custom tools, add handler files in a{" "}
+                  <code className="bg-gray-800 px-1.5 py-0.5 rounded text-purple-300 text-xs">tools/</code> directory.
                 </p>
                 <div className="bg-gray-950 rounded-xl border border-gray-700 p-4 font-mono text-sm">
                   <div className="text-gray-500">my-skill/</div>
@@ -132,7 +176,7 @@ export default function SubmitPage() {
             ),
           },
           {
-            step: "3",
+            step: "4",
             title: "Publish to GitHub",
             content: (
               <div>
@@ -157,7 +201,7 @@ gh repo edit --add-topic openclaw-skill`}
             ),
           },
           {
-            step: "4",
+            step: "5",
             title: "Create a GitHub Release",
             content: (
               <div>
@@ -181,7 +225,7 @@ gh release create v1.0.0 \\
             ),
           },
           {
-            step: "5",
+            step: "6",
             title: "Submit a PR to the registry",
             content: (
               <div>
@@ -202,7 +246,8 @@ gh release create v1.0.0 \\
                   </pre>
                 </div>
                 <p className="text-xs text-gray-500 mt-3">
-                  Or wait up to 6 hours — if your repo has the <code className="bg-gray-800 px-1 py-0.5 rounded">openclaw-skill</code> topic,
+                  Or wait up to 6 hours — if your repo has the{" "}
+                  <code className="bg-gray-800 px-1 py-0.5 rounded">openclaw-skill</code> topic,
                   it will be auto-discovered by the scraper.
                 </p>
               </div>
@@ -233,6 +278,7 @@ gh release create v1.0.0 \\
             "All tool files referenced in SKILL.md must exist",
             "Public GitHub repository with the skill code",
             "License file (MIT, Apache-2.0, or similar OSS license)",
+            "platforms field set to at least one supported platform value",
           ].map((req) => (
             <li key={req} className="flex items-start gap-2">
               <span className="text-emerald-400 mt-0.5 flex-shrink-0">✓</span>
@@ -252,8 +298,8 @@ gh release create v1.0.0 \\
               a: "If you add the openclaw-skill GitHub topic, auto-discovery runs every 6 hours. Manual PR submissions are reviewed within 5 business days.",
             },
             {
-              q: "Can I submit skills for other platforms (Claude, OpenAI)?",
-              a: "Yes! Set the platforms field in your SKILL.md to include mcp, openai, claude, or huggingface. Multi-platform skills get wider exposure.",
+              q: "Can I submit skills for Claude Desktop, Cursor, or OpenAI?",
+              a: "Yes! Set the platforms field in your SKILL.md to include mcp, claude, cursor, openai, or huggingface. Multi-platform skills get wider exposure and show platform-specific install instructions on their detail page.",
             },
             {
               q: "How do I reach Verified status?",
@@ -262,6 +308,10 @@ gh release create v1.0.0 \\
             {
               q: "Can I update my skill?",
               a: "Yes. Create a new GitHub Release with a higher version number. The scraper will pick it up automatically.",
+            },
+            {
+              q: "Does my skill need to support all platforms?",
+              a: "No — you can support just one. Most skills start with OpenClaw or MCP and expand. The registry will show the right install instructions based on what you declare in the platforms field.",
             },
           ].map((item) => (
             <div key={item.q} className="border border-gray-800 rounded-xl p-5">
