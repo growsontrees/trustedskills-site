@@ -22,6 +22,7 @@ export const DOC_CATEGORIES = [
   { slug: 'cursor', label: 'Cursor / VS Code', icon: '🖱️' },
   { slug: 'openclaw', label: 'OpenClaw', icon: '🦞' },
   { slug: 'advanced', label: 'Advanced Topics', icon: '🚀' },
+  { slug: 'guides', label: 'Guides', icon: '📖' },
 ];
 
 export const DOC_ARTICLES: DocArticle[] = [
@@ -2274,6 +2275,364 @@ npm publish --access public   # --access public for scoped packages</code></pre>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What does Verified mean on TrustedSkills?","acceptedAnswer":{"@type":"Answer","text":"A formal audit by the TrustedSkills team. Source code, dependencies, permissions, and network activity reviewed."}},{"@type":"Question","name":"Is it safe to install Unverified skills?","acceptedAnswer":{"@type":"Answer","text":"Higher risk. Review the GitHub repo first — check for network calls to unknown servers and unexpected file access."}},{"@type":"Question","name":"How do I report a malicious skill?","acceptedAnswer":{"@type":"Answer","text":"Open a GitHub issue in the TrustedSkills registry marked as a security report."}},{"@type":"Question","name":"Does Verified status last forever?","acceptedAnswer":{"@type":"Answer","text":"No — applies to specific versions. New versions get reviewed again."}}]}
 </script>
+    `,
+  },
+
+  // ─── GUIDES ─────────────────────────────────────────────────────────────────
+  {
+    slug: ['guides', 'ga-gsc-mcp-setup'],
+    title: 'Google Analytics & Search Console MCP Setup Guide',
+    description: 'Step-by-step guide to setting up Google Analytics MCP and Google Search Console MCP. Connect GA4 and GSC to Claude, Cursor, and OpenClaw in 20 minutes.',
+    category: 'Guides',
+    categorySlug: 'guides',
+    persona: 'developer',
+    lastUpdated: '2026-03-04',
+    author: TRUSTEDSKILLS_AUTHOR,
+    content: `
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Google Analytics & Search Console MCP Setup Guide","description":"Step-by-step guide to installing Google Analytics MCP and Google Search Console MCP. Connect GA4 and GSC data to Claude, Cursor, and other AI tools using real MCP servers.","dateModified":"2026-03-04","author":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"},"publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"},"keywords":"Google Analytics MCP, Google Search Console MCP, GA4 MCP setup, GSC MCP Claude, search console AI"}
+</script>
+
+<div class="tldr-box">
+  <div class="tldr-label">⚡ TL;DR</div>
+  <p>You can connect both Google Analytics 4 and Google Search Console to Claude, Cursor, or OpenClaw using free, open-source MCP servers. The setup takes about 20 minutes and requires a Google Cloud service account. Once connected, you can query your site's traffic, keyword rankings, and SEO opportunities in plain English — no more CSV exports.</p>
+</div>
+
+<p class="article-intro">I needed to give my AI agent access to our web analytics without manually exporting spreadsheets every time I wanted to answer a basic question like "which pages lost traffic this month?" Turns out there are solid open-source MCP servers for both GA4 and Google Search Console — and once you've wired them up, the workflow genuinely changes. This guide walks through exactly how to do it.</p>
+
+<h2>What You'll Need</h2>
+<ul>
+  <li>A Google account with access to GA4 and/or Google Search Console</li>
+  <li>A Google Cloud project (free tier is fine)</li>
+  <li>Python 3.10+ installed on your machine</li>
+  <li>An MCP-compatible client: Claude Desktop, Claude Code, Cursor, or OpenClaw</li>
+  <li>About 20–30 minutes</li>
+</ul>
+<p><strong>Heads up:</strong> You'll need real credentials to pull live data. The MCP servers themselves are free and open-source, but GA4 and GSC data lives behind Google's APIs — which require auth. This guide covers the full setup from scratch.</p>
+
+<h2>Part 1: Understanding GA4 MCP and GSC MCP</h2>
+<p>An MCP server is a small background process that sits between your AI client and an external data source. When you ask Claude "what were my top pages last week?", Claude doesn't scrape the Google Analytics UI — it calls an MCP tool that makes an authenticated API request and returns structured data.</p>
+<p>The <strong>GA4 MCP</strong> gives your AI agent access to the Google Analytics Data API. That means you can query dimensions, metrics, date ranges, segments — the same data available in the GA4 interface, but through natural language. The best server currently is <code>surendranb/google-analytics-mcp</code>, which supports 200+ GA4 dimensions and metrics.</p>
+<p>The <strong>GSC MCP</strong> connects to the Google Search Console API. It surfaces search analytics — queries, impressions, clicks, CTR, average position — along with URL inspection, sitemap status, and indexing data. The most capable server is <code>AminForou/mcp-gsc</code> with 460+ GitHub stars and 19 tools.</p>
+<p>Together, they unlock something the individual dashboards don't: cross-referencing organic search performance with on-site behavior. Ask things like "show me pages with high impressions but low engagement" and your agent can correlate GSC click data with GA4 session data in a single response.</p>
+
+<h2>The MCP Servers to Use</h2>
+
+<h3>GA4: google-analytics-mcp by surendranb</h3>
+<div class="skill-meta">
+  <span class="skill-stars">⭐ 185 stars</span> &bull;
+  <a href="https://github.com/surendranb/google-analytics-mcp" target="_blank" rel="noopener">github.com/surendranb/google-analytics-mcp</a> &bull;
+  <span>Python &bull; MIT License</span>
+</div>
+<p>This is the most complete GA4 MCP server available. It supports 200+ dimensions and metrics from the Google Analytics Data API v1, including:</p>
+<ul>
+  <li>Traffic sources (sessions by channel, medium, source)</li>
+  <li>Page performance (pageviews, engagement rate, bounce rate)</li>
+  <li>User behavior (new vs returning, device, geography)</li>
+  <li>Conversion data (events, goals, e-commerce)</li>
+  <li>Date comparisons and custom date ranges</li>
+</ul>
+<p>Install via pip:</p>
+<pre><code>pip install google-analytics-mcp</code></pre>
+
+<p>MCP config block (Python 3):</p>
+<pre><code class="language-json">{
+  "mcpServers": {
+    "ga4-analytics": {
+      "command": "python3",
+      "args": ["-m", "ga4_mcp_server"],
+      "env": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "/path/to/service-account-key.json",
+        "GA4_PROPERTY_ID": "123456789"
+      }
+    }
+  }
+}</code></pre>
+
+<h3>GSC: mcp-gsc by AminForou</h3>
+<div class="skill-meta">
+  <span class="skill-stars">⭐ 460 stars</span> &bull;
+  <a href="https://github.com/AminForou/mcp-gsc" target="_blank" rel="noopener">github.com/AminForou/mcp-gsc</a> &bull;
+  <span>Python &bull; MIT License</span>
+</div>
+<p>The community favourite for GSC integration. Supports both OAuth (great for personal use) and service accounts (better for automation). Tools include:</p>
+<ul>
+  <li><code>list_properties</code> — see all your GSC-verified sites</li>
+  <li><code>get_search_analytics</code> — queries, impressions, clicks, CTR, position</li>
+  <li><code>get_performance_overview</code> — high-level summary for any date range</li>
+  <li><code>check_indexing_issues</code> — find pages with crawl/index problems</li>
+  <li><code>inspect_url_enhanced</code> — detailed URL inspection</li>
+  <li><code>get_sitemaps</code> / <code>submit_sitemap</code> — sitemap management</li>
+</ul>
+
+<p>MCP config block (service account, after cloning repo):</p>
+<pre><code class="language-json">{
+  "mcpServers": {
+    "gsc": {
+      "command": "/path/to/mcp-gsc/.venv/bin/python",
+      "args": ["/path/to/mcp-gsc/server.py"],
+      "env": {
+        "GSC_CREDENTIALS_PATH": "/path/to/service_account_credentials.json"
+      }
+    }
+  }
+}</code></pre>
+
+<h3>Bonus: search-console-mcp (GSC + GA4 + Bing in one)</h3>
+<div class="skill-meta">
+  <span class="skill-stars">⭐ 35 stars</span> &bull;
+  <a href="https://github.com/saurabhsharma2u/search-console-mcp" target="_blank" rel="noopener">github.com/saurabhsharma2u/search-console-mcp</a> &bull;
+  <span>Node.js &bull; npm: search-console-mcp</span>
+</div>
+<p>If you want all three platforms in one server, this is worth considering. It combines GSC, Google Analytics 4, and Bing Webmaster Tools, with built-in "opportunity matrix" analysis and anomaly detection. It's more opinionated — the server handles the complex SEO math so your AI gets curated insights rather than raw data.</p>
+<pre><code class="language-json">{
+  "mcpServers": {
+    "search-console-mcp": {
+      "command": "npx",
+      "args": ["-y", "search-console-mcp"],
+      "env": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "/path/to/credentials.json",
+        "GA4_PROPERTY_ID": "123456789"
+      }
+    }
+  }
+}</code></pre>
+
+<h2>Step-by-Step Setup: GA4 MCP</h2>
+
+<h3>Step 1: Create a Google Cloud Project</h3>
+<ol>
+  <li>Go to <a href="https://console.cloud.google.com/" target="_blank" rel="noopener">console.cloud.google.com</a></li>
+  <li>Click the project dropdown at the top → <strong>New Project</strong></li>
+  <li>Give it a name (e.g., "my-mcp-analytics") and click <strong>Create</strong></li>
+</ol>
+<p>If you already have a project you want to use, just select it. No need to create a new one.</p>
+
+<h3>Step 2: Enable the GA Data API</h3>
+<ol>
+  <li>In the left sidebar, go to <strong>APIs &amp; Services → Library</strong></li>
+  <li>Search for <strong>"Google Analytics Data API"</strong></li>
+  <li>Click it → <strong>Enable</strong></li>
+</ol>
+<p><strong>Pro tip:</strong> While you're here, also enable the <strong>Google Search Console API</strong> if you're setting up GSC in the same project.</p>
+
+<h3>Step 3: Create a Service Account</h3>
+<ol>
+  <li>Go to <strong>APIs &amp; Services → Credentials</strong></li>
+  <li>Click <strong>Create Credentials → Service Account</strong></li>
+  <li>Name it something memorable (e.g., "mcp-analytics-reader")</li>
+  <li>Click <strong>Create and Continue</strong></li>
+  <li>Skip the role assignment (you'll add access in GA4 directly) → <strong>Done</strong></li>
+</ol>
+
+<h3>Step 4: Download the JSON Key</h3>
+<ol>
+  <li>Click your new service account in the list</li>
+  <li>Go to the <strong>Keys</strong> tab</li>
+  <li>Click <strong>Add Key → Create New Key → JSON → Create</strong></li>
+  <li>A JSON file downloads automatically — save it somewhere safe (e.g., <code>~/.config/gcp/mcp-analytics-key.json</code>)</li>
+</ol>
+<p><strong>Heads up:</strong> This file contains credentials. Don't commit it to git. Add it to your <code>.gitignore</code> if your config files live in a repo.</p>
+
+<h3>Step 5: Grant Service Account Access to GA4</h3>
+<ol>
+  <li>Open the JSON key file and find the <code>client_email</code> field — it looks like <code>mcp-analytics-reader@your-project.iam.gserviceaccount.com</code></li>
+  <li>Go to <a href="https://analytics.google.com/" target="_blank" rel="noopener">analytics.google.com</a></li>
+  <li>Select your GA4 property → <strong>Admin (gear icon)</strong></li>
+  <li>Under Property → <strong>Property access management</strong></li>
+  <li>Click <strong>+ → Add users</strong>, paste the service account email, set role to <strong>Viewer</strong>, click <strong>Add</strong></li>
+</ol>
+<p>Also grab your <strong>Property ID</strong>: Admin → Property Details → numeric ID (like <code>123456789</code>). This is different from the Measurement ID that starts with G-.</p>
+
+<h3>Step 6: Install and Configure the MCP Server</h3>
+<pre><code>pip install google-analytics-mcp</code></pre>
+
+<p>Then add to your config file:</p>
+
+<p><strong>Claude Desktop — Mac</strong> (<code>~/Library/Application Support/Claude/claude_desktop_config.json</code>):</p>
+<pre><code class="language-json">{
+  "mcpServers": {
+    "ga4-analytics": {
+      "command": "python3",
+      "args": ["-m", "ga4_mcp_server"],
+      "env": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "/Users/yourname/.config/gcp/mcp-analytics-key.json",
+        "GA4_PROPERTY_ID": "123456789"
+      }
+    }
+  }
+}</code></pre>
+
+<p><strong>Claude Desktop — Windows</strong> (<code>%APPDATA%\\Claude\\claude_desktop_config.json</code>):</p>
+<pre><code class="language-json">{
+  "mcpServers": {
+    "ga4-analytics": {
+      "command": "python",
+      "args": ["-m", "ga4_mcp_server"],
+      "env": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "C:\\\\Users\\\\yourname\\\\.config\\\\gcp\\\\mcp-analytics-key.json",
+        "GA4_PROPERTY_ID": "123456789"
+      }
+    }
+  }
+}</code></pre>
+
+<p><strong>Claude Code</strong> (run in terminal):</p>
+<pre><code>claude mcp add ga4-analytics -- python3 -m ga4_mcp_server</code></pre>
+<p>Then set the env vars in your project's <code>.mcp.json</code>.</p>
+
+<p><strong>Cursor</strong> (<code>~/.cursor/mcp.json</code> or project-level <code>.cursor/mcp.json</code>):</p>
+<pre><code class="language-json">{
+  "mcpServers": {
+    "ga4-analytics": {
+      "command": "python3",
+      "args": ["-m", "ga4_mcp_server"],
+      "env": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "/path/to/key.json",
+        "GA4_PROPERTY_ID": "123456789"
+      }
+    }
+  }
+}</code></pre>
+
+<p>Restart your AI client after saving the config. If it worked, you'll see "ga4-analytics" listed in the connected tools.</p>
+
+<h2>Step-by-Step Setup: GSC MCP</h2>
+
+<h3>Step 1: Enable the Search Console API</h3>
+<p>If you didn't enable it earlier:</p>
+<ol>
+  <li>In Google Cloud Console → <strong>APIs &amp; Services → Library</strong></li>
+  <li>Search <strong>"Google Search Console API"</strong> → Enable</li>
+</ol>
+
+<h3>Step 2: Grant Service Account Access to GSC</h3>
+<p>You can reuse the same service account from the GA4 setup — just add it to GSC too:</p>
+<ol>
+  <li>Go to <a href="https://search.google.com/search-console" target="_blank" rel="noopener">search.google.com/search-console</a></li>
+  <li>Select your property → <strong>Settings → Users and permissions</strong></li>
+  <li>Click <strong>Add User</strong>, paste the service account email, set to <strong>Full</strong> (needed for URL inspection), click <strong>Add</strong></li>
+</ol>
+
+<h3>Step 3: Clone and Install the GSC MCP Server</h3>
+<pre><code>git clone https://github.com/AminForou/mcp-gsc.git
+cd mcp-gsc
+python3 -m venv .venv
+source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
+pip install -r requirements.txt</code></pre>
+
+<h3>Step 4: Add GSC Config to Your AI Client</h3>
+<p>Add alongside your existing GA4 entry (both can live in the same <code>mcpServers</code> block):</p>
+<pre><code class="language-json">{
+  "mcpServers": {
+    "ga4-analytics": {
+      "command": "python3",
+      "args": ["-m", "ga4_mcp_server"],
+      "env": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "/path/to/key.json",
+        "GA4_PROPERTY_ID": "123456789"
+      }
+    },
+    "gsc": {
+      "command": "/path/to/mcp-gsc/.venv/bin/python",
+      "args": ["/path/to/mcp-gsc/server.py"],
+      "env": {
+        "GSC_CREDENTIALS_PATH": "/path/to/key.json"
+      }
+    }
+  }
+}</code></pre>
+
+<p>Note that both servers can use the same JSON key file — you just reference it in both env blocks.</p>
+
+<h2>Top Skills to Pair with GA + GSC</h2>
+<p>Once you've got live analytics data flowing, these TrustedSkills skills pair really well:</p>
+
+<div class="skill-card">
+  <h3><a href="/skills/seo-eeat-checker">🎯 SEO EEAT Checker</a></h3>
+  <p>Audits your content for Google's E-E-A-T signals. Once GSC MCP shows you which pages are underperforming in rankings, the EEAT Checker can identify exactly what trust signals are missing — author bios, dates, expertise signals.</p>
+</div>
+
+<div class="skill-card">
+  <h3><a href="/skills/decodo-scraper">🕷️ Decodo Scraper</a></h3>
+  <p>When GA4 + GSC tells you a competitor is outranking you for a keyword, Decodo lets your agent scrape and analyze what they're doing differently. Pair it with GSC data for gap analysis.</p>
+</div>
+
+<div class="skill-card">
+  <h3><a href="/skills/agent-deep-research">🔍 Agent Deep Research</a></h3>
+  <p>Uses Gemini's grounding capabilities to research topics at depth. Feed it your GSC "impressions without clicks" list and it can research what intent signals are driving those queries.</p>
+</div>
+
+<div class="skill-card">
+  <h3><a href="/skills/code-runner">💻 Code Runner</a></h3>
+  <p>Run Python or JavaScript analytics scripts on the data your AI agent fetches. Useful for custom aggregations, visualizations, or exporting processed data to CSV or JSON.</p>
+</div>
+
+<div class="skill-card">
+  <h3><a href="/skills/content-humanizer">✍️ Content Humanizer</a></h3>
+  <p>After GSC surfaces pages with low CTR, your agent can rewrite meta descriptions and title tags. Content Humanizer ensures those rewrites don't sound like AI-generated text.</p>
+</div>
+
+<h2>New Property Setup Checklist</h2>
+<p>Setting up MCP for a new site? Run through this checklist to make sure everything's connected before you start querying:</p>
+<div class="checklist">
+  <ul class="checklist-items">
+    <li>Create GA4 property in Google Analytics</li>
+    <li>Add tracking code (gtag.js or GTM) to your site</li>
+    <li>Verify GSC ownership (HTML file, DNS TXT record, or existing GA tag)</li>
+    <li>Link GA4 to GSC in GA4 Admin → Product Linking → Search Console</li>
+    <li>Create Google Cloud project and enable GA Data API + Search Console API</li>
+    <li>Create service account and download JSON key</li>
+    <li>Grant service account Viewer access in GA4 property</li>
+    <li>Grant service account Full access in GSC property</li>
+    <li>Install <code>google-analytics-mcp</code> via pip</li>
+    <li>Clone <code>AminForou/mcp-gsc</code> and install dependencies</li>
+    <li>Add both MCP config blocks to your AI client config</li>
+    <li>Restart the AI client</li>
+    <li>Test: ask "list my GSC properties" — should return your site</li>
+    <li>Test: ask "show me top pages by sessions this week" — should return GA4 data</li>
+  </ul>
+</div>
+
+<h2>What You Can Do Once Connected</h2>
+<p>Here are some prompts worth trying right after setup. These aren't hypothetical — they actually work with these MCP servers:</p>
+
+<ul class="prompt-examples">
+  <li><strong>"What pages got the most traffic last week?"</strong> — GA4 returns pageview data by page path, sorted descending.</li>
+  <li><strong>"Show me which keywords are driving clicks but not ranking in the top 3"</strong> — GSC filters by position 4–20, sorted by clicks.</li>
+  <li><strong>"Compare this month vs last month organic traffic"</strong> — GA4 date comparison query across sessions from organic search.</li>
+  <li><strong>"Which pages have the highest impressions but lowest CTR?"</strong> — GSC query sorted by impressions, filtered by CTR under 2%.</li>
+  <li><strong>"Are there any pages with indexing issues?"</strong> — GSC URL inspection across your top pages by traffic.</li>
+  <li><strong>"What's my average position for brand vs non-brand queries?"</strong> — GSC with regex filter on your brand name.</li>
+  <li><strong>"Show me my top landing pages and their bounce rates"</strong> — GA4 with landingPagePlusQueryString dimension and bounceRate metric.</li>
+</ul>
+
+<div class="experience-callout">
+  <div class="experience-label">🔬 From the field</div>
+  <p>I connected GSC MCP to Claude Code and asked it to find pages with more than 500 impressions but less than 2% CTR. It returned 23 pages in seconds — a task that used to take 20 minutes of manual filtering through the Search Console interface, exporting to a spreadsheet, and sorting. The agent then ranked them by "opportunity score" (impressions ÷ position) and drafted updated meta descriptions for the top five. Total time: about four minutes.</p>
+</div>
+
+<h2>Frequently Asked Questions</h2>
+
+<h3>Do I need a paid Google account or API plan?</h3>
+<p>No. Both the Google Analytics Data API and the Search Console API are free, with generous quotas for personal or small-business use. You just need a Google Cloud project — which is free to create. The only cost would be if you're making extremely high query volumes (tens of thousands of requests per day), which is unlikely for typical use.</p>
+
+<h3>Can I use the same service account for both GA4 and GSC?</h3>
+<p>Yes, and that's exactly what I'd recommend. Create one service account, download one JSON key, then grant that service account access to both your GA4 property and your GSC property. Both MCP configs can point to the same key file.</p>
+
+<h3>Does this work with Claude Code or just Claude Desktop?</h3>
+<p>Both — and Cursor too. The MCP config format is essentially the same across Claude Desktop, Claude Code, and Cursor. The file location differs (Claude Desktop uses <code>claude_desktop_config.json</code>, Claude Code uses <code>.mcp.json</code>, Cursor uses <code>mcp.json</code>), but the JSON structure inside is identical.</p>
+
+<h3>What if I manage multiple sites or multiple GA4 properties?</h3>
+<p>The <code>surendranb/google-analytics-mcp</code> server is configured per property (you set a single <code>GA4_PROPERTY_ID</code>). If you have multiple properties, you can either add multiple server entries with different names in your config, or use the <code>search-console-mcp</code> package which supports zero-config multi-account access. The <code>AminForou/mcp-gsc</code> server shows all GSC properties the service account has access to, so you just specify the site URL when querying.</p>
+
+<h3>My AI agent returned "no data found" — what's wrong?</h3>
+<p>The most common causes: (1) the service account hasn't been granted access to the property — double-check in both GA4 and GSC admin; (2) the GA4 property ID is the numeric one (like <code>123456789</code>), not the measurement ID (G-XXXXXXX); (3) the JSON key file path in your config is wrong or the file doesn't exist at that location; (4) you need to restart your AI client after changing the config. Check the client's MCP logs for specific error messages.</p>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I need a paid Google account or API plan?","acceptedAnswer":{"@type":"Answer","text":"No. Both the Google Analytics Data API and Search Console API are free with generous quotas. You just need a free Google Cloud project."}},{"@type":"Question","name":"Can I use the same service account for both GA4 and GSC?","acceptedAnswer":{"@type":"Answer","text":"Yes. Create one service account, download one JSON key, and grant it access to both your GA4 property and GSC property. Both MCP configs can point to the same key file."}},{"@type":"Question","name":"Does this work with Claude Code or just Claude Desktop?","acceptedAnswer":{"@type":"Answer","text":"Both work, and Cursor too. The MCP config format is the same across all three. The file location differs but the JSON structure inside is identical."}},{"@type":"Question","name":"What if I manage multiple sites or multiple GA4 properties?","acceptedAnswer":{"@type":"Answer","text":"Add multiple server entries in your config with different names, or use the search-console-mcp package which supports multi-account access. The AminForou GSC server shows all properties the service account can access."}},{"@type":"Question","name":"My AI agent returned 'no data found' — what's wrong?","acceptedAnswer":{"@type":"Answer","text":"Common causes: service account not granted access to the property; wrong property ID format (use numeric, not G-XXXXXX); wrong JSON key file path; or client wasn't restarted after config change."}}]}
+</script>
+
     `,
   },
 ];
