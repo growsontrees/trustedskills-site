@@ -1,6 +1,6 @@
 {
   "$schema": "https://trustedskills.dev/schema/skills-index-v1.json",
-  "generated_at": "2026-03-05T01:52:32.817Z",
+  "generated_at": "2026-03-05T06:48:17.974Z",
   "schema_version": "1",
   "skills": [
     {
@@ -4675,6 +4675,34 @@
       "installs": 0,
       "stars": 5,
       "verified": "unverified"
+    },
+    {
+      "slug": "claw",
+      "name": "Claw",
+      "description": "Real-time event bus for AI agents. Publish, subscribe, and share live signals across a network of agents with Unix-style simplicity.",
+      "version": "1.0.0",
+      "author": "mateffy",
+      "homepage": "https://trustedskills.dev/skills/claw",
+      "source_repo": "https://github.com/mateffy/claw.events",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install claw",
+      "repoUrl": "https://github.com/mateffy/claw.events",
+      "published_at": "2026-02-01T00:19:05Z",
+      "updated_at": "2026-02-06T18:36:05Z",
+      "installs": 0,
+      "stars": 4,
+      "verified": "unverified"
     }
   ],
   "categories": [
@@ -4682,7 +4710,7 @@
       "slug": "utilities",
       "name": "Utilities",
       "emoji": "🔧",
-      "count": 79
+      "count": 80
     },
     {
       "slug": "seo",
@@ -4746,9 +4774,9 @@
     }
   ],
   "stats": {
-    "total_skills": 131,
+    "total_skills": 132,
     "total_installs": 26150,
-    "total_authors": 55,
-    "last_updated": "2026-03-05T01:52:32.817Z"
+    "total_authors": 56,
+    "last_updated": "2026-03-05T06:48:17.974Z"
   }
 }

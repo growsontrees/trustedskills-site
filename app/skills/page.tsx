@@ -1,11 +1,15 @@
 import { Suspense } from "react";
 import { getAllSkills, getCategories, getStats } from "@/lib/skills";
 import { SkillsListClient } from "@/components/SkillsListClient";
+import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Browse Skills",
   description: "Browse all AI agent skills — humanizer, Obsidian, code runners, and more. Filter by platform, category, and verification tier.",
+  alternates: {
+    canonical: "https://trustedskills.dev/skills/",
+  },
 };
 
 export default function SkillsPage() {
@@ -21,6 +25,20 @@ export default function SkillsPage() {
           {stats.total_skills} skills available · {(stats.total_installs / 1000).toFixed(1)}k total installs
         </p>
       </div>
+
+      {/* Server-rendered skill links — crawlable by search engines, hidden visually */}
+      <nav aria-label="All skills index" className="sr-only">
+        <ul>
+          {skills.map((skill) => (
+            <li key={skill.slug}>
+              <Link href={`/skills/${skill.slug}/`}>
+                {skill.name} — {skill.description}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
       <Suspense fallback={<div className="text-gray-500 py-12 text-center">Loading skills...</div>}>
         <SkillsListClient
           skills={skills}
