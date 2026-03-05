@@ -210,6 +210,23 @@ export default function DocArticlePage({ params }: Props) {
   const { prev, next } = getPrevNext(article);
   const persona = PERSONA_BADGE[article.persona];
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": article.title,
+    "description": article.description,
+    "url": `https://trustedskills.dev/docs/${article.slug.join('/')}/`,
+    "publisher": {
+      "@type": "Organization",
+      "name": "TrustedSkills",
+      "url": "https://trustedskills.dev"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://trustedskills.dev/docs/${article.slug.join('/')}/`
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Inject scoped styles for all doc content elements */}
@@ -346,6 +363,12 @@ export default function DocArticlePage({ params }: Props) {
           </div>
         </main>
       </div>
+
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     </div>
   );
 }

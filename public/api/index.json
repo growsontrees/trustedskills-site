@@ -1,6 +1,6 @@
 {
   "$schema": "https://trustedskills.dev/schema/skills-index-v1.json",
-  "generated_at": "2026-03-04T12:52:20.231Z",
+  "generated_at": "2026-03-05T01:52:32.817Z",
   "schema_version": "1",
   "skills": [
     {
@@ -232,7 +232,12 @@
       "installs": 0,
       "verifiedCommit": "ca6047d4dc086c8531e4525be5f24d2bbcc50432",
       "verifiedAt": "2026-03-04",
-      "installArchiveUrl": "https://github.com/growsontrees/trustedskills-registry/archive/ca6047d4dc086c8531e4525be5f24d2bbcc50432.tar.gz"
+      "installArchiveUrl": "https://github.com/growsontrees/trustedskills-registry/archive/ca6047d4dc086c8531e4525be5f24d2bbcc50432.tar.gz",
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      }
     },
     {
       "slug": "nextjs-static-content",
@@ -260,7 +265,12 @@
       "installs": 0,
       "verifiedCommit": "ca6047d4dc086c8531e4525be5f24d2bbcc50432",
       "verifiedAt": "2026-03-04",
-      "installArchiveUrl": "https://github.com/growsontrees/trustedskills-registry/archive/ca6047d4dc086c8531e4525be5f24d2bbcc50432.tar.gz"
+      "installArchiveUrl": "https://github.com/growsontrees/trustedskills-registry/archive/ca6047d4dc086c8531e4525be5f24d2bbcc50432.tar.gz",
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      }
     },
     {
       "slug": "pdf-reader",
@@ -4637,6 +4647,34 @@
       "verifiedCommit": "75777c1f874a89f71f767592cd8d0b1d135e8a9d",
       "verifiedAt": "2026-03-04",
       "installArchiveUrl": "https://github.com/siddontang/claw-memory/archive/75777c1f874a89f71f767592cd8d0b1d135e8a9d.tar.gz"
+    },
+    {
+      "slug": "repl-scratchpad",
+      "name": "Repl Scratchpad",
+      "description": ">",
+      "version": "1.0.0",
+      "author": "knot0-com",
+      "homepage": "https://trustedskills.dev/skills/repl-scratchpad",
+      "source_repo": "https://github.com/knot0-com/repl-scratchpad",
+      "tags": [],
+      "category": "utilities",
+      "emoji": "🔧",
+      "license": "MIT",
+      "platforms": [
+        "openclaw"
+      ],
+      "requires": {
+        "bins": [],
+        "env": [],
+        "config": []
+      },
+      "installCmd": "openclaw skills install repl-scratchpad",
+      "repoUrl": "https://github.com/knot0-com/repl-scratchpad",
+      "published_at": "2026-03-02T05:10:28Z",
+      "updated_at": "2026-03-02T06:38:45Z",
+      "installs": 0,
+      "stars": 5,
+      "verified": "unverified"
     }
   ],
   "categories": [
@@ -4644,7 +4682,7 @@
       "slug": "utilities",
       "name": "Utilities",
       "emoji": "🔧",
-      "count": 78
+      "count": 79
     },
     {
       "slug": "seo",
@@ -4708,9 +4746,9 @@
     }
   ],
   "stats": {
-    "total_skills": 130,
+    "total_skills": 131,
     "total_installs": 26150,
-    "total_authors": 54,
-    "last_updated": "2026-03-04T12:52:20.232Z"
+    "total_authors": 55,
+    "last_updated": "2026-03-05T01:52:32.817Z"
   }
 }

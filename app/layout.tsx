@@ -4,12 +4,15 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: {
-    default: "TrustedSkills — AI Agent Skills Registry",
+    default: "TrustedSkills — Find & Install AI Agent Skills | MCP, Claude, OpenClaw",
     template: "%s — TrustedSkills",
   },
   description:
     "Find, verify, and install skills for any AI agent platform. Compatible with OpenClaw, MCP, Claude Desktop, OpenAI, Cursor, and VS Code.",
   metadataBase: new URL("https://trustedskills.dev"),
+  alternates: {
+    canonical: 'https://trustedskills.dev',
+  },
   openGraph: {
     title: "TrustedSkills — AI Agent Skills Registry",
     description:
@@ -17,11 +20,20 @@ export const metadata: Metadata = {
     url: "https://trustedskills.dev",
     siteName: "TrustedSkills",
     type: "website",
+    images: [
+      {
+        url: "https://trustedskills.dev/og-image.svg",
+        width: 1200,
+        height: 630,
+        alt: "TrustedSkills — AI Agent Skills Registry",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "TrustedSkills — AI Agent Skills Registry",
     description: "Find and install verified AI agent skills for any platform.",
+    images: ["https://trustedskills.dev/og-image.svg"],
   },
 };
 

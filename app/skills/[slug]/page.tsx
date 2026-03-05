@@ -37,6 +37,22 @@ export default function SkillDetailPage({ params }: Props) {
     .filter((s) => s.slug !== skill.slug && s.category === skill.category)
     .slice(0, 3);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": skill.name,
+    "description": skill.description,
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "url": `https://trustedskills.dev/skills/${skill.slug}/`,
+    "author": {
+      "@type": "Person",
+      "name": skill.author
+    },
+    "softwareVersion": skill.version,
+    "license": skill.license,
+  };
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="mb-6">
@@ -334,6 +350,12 @@ export default function SkillDetailPage({ params }: Props) {
           </div>
         </div>
       </div>
+
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     </div>
   );
 }

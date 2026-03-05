@@ -7,6 +7,37 @@ import { SearchBar } from "@/components/SearchBar";
 
 export default function HomePage() {
   const skills = getAllSkills();
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://trustedskills.dev/#website",
+        "url": "https://trustedskills.dev",
+        "name": "TrustedSkills",
+        "description": "The trusted registry for AI agent skills",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://trustedskills.dev/skills/?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://trustedskills.dev/#organization",
+        "name": "TrustedSkills",
+        "url": "https://trustedskills.dev",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://trustedskills.dev/og-image.svg"
+        },
+        "sameAs": []
+      }
+    ]
+  };
   const featured = getFeaturedSkills();
   const categories = getCategories();
   const stats = getStats();
@@ -214,6 +245,12 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
+
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     </div>
   );
 }
