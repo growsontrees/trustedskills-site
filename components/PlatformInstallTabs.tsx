@@ -235,7 +235,7 @@ export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms }: Pr
           {ALL_TABS.map((tab) => {
             const isActive = activeTab === tab.key;
             const isSupported =
-              platforms.includes(tab.key) ||
+              (platforms || []).includes(tab.key) ||
               tab.key === "openclaw" ||
               tab.key === "mcp" ||
               tab.key === "claudecode";

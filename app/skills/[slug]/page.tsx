@@ -123,9 +123,9 @@ export default function SkillDetailPage({ params }: Props) {
           {/* Platform Install Tabs */}
           <PlatformInstallTabs
             slug={skill.slug}
-            installCmd={skill.installCmd}
-            repoUrl={skill.repoUrl}
-            platforms={skill.platforms}
+            installCmd={skill.installCmd || ""}
+            repoUrl={skill.repoUrl || ""}
+            platforms={skill.platforms || []}
           />
 
           {/* Tags */}

@@ -71,7 +71,7 @@ export function SkillCard({ skill, compact = false }: SkillCardProps) {
 
       {!compact && (
         <div className="flex flex-wrap gap-1.5 mb-3">
-          {skill.platforms.map((platform) => {
+          {(skill.platforms || []).map((platform) => {
             const config = PLATFORM_CONFIG[platform] || {
               label: platform,
               color: "text-gray-400",
