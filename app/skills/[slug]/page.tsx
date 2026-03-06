@@ -27,11 +27,12 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const skill = getSkillBySlug(params.slug);
   if (!skill) return {};
+  const categoryName = skill.category.charAt(0).toUpperCase() + skill.category.slice(1);
   return {
-    title: skill.name,
+    title: `${skill.name} Agent Skill`,
     description: skill.description,
     openGraph: {
-      title: `${skill.name} — TrustedSkills`,
+      title: `${skill.name} Agent Skill | ${categoryName} | TrustedSkills`,
       description: skill.description,
     },
   };

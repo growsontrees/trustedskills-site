@@ -6,7 +6,7 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 export const metadata: Metadata = {
   title: {
     default: "TrustedSkills — Find & Install AI Agent Skills | MCP, Claude, OpenClaw",
-    template: "%s — TrustedSkills",
+    template: "%s | TrustedSkills",
   },
   description:
     "Find, verify, and install skills for any AI agent platform. Compatible with OpenClaw, MCP, Claude Desktop, OpenAI, Cursor, and VS Code.",

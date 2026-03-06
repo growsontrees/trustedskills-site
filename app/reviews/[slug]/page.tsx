@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: review.description,
     keywords: review.targetKeyword,
     openGraph: {
-      title: `${review.title} — TrustedSkills`,
+      title: `${review.title} | TrustedSkills`,
       description: review.description,
       url: `https://trustedskills.dev/reviews/${review.slug}`,
       type: "article",
@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: review.title,
+      title: `${review.title} | TrustedSkills`,
       description: review.description,
     },
   };

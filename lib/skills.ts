@@ -68,6 +68,10 @@ export function getCategories(): Category[] {
   return skillsIndex.categories;
 }
 
+export function getCategoryBySlug(slug: string): Category | undefined {
+  return skillsIndex.categories.find((category) => category.slug === slug);
+}
+
 export function getStats() {
   return skillsIndex.stats;
 }

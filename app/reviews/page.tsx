@@ -3,11 +3,11 @@ import Link from "next/link";
 import { getAllReviews } from "@/lib/reviews-content";
 
 export const metadata: Metadata = {
-  title: "Skill Reviews",
+  title: "Skill Reviews | TrustedSkills",
   description:
     "In-depth reviews of AI agent skills — tested on real sites, scored honestly. No sponsored content.",
   openGraph: {
-    title: "Skill Reviews — TrustedSkills",
+    title: "Skill Reviews | TrustedSkills",
     description:
       "In-depth reviews of AI agent skills — tested on real sites, scored honestly.",
     url: "https://trustedskills.dev/reviews",
