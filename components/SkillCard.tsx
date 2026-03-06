@@ -32,34 +32,13 @@ export function SkillCard({ skill, compact = false }: SkillCardProps) {
       href={`/skills/${skill.slug}`}
       className="group block bg-gray-900 hover:bg-gray-800/80 border border-gray-800 hover:border-gray-700 rounded-xl p-4 transition-all"
     >
-      <div className="flex items-start justify-between gap-3 mb-3">
-        <div className="flex items-center gap-3 min-w-0">
-          <span className="text-2xl flex-shrink-0">{skill.emoji}</span>
-          <div className="min-w-0">
-            <h3 className="font-semibold text-gray-100 group-hover:text-white transition-colors truncate">
-              {skill.name}
-            </h3>
-            <div className="text-xs text-gray-500">by {skill.author}</div>
-          </div>
-        </div>
-        <div className="flex flex-col items-end gap-0.5 flex-shrink-0">
-          <div
-            className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border ${tier.bg} ${tier.border} ${tier.color}`}
-            title={tier.description}
-          >
-            <span>{tier.icon}</span>
-            <span className="hidden sm:inline">{tier.label}</span>
-          </div>
-          {skill.verified === "verified" && skill.verifiedAt && (
-            <span className="text-xs text-gray-600 hidden sm:block">
-              pinned {skill.verifiedAt}
-            </span>
-          )}
-          {skill.verified === "community" && skill.verifiedChangedAt && (
-            <span className="text-xs text-amber-600 hidden sm:block">
-              ⚠️ re-review needed
-            </span>
-          )}
+      <div className="flex items-start gap-3 mb-3">
+        <span className="text-2xl flex-shrink-0">{skill.emoji}</span>
+        <div className="min-w-0 flex-1">
+          <h3 className="font-semibold text-gray-100 group-hover:text-white transition-colors truncate">
+            {skill.name}
+          </h3>
+          <div className="text-xs text-gray-500">by {skill.author}</div>
         </div>
       </div>
 
@@ -67,6 +46,28 @@ export function SkillCard({ skill, compact = false }: SkillCardProps) {
         <p className="text-sm text-gray-400 leading-relaxed mb-3 line-clamp-2">
           {skill.description}
         </p>
+      )}
+
+      {!compact && (
+        <div className="flex items-center gap-2 mb-3">
+          <div
+            className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border ${tier.bg} ${tier.border} ${tier.color}`}
+            title={tier.description}
+          >
+            <span>{tier.icon}</span>
+            <span>{tier.label}</span>
+          </div>
+          {skill.verified === "verified" && skill.verifiedAt && (
+            <span className="text-xs text-gray-600">
+              pinned {skill.verifiedAt}
+            </span>
+          )}
+          {skill.verified === "community" && skill.verifiedChangedAt && (
+            <span className="text-xs text-amber-600">
+              ⚠️ re-review needed
+            </span>
+          )}
+        </div>
       )}
 
       {!compact && (
