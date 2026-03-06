@@ -41,7 +41,7 @@ export default function SkillDetailPage({ params }: Props) {
   const skill = getSkillBySlug(params.slug);
   if (!skill) notFound();
 
-  const tier = TIER_CONFIG[skill.verified];
+  const tier = TIER_CONFIG[skill.verified as keyof typeof TIER_CONFIG] ?? TIER_CONFIG['unverified'];
   const allSkills = getAllSkills();
   const related = allSkills
     .filter((s) => s.slug !== skill.slug && s.category === skill.category)
@@ -212,7 +212,7 @@ export default function SkillDetailPage({ params }: Props) {
               <h2 className="font-semibold text-white mb-4">Related Skills</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {related.map((s) => {
-                  const t = TIER_CONFIG[s.verified];
+                  const t = TIER_CONFIG[s.verified as keyof typeof TIER_CONFIG] ?? TIER_CONFIG['unverified'];
                   return (
                     <Link
                       key={s.slug}

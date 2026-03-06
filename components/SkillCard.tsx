@@ -13,7 +13,7 @@ interface SkillCardProps {
 export function SkillCard({ skill, compact = false }: SkillCardProps) {
   const [copied, setCopied] = useState(false);
   const { platform, mounted } = usePlatform();
-  const tier = TIER_CONFIG[skill.verified];
+  const tier = TIER_CONFIG[skill.verified as keyof typeof TIER_CONFIG] ?? TIER_CONFIG['unverified'];
 
   const install = getPlatformInstall(skill.slug, skill.installCmd, skill.repoUrl, platform);
 

@@ -221,7 +221,7 @@ export function SkillsListClient({
                   All tiers
                 </button>
                 {TIERS.map((tier) => {
-                  const config = TIER_CONFIG[tier];
+                  const config = TIER_CONFIG[tier as keyof typeof TIER_CONFIG] ?? TIER_CONFIG['unverified'];
                   return (
                     <button
                       key={tier}
