@@ -9,7 +9,7 @@ import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const OUTPUT = resolve(__dirname, '../public/api/index.json');
+const OUTPUT = resolve(__dirname, '../data/skills-index.json');
 const REGISTRY_URL = 'https://raw.githubusercontent.com/growsontrees/trustedskills-registry/main/skills-index.json';
 
 async function fetchIndex() {

@@ -5,13 +5,23 @@ import { CopyButton } from "@/components/CopyButton";
 import { PlatformInstallTabs } from "@/components/PlatformInstallTabs";
 import type { Metadata } from "next";
 
+// ISR: revalidate pages every 24 hours
+export const revalidate = 86400;
+
+// Allow on-demand rendering for slugs not in generateStaticParams
+export const dynamicParams = true;
+
 interface Props {
   params: { slug: string };
 }
 
 export async function generateStaticParams() {
   const skills = getAllSkills();
-  return skills.map((skill) => ({ slug: skill.slug }));
+  // Only pre-render top 500 by install count; the rest render on-demand (ISR)
+  const top500 = [...skills]
+    .sort((a, b) => b.installs - a.installs)
+    .slice(0, 500);
+  return top500.map((skill) => ({ slug: skill.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
