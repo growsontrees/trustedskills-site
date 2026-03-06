@@ -58,19 +58,7 @@ export default function RootLayout({
                 <Link href="/reviews" className="hover:text-white transition-colors">Reviews</Link>
                 <Link href="/submit" className="hover:text-white transition-colors">Submit</Link>
                 <Link href="/docs" className="hover:text-white transition-colors">Docs</Link>
-                {/* Developer API link — raw JSON index, not an MCP server endpoint */}
-                <a
-                  href="/api/index.json"
-                  className="hover:text-white transition-colors group relative"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  title="Raw skills index JSON — for developers building custom integrations. Not an MCP server endpoint."
-                >
-                  <span>JSON Index</span>
-                  <span className="absolute -top-7 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gray-800 text-gray-300 text-xs px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10 border border-gray-700">
-                    Raw skills index · not an MCP endpoint
-                  </span>
-                </a>
+
               </div>
             </div>
           </div>
@@ -96,14 +84,7 @@ export default function RootLayout({
                 <Link href="/reviews" className="hover:text-gray-300 transition-colors">Reviews</Link>
                 <Link href="/submit" className="hover:text-gray-300 transition-colors">Submit a Skill</Link>
                 <Link href="/docs" className="hover:text-gray-300 transition-colors">Docs</Link>
-                <a
-                  href="/api/index.json"
-                  className="hover:text-gray-300 transition-colors"
-                  target="_blank"
-                  title="Raw JSON index for developers — not an MCP server endpoint"
-                >
-                  Developer API
-                </a>
+
               </div>
             </div>
             <div className="mt-8 pt-8 border-t border-gray-800/50 text-xs text-gray-600 text-center">

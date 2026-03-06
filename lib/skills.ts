@@ -1,4 +1,4 @@
-import skillsData from "@/public/api/index.json";
+import skillsData from "@/data/skills-index.json";
 
 export type VerificationTier = "unverified" | "community" | "verified" | "featured";
 

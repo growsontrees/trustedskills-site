@@ -214,26 +214,7 @@ export default function DocsPage() {
         })}
       </div>
 
-      {/* Registry API */}
-      <div className="mt-12 bg-gray-900 border border-gray-800 rounded-2xl p-6">
-        <h2 className="font-semibold text-white mb-1 flex items-center gap-2">
-          <span>🔌</span> Registry API (Developer JSON Index)
-        </h2>
-        <p className="text-xs text-gray-500 mb-4">
-          Machine-readable skills index for building custom integrations.{' '}
-          <strong className="text-gray-400">Not an MCP server endpoint</strong> — see the MCP tab on skill pages for Claude Desktop config.
-        </p>
-        <div className="flex items-center gap-3 mb-4">
-          <span className="text-xs font-mono bg-emerald-900/30 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded">GET</span>
-          <a href="/api/index.json" target="_blank" rel="noopener noreferrer" className="font-mono text-sm text-purple-400 hover:text-purple-300 transition-colors">
-            /api/index.json
-          </a>
-          <span className="text-sm text-gray-500">Full skills index (JSON)</span>
-        </div>
-        <div className="p-4 bg-gray-950 rounded-xl border border-gray-700">
-          <code className="text-sm font-mono text-emerald-400">curl https://trustedskills.dev/api/index.json</code>
-        </div>
-      </div>
+
 
       {/* SKILL.md Reference */}
       <div className="mt-8 bg-gray-900 border border-gray-800 rounded-2xl p-6">
