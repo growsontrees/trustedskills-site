@@ -252,6 +252,46 @@ export default function SkillDetailPage({ params }: Props) {
             </div>
           )}
 
+          {/* TrustedSkills Differentiator */}
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="text-emerald-400">🛡️</span>
+              <h2 className="font-semibold text-white">TrustedSkills Verification</h2>
+            </div>
+            <p className="text-sm text-gray-400 leading-relaxed mb-4">
+              Unlike other registries that point to live repositories, TrustedSkills pins every skill 
+              to a verified commit hash. This protects you from malicious updates — what you install 
+              today is exactly what was reviewed and verified.
+            </p>
+            {skill.verifiedCommit && skill.repoUrl && (() => {
+              const parts = skill.repoUrl.replace("https://github.com/", "").replace(/\/$/, "").split("/");
+              const owner = parts[0];
+              const repo = parts[1];
+              const shortSha = skill.verifiedCommit.slice(0, 8);
+              const commitUrl = `https://github.com/${owner}/${repo}/commit/${skill.verifiedCommit}`;
+              return (
+                <div className="bg-gray-950 border border-gray-800 rounded-lg p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs text-gray-500 uppercase tracking-wider">Verified Commit</span>
+                    <a
+                      href={commitUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-mono text-xs text-purple-400 hover:text-purple-300 transition-colors"
+                    >
+                      {shortSha} →
+                    </a>
+                  </div>
+                  <p className="text-xs text-gray-600 leading-relaxed">
+                    Installing this skill downloads the exact code at commit {shortSha}, 
+                    not the current state of the repository. This prevents supply-chain attacks 
+                    from unauthorized updates.
+                  </p>
+                </div>
+              );
+            })()}
+          </div>
+
           {/* Security Audits */}
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
             <h2 className="font-semibold text-white mb-4">Security Audits</h2>
