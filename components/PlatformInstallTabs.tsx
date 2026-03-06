@@ -17,6 +17,8 @@ const ALL_TABS: { key: PlatformKey; emoji: string; label: string }[] = [
   { key: "claude", emoji: "💬", label: "Claude Desktop" },
   { key: "claudecode", emoji: "⌨️", label: "Claude Code" },
   { key: "cursor", emoji: "🖱️", label: "Cursor / VS Code" },
+  { key: "codex", emoji: "🐙", label: "GitHub Copilot / Codex" },
+  { key: "opencode", emoji: "🔓", label: "OpenCode" },
   { key: "mcp", emoji: "🔌", label: "MCP (generic)" },
   { key: "openai", emoji: "🤖", label: "OpenAI" },
 ];
@@ -185,6 +187,88 @@ function McpGuide({ slug }: { slug: string }) {
   );
 }
 
+function CodexGuide({ slug, repoUrl }: { slug: string; repoUrl: string }) {
+  const configJson = JSON.stringify(
+    {
+      "name": slug,
+      "description": `Agent skill for ${slug}`,
+      "type": "git",
+      "git": {
+        "url": repoUrl,
+        "branch": "main"
+      },
+      "install": {
+        "command": "npm install",
+        "workingDirectory": "."
+      },
+      "tools": ["*"]
+    },
+    null, 2
+  );
+  return (
+    <div className="space-y-5">
+      <div className="flex items-start gap-3 text-sm text-gray-400">
+        <StepNumber n={1} />
+        <div>
+          <p className="font-medium text-gray-300">Open GitHub Copilot Chat in VS Code</p>
+          <p className="mt-1 text-xs text-gray-500">Click the Copilot icon or press <kbd className="bg-gray-800 px-1 rounded">Ctrl</kbd>+<kbd className="bg-gray-800 px-1 rounded">Alt</kbd>+<kbd className="bg-gray-800 px-1 rounded">I</kbd></p>
+        </div>
+      </div>
+      <div className="flex items-start gap-3 text-sm text-gray-400">
+        <StepNumber n={2} />
+        <div className="flex-1 min-w-0">
+          <p className="mb-2 font-medium text-gray-300">Add this skill configuration to your workspace</p>
+          <p className="mb-2 text-xs text-gray-500">Create or edit <code className="text-gray-300 bg-gray-800 px-1 rounded">.github/copilot/skills.json</code></p>
+          <CodeBlock label="skills.json" code={configJson} />
+        </div>
+      </div>
+      <div className="flex items-start gap-3 text-sm text-gray-400">
+        <StepNumber n={3} />
+        <span>Copilot will automatically install and register the skill. You can now invoke it with <code className="text-purple-300 bg-gray-800 px-1 rounded">@{slug}</code> in chat.</span>
+      </div>
+      <div className="text-xs text-gray-500 border-l-2 border-gray-700 pl-3">
+        Requires: <span className="text-gray-400">GitHub Copilot Workspace (preview) or VS Code Insiders with Copilot Chat.</span>
+      </div>
+    </div>
+  );
+}
+
+function OpenCodeGuide({ slug }: { slug: string }) {
+  const installCmd = `opencode skill install ${slug}`;
+  const configYaml = `skills:
+  - name: ${slug}
+    enabled: true`;
+  return (
+    <div className="space-y-5">
+      <div className="flex items-start gap-3 text-sm text-gray-400">
+        <StepNumber n={1} />
+        <div>
+          <p className="font-medium text-gray-300">Install OpenCode CLI</p>
+          <CodeBlock label="terminal" code={npm install -g @opencode/agent} />
+        </div>
+      </div>
+      <div className="flex items-start gap-3 text-sm text-gray-400">
+        <StepNumber n={2} />
+        <div className="flex-1 min-w-0">
+          <p className="mb-2 font-medium text-gray-300">Install this skill</p>
+          <CodeBlock label="terminal" code={installCmd} />
+        </div>
+      </div>
+      <div className="flex items-start gap-3 text-sm text-gray-400">
+        <StepNumber n={3} />
+        <div className="flex-1 min-w-0">
+          <p className="mb-2 font-medium text-gray-300">Or add to your project config</p>
+          <p className="mb-2 text-xs text-gray-500">Create or edit <code className="text-gray-300 bg-gray-800 px-1 rounded">opencode.yaml</code> in your project root</p>
+          <CodeBlock label="opencode.yaml" code={configYaml} />
+        </div>
+      </div>
+      <div className="text-xs text-gray-500 border-l-2 border-gray-700 pl-3">
+        Requires: <span className="text-gray-400">OpenCode Agent CLI or Codium IDE with OpenCode extension.</span>
+      </div>
+    </div>
+  );
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function OpenAIGuide({ repoUrl, slug }: { repoUrl: string; slug: string }) {
   return (
@@ -219,6 +303,8 @@ export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms }: Pr
       case "claude":     return <ClaudeDesktopGuide slug={slug} />;
       case "claudecode": return <ClaudeCodeGuide slug={slug} />;
       case "cursor":     return <CursorGuide slug={slug} />;
+      case "codex":      return <CodexGuide slug={slug} repoUrl={repoUrl} />;
+      case "opencode":   return <OpenCodeGuide slug={slug} />;
       case "mcp":        return <McpGuide slug={slug} />;
       case "openai":     return <OpenAIGuide repoUrl={repoUrl} slug={slug} />;
       default:           return <OpenClawGuide installCmd={installCmd} />;
