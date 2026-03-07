@@ -244,7 +244,7 @@ function OpenCodeGuide({ slug }: { slug: string }) {
         <StepNumber n={1} />
         <div>
           <p className="font-medium text-gray-300">Install OpenCode CLI</p>
-          <CodeBlock label="terminal" code={npm install -g @opencode/agent} />
+          <CodeBlock label="terminal" code={"npm install -g @opencode/agent"} />
         </div>
       </div>
       <div className="flex items-start gap-3 text-sm text-gray-400">
