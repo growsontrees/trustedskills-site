@@ -22,8 +22,8 @@ function getCategoryPageData(categorySlug: string, pageNumber: number) {
 
   const totalPages = Math.max(1, Math.ceil(skills.length / SKILLS_PER_PAGE));
   
-  // Validate page number
-  if (pageNumber < 1 || pageNumber > totalPages) return null;
+  // Validate page number (page 1 should use the base URL, not /1/)
+  if (pageNumber < 2 || pageNumber > totalPages) return null;
 
   const startIndex = (pageNumber - 1) * SKILLS_PER_PAGE;
   const endIndex = startIndex + SKILLS_PER_PAGE;
@@ -69,15 +69,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: `${data.category.name} Agent Skills — Page ${pageNumber}`,
+    title: `${data.category.name} Agent Skills — Page ${pageNumber} | TrustedSkills`,
     description: `Browse ${data.category.count} ${data.category.name.toLowerCase()} agent skills on TrustedSkills. Page ${pageNumber} of ${data.totalPages}.`,
     alternates: {
-      canonical: `${SITE_URL}${data.basePath}/page/${pageNumber}/`,
+      canonical: `${SITE_URL}${data.basePath}/${pageNumber}/`,
     },
     openGraph: {
       title: `${data.category.name} Agent Skills — Page ${pageNumber} | TrustedSkills`,
       description: `Browse ${data.category.count} ${data.category.name.toLowerCase()} agent skills on TrustedSkills.`,
-      url: `${SITE_URL}${data.basePath}/page/${pageNumber}/`,
+      url: `${SITE_URL}${data.basePath}/${pageNumber}/`,
     },
   };
 }

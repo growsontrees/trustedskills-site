@@ -7,7 +7,8 @@ interface PaginationProps {
 }
 
 function getPageHref(basePath: string, page: number) {
-  return page <= 1 ? `${basePath}/` : `${basePath}/page/${page}/`;
+  // SEO-optimized URLs: /category/slug/2/ instead of /category/slug/page/2/
+  return page <= 1 ? `${basePath}/` : `${basePath}/${page}/`;
 }
 
 export function Pagination({ currentPage, totalPages, basePath }: PaginationProps) {
