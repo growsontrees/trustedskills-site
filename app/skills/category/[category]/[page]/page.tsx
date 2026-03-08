@@ -12,73 +12,80 @@ interface PageProps {
   params: Promise<{ category: string; page: string }>;
 }
 
-function getCategoryPageData(categorySlug: string, pageValue: string) {
+function getCategoryPageData(categorySlug: string, pageNumber: number) {
   const category = getCategoryBySlug(categorySlug);
-  const currentPage = Number.parseInt(pageValue, 10);
-
-  if (!category || !Number.isInteger(currentPage) || currentPage < 2) {
-    return null;
-  }
+  if (!category) return null;
 
   const skills = getAllSkills()
     .filter((skill) => skill.category === category.slug)
     .sort((a, b) => b.installs - a.installs);
 
   const totalPages = Math.max(1, Math.ceil(skills.length / SKILLS_PER_PAGE));
-  if (currentPage > totalPages) {
-    return null;
-  }
+  
+  // Validate page number (page 1 should use the base URL, not /1/)
+  if (pageNumber < 2 || pageNumber > totalPages) return null;
 
-  const start = (currentPage - 1) * SKILLS_PER_PAGE;
-  const paginatedSkills = skills.slice(start, start + SKILLS_PER_PAGE);
+  const startIndex = (pageNumber - 1) * SKILLS_PER_PAGE;
+  const endIndex = startIndex + SKILLS_PER_PAGE;
+  const paginatedSkills = skills.slice(startIndex, endIndex);
 
   return {
     category,
     skills,
     paginatedSkills,
     totalPages,
-    currentPage,
+    currentPage: pageNumber,
     basePath: `/skills/category/${category.slug}`,
   };
 }
 
 export async function generateStaticParams() {
-  return getCategories().flatMap((category) => {
-    const skillCount = getAllSkills().filter((skill) => skill.category === category.slug).length;
-    const totalPages = Math.max(1, Math.ceil(skillCount / SKILLS_PER_PAGE));
-
-    return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => ({
-      category: category.slug,
-      page: String(index + 2),
-    }));
-  });
+  const categories = getCategories();
+  const params: { category: string; page: string }[] = [];
+  
+  for (const category of categories) {
+    const skills = getAllSkills().filter((skill) => skill.category === category.slug);
+    const totalPages = Math.max(1, Math.ceil(skills.length / SKILLS_PER_PAGE));
+    
+    // Generate pages 2 through totalPages (page 1 is handled by the parent route)
+    for (let page = 2; page <= totalPages; page++) {
+      params.push({
+        category: category.slug,
+        page: page.toString(),
+      });
+    }
+  }
+  
+  return params;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { category: categorySlug, page } = await params;
-  const data = getCategoryPageData(categorySlug, page);
+  const { category: categorySlug, page: pageStr } = await params;
+  const pageNumber = parseInt(pageStr, 10);
+  const data = getCategoryPageData(categorySlug, pageNumber);
 
   if (!data) {
     return {};
   }
 
   return {
-    title: `${data.category.name} Agent Skills | Page ${data.currentPage}`,
-    description: `Browse ${data.category.count} ${data.category.name.toLowerCase()} agent skills on TrustedSkills. Page ${data.currentPage} of ${data.totalPages}.`,
+    title: `${data.category.name} Agent Skills — Page ${pageNumber} | TrustedSkills`,
+    description: `Browse ${data.category.count} ${data.category.name.toLowerCase()} agent skills on TrustedSkills. Page ${pageNumber} of ${data.totalPages}.`,
     alternates: {
-      canonical: `${SITE_URL}${data.basePath}/page/${data.currentPage}/`,
+      canonical: `${SITE_URL}${data.basePath}/${pageNumber}/`,
     },
     openGraph: {
-      title: `${data.category.name} Agent Skills | Page ${data.currentPage} | TrustedSkills`,
-      description: `Browse ${data.category.count} ${data.category.name.toLowerCase()} agent skills on TrustedSkills. Page ${data.currentPage} of ${data.totalPages}.`,
-      url: `${SITE_URL}${data.basePath}/page/${data.currentPage}/`,
+      title: `${data.category.name} Agent Skills — Page ${pageNumber} | TrustedSkills`,
+      description: `Browse ${data.category.count} ${data.category.name.toLowerCase()} agent skills on TrustedSkills.`,
+      url: `${SITE_URL}${data.basePath}/${pageNumber}/`,
     },
   };
 }
 
-export default async function CategoryPaginatedPage({ params }: PageProps) {
-  const { category: categorySlug, page } = await params;
-  const data = getCategoryPageData(categorySlug, page);
+export default async function CategoryPagePaginated({ params }: PageProps) {
+  const { category: categorySlug, page: pageStr } = await params;
+  const pageNumber = parseInt(pageStr, 10);
+  const data = getCategoryPageData(categorySlug, pageNumber);
 
   if (!data) {
     notFound();
@@ -88,10 +95,10 @@ export default async function CategoryPaginatedPage({ params }: PageProps) {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="mb-6">
         <Link
-          href={`/skills/category/${data.category.slug}/`}
+          href="/skills"
           className="text-sm text-gray-500 hover:text-gray-300 transition-colors flex items-center gap-1"
         >
-          ← Back to {data.category.name}
+          ← Back to Skills
         </Link>
       </div>
 
@@ -99,18 +106,18 @@ export default async function CategoryPaginatedPage({ params }: PageProps) {
         <div className="flex items-center gap-3 mb-3">
           <span className="text-4xl">{data.category.emoji}</span>
           <div>
-            <h1 className="text-3xl font-bold text-white">{data.category.name} Skills — Page {data.currentPage}</h1>
+            <h1 className="text-3xl font-bold text-white">{data.category.name} Skills</h1>
             <p className="text-gray-400">
               {data.skills.length} skills in this category · Page {data.currentPage} of {data.totalPages}
             </p>
           </div>
         </div>
         <p className="text-gray-500 max-w-3xl">
-          Continue browsing {data.category.name.toLowerCase()} skills on TrustedSkills.
+          Browse the most popular {data.category.name.toLowerCase()} skills on TrustedSkills.
         </p>
       </header>
 
-      <nav aria-label={`${data.category.name} skills index page ${data.currentPage}`} className="sr-only">
+      <nav aria-label={`${data.category.name} skills index`} className="sr-only">
         <ul>
           {data.paginatedSkills.map((skill) => (
             <li key={skill.slug}>

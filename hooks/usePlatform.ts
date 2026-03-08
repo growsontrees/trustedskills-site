@@ -130,6 +130,31 @@ export function getPlatformInstall(
         lang: "text",
         isComingSoon: true,
       };
+    case "codex":
+      return {
+        label: "GitHub Copilot / Codex",
+        cmd: JSON.stringify(
+          {
+            skills: [
+              {
+                name: slug,
+                enabled: true,
+              },
+            ],
+          },
+          null,
+          2
+        ),
+        isJson: true,
+        lang: "json",
+      };
+    case "opencode":
+      return {
+        label: "OpenCode",
+        cmd: `npm install -g @opencode/agent\n\n# Add to your opencode.yaml:\nskills:\n  - name: ${slug}\n    enabled: true`,
+        isJson: false,
+        lang: "bash",
+      };
     case "other":
       return {
         label: "Generic",

@@ -17,11 +17,9 @@ const DEFAULT_PAGE_SIZE_OPTIONS = [
   { value: Infinity, label: "All" },
 ];
 
-function getPageHref(basePath: string, page: number, pageSize: number) {
-  const sizeParam = pageSize === Infinity ? 'all' : String(pageSize);
-  const pageParam = page <= 1 ? '' : `/page/${page}`;
-  const separator = basePath.includes('?') ? '&' : '?';
-  return `${basePath.split('?')[0]}${pageParam}/${separator}per_page=${sizeParam}`;
+function getPageHref(basePath: string, page: number) {
+  // SEO-optimized URLs: /category/slug/page/2/ for static export
+  return page <= 1 ? `${basePath}/` : `${basePath}/page/${page}/`;
 }
 
 export function Pagination({ 
@@ -66,7 +64,7 @@ export function Pagination({
           <div className="flex items-center justify-between gap-3">
             {prevPage ? (
               <Link
-                href={getPageHref(basePath, prevPage, currentPageSize)}
+                href={getPageHref(basePath, prevPage)}
                 rel="prev"
                 className="inline-flex items-center rounded-lg border border-gray-700 bg-gray-900 px-4 py-2 text-sm text-gray-300 transition-colors hover:border-gray-600 hover:text-white"
               >
@@ -84,7 +82,7 @@ export function Pagination({
 
             {nextPage ? (
               <Link
-                href={getPageHref(basePath, nextPage, currentPageSize)}
+                href={getPageHref(basePath, nextPage)}
                 rel="next"
                 className="inline-flex items-center rounded-lg border border-gray-700 bg-gray-900 px-4 py-2 text-sm text-gray-300 transition-colors hover:border-gray-600 hover:text-white"
               >
@@ -112,7 +110,7 @@ export function Pagination({
                 ) : (
                   <Link
                     key={pageNumber}
-                    href={getPageHref(basePath, pageNumber, currentPageSize)}
+                    href={getPageHref(basePath, pageNumber)}
                     className="inline-flex min-w-10 justify-center rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-300 transition-colors hover:border-gray-600 hover:text-white"
                   >
                     {pageNumber}
