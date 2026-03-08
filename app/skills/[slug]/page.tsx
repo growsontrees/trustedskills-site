@@ -17,11 +17,11 @@ interface Props {
 
 export async function generateStaticParams() {
   const skills = getAllSkills();
-  // Only pre-render top 500 by install count; the rest render on-demand (ISR)
-  const top500 = [...skills]
+  // Vercel ISR: Pre-render top 5000 by install count, rest on-demand
+  const top5000 = [...skills]
     .sort((a, b) => b.installs - a.installs)
-    .slice(0, 500);
-  return top500.map((skill) => ({ slug: skill.slug }));
+    .slice(0, 5000);
+  return top5000.map((skill) => ({ slug: skill.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
