@@ -28,7 +28,7 @@ export function SkillsListClient({
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(() => searchParams.get("q") ?? initialQuery);
   const [activeCategory, setActiveCategory] = useState<string>(() => searchParams.get("category") ?? initialCategory);
-  const [activePlatform, setActivePlatform] = useState<string>("all");
+  const [activePlatform, setActivePlatform] = useState<string>(() => searchParams.get("platform") ?? "all");
   const [activeTier, setActiveTier] = useState<string>(() => searchParams.get("tier") ?? initialTier);
   const [sort, setSort] = useState<"installs" | "updated" | "name">("installs");
 
@@ -36,20 +36,43 @@ export function SkillsListClient({
   // pre-fill the filter here (but only once on mount, then user can override).
   const { setPlatform } = usePlatform();
 
-  /** Push updated query params to the URL so filters are bookmarkable. */
+  /** Navigate to pretty URL or update query params for search */
   const syncUrl = useCallback(
-    (overrides: { q?: string; tier?: string; category?: string }) => {
-      const params = new URLSearchParams();
+    (overrides: { q?: string; tier?: string; category?: string; platform?: string }) => {
       const q = overrides.q !== undefined ? overrides.q : query;
       const tier = overrides.tier !== undefined ? overrides.tier : activeTier;
       const category = overrides.category !== undefined ? overrides.category : activeCategory;
+      const platform = overrides.platform !== undefined ? overrides.platform : activePlatform;
+
+      // If only one filter is active (no search query), navigate to pretty URL
+      if (!q) {
+        // Tier-only filter → /tier/[tier]/
+        if (tier && tier !== "all" && category === "all" && platform === "all") {
+          router.replace(`/tier/${tier}/`, { scroll: false });
+          return;
+        }
+        // Category-only filter → /category/[category]/
+        if (category && category !== "all" && tier === "all" && platform === "all") {
+          router.replace(`/category/${category}/`, { scroll: false });
+          return;
+        }
+        // Platform-only filter → /platform/[platform]/
+        if (platform && platform !== "all" && tier === "all" && category === "all") {
+          router.replace(`/platform/${platform}/`, { scroll: false });
+          return;
+        }
+      }
+
+      // Multiple filters or search query → use query params
+      const params = new URLSearchParams();
       if (q) params.set("q", q);
       if (tier && tier !== "all") params.set("tier", tier);
       if (category && category !== "all") params.set("category", category);
+      if (platform && platform !== "all") params.set("platform", platform);
       const qs = params.toString();
       router.replace(qs ? `/skills?${qs}` : "/skills", { scroll: false });
     },
-    [router, query, activeTier, activeCategory]
+    [router, query, activeTier, activeCategory, activePlatform]
   );
 
   function handlePlatformFilter(platform: string) {
@@ -58,6 +81,7 @@ export function SkillsListClient({
     if (platform !== "all") {
       setPlatform(platform as PlatformKey);
     }
+    syncUrl({ platform });
   }
 
   function handleTierFilter(tier: string) {

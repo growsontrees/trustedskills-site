@@ -119,7 +119,7 @@ export default function HomePage() {
           {Object.entries(TIER_CONFIG).map(([tier, config]) => (
             <Link
               key={tier}
-              href={`/skills?tier=${tier}`}
+              href={`/tier/${tier}/`}
               title={config.description}
               className={`inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-full border ${config.bg} ${config.border} ${config.color} hover:opacity-80 transition-opacity cursor-pointer`}
             >
