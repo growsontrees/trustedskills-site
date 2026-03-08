@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 
-export type PlatformKey = "openclaw" | "mcp" | "claude" | "claudecode" | "openai" | "cursor" | "other";
+export type PlatformKey = "openclaw" | "mcp" | "claude" | "claudecode" | "openai" | "cursor" | "codex" | "opencode" | "other";
 
 const STORAGE_KEY = "ts-platform-pref";
 const EVENT_NAME = "ts-platform-change";
@@ -13,6 +13,8 @@ export const PLATFORM_LABELS: Record<PlatformKey, string> = {
   claudecode: "Claude Code",
   openai: "OpenAI / ChatGPT",
   cursor: "Cursor / VS Code",
+  codex: "GitHub Copilot / Codex",
+  opencode: "OpenCode",
   other: "Other / Exploring",
 };
 

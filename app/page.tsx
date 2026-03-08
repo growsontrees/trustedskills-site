@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { getAllSkills, getCategories, getFeaturedSkills, getStats, TIER_CONFIG } from "@/lib/skills";
-import { SkillCard } from "@/components/SkillCard";
-import { PlatformSelector } from "@/components/PlatformSelector";
-import { HeroInstallCommand } from "@/components/HeroInstallCommand";
-import { SearchBar } from "@/components/SearchBar";
+import { getAllSkills, getCategories, getFeaturedSkills, getStats, TIER_CONFIG } from "../lib/skills";
+import { SkillCard } from "../components/SkillCard";
+import { PlatformSelector } from "../components/PlatformSelector";
+import { HeroInstallCommand } from "../components/HeroInstallCommand";
+import { SearchBar } from "../components/SearchBar";
 
 export default function HomePage() {
   const skills = getAllSkills();
@@ -154,7 +154,7 @@ export default function HomePage() {
           {categories.map((cat) => (
             <Link
               key={cat.slug}
-              href={`/skills?category=${cat.slug}`}
+              href={`/skills/category/${cat.slug}/`}
               className="flex items-center gap-3 p-4 bg-gray-900 hover:bg-gray-800 border border-gray-800 hover:border-gray-700 rounded-xl transition-all group"
             >
               <span className="text-2xl">{cat.emoji}</span>

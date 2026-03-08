@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getAllReviews } from "@/lib/reviews-content";
+import { getAllReviews } from "../../lib/reviews-content";
 
 export const metadata: Metadata = {
   title: "Skill Reviews | TrustedSkills",

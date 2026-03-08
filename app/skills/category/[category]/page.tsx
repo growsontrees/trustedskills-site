@@ -5,12 +5,8 @@ import { Pagination } from "@/components/Pagination";
 import { SkillCard } from "@/components/SkillCard";
 import { getAllSkills, getCategories, getCategoryBySlug } from "@/lib/skills";
 
-const SKILLS_PER_PAGE = 24;
+const DEFAULT_SKILLS_PER_PAGE = 25;
 const SITE_URL = "https://trustedskills.dev";
-
-interface PageProps {
-  params: Promise<{ category: string }>;
-}
 
 function getCategoryPageData(categorySlug: string) {
   const category = getCategoryBySlug(categorySlug);
@@ -20,8 +16,8 @@ function getCategoryPageData(categorySlug: string) {
     .filter((skill) => skill.category === category.slug)
     .sort((a, b) => b.installs - a.installs);
 
-  const totalPages = Math.max(1, Math.ceil(skills.length / SKILLS_PER_PAGE));
-  const paginatedSkills = skills.slice(0, SKILLS_PER_PAGE);
+  const totalPages = Math.max(1, Math.ceil(skills.length / DEFAULT_SKILLS_PER_PAGE));
+  const paginatedSkills = skills.slice(0, DEFAULT_SKILLS_PER_PAGE);
 
   return {
     category,
@@ -29,16 +25,18 @@ function getCategoryPageData(categorySlug: string) {
     paginatedSkills,
     totalPages,
     currentPage: 1,
+    pageSize: DEFAULT_SKILLS_PER_PAGE,
+    totalSkills: skills.length,
     basePath: `/skills/category/${category.slug}`,
   };
 }
 
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return getCategories().map((category) => ({ category: category.slug }));
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { category: categorySlug } = await params;
+export async function generateMetadata({ params }: { params: { category: string } }): Promise<Metadata> {
+  const categorySlug = params.category;
   const data = getCategoryPageData(categorySlug);
 
   if (!data) {
@@ -59,8 +57,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function CategoryPage({ params }: PageProps) {
-  const { category: categorySlug } = await params;
+// Re-export as async to handle the params
+export default function CategoryPage({ params }: { params: { category: string } }) {
+  const categorySlug = params.category;
+  
+  // Fixed page size for static export
+  const pageSize = DEFAULT_SKILLS_PER_PAGE;
+      
   const data = getCategoryPageData(categorySlug);
 
   if (!data) {
@@ -114,7 +117,11 @@ export default async function CategoryPage({ params }: PageProps) {
       <Pagination
         currentPage={data.currentPage}
         totalPages={data.totalPages}
-        basePath={data.basePath}
+        basePath={`${data.basePath}`}
+        currentPageSize={pageSize}
+        totalItems={data.totalSkills}
+        pageSizeOptions={[25, 50, 100, { value: Infinity, label: "All" }]}
+        categorySlug={categorySlug}
       />
     </div>
   );

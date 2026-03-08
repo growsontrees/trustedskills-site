@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Skill, TIER_CONFIG, PLATFORM_CONFIG } from "@/lib/skills";
+import { Skill, TIER_CONFIG, PLATFORM_CONFIG } from "../lib/skills";
 import { useState } from "react";
-import { usePlatform, getPlatformInstall, PLATFORM_LABELS } from "@/hooks/usePlatform";
+import { usePlatform, getPlatformInstall, PLATFORM_LABELS } from "../hooks/usePlatform";
 
 interface SkillCardProps {
   skill: Skill;

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CopyButton } from "@/components/CopyButton";
+import { CopyButton } from "../../components/CopyButton";
 
 export const metadata: Metadata = {
   title: "Submit a Skill",

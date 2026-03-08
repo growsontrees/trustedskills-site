@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { usePlatform, getPlatformInstall } from "@/hooks/usePlatform";
+import { usePlatform, getPlatformInstall } from "../hooks/usePlatform";
 
 const EXAMPLE_SLUG = "weather";
 const EXAMPLE_REPO = "https://github.com/trustedskills/weather";

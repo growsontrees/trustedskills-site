@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import { getAllSkills, getCategories, getStats } from "@/lib/skills";
-import { SkillsListClient } from "@/components/SkillsListClient";
+import { getAllSkills, getCategories, getStats } from "../../lib/skills";
+import { SkillsListClient } from "../../components/SkillsListClient";
 import Link from "next/link";
 import type { Metadata } from "next";
 
