@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/fetch-index.mjs",
+    "prebuild": "echo 'Using bundled skills index'",
     "build": "next build",
     "postbuild": "next-sitemap",
     "start": "next start",

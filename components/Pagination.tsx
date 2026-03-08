@@ -18,8 +18,8 @@ const DEFAULT_PAGE_SIZE_OPTIONS = [
 ];
 
 function getPageHref(basePath: string, page: number) {
-  // SEO-optimized URLs: /category/slug/page/2/ for static export
-  return page <= 1 ? `${basePath}/` : `${basePath}/page/${page}/`;
+  // SEO-optimized URLs: /category/slug/2/ for static export (Next.js [page] segment)
+  return page <= 1 ? `${basePath}/` : `${basePath}/${page}/`;
 }
 
 export function Pagination({ 
