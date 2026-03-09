@@ -45,7 +45,7 @@ export default function SkillDetailPage({ params }: Props) {
   const tier = TIER_CONFIG[skill.verified as keyof typeof TIER_CONFIG] ?? TIER_CONFIG['unverified'];
   // Optimized: Don't load all skills for ISR fallback (too large)
   // Related skills will show only for pre-rendered pages
-  const related: typeof skill[] = [];
+  const related: any[] = [];
 
   const jsonLd = {
     "@context": "https://schema.org",
