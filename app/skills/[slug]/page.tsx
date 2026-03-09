@@ -43,10 +43,9 @@ export default function SkillDetailPage({ params }: Props) {
   if (!skill) notFound();
 
   const tier = TIER_CONFIG[skill.verified as keyof typeof TIER_CONFIG] ?? TIER_CONFIG['unverified'];
-  const allSkills = getAllSkills();
-  const related = allSkills
-    .filter((s) => s.slug !== skill.slug && s.category === skill.category)
-    .slice(0, 3);
+  // Optimized: Don't load all skills for ISR fallback (too large)
+  // Related skills will show only for pre-rendered pages
+  const related: typeof skill[] = [];
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -227,8 +226,8 @@ export default function SkillDetailPage({ params }: Props) {
             </div>
           )}
 
-          {/* Related skills */}
-          {related.length > 0 && (
+          {/* Related skills - skipped for ISR fallback to reduce bundle size */
+          {related.length > 0 && false && (
             <div>
               <h2 className="font-semibold text-white mb-4">Related Skills</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
