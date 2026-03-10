@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSkillBySlug } from "@/lib/skills";
+import { getSkillBySlug } from "../../../../lib/skills";
 
 export const dynamic = "force-dynamic";
 

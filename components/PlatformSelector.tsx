@@ -1,6 +1,6 @@
 "use client";
 
-import { usePlatform, PlatformKey } from "@/hooks/usePlatform";
+import { usePlatform, PlatformKey } from "../hooks/usePlatform";
 
 const OPTIONS: { key: PlatformKey; emoji: string; label: string; sublabel: string }[] = [
   { key: "openclaw", emoji: "🦀", label: "OpenClaw", sublabel: "openclaw skills install" },

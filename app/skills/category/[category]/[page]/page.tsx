@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Pagination } from "@/components/Pagination";
-import { SkillCard } from "@/components/SkillCard";
-import { getAllSkills, getCategories, getCategoryBySlug } from "@/lib/skills";
+import { Pagination } from "../../../../../components/Pagination";
+import { SkillCard } from "../../../../../components/SkillCard";
+import { getAllSkills, getCategories, getCategoryBySlug } from "../../../../../lib/skills";
 
 const SKILLS_PER_PAGE = 24;
 const SITE_URL = "https://trustedskills.dev";

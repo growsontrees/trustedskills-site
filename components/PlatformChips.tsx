@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { PLATFORM_CONFIG } from "@/lib/skills";
+import { PLATFORM_CONFIG } from "../lib/skills";
 import { Suspense } from "react";
 
 const PLATFORMS = ["openclaw", "mcp", "openai", "claude", "huggingface"];

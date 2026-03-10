@@ -2,9 +2,9 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Skill, Category, TIER_CONFIG, PLATFORM_CONFIG } from "@/lib/skills";
-import { SkillCard } from "@/components/SkillCard";
-import { usePlatform, PlatformKey } from "@/hooks/usePlatform";
+import { Skill, Category, TIER_CONFIG, PLATFORM_CONFIG } from "../lib/skills";
+import { SkillCard } from "./SkillCard";
+import { usePlatform, PlatformKey } from "../hooks/usePlatform";
 
 const PLATFORMS = ["openclaw", "mcp", "openai", "claude", "cursor", "huggingface"];
 const TIERS = ["featured", "verified", "community", "unverified"] as const;

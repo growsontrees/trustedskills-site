@@ -1,4 +1,4 @@
-import { getAllReviews, getReviewBySlug } from "@/lib/reviews-content";
+import { getAllReviews, getReviewBySlug } from "../../../lib/reviews-content";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";

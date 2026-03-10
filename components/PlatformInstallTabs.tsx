@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { PlatformKey } from "@/hooks/usePlatform";
-import { CopyButton } from "@/components/CopyButton";
-import { usePlatform } from "@/hooks/usePlatform";
+import { PlatformKey } from "../hooks/usePlatform";
+import { CopyButton } from "./CopyButton";
+import { usePlatform } from "../hooks/usePlatform";
 
 interface Props {
   slug: string;

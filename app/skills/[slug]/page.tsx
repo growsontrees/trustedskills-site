@@ -1,8 +1,8 @@
-import { getAllSkills, getSkillBySlug, TIER_CONFIG } from "@/lib/skills";
+import { getAllSkills, getSkillBySlug, TIER_CONFIG } from "../../../lib/skills";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { CopyButton } from "@/components/CopyButton";
-import { PlatformInstallTabs } from "@/components/PlatformInstallTabs";
+import { CopyButton } from "../../../components/CopyButton";
+import { PlatformInstallTabs } from "../../../components/PlatformInstallTabs";
 import type { Metadata } from "next";
 
 // ISR: revalidate pages every 24 hours
@@ -47,6 +47,15 @@ export default function SkillDetailPage({ params }: Props) {
   // Related skills will show only for pre-rendered pages
   const related: any[] = [];
 
+  // Pre-compute commit info for JSX rendering
+  let commitUrl = "";
+  let shortSha = "";
+  if (skill.verifiedCommit && skill.repoUrl) {
+    const repoParts = skill.repoUrl.replace("https://github.com/", "").replace(/\/$/, "").split("/");
+    commitUrl = "https://github.com/" + repoParts[0] + "/" + repoParts[1] + "/commit/" + skill.verifiedCommit;
+    shortSha = skill.verifiedCommit.slice(0, 8);
+  }
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -54,7 +63,7 @@ export default function SkillDetailPage({ params }: Props) {
     "description": skill.description,
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
-    "url": `https://trustedskills.dev/skills/${skill.slug}/`,
+    "url": "https://trustedskills.dev/skills/" + skill.slug + "/",
     "author": {
       "@type": "Person",
       "name": skill.author
@@ -262,13 +271,7 @@ export default function SkillDetailPage({ params }: Props) {
               to a verified commit hash. This protects you from malicious updates — what you install 
               today is exactly what was reviewed and verified.
             </p>
-            {skill.verifiedCommit && skill.repoUrl && (() => {
-              const parts = skill.repoUrl.replace("https://github.com/", "").replace(/\/$/, "").split("/");
-              const owner = parts[0];
-              const repo = parts[1];
-              const shortSha = skill.verifiedCommit.slice(0, 8);
-              const commitUrl = `https://github.com/${owner}/${repo}/commit/${skill.verifiedCommit}`;
-              return (
+            {skill.verifiedCommit && skill.repoUrl && (
                 <div className="bg-gray-950 border border-gray-800 rounded-lg p-3">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs text-gray-500 uppercase tracking-wider">Verified Commit</span>
@@ -287,8 +290,7 @@ export default function SkillDetailPage({ params }: Props) {
                     from unauthorized updates.
                   </p>
                 </div>
-              );
-            })()}
+            )}}
           </div>
 
           {/* Security Audits */}
@@ -424,13 +426,7 @@ export default function SkillDetailPage({ params }: Props) {
               </div>
             )}
 
-            {skill.verifiedCommit && skill.repoUrl && (() => {
-              const parts = skill.repoUrl.replace("https://github.com/", "").replace(/\/$/, "").split("/");
-              const owner = parts[0];
-              const repo = parts[1];
-              const shortSha = skill.verifiedCommit.slice(0, 8);
-              const commitUrl = `https://github.com/${owner}/${repo}/commit/${skill.verifiedCommit}`;
-              return (
+            {skill.verifiedCommit && skill.repoUrl && (
                 <div className="mt-2 space-y-2">
                   <div className="flex items-center justify-between text-xs">
                     <span className="text-gray-500">Pinned commit</span>
@@ -449,8 +445,7 @@ export default function SkillDetailPage({ params }: Props) {
                     </p>
                   )}
                 </div>
-              );
-            })()}
+            )}}
           </div>
 
           {/* Quick Install */}
