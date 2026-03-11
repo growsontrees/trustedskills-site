@@ -35,8 +35,9 @@ export function generateStaticParams() {
   return getCategories().map((category) => ({ category: category.slug }));
 }
 
-export async function generateMetadata({ params }: { params: { category: string } }): Promise<Metadata> {
-  const categorySlug = params.category;
+export async function generateMetadata({ params }: { params: Promise<{ category: string }> }): Promise<Metadata> {
+  const { category } = await params;
+  const categorySlug = category;
   const data = getCategoryPageData(categorySlug);
 
   if (!data) {
@@ -57,8 +58,9 @@ export async function generateMetadata({ params }: { params: { category: string 
   };
 }
 
-export default function CategoryPage({ params }: { params: { category: string } }) {
-  const categorySlug = params.category;
+export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
+  const { category } = await params;
+  const categorySlug = category;
   const pageSize = DEFAULT_SKILLS_PER_PAGE;
       
   const data = getCategoryPageData(categorySlug);

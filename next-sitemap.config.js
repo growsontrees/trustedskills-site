@@ -2,7 +2,7 @@
 module.exports = {
   siteUrl: 'https://trustedskills.dev',
   generateRobotsTxt: false,
-  outDir: './out',
+  outDir: './public',
   changefreq: 'weekly',
   priority: 0.7,
   sitemapSize: 5000,

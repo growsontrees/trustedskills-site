@@ -10,7 +10,7 @@ import {
 } from '../../../lib/docs-content';
 
 interface Props {
-  params: { slug: string[] };
+  params: Promise<{ slug: string[] }>;
 }
 
 export async function generateStaticParams() {
@@ -18,7 +18,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const article = getArticle(params.slug);
+  const { slug } = await params;
+  const article = getArticle(slug);
   if (!article) return { title: 'Not Found' };
   return {
     title: article.title,
@@ -203,8 +204,9 @@ function formatDate(iso: string): string {
   return d.toLocaleDateString('en-AU', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-export default function DocArticlePage({ params }: Props) {
-  const article = getArticle(params.slug);
+export default async function DocArticlePage({ params }: Props) {
+  const { slug } = await params;
+  const article = getArticle(slug);
   if (!article) notFound();
 
   const { prev, next } = getPrevNext(article);
@@ -253,7 +255,7 @@ export default function DocArticlePage({ params }: Props) {
                   </div>
                   <ul className="space-y-1">
                     {articles.map((a) => {
-                      const isActive = a.slug.join('/') === params.slug.join('/');
+                      const isActive = a.slug.join('/') === slug.join('/');
                       return (
                         <li key={a.slug.join('/')}>
                           <Link

@@ -11,10 +11,10 @@ const SITE_URL = "https://trustedskills.dev";
 const VALID_TIERS: VerificationTier[] = ["featured", "verified", "community", "unverified"];
 
 interface PageProps {
-  params: {
+  params: Promise<{
     tier: string;
     page: string;
-  };
+  }>;
 }
 
 function getTierPageData(tierSlug: string, pageNum: number) {
@@ -67,8 +67,9 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const tierSlug = params.tier;
-  const pageNum = parseInt(params.page, 10) || 1;
+  const { tier, page } = await params;
+  const tierSlug = tier;
+  const pageNum = parseInt(page, 10) || 1;
   const data = getTierPageData(tierSlug, pageNum);
 
   if (!data) {
@@ -89,9 +90,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default function TierPagePaginated({ params }: PageProps) {
-  const tierSlug = params.tier;
-  const pageNum = parseInt(params.page, 10) || 1;
+export default async function TierPagePaginated({ params }: PageProps) {
+  const { tier, page } = await params;
+  const tierSlug = tier;
+  const pageNum = parseInt(page, 10) || 1;
   const pageSize = DEFAULT_SKILLS_PER_PAGE;
       
   const data = getTierPageData(tierSlug, pageNum);

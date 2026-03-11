@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -13,7 +13,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const review = getReviewBySlug(params.slug);
+  const { slug } = await params;
+  const review = getReviewBySlug(slug);
   if (!review) return {};
   return {
     title: review.title,
@@ -85,8 +86,9 @@ function StarScore({ score }: { score: number }) {
   );
 }
 
-export default function ReviewDetailPage({ params }: Props) {
-  const review = getReviewBySlug(params.slug);
+export default async function ReviewDetailPage({ params }: Props) {
+  const { slug } = await params;
+  const review = getReviewBySlug(slug);
   if (!review) notFound();
 
   const verdictClass =

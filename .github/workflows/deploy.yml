@@ -12,7 +12,7 @@ jobs:
         run: |
           curl -s -X POST "${{ secrets.N8N_SSH_WEBHOOK }}" \
             -H "Content-Type: application/json" \
-            -d "{\"command\": \"cd /opt/trustedskills && git pull origin main && GITHUB_TOKEN=${{ secrets.REGISTRY_TOKEN }} npm run build && pm2 restart trustedskills --update-env && echo DEPLOYED_OK\"}"
+            -d "{\"command\": \"cd /opt/trustedskills && git pull origin main && npm install --production=false && GITHUB_TOKEN=${{ secrets.REGISTRY_TOKEN }} npm run build && test -f .next/standalone/server.js || exit 1 && cp -r public .next/standalone/public && cp -r .next/static .next/standalone/.next/static && pm2 delete trustedskills 2>/dev/null; PORT=3000 pm2 start .next/standalone/server.js --name trustedskills && echo DEPLOYED_OK\"}"
 
       - name: Purge Cloudflare cache
         run: |

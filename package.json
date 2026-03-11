@@ -12,7 +12,7 @@
     "fetch-index": "node scripts/fetch-index.mjs"
   },
   "dependencies": {
-    "next": "14.2.35",
+    "next": "^16.1.6",
     "react": "^18",
     "react-dom": "^18"
   },
@@ -20,15 +20,12 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "archiver": "^7.0.1",
     "autoprefixer": "^10.4.27",
     "eslint": "^8",
-    "eslint-config-next": "14.2.35",
+    "eslint-config-next": "^16.1.6",
     "next-sitemap": "^4.2.3",
     "postcss": "^8.5.8",
     "tailwindcss": "^3.4.19",
-    "tweetsodium": "^0.0.4",
-    "typescript": "^5.9.3",
-    "wrangler": "^3.114.17"
+    "typescript": "^5.9.3"
   }
 }

@@ -43,8 +43,9 @@ export function generateStaticParams() {
   return VALID_PLATFORMS.map((platform) => ({ platform }));
 }
 
-export async function generateMetadata({ params }: { params: { platform: string } }): Promise<Metadata> {
-  const platformSlug = params.platform;
+export async function generateMetadata({ params }: { params: Promise<{ platform: string }> }): Promise<Metadata> {
+  const { platform } = await params;
+  const platformSlug = platform;
   const data = getPlatformPageData(platformSlug);
 
   if (!data) {
@@ -65,8 +66,9 @@ export async function generateMetadata({ params }: { params: { platform: string 
   };
 }
 
-export default function PlatformPage({ params }: { params: { platform: string } }) {
-  const platformSlug = params.platform;
+export default async function PlatformPage({ params }: { params: Promise<{ platform: string }> }) {
+  const { platform } = await params;
+  const platformSlug = platform;
   const pageSize = DEFAULT_SKILLS_PER_PAGE;
       
   const data = getPlatformPageData(platformSlug);

@@ -42,8 +42,9 @@ export function generateStaticParams() {
   return VALID_TIERS.map((tier) => ({ tier }));
 }
 
-export async function generateMetadata({ params }: { params: { tier: string } }): Promise<Metadata> {
-  const tierSlug = params.tier;
+export async function generateMetadata({ params }: { params: Promise<{ tier: string }> }): Promise<Metadata> {
+  const { tier } = await params;
+  const tierSlug = tier;
   const data = getTierPageData(tierSlug);
 
   if (!data) {
@@ -64,8 +65,9 @@ export async function generateMetadata({ params }: { params: { tier: string } })
   };
 }
 
-export default function TierPage({ params }: { params: { tier: string } }) {
-  const tierSlug = params.tier;
+export default async function TierPage({ params }: { params: Promise<{ tier: string }> }) {
+  const { tier } = await params;
+  const tierSlug = tier;
   const pageSize = DEFAULT_SKILLS_PER_PAGE;
       
   const data = getTierPageData(tierSlug);

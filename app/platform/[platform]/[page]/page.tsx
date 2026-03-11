@@ -12,10 +12,10 @@ const VALID_PLATFORMS = ["openclaw", "mcp", "openai", "claude", "cursor", "huggi
 type PlatformSlug = typeof VALID_PLATFORMS[number];
 
 interface PageProps {
-  params: {
+  params: Promise<{
     platform: string;
     page: string;
-  };
+  }>;
 }
 
 function getPlatformPageData(platformSlug: string, pageNum: number) {
@@ -68,8 +68,9 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const platformSlug = params.platform;
-  const pageNum = parseInt(params.page, 10) || 1;
+  const { platform, page } = await params;
+  const platformSlug = platform;
+  const pageNum = parseInt(page, 10) || 1;
   const data = getPlatformPageData(platformSlug, pageNum);
 
   if (!data) {
@@ -90,9 +91,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default function PlatformPagePaginated({ params }: PageProps) {
-  const platformSlug = params.platform;
-  const pageNum = parseInt(params.page, 10) || 1;
+export default async function PlatformPagePaginated({ params }: PageProps) {
+  const { platform, page } = await params;
+  const platformSlug = platform;
+  const pageNum = parseInt(page, 10) || 1;
   const pageSize = DEFAULT_SKILLS_PER_PAGE;
       
   const data = getPlatformPageData(platformSlug, pageNum);

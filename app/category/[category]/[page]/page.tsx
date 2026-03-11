@@ -9,10 +9,10 @@ const DEFAULT_SKILLS_PER_PAGE = 25;
 const SITE_URL = "https://trustedskills.dev";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     category: string;
     page: string;
-  };
+  }>;
 }
 
 function getCategoryPageData(categorySlug: string, pageNum: number) {
@@ -61,8 +61,9 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const categorySlug = params.category;
-  const pageNum = parseInt(params.page, 10) || 1;
+  const { category, page } = await params;
+  const categorySlug = category;
+  const pageNum = parseInt(page, 10) || 1;
   const data = getCategoryPageData(categorySlug, pageNum);
 
   if (!data) {
@@ -83,9 +84,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default function CategoryPagePaginated({ params }: PageProps) {
-  const categorySlug = params.category;
-  const pageNum = parseInt(params.page, 10) || 1;
+export default async function CategoryPagePaginated({ params }: PageProps) {
+  const { category, page } = await params;
+  const categorySlug = category;
+  const pageNum = parseInt(page, 10) || 1;
   const pageSize = DEFAULT_SKILLS_PER_PAGE;
       
   const data = getCategoryPageData(categorySlug, pageNum);

@@ -12,7 +12,7 @@ export const revalidate = 86400;
 export const dynamicParams = true;
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -20,12 +20,14 @@ export async function generateStaticParams() {
   // Vercel ISR: Pre-render top 5000 by install count, rest on-demand
   const top5000 = [...skills]
     .sort((a, b) => b.installs - a.installs)
-    .slice(0, 5000);
+    .slice(0, 5000)
+    .filter((s) => !/[:]/.test(s.slug));
   return top5000.map((skill) => ({ slug: skill.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const skill = getSkillBySlug(params.slug);
+  const { slug } = await params;
+  const skill = getSkillBySlug(slug);
   if (!skill) return {};
   const categoryName = skill.category.charAt(0).toUpperCase() + skill.category.slice(1);
   return {
@@ -38,8 +40,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function SkillDetailPage({ params }: Props) {
-  const skill = getSkillBySlug(params.slug);
+export default async function SkillDetailPage({ params }: Props) {
+  const { slug } = await params;
+  const skill = getSkillBySlug(slug);
   if (!skill) notFound();
 
   const tier = TIER_CONFIG[skill.verified as keyof typeof TIER_CONFIG] ?? TIER_CONFIG['unverified'];
@@ -235,30 +238,7 @@ export default function SkillDetailPage({ params }: Props) {
             </div>
           )}
 
-          {/* Related skills - skipped for ISR fallback to reduce bundle size */
-          {related.length > 0 && false && (
-            <div>
-              <h2 className="font-semibold text-white mb-4">Related Skills</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {related.map((s) => {
-                  const t = TIER_CONFIG[s.verified as keyof typeof TIER_CONFIG] ?? TIER_CONFIG['unverified'];
-                  return (
-                    <Link
-                      key={s.slug}
-                      href={`/skills/${s.slug}`}
-                      className="flex items-center gap-3 p-3 bg-gray-900 hover:bg-gray-800 border border-gray-800 hover:border-gray-700 rounded-xl transition-all"
-                    >
-                      <span className="text-2xl">{s.emoji}</span>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium text-gray-200 text-sm truncate">{s.name}</div>
-                        <div className="text-xs text-gray-500">{t.icon} {t.label}</div>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+          {/* Related skills disabled — causes ISR body-too-large errors */}
 
           {/* TrustedSkills Differentiator */}
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
@@ -290,7 +270,7 @@ export default function SkillDetailPage({ params }: Props) {
                     from unauthorized updates.
                   </p>
                 </div>
-            )}}
+            )}
           </div>
 
           {/* Security Audits */}
@@ -364,26 +344,30 @@ export default function SkillDetailPage({ params }: Props) {
                     : skill.installs}
                 </dd>
               </div>
-              <div className="flex justify-between gap-2">
-                <dt className="text-gray-500">Updated</dt>
-                <dd className="text-gray-300">
-                  {new Date(skill.updated_at).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </dd>
-              </div>
-              <div className="flex justify-between gap-2">
-                <dt className="text-gray-500">Published</dt>
-                <dd className="text-gray-300">
-                  {new Date(skill.published_at).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </dd>
-              </div>
+              {skill.updated_at && !isNaN(new Date(skill.updated_at).getTime()) && (
+                <div className="flex justify-between gap-2">
+                  <dt className="text-gray-500">Updated</dt>
+                  <dd className="text-gray-300">
+                    {new Date(skill.updated_at).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </dd>
+                </div>
+              )}
+              {skill.published_at && !isNaN(new Date(skill.published_at).getTime()) && (
+                <div className="flex justify-between gap-2">
+                  <dt className="text-gray-500">Published</dt>
+                  <dd className="text-gray-300">
+                    {new Date(skill.published_at).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </dd>
+                </div>
+              )}
             </dl>
 
             {skill.source_repo && (
@@ -445,7 +429,7 @@ export default function SkillDetailPage({ params }: Props) {
                     </p>
                   )}
                 </div>
-            )}}
+            )}
           </div>
 
           {/* Quick Install */}
