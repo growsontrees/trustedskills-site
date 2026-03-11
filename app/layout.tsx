@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Link from "next/link";
 import GoogleAnalytics from "../components/GoogleAnalytics";
+import { MobileNav } from "./components/MobileNav";
 
 export const metadata: Metadata = {
   title: {
@@ -55,13 +56,15 @@ export default function RootLayout({
                 <span className="text-white">TrustedSkills</span>
                 <span className="text-xs text-gray-500 font-mono bg-gray-800 px-1.5 py-0.5 rounded ml-1">beta</span>
               </Link>
-              <div className="flex items-center gap-6 text-sm text-gray-400">
+              {/* Desktop Navigation */}
+              <div className="hidden md:flex items-center gap-6 text-sm text-gray-400">
                 <Link href="/skills" className="hover:text-white transition-colors">Browse</Link>
                 <Link href="/reviews" className="hover:text-white transition-colors">Reviews</Link>
                 <Link href="/submit" className="hover:text-white transition-colors">Submit</Link>
                 <Link href="/docs" className="hover:text-white transition-colors">Docs</Link>
-
               </div>
+              {/* Mobile Navigation */}
+              <MobileNav />
             </div>
           </div>
         </nav>
@@ -86,7 +89,6 @@ export default function RootLayout({
                 <Link href="/reviews" className="hover:text-gray-300 transition-colors">Reviews</Link>
                 <Link href="/submit" className="hover:text-gray-300 transition-colors">Submit a Skill</Link>
                 <Link href="/docs" className="hover:text-gray-300 transition-colors">Docs</Link>
-
               </div>
             </div>
             <div className="mt-8 pt-8 border-t border-gray-800/50 text-xs text-gray-600 text-center">
