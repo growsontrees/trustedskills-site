@@ -40,7 +40,7 @@ export function MobileNav() {
             onClick={closeMenu}
           />
           {/* Slide-out Panel */}
-          <div className="fixed top-0 right-0 h-full w-64 bg-gray-950 border-l border-gray-800 z-50 transform transition-transform duration-300 ease-out">
+          <div className="fixed top-0 right-0 h-screen w-64 bg-gray-950 border-l border-gray-800 shadow-[20px_0_50px_rgba(0,0,0,0.5)] z-[100] transform transition-transform duration-300 ease-out">
             <div className="flex flex-col h-full">
               {/* Header with close button */}
               <div className="flex items-center justify-between p-4 border-b border-gray-800">
