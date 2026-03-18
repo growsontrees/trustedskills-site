@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Task Tracker
+
+**Read `TASKS.md` in the repo root before starting work.** It contains the current prioritized task list with context, root cause analysis, affected files, and dependencies. When you complete a task, update TASKS.md to mark it done with the date.
+
 ## Commands
 
 ```bash
