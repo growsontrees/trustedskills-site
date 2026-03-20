@@ -5,6 +5,23 @@ import { CopyButton } from "../../../components/CopyButton";
 import { PlatformInstallTabs } from "../../../components/PlatformInstallTabs";
 import type { Metadata } from "next";
 
+/** Returns a short human-readable label for any source URL, e.g. "skills.sh", "github.com", "npm" */
+function sourceLabel(url: string): string {
+  try {
+    const host = new URL(url).hostname.replace(/^www\./, "");
+    if (host === "skills.sh") return "skills.sh";
+    if (host === "npmjs.com" || host === "npm.im") return "npm";
+    if (host === "github.com") return "GitHub";
+    if (host === "gitlab.com") return "GitLab";
+    if (host === "huggingface.co") return "HuggingFace";
+    if (host === "clawhub.com") return "ClawHub";
+    // strip common TLDs for everything else: vercel.com → vercel
+    return host.replace(/\.(com|io|dev|ai|org|net|co)$/, "");
+  } catch {
+    return "Source";
+  }
+}
+
 // ISR: revalidate pages every 24 hours
 export const revalidate = 86400;
 
@@ -104,18 +121,7 @@ export default async function SkillDetailPage({ params }: Props) {
                 </div>
                 <div className="text-sm text-gray-500 flex flex-wrap items-center gap-x-1 gap-y-1">
                   <span>by{" "}</span>
-                  {skill.sourceUrl && !skill.sourceUrl.includes('trustedskills.dev') ? (
-                    <a
-                      href={`https://skills.sh/${skill.author}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sky-400 hover:text-sky-300 font-medium transition-colors"
-                    >
-                      {skill.author}
-                    </a>
-                  ) : (
-                    <span className="text-gray-300 font-medium">{skill.author}</span>
-                  )}
+                  <span className="text-gray-300 font-medium">{skill.author}</span>
                   <span>{" · "}v{skill.version}{" · "}{skill.license}</span>
                   {skill.sourceUrl && !skill.sourceUrl.includes('trustedskills.dev') && (
                     <a
@@ -127,7 +133,7 @@ export default async function SkillDetailPage({ params }: Props) {
                       <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                       </svg>
-                      skills.sh
+                      {sourceLabel(skill.sourceUrl)}
                     </a>
                   )}
                 </div>
@@ -179,7 +185,7 @@ export default async function SkillDetailPage({ params }: Props) {
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
-                  View on skills.sh →
+                  View on {sourceLabel(skill.sourceUrl!)} →
                 </a>
               )}
               {skill.repoUrl && (
@@ -420,7 +426,7 @@ export default async function SkillDetailPage({ params }: Props) {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                     </svg>
-                    View on skills.sh →
+                    View on {sourceLabel(skill.sourceUrl!)} →
                   </a>
                 )}
                 {skill.repoUrl && (
