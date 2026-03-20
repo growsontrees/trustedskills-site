@@ -1,6 +1,6 @@
 # TrustedSkills — Task Tracker
 
-*Last updated: 2026-03-18*
+*Last updated: 2026-03-20*
 *Canonical location: `/opt/trustedskills/TASKS.md` (in the site repo)*
 *Also tracked at: `/opt/app/openclaw/workspace/projects/personal/skills-marketplace-project/TASKS.md` (Macros' copy)*
 
@@ -26,6 +26,12 @@
 - [x] **Docs section** — 18 articles live
 - [x] **Reviews section** — first review live (claude-seo-suite)
 - [x] **Registry repo private** — moat protection
+- [x] **Vercel projects removed** (2026-03-20) — disconnected `trustedskills-site` and `trustedskills-site-h77u` from Vercel; no more spurious failed deployment emails
+- [x] **Official tier** (2026-03-20) — 1,149 skills from official orgs (Vercel, Microsoft, Anthropic, Stripe, etc.) marked 🏢 Official with ranking bonus
+- [x] **Source links on skill pages** (2026-03-20) — "View on skills.sh →" link in About block and sidebar; author name links to skills.sh profile
+- [x] **Fixed About This Skill block** (2026-03-20) — removed generic placeholder text; uses `longDescription` if present, falls back to `description`
+- [x] **Composite ranking site-wide** (2026-03-20) — homepage, category, platform, tier pages all use scored ranking (installs + official bonus + tier bonus); no more weather/web-search on homepage
+- [x] **14-category taxonomy** (2026-03-20) — reclassified 26k skills from `dev` monoculture into frontend/backend/cloud/ai-ml/agents/etc.
 
 ---
 
