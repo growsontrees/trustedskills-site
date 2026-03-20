@@ -1,6 +1,6 @@
 import skillsData from "../data/skills-index.json";
 
-export type VerificationTier = "unverified" | "community" | "verified" | "featured";
+export type VerificationTier = "unverified" | "community" | "verified" | "featured" | "official";
 
 // ---------------------------------------------------------------------------
 // Composite ranking
@@ -32,7 +32,22 @@ const TRUSTED_AUTHOR_BONUS: Record<string, number> = {
   "openclaw":          10,
 };
 
+// Official orgs from skills.sh/official
+export const OFFICIAL_ORGS = new Set([
+  'anthropics','apify','apollographql','auth0','automattic','axiomhq','base','better-auth',
+  'bitwarden','brave','browser-use','browserbase','callstackincubator','clerk','clickhouse',
+  'cloudflare','coderabbitai','coinbase','dagster-io','datadog-labs','dbt-labs','denoland',
+  'elevenlabs','encoredev','expo','facebook','figma','firebase','firecrawl','flutter',
+  'getsentry','github','google-gemini','google-labs-code','hashicorp','huggingface','kotlin',
+  'langchain-ai','langfuse','launchdarkly','livekit','makenotion','mapbox','mastra-ai',
+  'mcp-use','medusajs','microsoft','n8n-io','neondatabase','nuxt','openai','openshift',
+  'planetscale','posthog','prisma','pulumi','pytorch','redis','remotion-dev','resend',
+  'rivet-dev','runwayml','sanity-io','semgrep','streamlit','stripe','supabase','sveltejs',
+  'tinybirdco','tldraw','triggerdotdev','upstash','vercel','vercel-labs','webflow','wix','wordpress',
+]);
+
 const TIER_BONUS: Record<VerificationTier, number> = {
+  official: 30,
   featured:   15,
   verified:   10,
   community:   5,
@@ -127,10 +142,12 @@ export interface Skill {
   slug: string;
   name: string;
   description: string;
+  longDescription?: string;
   version: string;
   author: string;
   homepage: string;
   source_repo: string;
+  sourceUrl?: string;
   tags: string[];
   category: string;
   emoji: string;
@@ -241,6 +258,14 @@ export const TIER_CONFIG: Record<VerificationTier, {
     bg: "bg-yellow-900/30",
     border: "border-yellow-800",
     description: "Editorially selected — recommended for any platform.",
+  },
+  official: {
+    label: "Official",
+    icon: "🏢",
+    color: "text-sky-400",
+    bg: "bg-sky-900/30",
+    border: "border-sky-700",
+    description: "Published by the company or team that built the technology.",
   },
 };
 
