@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Pagination } from "../../../components/Pagination";
 import { SkillCard } from "../../../components/SkillCard";
-import { getAllSkills, PLATFORM_CONFIG } from "../../../lib/skills";
+import { getAllSkills, PLATFORM_CONFIG, sortByScore } from "../../../lib/skills";
 
 const DEFAULT_SKILLS_PER_PAGE = 25;
 const SITE_URL = "https://trustedskills.dev";
@@ -19,9 +19,7 @@ function getPlatformPageData(platformSlug: string) {
   const platform = platformSlug as PlatformSlug;
   const platformConfig = PLATFORM_CONFIG[platform];
 
-  const skills = getAllSkills()
-    .filter((skill) => skill.platforms?.includes(platform))
-    .sort((a, b) => b.installs - a.installs);
+  const skills = sortByScore(getAllSkills().filter((skill) => skill.platforms?.includes(platform)));
 
   const totalPages = Math.max(1, Math.ceil(skills.length / DEFAULT_SKILLS_PER_PAGE));
   const paginatedSkills = skills.slice(0, DEFAULT_SKILLS_PER_PAGE);

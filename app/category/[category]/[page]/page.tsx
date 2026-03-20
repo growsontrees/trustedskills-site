@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Pagination } from "../../../../components/Pagination";
 import { SkillCard } from "../../../../components/SkillCard";
-import { getAllSkills, getCategories, getCategoryBySlug } from "../../../../lib/skills";
+import { getAllSkills, getCategories, getCategoryBySlug, sortByScore } from "../../../../lib/skills";
 
 const DEFAULT_SKILLS_PER_PAGE = 25;
 const SITE_URL = "https://trustedskills.dev";
@@ -19,9 +19,7 @@ function getCategoryPageData(categorySlug: string, pageNum: number) {
   const category = getCategoryBySlug(categorySlug);
   if (!category) return null;
 
-  const skills = getAllSkills()
-    .filter((skill) => skill.category === category.slug)
-    .sort((a, b) => b.installs - a.installs);
+  const skills = sortByScore(getAllSkills().filter((skill) => skill.category === category.slug));
 
   const totalPages = Math.max(1, Math.ceil(skills.length / DEFAULT_SKILLS_PER_PAGE));
   

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getAllSkills, getCategories, getFeaturedSkills, getStats, TIER_CONFIG } from "../lib/skills";
+import { getAllSkills, getCategories, getTopRankedSkills, getStats, TIER_CONFIG } from "../lib/skills";
 import { SkillCard } from "../components/SkillCard";
 import { PlatformSelector } from "../components/PlatformSelector";
 import { HeroInstallCommand } from "../components/HeroInstallCommand";
@@ -38,7 +38,7 @@ export default function HomePage() {
       }
     ]
   };
-  const featured = getFeaturedSkills();
+  const featured = getTopRankedSkills(6);
   const categories = getCategories();
   const stats = getStats();
   const recent = [...skills].sort((a, b) =>
@@ -134,7 +134,7 @@ export default function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-            <span>⭐</span> Featured Skills
+            <span>🏆</span> Top Skills
           </h2>
           <Link href="/skills" className="text-sm text-purple-400 hover:text-purple-300 transition-colors">
             View all →

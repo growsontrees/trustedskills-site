@@ -2,11 +2,11 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Skill, Category, TIER_CONFIG, PLATFORM_CONFIG } from "../lib/skills";
+import { Skill, Category, TIER_CONFIG, PLATFORM_CONFIG, scoreSkill } from "../lib/skills";
 import { SkillCard } from "./SkillCard";
 import { usePlatform, PlatformKey } from "../hooks/usePlatform";
 
-const PLATFORMS = ["openclaw", "mcp", "openai", "claude", "cursor", "huggingface"];
+const PLATFORMS = ["openclaw", "mcp", "openai", "claude", "claudecode", "cursor", "codex", "opencode"];
 const TIERS = ["featured", "verified", "community", "unverified"] as const;
 
 interface SkillsListClientProps {
@@ -30,7 +30,7 @@ export function SkillsListClient({
   const [activeCategory, setActiveCategory] = useState<string>(() => searchParams.get("category") ?? initialCategory);
   const [activePlatform, setActivePlatform] = useState<string>(() => searchParams.get("platform") ?? "all");
   const [activeTier, setActiveTier] = useState<string>(() => searchParams.get("tier") ?? initialTier);
-  const [sort, setSort] = useState<"installs" | "updated" | "name">("installs");
+  const [sort, setSort] = useState<"ranked" | "installs" | "updated" | "name">("ranked");
 
   // Sync platform preference: when the user picks a platform in the selector,
   // pre-fill the filter here (but only once on mount, then user can override).
@@ -128,6 +128,7 @@ export function SkillsListClient({
     }
 
     result.sort((a, b) => {
+      if (sort === "ranked") return scoreSkill(b) - scoreSkill(a);
       if (sort === "installs") return b.installs - a.installs;
       if (sort === "updated")
         return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
@@ -279,6 +280,7 @@ export function SkillsListClient({
               onChange={(e) => setSort(e.target.value as typeof sort)}
               className="text-sm bg-gray-900 border border-gray-700 text-gray-300 rounded-lg px-3 py-1.5 outline-none focus:border-purple-600 transition-colors"
             >
+              <option value="ranked">Top Ranked</option>
               <option value="installs">Most Popular</option>
               <option value="updated">Recently Updated</option>
               <option value="name">Alphabetical</option>

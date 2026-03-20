@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Pagination } from "../../../components/Pagination";
 import { SkillCard } from "../../../components/SkillCard";
-import { getAllSkills, TIER_CONFIG, VerificationTier } from "../../../lib/skills";
+import { getAllSkills, TIER_CONFIG, VerificationTier, sortByScore } from "../../../lib/skills";
 
 const DEFAULT_SKILLS_PER_PAGE = 25;
 const SITE_URL = "https://trustedskills.dev";
@@ -18,9 +18,7 @@ function getTierPageData(tierSlug: string) {
   const tier = tierSlug as VerificationTier;
   const tierConfig = TIER_CONFIG[tier];
 
-  const skills = getAllSkills()
-    .filter((skill) => skill.verified === tier)
-    .sort((a, b) => b.installs - a.installs);
+  const skills = sortByScore(getAllSkills().filter((skill) => skill.verified === tier));
 
   const totalPages = Math.max(1, Math.ceil(skills.length / DEFAULT_SKILLS_PER_PAGE));
   const paginatedSkills = skills.slice(0, DEFAULT_SKILLS_PER_PAGE);
