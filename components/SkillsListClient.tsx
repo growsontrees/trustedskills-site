@@ -63,14 +63,18 @@ export function SkillsListClient({
         }
       }
 
-      // Multiple filters or search query → use query params
+      // Multiple filters or search query → update URL locally without triggering
+      // a full App Router navigation. The full skills dataset is already on the
+      // page, so router.replace() on every keystroke is wasteful and has caused
+      // fragile client/runtime behavior under load.
       const params = new URLSearchParams();
       if (q) params.set("q", q);
       if (tier && tier !== "all") params.set("tier", tier);
       if (category && category !== "all") params.set("category", category);
       if (platform && platform !== "all") params.set("platform", platform);
       const qs = params.toString();
-      router.replace(qs ? `/skills?${qs}` : "/skills", { scroll: false });
+      const nextUrl = qs ? `/skills?${qs}` : "/skills";
+      window.history.replaceState(null, "", nextUrl);
     },
     [router, query, activeTier, activeCategory, activePlatform]
   );
