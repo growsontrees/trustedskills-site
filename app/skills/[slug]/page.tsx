@@ -34,10 +34,11 @@ interface Props {
 
 export async function generateStaticParams() {
   const skills = getAllSkills();
-  // Vercel ISR: Pre-render top 5000 by install count, rest on-demand
+  // ISR: Pre-render top 1000 by install count, rest on-demand
+  // Reduced from 5000 — enriched longDescriptions make each page ~3x larger on disk
   const top5000 = [...skills]
     .sort((a, b) => b.installs - a.installs)
-    .slice(0, 5000)
+    .slice(0, 1000)
     .filter((s) => !/[:]/.test(s.slug));
   return top5000.map((skill) => ({ slug: skill.slug }));
 }
