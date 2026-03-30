@@ -270,10 +270,13 @@ export const TIER_CONFIG: Record<VerificationTier, {
 };
 
 export const PLATFORM_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
-  openclaw:    { label: "OpenClaw",       color: "text-purple-400",  bg: "bg-purple-900/30" },
-  mcp:         { label: "MCP",            color: "text-blue-400",    bg: "bg-blue-900/30" },
-  openai:      { label: "OpenAI",         color: "text-green-400",   bg: "bg-green-900/30" },
-  claude:      { label: "Claude",         color: "text-orange-400",  bg: "bg-orange-900/30" },
-  cursor:      { label: "Cursor / VS Code", color: "text-cyan-400",  bg: "bg-cyan-900/30" },
-  huggingface: { label: "HuggingFace",    color: "text-yellow-400",  bg: "bg-yellow-900/30" },
+  openclaw:    { label: "OpenClaw",              color: "text-purple-400", bg: "bg-purple-900/30" },
+  mcp:         { label: "MCP",                   color: "text-blue-400",   bg: "bg-blue-900/30" },
+  openai:      { label: "OpenAI / ChatGPT",      color: "text-green-400",  bg: "bg-green-900/30" },
+  claude:      { label: "Claude Desktop",        color: "text-orange-400", bg: "bg-orange-900/30" },
+  claudecode:  { label: "Claude Code",           color: "text-amber-300",  bg: "bg-amber-900/30" },
+  cursor:      { label: "Cursor / VS Code",      color: "text-cyan-400",   bg: "bg-cyan-900/30" },
+  codex:       { label: "GitHub Copilot / Codex",color: "text-sky-400",    bg: "bg-sky-900/30" },
+  opencode:    { label: "OpenCode",              color: "text-emerald-400",bg: "bg-emerald-900/30" },
+  huggingface: { label: "HuggingFace",           color: "text-yellow-400", bg: "bg-yellow-900/30" },
 };

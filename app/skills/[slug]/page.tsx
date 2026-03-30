@@ -147,7 +147,7 @@ export default async function SkillDetailPage({ params }: Props) {
             <div className="bg-gray-950 border border-gray-700 rounded-xl p-4">
               <div className="text-xs text-gray-500 mb-2 font-medium">
                 OpenClaw install
-                <span className="ml-2 text-gray-600 font-normal">— see all platforms below</span>
+                <span className="ml-2 text-gray-600 font-normal">— Claude Code and Claude Desktop are shown explicitly below</span>
               </div>
               <div className="flex items-center gap-3">
                 <div className="flex-1 font-mono text-sm text-emerald-400 min-w-0">
@@ -155,6 +155,29 @@ export default async function SkillDetailPage({ params }: Props) {
                   {skill.installCmd}
                 </div>
                 <CopyButton text={skill.installCmd} label="Copy" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div className="bg-orange-900/15 border border-orange-800 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-2 text-orange-300 font-medium">
+                  <span>💬</span>
+                  <span>Claude Desktop</span>
+                </div>
+                <p className="text-sm text-gray-300 mb-3">
+                  Add this skill to Claude Desktop’s MCP config file under <code className="text-purple-300 bg-gray-800 px-1 rounded">mcpServers</code>.
+                </p>
+                <div className="text-xs text-gray-500">Config-file based install inside the Claude desktop app.</div>
+              </div>
+              <div className="bg-amber-900/15 border border-amber-800 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-2 text-amber-300 font-medium">
+                  <span>⌨️</span>
+                  <span>Claude Code</span>
+                </div>
+                <p className="text-sm text-gray-300 mb-3">
+                  Install from terminal with <code className="text-purple-300 bg-gray-800 px-1 rounded">claude mcp add {skill.slug} npx -- -y @trustedskills/{skill.slug}</code>.
+                </p>
+                <div className="text-xs text-gray-500">CLI-first install for Claude Code, separate from Claude Desktop.</div>
               </div>
             </div>
           </div>
@@ -495,7 +518,7 @@ export default async function SkillDetailPage({ params }: Props) {
           {/* Quick Install */}
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
             <h2 className="font-semibold text-white mb-1">Quick Install (OpenClaw)</h2>
-            <p className="text-xs text-gray-600 mb-3">See the tabs above for Claude Desktop, Cursor, MCP, and more.</p>
+            <p className="text-xs text-gray-600 mb-3">See the sections and tabs above for Claude Code, Claude Desktop, Cursor, MCP, and more.</p>
             <div className="font-mono text-xs text-emerald-400 bg-gray-950 rounded-lg p-3 mb-3 break-all">
               {skill.installCmd}
             </div>

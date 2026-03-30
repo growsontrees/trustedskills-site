@@ -314,7 +314,33 @@ export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms }: Pr
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
       <div className="px-5 pt-5 pb-0">
-        <h2 className="font-semibold text-white mb-4">Install on your platform</h2>
+        <h2 className="font-semibold text-white mb-2">Install on your platform</h2>
+        <p className="text-sm text-gray-400 mb-4">
+          Claude Desktop and Claude Code are different install targets.
+          <span className="text-gray-300"> Desktop uses JSON config in Claude’s app settings; Claude Code uses the </span>
+          <code className="mx-1 text-purple-300 bg-gray-800 px-1.5 py-0.5 rounded">claude mcp add</code>
+          <span className="text-gray-300"> CLI command or </span>
+          <code className="mx-1 text-purple-300 bg-gray-800 px-1.5 py-0.5 rounded">~/.claude/settings.json</code>.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+          <div className="rounded-xl border border-orange-800 bg-orange-900/20 p-4">
+            <div className="flex items-center gap-2 mb-2 text-orange-300 font-medium">
+              <span>💬</span>
+              <span>Claude Desktop</span>
+            </div>
+            <p className="text-sm text-gray-300 mb-2">Best if you use the Claude desktop app and manage MCP tools through its config file.</p>
+            <p className="text-xs text-gray-500">Install shape: JSON under <code className="text-gray-300 bg-gray-800 px-1 rounded">mcpServers</code></p>
+          </div>
+          <div className="rounded-xl border border-amber-800 bg-amber-900/20 p-4">
+            <div className="flex items-center gap-2 mb-2 text-amber-300 font-medium">
+              <span>⌨️</span>
+              <span>Claude Code</span>
+            </div>
+            <p className="text-sm text-gray-300 mb-2">Best if you use the Claude CLI / coding workflow and want one-command setup in terminal.</p>
+            <p className="text-xs text-gray-500">Install shape: <code className="text-gray-300 bg-gray-800 px-1 rounded">claude mcp add ...</code></p>
+          </div>
+        </div>
 
         {/* Tabs */}
         <div className="flex flex-wrap gap-1 border-b border-gray-800 -mx-5 px-5 pb-0">
