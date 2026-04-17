@@ -43,6 +43,12 @@ try {
   if (!css.ok) throw new Error(`CSS asset returned ${css.status}`);
   ok("css asset", `${css.status} ${cssUrl}`);
 
+  const buildMeta = await fetchText(baseUrl + "/__build.json");
+  if (!buildMeta.res.ok) throw new Error(`/__build.json returned ${buildMeta.res.status}`);
+  const parsedBuildMeta = JSON.parse(buildMeta.text);
+  if (!parsedBuildMeta.buildId) throw new Error("/__build.json missing buildId");
+  ok("build metadata", `buildId ${parsedBuildMeta.buildId}`);
+
   const claudeSeo = await fetchText(baseUrl + "/skills/claude-seo");
   if (!claudeSeo.res.ok) throw new Error(`/skills/claude-seo returned ${claudeSeo.res.status}`);
   requireIncludes(claudeSeo.text, "Claude SEO Suite", "claude-seo page title");

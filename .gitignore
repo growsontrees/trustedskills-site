@@ -6,6 +6,7 @@ node_modules/
 # Build output
 .next/
 out/
+public/__build.json
 
 # Testing
 /coverage

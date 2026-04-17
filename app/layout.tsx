@@ -44,6 +44,13 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  let buildId = "";
+  try {
+    buildId = readFileSync(join(process.cwd(), ".next", "BUILD_ID"), "utf8").trim();
+  } catch {
+    buildId = "";
+  }
+
   return (
     <html lang="en">
       <body className="bg-gray-950 text-gray-100 min-h-screen font-sans antialiased">

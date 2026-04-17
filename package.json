@@ -6,7 +6,7 @@
     "dev": "next dev",
     "prebuild": "echo 'Using bundled skills index'",
     "build": "next build",
-    "postbuild": "next-sitemap",
+    "postbuild": "next-sitemap && node scripts/write-build-meta.mjs",
     "start": "next start",
     "lint": "next lint",
     "fetch-index": "node scripts/fetch-index.mjs",
