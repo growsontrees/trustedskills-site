@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PlatformKey } from "../hooks/usePlatform";
 import { CopyButton } from "./CopyButton";
 import { usePlatform } from "../hooks/usePlatform";
@@ -10,6 +10,15 @@ interface Props {
   installCmd: string;
   repoUrl: string;
   platforms: string[];
+}
+
+function supportsPlatform(platforms: string[] = [], key: PlatformKey): boolean {
+  return platforms.includes(key);
+}
+
+function looksLikeTrustedSkillsNpm(slug: string, installCmd: string): boolean {
+  const cmd = installCmd.toLowerCase();
+  return cmd.includes(`@trustedskills/${slug}`.toLowerCase()) || cmd.includes(`openclaw skills install ${slug}`.toLowerCase());
 }
 
 const ALL_TABS: { key: PlatformKey; emoji: string; label: string }[] = [
@@ -95,12 +104,41 @@ function ClaudeDesktopGuide({ slug }: { slug: string }) {
   );
 }
 
-function ClaudeCodeGuide({ slug }: { slug: string }) {
+function ClaudeCodeGuide({ slug, installCmd, repoUrl, supported }: { slug: string; installCmd: string; repoUrl: string; supported: boolean }) {
   const cliCmd = `claude mcp add ${slug} npx -- -y @trustedskills/${slug}`;
   const configJson = JSON.stringify(
     { mcpServers: { [slug]: { command: "npx", args: ["-y", `@trustedskills/${slug}`] } } },
     null, 2
   );
+
+  if (!supported) {
+    return (
+      <div className="bg-amber-900/20 border border-amber-800/50 rounded-xl p-5 space-y-3">
+        <p className="text-sm text-amber-300 font-medium">⚠️ No verified one-command Claude Code install recorded for this skill</p>
+        <p className="text-sm text-gray-300">
+          TrustedSkills should not invent a <code className="text-purple-300 bg-gray-800 px-1 rounded">claude mcp add</code> command here.
+          This skill uses a custom or upstream install flow instead.
+        </p>
+        <div className="space-y-3">
+          <div>
+            <p className="text-xs text-gray-500 mb-2">Use the upstream / recorded install command</p>
+            <CodeBlock label="terminal" code={installCmd} />
+          </div>
+          {repoUrl && (
+            <a
+              href={repoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 transition-colors"
+            >
+              📥 View repository install instructions →
+            </a>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-5">
       <div className="flex items-start gap-3 text-sm text-gray-400">
@@ -294,14 +332,24 @@ function OpenAIGuide({ repoUrl, slug }: { repoUrl: string; slug: string }) {
 
 export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms }: Props) {
   const { platform: storedPlatform } = usePlatform();
+  const hasClaudeCode = supportsPlatform(platforms, "claudecode") || looksLikeTrustedSkillsNpm(slug, installCmd);
   const defaultTab = (storedPlatform as PlatformKey | null) ?? "openclaw";
-  const [activeTab, setActiveTab] = useState<PlatformKey>(defaultTab);
+  const safeDefaultTab = defaultTab === "claudecode" && !hasClaudeCode ? "openclaw" : defaultTab;
+  const [activeTab, setActiveTab] = useState<PlatformKey>(safeDefaultTab);
+
+  useEffect(() => {
+    if (storedPlatform === "claudecode" && !hasClaudeCode) {
+      setActiveTab("openclaw");
+      return;
+    }
+    if (storedPlatform) setActiveTab(storedPlatform as PlatformKey);
+  }, [storedPlatform, hasClaudeCode]);
 
   function renderGuide() {
     switch (activeTab) {
       case "openclaw":   return <OpenClawGuide installCmd={installCmd} />;
       case "claude":     return <ClaudeDesktopGuide slug={slug} />;
-      case "claudecode": return <ClaudeCodeGuide slug={slug} />;
+      case "claudecode": return <ClaudeCodeGuide slug={slug} installCmd={installCmd} repoUrl={repoUrl} supported={hasClaudeCode} />;
       case "cursor":     return <CursorGuide slug={slug} />;
       case "codex":      return <CodexGuide slug={slug} repoUrl={repoUrl} />;
       case "opencode":   return <OpenCodeGuide slug={slug} />;
@@ -317,10 +365,9 @@ export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms }: Pr
         <h2 className="font-semibold text-white mb-2">Install on your platform</h2>
         <p className="text-sm text-gray-400 mb-4">
           Claude Desktop and Claude Code are different install targets.
-          <span className="text-gray-300"> Desktop uses JSON config in Claude’s app settings; Claude Code uses the </span>
+          <span className="text-gray-300"> Desktop uses JSON config in Claude’s app settings. Claude Code may use </span>
           <code className="mx-1 text-purple-300 bg-gray-800 px-1.5 py-0.5 rounded">claude mcp add</code>
-          <span className="text-gray-300"> CLI command or </span>
-          <code className="mx-1 text-purple-300 bg-gray-800 px-1.5 py-0.5 rounded">~/.claude/settings.json</code>.
+          <span className="text-gray-300"> for compatible skills, but some skills use custom upstream install flows instead.</span>
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
@@ -347,10 +394,10 @@ export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms }: Pr
           {ALL_TABS.map((tab) => {
             const isActive = activeTab === tab.key;
             const isSupported =
-              (platforms || []).includes(tab.key) ||
+              supportsPlatform(platforms, tab.key) ||
               tab.key === "openclaw" ||
               tab.key === "mcp" ||
-              tab.key === "claudecode";
+              (tab.key === "claudecode" && hasClaudeCode);
             return (
               <button
                 key={tab.key}

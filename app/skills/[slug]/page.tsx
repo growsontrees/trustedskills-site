@@ -65,6 +65,10 @@ export default async function SkillDetailPage({ params }: Props) {
   const skill = getSkillBySlug(slug);
   if (!skill) notFound();
 
+  const hasClaudeCode = (skill.platforms || []).includes("claudecode") ||
+    skill.installCmd.toLowerCase().includes(`@trustedskills/${skill.slug}`.toLowerCase()) ||
+    skill.installCmd.toLowerCase().includes(`openclaw skills install ${skill.slug}`.toLowerCase());
+
   const tier = TIER_CONFIG[skill.verified as keyof typeof TIER_CONFIG] ?? TIER_CONFIG['unverified'];
   // Optimized: Don't load all skills for ISR fallback (too large)
   // Related skills disabled to avoid body-too-large ISR errors
@@ -176,10 +180,21 @@ export default async function SkillDetailPage({ params }: Props) {
                   <span>⌨️</span>
                   <span>Claude Code</span>
                 </div>
-                <p className="text-sm text-gray-300 mb-3">
-                  Install from terminal with <code className="text-purple-300 bg-gray-800 px-1 rounded">claude mcp add {skill.slug} npx -- -y @trustedskills/{skill.slug}</code>.
-                </p>
-                <div className="text-xs text-gray-500">CLI-first install for Claude Code, separate from Claude Desktop.</div>
+                {hasClaudeCode ? (
+                  <>
+                    <p className="text-sm text-gray-300 mb-3">
+                      Install from terminal with <code className="text-purple-300 bg-gray-800 px-1 rounded">claude mcp add {skill.slug} npx -- -y @trustedskills/{skill.slug}</code>.
+                    </p>
+                    <div className="text-xs text-gray-500">CLI-first install for Claude Code, separate from Claude Desktop.</div>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-sm text-gray-300 mb-3">
+                      This skill does <span className="text-amber-300 font-medium">not</span> have a verified one-command Claude Code install recorded in TrustedSkills.
+                    </p>
+                    <div className="text-xs text-gray-500">Use the upstream repository instructions or the recorded install command below instead of a generated <code className="text-gray-300 bg-gray-800 px-1 rounded">claude mcp add</code> command.</div>
+                  </>
+                )}
               </div>
             </div>
           </div>
