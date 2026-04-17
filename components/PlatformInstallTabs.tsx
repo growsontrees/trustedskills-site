@@ -5,11 +5,20 @@ import { PlatformKey } from "../hooks/usePlatform";
 import { CopyButton } from "./CopyButton";
 import { usePlatform } from "../hooks/usePlatform";
 
+type InstallOverride = {
+  supported?: boolean;
+  mode?: "generated" | "custom";
+  command?: string;
+  note?: string;
+};
+
 interface Props {
   slug: string;
   installCmd: string;
   repoUrl: string;
   platforms: string[];
+  preferredPlatform?: PlatformKey;
+  installOverrides?: Partial<Record<PlatformKey, InstallOverride>>;
 }
 
 const PLATFORM_PRIORITY: PlatformKey[] = [
@@ -32,12 +41,29 @@ function looksLikeTrustedSkillsNpm(slug: string, installCmd: string): boolean {
   return cmd.includes(`@trustedskills/${slug}`.toLowerCase()) || cmd.includes(`openclaw skills install ${slug}`.toLowerCase());
 }
 
-function inferBestPlatform(platforms: string[] = [], slug: string, installCmd: string): PlatformKey {
+function inferBestPlatform(
+  platforms: string[] = [],
+  slug: string,
+  installCmd: string,
+  preferredPlatform?: PlatformKey,
+  installOverrides?: Partial<Record<PlatformKey, InstallOverride>>
+): PlatformKey {
   const available = new Set<PlatformKey>(platforms.filter(Boolean) as PlatformKey[]);
 
   if (looksLikeTrustedSkillsNpm(slug, installCmd)) {
     available.add("claudecode");
   }
+
+  if (installOverrides?.claudecode?.supported) {
+    available.add("claudecode");
+  }
+
+  const cmd = installCmd.toLowerCase();
+  const isDirectMcpStyle = available.has("mcp") && !cmd.includes("openclaw skills install");
+
+  if (preferredPlatform && available.has(preferredPlatform)) return preferredPlatform;
+  if (preferredPlatform === "claudecode" && installOverrides?.claudecode?.supported) return "claudecode";
+  if (isDirectMcpStyle) return "mcp";
 
   for (const key of PLATFORM_PRIORITY) {
     if (key === "openclaw") continue;
@@ -130,12 +156,42 @@ function ClaudeDesktopGuide({ slug }: { slug: string }) {
   );
 }
 
-function ClaudeCodeGuide({ slug, installCmd, repoUrl, supported }: { slug: string; installCmd: string; repoUrl: string; supported: boolean }) {
+function ClaudeCodeGuide({ slug, installCmd, repoUrl, supported, override }: { slug: string; installCmd: string; repoUrl: string; supported: boolean; override?: InstallOverride }) {
   const cliCmd = `claude mcp add ${slug} npx -- -y @trustedskills/${slug}`;
   const configJson = JSON.stringify(
     { mcpServers: { [slug]: { command: "npx", args: ["-y", `@trustedskills/${slug}`] } } },
     null, 2
   );
+
+  if (override?.supported && override.mode === "custom") {
+    return (
+      <div className="space-y-5">
+        <div className="bg-amber-900/20 border border-amber-800/50 rounded-xl p-5 space-y-3">
+          <p className="text-sm text-amber-300 font-medium">⌨️ Claude Code uses a custom install flow for this skill</p>
+          <p className="text-sm text-gray-300">
+            {override.note || "This skill works with Claude Code, but not through a generated one-command TrustedSkills installer."}
+          </p>
+        </div>
+        <div className="flex items-start gap-3 text-sm text-gray-400">
+          <StepNumber n={1} />
+          <div className="flex-1 min-w-0">
+            <p className="mb-2 font-medium text-gray-300">Use the upstream / recorded install command</p>
+            <CodeBlock label="terminal" code={override.command || installCmd} />
+          </div>
+        </div>
+        {repoUrl && (
+          <a
+            href={repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 transition-colors"
+          >
+            📥 View repository install instructions →
+          </a>
+        )}
+      </div>
+    );
+  }
 
   if (!supported) {
     return (
@@ -356,10 +412,10 @@ function OpenAIGuide({ repoUrl, slug }: { repoUrl: string; slug: string }) {
   );
 }
 
-export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms }: Props) {
+export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms, preferredPlatform, installOverrides }: Props) {
   const { platform: storedPlatform } = usePlatform();
-  const hasClaudeCode = supportsPlatform(platforms, "claudecode") || looksLikeTrustedSkillsNpm(slug, installCmd);
-  const inferredDefaultTab = inferBestPlatform(platforms, slug, installCmd);
+  const hasClaudeCode = installOverrides?.claudecode?.supported || supportsPlatform(platforms, "claudecode") || looksLikeTrustedSkillsNpm(slug, installCmd);
+  const inferredDefaultTab = inferBestPlatform(platforms, slug, installCmd, preferredPlatform, installOverrides);
   const storedSupported = storedPlatform && (storedPlatform === "claudecode" ? hasClaudeCode : supportsPlatform(platforms, storedPlatform as PlatformKey));
   const [activeTab, setActiveTab] = useState<PlatformKey>(storedSupported ? (storedPlatform as PlatformKey) : inferredDefaultTab);
 
@@ -375,7 +431,7 @@ export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms }: Pr
     switch (activeTab) {
       case "openclaw":   return <OpenClawGuide installCmd={installCmd} />;
       case "claude":     return <ClaudeDesktopGuide slug={slug} />;
-      case "claudecode": return <ClaudeCodeGuide slug={slug} installCmd={installCmd} repoUrl={repoUrl} supported={hasClaudeCode} />;
+      case "claudecode": return <ClaudeCodeGuide slug={slug} installCmd={installCmd} repoUrl={repoUrl} supported={hasClaudeCode} override={installOverrides?.claudecode} />;
       case "cursor":     return <CursorGuide slug={slug} />;
       case "codex":      return <CodexGuide slug={slug} repoUrl={repoUrl} />;
       case "opencode":   return <OpenCodeGuide slug={slug} />;

@@ -151,6 +151,8 @@ export default async function SkillDetailPage({ params }: Props) {
             installCmd={skill.installCmd || ""}
             repoUrl={skill.repoUrl || ""}
             platforms={skill.platforms || []}
+            preferredPlatform={skill.preferredPlatform}
+            installOverrides={skill.installOverrides}
           />
 
           {/* About This Skill */}
