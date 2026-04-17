@@ -12,6 +12,17 @@ interface Props {
   platforms: string[];
 }
 
+const PLATFORM_PRIORITY: PlatformKey[] = [
+  "claudecode",
+  "claude",
+  "mcp",
+  "cursor",
+  "codex",
+  "opencode",
+  "openai",
+  "openclaw",
+];
+
 function supportsPlatform(platforms: string[] = [], key: PlatformKey): boolean {
   return platforms.includes(key);
 }
@@ -19,6 +30,21 @@ function supportsPlatform(platforms: string[] = [], key: PlatformKey): boolean {
 function looksLikeTrustedSkillsNpm(slug: string, installCmd: string): boolean {
   const cmd = installCmd.toLowerCase();
   return cmd.includes(`@trustedskills/${slug}`.toLowerCase()) || cmd.includes(`openclaw skills install ${slug}`.toLowerCase());
+}
+
+function inferBestPlatform(platforms: string[] = [], slug: string, installCmd: string): PlatformKey {
+  const available = new Set<PlatformKey>(platforms.filter(Boolean) as PlatformKey[]);
+
+  if (looksLikeTrustedSkillsNpm(slug, installCmd)) {
+    available.add("claudecode");
+  }
+
+  for (const key of PLATFORM_PRIORITY) {
+    if (key === "openclaw") continue;
+    if (available.has(key)) return key;
+  }
+
+  return "openclaw";
 }
 
 const ALL_TABS: { key: PlatformKey; emoji: string; label: string }[] = [
@@ -333,17 +359,17 @@ function OpenAIGuide({ repoUrl, slug }: { repoUrl: string; slug: string }) {
 export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms }: Props) {
   const { platform: storedPlatform } = usePlatform();
   const hasClaudeCode = supportsPlatform(platforms, "claudecode") || looksLikeTrustedSkillsNpm(slug, installCmd);
-  const defaultTab = (storedPlatform as PlatformKey | null) ?? "openclaw";
-  const safeDefaultTab = defaultTab === "claudecode" && !hasClaudeCode ? "openclaw" : defaultTab;
-  const [activeTab, setActiveTab] = useState<PlatformKey>(safeDefaultTab);
+  const inferredDefaultTab = inferBestPlatform(platforms, slug, installCmd);
+  const storedSupported = storedPlatform && (storedPlatform === "claudecode" ? hasClaudeCode : supportsPlatform(platforms, storedPlatform as PlatformKey));
+  const [activeTab, setActiveTab] = useState<PlatformKey>(storedSupported ? (storedPlatform as PlatformKey) : inferredDefaultTab);
 
   useEffect(() => {
-    if (storedPlatform === "claudecode" && !hasClaudeCode) {
-      setActiveTab("openclaw");
+    if (storedPlatform && (storedPlatform === "claudecode" ? hasClaudeCode : supportsPlatform(platforms, storedPlatform as PlatformKey))) {
+      setActiveTab(storedPlatform as PlatformKey);
       return;
     }
-    if (storedPlatform) setActiveTab(storedPlatform as PlatformKey);
-  }, [storedPlatform, hasClaudeCode]);
+    setActiveTab(inferredDefaultTab);
+  }, [storedPlatform, hasClaudeCode, inferredDefaultTab, platforms]);
 
   function renderGuide() {
     switch (activeTab) {
@@ -362,30 +388,12 @@ export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms }: Pr
   return (
     <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
       <div className="px-5 pt-5 pb-0">
-        <h2 className="font-semibold text-white mb-2">Install on your platform</h2>
-        <p className="text-sm text-gray-400 mb-4">
-          Claude Desktop and Claude Code are different install targets.
-          <span className="text-gray-300"> Desktop uses JSON config in Claude’s app settings. Claude Code may use </span>
-          <code className="mx-1 text-purple-300 bg-gray-800 px-1.5 py-0.5 rounded">claude mcp add</code>
-          <span className="text-gray-300"> for compatible skills, but some skills use custom upstream install flows instead.</span>
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-          <div className="rounded-xl border border-orange-800 bg-orange-900/20 p-4">
-            <div className="flex items-center gap-2 mb-2 text-orange-300 font-medium">
-              <span>💬</span>
-              <span>Claude Desktop</span>
-            </div>
-            <p className="text-sm text-gray-300 mb-2">Best if you use the Claude desktop app and manage MCP tools through its config file.</p>
-            <p className="text-xs text-gray-500">Install shape: JSON under <code className="text-gray-300 bg-gray-800 px-1 rounded">mcpServers</code></p>
-          </div>
-          <div className="rounded-xl border border-amber-800 bg-amber-900/20 p-4">
-            <div className="flex items-center gap-2 mb-2 text-amber-300 font-medium">
-              <span>⌨️</span>
-              <span>Claude Code</span>
-            </div>
-            <p className="text-sm text-gray-300 mb-2">Best if you use the Claude CLI / coding workflow and want one-command setup in terminal.</p>
-            <p className="text-xs text-gray-500">Install shape: <code className="text-gray-300 bg-gray-800 px-1 rounded">claude mcp add ...</code></p>
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div>
+            <h2 className="font-semibold text-white">Install on your platform</h2>
+            <p className="text-sm text-gray-400 mt-1">
+              We auto-selected <span className="text-gray-200 font-medium">{ALL_TABS.find((t) => t.key === activeTab)?.label ?? "OpenClaw"}</span> based on this skill’s supported platforms.
+            </p>
           </div>
         </div>
 
