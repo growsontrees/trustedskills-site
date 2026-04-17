@@ -5,7 +5,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Browse Agent Skills | TrustedSkills",
+  title: "Browse Agent Skills",
   description: "Browse all AI agent skills — humanizer, Obsidian, code runners, and more. Filter by platform, category, and verification tier.",
   alternates: {
     canonical: "https://trustedskills.dev/skills/",

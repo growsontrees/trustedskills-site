@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   return {
-    title: `${data.category.name} Agent Skills — Page ${pageNumber} | TrustedSkills`,
+    title: `${data.category.name} Agent Skills — Page ${pageNumber}`,
     description: `Browse ${data.category.count} ${data.category.name.toLowerCase()} agent skills on TrustedSkills. Page ${pageNumber} of ${data.totalPages}.`,
     alternates: {
       canonical: `${SITE_URL}${data.basePath}/${pageNumber}/`,

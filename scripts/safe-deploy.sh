@@ -7,6 +7,9 @@ log() {
   printf '\n[%s] %s\n' "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" "$*"
 }
 
+log "Cleaning stale Next build output"
+rm -rf /opt/trustedskills/.next
+
 log "Building TrustedSkills"
 npm run build
 
