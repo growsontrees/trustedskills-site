@@ -1,6 +1,8 @@
 import { getAllSkills, getSkillBySlug, TIER_CONFIG } from "../../../lib/skills";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { CopyButton } from "../../../components/CopyButton";
 import { PlatformInstallTabs } from "../../../components/PlatformInstallTabs";
 import type { Metadata } from "next";
@@ -194,7 +196,9 @@ export default async function SkillDetailPage({ params }: Props) {
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
             <h2 className="font-semibold text-white mb-3">About This Skill</h2>
             {skill.longDescription ? (
-              <p className="text-gray-300 text-sm leading-relaxed mb-4">{skill.longDescription}</p>
+              <div className="doc-content text-sm mb-4">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{skill.longDescription}</ReactMarkdown>
+              </div>
             ) : (
               <p className="text-gray-400 text-sm leading-relaxed mb-4">{skill.description}</p>
             )}
