@@ -52,12 +52,29 @@ export function usePlatform() {
 }
 
 /** Returns the install command/config for a skill on a given platform. */
+export function supportsInstallPlatform(platforms: string[] = [], platform: PlatformKey | null): boolean {
+  if (!platform) return true;
+  if (platform === "openclaw") return true;
+  return platforms.includes(platform);
+}
+
 export function getPlatformInstall(
   slug: string,
   installCmd: string,
   repoUrl: string,
-  platform: PlatformKey | null
-): { label: string; cmd: string; isJson: boolean; lang: string; isComingSoon?: boolean } {
+  platform: PlatformKey | null,
+  platforms: string[] = []
+): { label: string; cmd: string; isJson: boolean; lang: string; isComingSoon?: boolean; isFallback?: boolean } {
+  if (!supportsInstallPlatform(platforms, platform)) {
+    return {
+      label: "OpenClaw",
+      cmd: installCmd,
+      isJson: false,
+      lang: "bash",
+      isFallback: true,
+    };
+  }
+
   switch (platform) {
     case "mcp":
       return {

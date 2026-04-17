@@ -10,7 +10,7 @@ export function HeroInstallCommand() {
   const { platform, mounted } = usePlatform();
   const [copied, setCopied] = useState(false);
 
-  const install = getPlatformInstall(EXAMPLE_SLUG, `openclaw skills install ${EXAMPLE_SLUG}`, EXAMPLE_REPO, platform);
+  const install = getPlatformInstall(EXAMPLE_SLUG, `openclaw skills install ${EXAMPLE_SLUG}`, EXAMPLE_REPO, platform, ["openclaw"]);
 
   function handleCopy() {
     navigator.clipboard.writeText(install.cmd);

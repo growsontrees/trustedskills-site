@@ -15,7 +15,7 @@ export function SkillCard({ skill, compact = false }: SkillCardProps) {
   const { platform, mounted } = usePlatform();
   const tier = TIER_CONFIG[skill.verified as keyof typeof TIER_CONFIG] ?? TIER_CONFIG['unverified'];
 
-  const install = getPlatformInstall(skill.slug, skill.installCmd, skill.repoUrl, platform);
+  const install = getPlatformInstall(skill.slug, skill.installCmd, skill.repoUrl, platform, skill.platforms || []);
 
   function handleCopy(e: React.MouseEvent) {
     e.preventDefault();
