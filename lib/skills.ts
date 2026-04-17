@@ -168,6 +168,13 @@ export interface Skill {
   verifiedAt?: string;
   verifiedChangedAt?: string;
   installArchiveUrl?: string;
+  preferredPlatform?: string;
+  installOverrides?: Record<string, {
+    supported?: boolean;
+    mode?: "generated" | "custom";
+    command?: string;
+    note?: string;
+  }>;
 }
 
 export interface Category {
