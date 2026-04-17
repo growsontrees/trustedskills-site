@@ -30,6 +30,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DATA_FILE = path.join(__dirname, '../data/skills-index.json');
 
 const LM_STUDIO_URL = 'http://100.92.164.72:1234';
+const FIRECRAWL_URL = 'http://100.92.164.72:3002'; // self-hosted Firecrawl (Docker Desktop, home machine)
 const MODEL_PRIMARY = 'qwen/qwen3.5-9b';    // base model — NOT the claude-code finetune
 const MODEL_FALLBACK = 'google/gemma-3-12b'; // fallback if primary fails probe
 
@@ -135,44 +136,90 @@ function extractSkillsShContent(html) {
   return text.substring(0, 3000);
 }
 
+// ── Firecrawl ─────────────────────────────────────────────────────────────────
+let firecrawlAvailable = null; // cached after first probe
+
+async function probeFirecrawl() {
+  if (firecrawlAvailable !== null) return firecrawlAvailable;
+  try {
+    const res = await fetch(`${FIRECRAWL_URL}/v1/scrape`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: AbortSignal.timeout(8000),
+      body: JSON.stringify({ url: 'https://example.com', formats: ['markdown'] })
+    });
+    firecrawlAvailable = res.ok;
+  } catch {
+    firecrawlAvailable = false;
+  }
+  if (firecrawlAvailable) {
+    log('Firecrawl: available — will use for skills.sh pages');
+  } else {
+    log('Firecrawl: not reachable — falling back to HTML extraction for skills.sh');
+  }
+  return firecrawlAvailable;
+}
+
+/**
+ * Use Firecrawl to scrape a URL and return clean markdown.
+ * Returns null if Firecrawl is unavailable or the scrape fails.
+ */
+async function firecrawlScrape(url) {
+  try {
+    const res = await fetch(`${FIRECRAWL_URL}/v1/scrape`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: AbortSignal.timeout(20000),
+      body: JSON.stringify({ url, formats: ['markdown'], onlyMainContent: true })
+    });
+    if (!res.ok) return null;
+    const j = await res.json();
+    const md = j?.data?.markdown || '';
+    return md.length >= 200 ? md.substring(0, 5000) : null;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Fetch the best available source content for a skill.
- * Priority: GitHub README > skills.sh page SKILL.md content > null (skip LLM)
+ *
+ * Priority:
+ *   1. GitHub README / SKILL.md (direct raw fetch — always clean plain text)
+ *   2. Firecrawl scrape of skills.sh page (if home machine is online) — best quality
+ *   3. HTML extraction fallback for skills.sh (offline fallback) — ok for most pages
+ *   4. null → skip LLM entirely, never hallucinate
  */
 async function fetchSource(skill) {
-  // 1. GitHub README — always the authoritative source
+  // 1. GitHub README — always preferred when available
   if (skill.repoUrl && skill.repoUrl.includes('github.com') && !skill.repoUrl.includes('skills.sh')) {
     const parts = skill.repoUrl.replace('https://github.com/', '').split('/');
     if (parts.length >= 2) {
       const owner = parts[0];
       const repo = parts[1];
-      // Try main then master branch
       for (const branch of ['main', 'master']) {
-        const readmeUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/README.md`;
-        const text = await fetchText(readmeUrl);
-        if (text && text.length > 100) {
-          return { content: text.substring(0, 4000), source: 'github' };
-        }
-        // Also try SKILL.md
-        const skillMdUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/SKILL.md`;
-        const skillMdText = await fetchText(skillMdUrl);
-        if (skillMdText && skillMdText.length > 100) {
-          return { content: skillMdText.substring(0, 4000), source: 'github' };
-        }
+        const text = await fetchText(`https://raw.githubusercontent.com/${owner}/${repo}/${branch}/README.md`);
+        if (text && text.length > 100) return { content: text.substring(0, 4000), source: 'github' };
+        const sm = await fetchText(`https://raw.githubusercontent.com/${owner}/${repo}/${branch}/SKILL.md`);
+        if (sm && sm.length > 100) return { content: sm.substring(0, 4000), source: 'github' };
       }
     }
   }
 
-  // 2. skills.sh page — extract SKILL.md embedded content
+  // 2. skills.sh page — try Firecrawl first, fall back to HTML extraction
   if (skill.sourceUrl && skill.sourceUrl.includes('skills.sh')) {
+    const usFirecrawl = await probeFirecrawl();
+    if (usFirecrawl) {
+      const md = await firecrawlScrape(skill.sourceUrl);
+      if (md) return { content: md, source: 'skills.sh-firecrawl' };
+    }
+    // Fallback: HTML extraction
     const html = await fetchText(skill.sourceUrl);
     const content = extractSkillsShContent(html);
-    if (content && content.length >= 200) {
-      return { content, source: 'skills.sh' };
-    }
+    if (content && content.length >= 200) return { content, source: 'skills.sh' };
   }
 
-  // 3. No usable source — do NOT call LLM, return null
+  // 3. No usable source — do NOT call LLM
   return null;
 }
 
