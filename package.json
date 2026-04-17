@@ -9,7 +9,8 @@
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
-    "fetch-index": "node scripts/fetch-index.mjs"
+    "fetch-index": "node scripts/fetch-index.mjs",
+    "verify-deploy": "node scripts/verify-deploy.mjs"
   },
   "dependencies": {
     "next": "^16.1.6",
