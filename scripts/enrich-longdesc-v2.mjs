@@ -36,7 +36,7 @@ const MODEL_FALLBACK = 'google/gemma-3-12b'; // fallback if primary fails probe
 
 const SAVE_EVERY = 10;
 const FETCH_TIMEOUT_MS = 15000;
-const LLM_TIMEOUT_MS = 90000;
+const LLM_TIMEOUT_MS = 180000; // thinking models need more headroom
 const STOP_HOUR_SYDNEY = 7;   // auto-stop at 7am Sydney
 const AEDT_OFFSET = 10;       // UTC+10 AEST (no daylight saving April–Oct)
 const EARLY_ABORT_COUNT = 5;  // abort if first N skills all fail
@@ -199,9 +199,9 @@ async function fetchSource(skill) {
       const repo = parts[1];
       for (const branch of ['main', 'master']) {
         const text = await fetchText(`https://raw.githubusercontent.com/${owner}/${repo}/${branch}/README.md`);
-        if (text && text.length > 100) return { content: text.substring(0, 4000), source: 'github' };
+        if (text && text.length > 100) return { content: text.substring(0, 2500), source: 'github' };
         const sm = await fetchText(`https://raw.githubusercontent.com/${owner}/${repo}/${branch}/SKILL.md`);
-        if (sm && sm.length > 100) return { content: sm.substring(0, 4000), source: 'github' };
+        if (sm && sm.length > 100) return { content: sm.substring(0, 2500), source: 'github' };
       }
     }
   }
@@ -211,7 +211,7 @@ async function fetchSource(skill) {
     const usFirecrawl = await probeFirecrawl();
     if (usFirecrawl) {
       const md = await firecrawlScrape(skill.sourceUrl);
-      if (md) return { content: md, source: 'skills.sh-firecrawl' };
+      if (md) return { content: md.substring(0, 2500), source: 'skills.sh-firecrawl' };
     }
     // Fallback: HTML extraction
     const html = await fetchText(skill.sourceUrl);
@@ -257,25 +257,84 @@ function stripThinkTags(s) {
   return (s || '').replace(/<think>[\s\S]*?<\/think>/g, '').trim();
 }
 
-async function probeModel(model) {
+/**
+ * Check model state via LM Studio v0 API.
+ * Returns: 'loaded' | 'not-loaded' | 'unknown'
+ */
+async function getModelState(model) {
+  try {
+    const encoded = encodeURIComponent(model);
+    const res = await fetch(`${LM_STUDIO_URL}/api/v0/models/${encoded}`, {
+      signal: AbortSignal.timeout(8000)
+    });
+    if (!res.ok) return 'unknown';
+    const j = await res.json();
+    return j.state || 'unknown';
+  } catch {
+    return 'unknown';
+  }
+}
+
+/**
+ * Auto-load a model by sending a minimal completion request.
+ * LM Studio loads the model on first use — no dedicated load API exists.
+ */
+async function ensureModelLoaded(model) {
+  const state = await getModelState(model);
+  if (state === 'loaded') {
+    log(`Model ${model} already loaded.`);
+    return true;
+  }
+  log(`Model ${model} state: ${state}. Triggering load via completion request (may take 30-60s)...`);
   try {
     const res = await fetch(`${LM_STUDIO_URL}/v1/chat/completions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      signal: AbortSignal.timeout(20000),
+      signal: AbortSignal.timeout(120000),
+      body: JSON.stringify({
+        model,
+        messages: [{ role: 'user', content: 'Hi' }],
+        max_tokens: 5,
+        temperature: 0
+      })
+    });
+    const j = await res.json();
+    if (j.error) {
+      log(`Load failed: ${j.error.message || JSON.stringify(j.error)}`);
+      return false;
+    }
+    // Verify state after load
+    const newState = await getModelState(model);
+    log(`Model ${model} state after load: ${newState}`);
+    return newState === 'loaded';
+  } catch (e) {
+    log(`Load request failed: ${e.message}`);
+    return false;
+  }
+}
+
+async function probeModel(model) {
+  // Ensure model is loaded first
+  const loaded = await ensureModelLoaded(model);
+  if (!loaded) return false;
+
+  try {
+    const res = await fetch(`${LM_STUDIO_URL}/v1/chat/completions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: AbortSignal.timeout(30000),
       body: JSON.stringify({
         model,
         messages: [
-          { role: 'system', content: '/no_think\nRespond with exactly: OK' },
-          { role: 'user', content: 'Reply with OK' }
+          { role: 'user', content: 'Reply with: OK' }
         ],
         temperature: 0,
-        max_tokens: 10
+        max_tokens: 2000  // needs headroom for thinking tokens
       })
     });
     const j = await res.json();
     const content = stripThinkTags(j.choices?.[0]?.message?.content || '');
-    log(`Probe ${model}: "${content.substring(0, 50)}"`);
+    log(`Probe ${model}: content="${content.substring(0, 50)}" (${content.length} chars)`);
     return content.length > 0;
   } catch (e) {
     log(`Probe ${model} failed: ${e.message}`);
@@ -313,7 +372,7 @@ Write the "About This Skill" section now.`;
           { role: 'user', content: userMsg }
         ],
         temperature: 0.3,
-        max_tokens: 600
+        max_tokens: 2000  // needs headroom: thinking tokens + actual content output
       })
     });
     clearTimeout(timeout);

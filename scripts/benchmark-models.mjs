@@ -21,7 +21,7 @@ const RESULTS_FILE = '/tmp/benchmark-results.json';
 const LM_STUDIO_URL = 'http://100.92.164.72:1234';
 const FIRECRAWL_URL = 'http://100.92.164.72:3002';
 const FETCH_TIMEOUT_MS = 15000;
-const LLM_TIMEOUT_MS = 90000;
+const LLM_TIMEOUT_MS = 180000; // thinking models need more time
 
 // ── 5 test skills — diverse categories and source types ──────────────────────
 const TEST_SLUGS = [
@@ -126,16 +126,16 @@ async function fetchSource(skill) {
     if (parts.length >= 2) {
       for (const branch of ['main', 'master']) {
         const text = await fetchText(`https://raw.githubusercontent.com/${parts[0]}/${parts[1]}/${branch}/README.md`);
-        if (text && text.length > 100) return { content: text.substring(0, 4000), source: 'github' };
+        if (text && text.length > 100) return { content: text.substring(0, 2500), source: 'github' };
         const sm = await fetchText(`https://raw.githubusercontent.com/${parts[0]}/${parts[1]}/${branch}/SKILL.md`);
-        if (sm && sm.length > 100) return { content: sm.substring(0, 4000), source: 'github' };
+        if (sm && sm.length > 100) return { content: sm.substring(0, 2500), source: 'github' };
       }
     }
   }
   if (skill.sourceUrl && skill.sourceUrl.includes('skills.sh')) {
     if (await probeFirecrawl()) {
       const md = await firecrawlScrape(skill.sourceUrl);
-      if (md) return { content: md, source: 'skills.sh-firecrawl' };
+      if (md) return { content: md.substring(0, 2500), source: 'skills.sh-firecrawl' };
     }
     const html = await fetchText(skill.sourceUrl);
     const content = extractSkillsShContent(html);
@@ -174,7 +174,7 @@ Write the "About This Skill" section now.`;
           { role: 'user', content: userMsg }
         ],
         temperature: 0.3,
-        max_tokens: 600
+        max_tokens: 2000  // needs headroom for reasoning tokens + actual content
       })
     });
     clearTimeout(timeout);
@@ -188,8 +188,45 @@ Write the "About This Skill" section now.`;
   }
 }
 
+// ── Model state / auto-load ───────────────────────────────────────────────────
+async function getModelState(model) {
+  try {
+    const res = await fetch(`${LM_STUDIO_URL}/api/v0/models/${encodeURIComponent(model)}`, {
+      signal: AbortSignal.timeout(8000)
+    });
+    if (!res.ok) return 'unknown';
+    const j = await res.json();
+    return j.state || 'unknown';
+  } catch { return 'unknown'; }
+}
+
+async function ensureModelLoaded(model) {
+  const state = await getModelState(model);
+  if (state === 'loaded') { console.log(`  ${model}: already loaded`); return true; }
+  console.log(`  ${model}: state=${state} — triggering load (may take 30-60s)...`);
+  try {
+    const res = await fetch(`${LM_STUDIO_URL}/v1/chat/completions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: AbortSignal.timeout(120000),
+      body: JSON.stringify({ model, messages: [{ role: 'user', content: 'Hi' }], max_tokens: 5 })
+    });
+    const j = await res.json();
+    if (j.error) { console.log(`  Load failed: ${JSON.stringify(j.error)}`); return false; }
+    const newState = await getModelState(model);
+    console.log(`  ${model}: state after load = ${newState}`);
+    return newState === 'loaded';
+  } catch (e) { console.log(`  Load failed: ${e.message}`); return false; }
+}
+
 // ── Get current model ─────────────────────────────────────────────────────────
 async function getLoadedModel() {
+  // If --model flag provided, auto-load if needed and use it
+  if (FORCE_MODEL) {
+    console.log(`\nEnsuring model is loaded: ${FORCE_MODEL}`);
+    await ensureModelLoaded(FORCE_MODEL);
+    return FORCE_MODEL;
+  }
   try {
     const res = await fetch(`${LM_STUDIO_URL}/v1/models`, { signal: AbortSignal.timeout(10000) });
     const j = await res.json();
@@ -198,15 +235,14 @@ async function getLoadedModel() {
     const usable = models.filter(m =>
       !m.id.includes('nomic-embed') &&
       !m.id.includes('text-embedding') &&
-      m.id !== 'qwen3.5-9b-claude-code'  // always returns empty
+      m.id !== 'qwen3.5-9b-claude-code'
     );
     if (usable.length === 1) return usable[0].id;
     if (usable.length > 1) {
       console.log('\nMultiple usable models loaded:');
       usable.forEach((m, i) => console.log(`  ${i+1}. ${m.id}`));
-      console.log('\nThis benchmark tests ONE model at a time for clean results.');
-      console.log('Please unload all but one and rerun.');
-      console.log('\nAll detected models:', models.map(m => m.id));
+      console.log('\nUse --model <id> to specify which one to benchmark, e.g.:');
+      usable.forEach(m => console.log(`  node scripts/benchmark-models.mjs --model "${m.id}"`));
       process.exit(1);
     }
     return null;
@@ -391,6 +427,7 @@ async function compareResults() {
 }
 
 const COMPARE = process.argv.includes('--compare');
+const FORCE_MODEL = (() => { const i = process.argv.indexOf('--model'); return i >= 0 ? process.argv[i+1] : null; })();
 if (COMPARE) {
   compareResults().catch(console.error);
 } else {
