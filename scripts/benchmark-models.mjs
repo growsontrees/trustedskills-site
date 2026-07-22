@@ -174,7 +174,7 @@ Write the "About This Skill" section now.`;
           { role: 'user', content: userMsg }
         ],
         temperature: 0.3,
-        max_tokens: 2000  // needs headroom for reasoning tokens + actual content
+        max_tokens: 4000  // thinking model: needs ~2000 reasoning + ~500 output
       })
     });
     clearTimeout(timeout);

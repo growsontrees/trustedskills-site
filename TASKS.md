@@ -1,6 +1,6 @@
 # TrustedSkills — Task Tracker
 
-*Last updated: 2026-03-20*
+*Last updated: 2026-03-22*
 *Canonical location: `/opt/trustedskills/TASKS.md` (in the site repo)*
 *Also tracked at: `/opt/app/openclaw/workspace/projects/personal/skills-marketplace-project/TASKS.md` (Macros' copy)*
 
@@ -32,6 +32,7 @@
 - [x] **Fixed About This Skill block** (2026-03-20) — removed generic placeholder text; uses `longDescription` if present, falls back to `description`
 - [x] **Composite ranking site-wide** (2026-03-20) — homepage, category, platform, tier pages all use scored ranking (installs + official bonus + tier bonus); no more weather/web-search on homepage
 - [x] **14-category taxonomy** (2026-03-20) — reclassified 26k skills from `dev` monoculture into frontend/backend/cloud/ai-ml/agents/etc.
+- [x] **Gemma 3 12B bulk description re-enrichment** (2026-03-22) — 10k+ weak descriptions refreshed in `data/skills-index.json`; site rebuilt, PM2 restarted, and Cloudflare cache purged
 
 ---
 

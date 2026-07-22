@@ -377,15 +377,32 @@ Reply with ONLY the description sentence. No quotes, no extra text.`;
   return json.choices?.[0]?.message?.content?.trim() || null;
 }
 
+// ─── Weak template detection ──────────────────────────────────────────────────
+// A template description is "weak" when the slug had no recognized token concepts
+// and fell back to a generic category-only sentence.
+const WEAK_TEMPLATE_RE = /^(Official .+ skill for |.+ — provides AI agent assistance for |Skill \w)/;
+
+function isWeakTemplate(skill) {
+  if (skill.descriptionSource !== "template") return false;
+  const tokens = tokenize(skill.slug);
+  const recognized = tokens.filter(t => TOKEN_CONCEPTS[t]);
+  return recognized.length === 0;
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 async function main() {
   const data = JSON.parse(readFileSync(DATA_PATH, "utf8"));
   const skills = data.skills;
 
-  const toEnrich = skills.filter(s => isStub(s.description));
+  // Stage 2 mode: target weak template results (opaque slugs) for LLM upgrade
+  const isStage2Mode = STAGE2_ONLY && STAGE2_URL;
+  const toEnrich = isStage2Mode
+    ? skills.filter(s => isWeakTemplate(s))
+    : skills.filter(s => isStub(s.description));
+
   console.log(`Total skills: ${skills.length}`);
-  console.log(`Stubs to enrich: ${toEnrich.length}`);
-  console.log(`Already have descriptions: ${skills.length - toEnrich.length}`);
+  console.log(`To enrich: ${toEnrich.length} (${isStage2Mode ? "weak-template LLM upgrade" : "stub replacement"})`);
+  console.log(`Already have good descriptions: ${skills.length - toEnrich.length}`);
   console.log(`Dry run: ${DRY_RUN}`);
   if (STAGE2_URL) console.log(`Stage 2 LLM URL: ${STAGE2_URL}`);
 
@@ -394,9 +411,11 @@ async function main() {
   let stage1Count = 0;
   let stage2Count = 0;
   let stage2Errors = 0;
-  const samples = [];
+  const SAVE_EVERY = 100;
+  const SHOW_EVERY = 10;
 
-  for (const skill of batch) {
+  for (let i = 0; i < batch.length; i++) {
+    const skill = batch[i];
     let newDesc = null;
     let source = "template";
 
@@ -405,13 +424,12 @@ async function main() {
       source = "template";
     }
 
-    // Stage 2: LLM for opaque slugs (all same-word slug like "nano-banana")
-    // or when explicitly requested
+    // Stage 2: LLM for opaque slugs or when explicitly requested
     if (STAGE2_URL) {
       const tokens = tokenize(skill.slug);
       const recognizedTokens = tokens.filter(t => TOKEN_CONCEPTS[t]);
       const isOpaque = recognizedTokens.length === 0;
-      
+
       if (isOpaque || STAGE2_ONLY) {
         try {
           const llmDesc = await generateWithLLM(skill, STAGE2_URL);
@@ -422,7 +440,7 @@ async function main() {
           }
         } catch (e) {
           stage2Errors++;
-          // fall back to template
+          // fall back to template result if any
         }
       }
     }
@@ -430,15 +448,11 @@ async function main() {
     if (newDesc) {
       if (source === "template") stage1Count++;
 
-      if (samples.length < 20) {
-        samples.push({
-          slug: skill.slug,
-          author: skill.author,
-          category: skill.category,
-          old: skill.description,
-          new: newDesc,
-          source,
-        });
+      // Live sample output every N skills
+      if (i % SHOW_EVERY === 0) {
+        console.log(`[${i+1}/${batch.length}] [${source.toUpperCase()}] ${skill.slug}`);
+        console.log(`  OLD: ${skill.description}`);
+        console.log(`  NEW: ${newDesc}`);
       }
 
       if (!DRY_RUN) {
@@ -446,19 +460,19 @@ async function main() {
         skill.descriptionSource = source;
       }
     }
+
+    // Incremental save every SAVE_EVERY skills
+    if (!DRY_RUN && (i + 1) % SAVE_EVERY === 0) {
+      writeFileSync(DATA_PATH, JSON.stringify(data, null, 2));
+      console.log(`  💾 Saved progress (${i+1}/${batch.length})`);
+    }
   }
 
-  console.log(`\n── Results ──`);
+  console.log(`\n── Final Results ──`);
   console.log(`Stage 1 (template): ${stage1Count}`);
   if (STAGE2_URL) {
     console.log(`Stage 2 (LLM):      ${stage2Count}`);
     console.log(`Stage 2 errors:     ${stage2Errors}`);
-  }
-  console.log(`\n── Sample output (first 20) ──`);
-  for (const s of samples) {
-    console.log(`\n[${s.source.toUpperCase()}] ${s.slug} (${s.author} / ${s.category})`);
-    console.log(`  OLD: ${s.old}`);
-    console.log(`  NEW: ${s.new}`);
   }
 
   if (!DRY_RUN) {

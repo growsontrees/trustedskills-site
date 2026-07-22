@@ -329,7 +329,7 @@ async function probeModel(model) {
           { role: 'user', content: 'Reply with: OK' }
         ],
         temperature: 0,
-        max_tokens: 2000  // needs headroom for thinking tokens
+        max_tokens: 4000  // thinking model: needs ~2000 reasoning + ~500 output
       })
     });
     const j = await res.json();
@@ -372,7 +372,7 @@ Write the "About This Skill" section now.`;
           { role: 'user', content: userMsg }
         ],
         temperature: 0.3,
-        max_tokens: 2000  // needs headroom: thinking tokens + actual content output
+        max_tokens: 4000  // thinking model: needs ~2000 reasoning + ~500 output
       })
     });
     clearTimeout(timeout);
