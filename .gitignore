@@ -34,3 +34,6 @@ next-env.d.ts
 
 # Claude Code
 .claude/
+
+# GitHub account pin (local tooling)
+.gh-account
