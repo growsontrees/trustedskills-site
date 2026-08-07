@@ -38,3 +38,6 @@ next-env.d.ts
 
 # Local PM2 runtime state
 .pm2/
+
+# GitHub account pin (local tooling)
+.gh-account

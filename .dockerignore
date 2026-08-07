@@ -1,0 +1,13 @@
+.git
+.github
+.next
+node_modules
+.claude
+.agents
+.gh-account
+npm-debug.log*
+*.tsbuildinfo
+.env*.local
+.vercel
+README.md
+CLAUDE.md
