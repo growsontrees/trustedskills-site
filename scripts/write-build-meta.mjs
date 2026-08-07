@@ -2,8 +2,11 @@
 
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const root = "/opt/trustedskills";
+// Resolve from this file rather than a fixed path: the build now runs in CI and
+// in a container, neither of which is the old /opt/trustedskills checkout.
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const buildIdPath = join(root, ".next", "BUILD_ID");
 const outputPath = join(root, "public", "__build.json");
 
