@@ -1,16 +1,15 @@
-# TrustedSkills — AI Agent Skills Registry
-> The platform-agnostic registry for finding, verifying, and installing skills for any AI agent.
+# TrustedSkills — AI Agent Skills Directory
+> A public directory for finding and installing skills across supported AI-agent platforms.
 
 ## What is TrustedSkills?
-TrustedSkills is a curated directory of AI agent skills — pre-built capabilities that extend AI agents across any platform. Skills are community-reviewed, cryptographically signed, and compatible with OpenClaw, MCP (Model Context Protocol), Claude Desktop, OpenAI, Cursor, and VS Code.
+TrustedSkills provides public skill listings, category and platform indexes, installation guidance, and reviews. Verification status varies by listing and is shown on each skill page.
 
 ## Key Pages
 - Homepage: https://trustedskills.dev/
-- Browse all skills: https://trustedskills.dev/skills/
-- Documentation: https://trustedskills.dev/docs/
-- Submit a skill: https://trustedskills.dev/submit/
-- Reviews: https://trustedskills.dev/reviews/
-- Skills index (JSON): https://trustedskills.dev/api/index.json
+- Browse all skills: https://trustedskills.dev/skills
+- Documentation: https://trustedskills.dev/docs
+- Submit a skill: https://trustedskills.dev/submit
+- Reviews: https://trustedskills.dev/reviews
 
 ## Skill Categories
 - Productivity, SEO, Development, Data, Communication, Research, Automation, Media
@@ -19,7 +18,7 @@ TrustedSkills is a curated directory of AI agent skills — pre-built capabiliti
 - OpenClaw (primary), MCP (Model Context Protocol), Claude Desktop, OpenAI Assistants, Cursor, VS Code
 
 ## For AI Agents
-Skills can be discovered via the JSON index at /api/index.json. Each skill entry includes name, description, install command, category, author, version, and verification tier.
+Use the public HTML pages and https://trustedskills.dev/sitemap.xml for discovery. TrustedSkills does not currently advertise a public registry API.
 
 ## Contact
 Site: https://trustedskills.dev
