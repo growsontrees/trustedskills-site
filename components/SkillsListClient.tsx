@@ -1,13 +1,19 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Skill, Category, TIER_CONFIG, PLATFORM_CONFIG } from "../lib/skills";
 import { SkillCard } from "./SkillCard";
-import { usePlatform, PlatformKey } from "../hooks/usePlatform";
+import { usePlatform } from "../hooks/usePlatform";
+import {
+  getPlatformBrowsePath,
+  getBrowsablePlatformKey,
+  getPlatformFilters,
+  PlatformKey,
+} from "../lib/platforms";
 
-const PLATFORMS = ["openclaw", "mcp", "openai", "claude", "cursor", "huggingface"];
 const TIERS = ["featured", "verified", "community", "unverified"] as const;
+type PlatformFilterValue = PlatformKey | "all";
 
 interface SkillsListClientProps {
   skills: Skill[];
@@ -28,17 +34,30 @@ export function SkillsListClient({
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(() => searchParams.get("q") ?? initialQuery);
   const [activeCategory, setActiveCategory] = useState<string>(() => searchParams.get("category") ?? initialCategory);
-  const [activePlatform, setActivePlatform] = useState<string>(() => searchParams.get("platform") ?? "all");
+  const [activePlatform, setActivePlatform] = useState<PlatformFilterValue>(
+    () => getBrowsablePlatformKey(searchParams.get("platform"), skills) ?? "all"
+  );
   const [activeTier, setActiveTier] = useState<string>(() => searchParams.get("tier") ?? initialTier);
   const [sort, setSort] = useState<"installs" | "updated" | "name">("installs");
 
   // Sync platform preference: when the user picks a platform in the selector,
   // pre-fill the filter here (but only once on mount, then user can override).
   const { setPlatform } = usePlatform();
+  const platformFilters = useMemo(() => getPlatformFilters(skills), [skills]);
+
+  // A shared query URL is also a platform choice: keep install guidance in
+  // sync when a user lands directly on /skills?platform=… or uses history.
+  useEffect(() => {
+    const platform = getBrowsablePlatformKey(searchParams.get("platform"), skills);
+    setActivePlatform(platform ?? "all");
+    if (platform) {
+      setPlatform(platform);
+    }
+  }, [searchParams, setPlatform, skills]);
 
   /** Navigate to pretty URL or update query params for search */
   const syncUrl = useCallback(
-    (overrides: { q?: string; tier?: string; category?: string; platform?: string }) => {
+    (overrides: { q?: string; tier?: string; category?: string; platform?: PlatformFilterValue }) => {
       const q = overrides.q !== undefined ? overrides.q : query;
       const tier = overrides.tier !== undefined ? overrides.tier : activeTier;
       const category = overrides.category !== undefined ? overrides.category : activeCategory;
@@ -58,7 +77,7 @@ export function SkillsListClient({
         }
         // Platform-only filter → /platform/[platform]/
         if (platform && platform !== "all" && tier === "all" && category === "all") {
-          router.replace(`/platform/${platform}/`, { scroll: false });
+          router.replace(getPlatformBrowsePath(platform), { scroll: false });
           return;
         }
       }
@@ -75,12 +94,10 @@ export function SkillsListClient({
     [router, query, activeTier, activeCategory, activePlatform]
   );
 
-  function handlePlatformFilter(platform: string) {
+  function handlePlatformFilter(platform: PlatformFilterValue) {
     setActivePlatform(platform);
     // Update the global platform preference so install commands sync too
-    if (platform !== "all") {
-      setPlatform(platform as PlatformKey);
-    }
+    setPlatform(platform === "all" ? null : platform);
     syncUrl({ platform });
   }
 
@@ -154,9 +171,8 @@ export function SkillsListClient({
           >
             All platforms
           </button>
-          {PLATFORMS.map((platform) => {
+          {platformFilters.map(({ key: platform, count }) => {
             const config = PLATFORM_CONFIG[platform];
-            if (!config) return null;
             return (
               <button
                 key={platform}
@@ -167,7 +183,8 @@ export function SkillsListClient({
                     : "bg-gray-800 text-gray-400 border-gray-700 hover:border-gray-500 hover:text-gray-200"
                 }`}
               >
-                {config.label}
+                <span>{config.label}</span>
+                <span className="ml-1 text-xs opacity-70">{count.toLocaleString()}</span>
               </button>
             );
           })}

@@ -24,6 +24,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: article.title,
     description: article.description,
+    alternates: {
+      canonical: `https://trustedskills.dev/docs/${article.slug.join('/')}`,
+    },
   };
 }
 

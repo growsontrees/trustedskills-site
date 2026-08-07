@@ -4,6 +4,7 @@ import Link from "next/link";
 import { CopyButton } from "../../../components/CopyButton";
 import { PlatformInstallTabs } from "../../../components/PlatformInstallTabs";
 import type { Metadata } from "next";
+import { PLATFORM_DEFINITIONS } from "../../../lib/platforms";
 
 // ISR: revalidate pages every 24 hours
 export const revalidate = 86400;
@@ -33,9 +34,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${skill.name} Agent Skill`,
     description: skill.description,
+    alternates: {
+      canonical: `https://trustedskills.dev/skills/${skill.slug}`,
+    },
     openGraph: {
       title: `${skill.name} Agent Skill | ${categoryName} | TrustedSkills`,
       description: skill.description,
+      url: `https://trustedskills.dev/skills/${skill.slug}`,
     },
   };
 }
@@ -46,6 +51,8 @@ export default async function SkillDetailPage({ params }: Props) {
   if (!skill) notFound();
 
   const tier = TIER_CONFIG[skill.verified as keyof typeof TIER_CONFIG] ?? TIER_CONFIG['unverified'];
+  const primaryPlatform = skill.platforms[0] ?? "openclaw";
+  const primaryPlatformLabel = PLATFORM_DEFINITIONS[primaryPlatform].label;
   // Optimized: Don't load all skills for ISR fallback (too large)
   // Related skills will show only for pre-rendered pages
   const related: any[] = [];
@@ -116,10 +123,10 @@ export default async function SkillDetailPage({ params }: Props) {
 
             <p className="text-gray-300 leading-relaxed mb-6">{skill.description}</p>
 
-            {/* Default install command (OpenClaw) */}
+            {/* Default install command for the record's primary platform */}
             <div className="bg-gray-950 border border-gray-700 rounded-xl p-4">
               <div className="text-xs text-gray-500 mb-2 font-medium">
-                OpenClaw install
+                {primaryPlatformLabel} install
                 <span className="ml-2 text-gray-600 font-normal">— see all platforms below</span>
               </div>
               <div className="flex items-center gap-3">
@@ -434,8 +441,8 @@ export default async function SkillDetailPage({ params }: Props) {
 
           {/* Quick Install */}
           <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-            <h2 className="font-semibold text-white mb-1">Quick Install (OpenClaw)</h2>
-            <p className="text-xs text-gray-600 mb-3">See the tabs above for Claude Desktop, Cursor, MCP, and more.</p>
+            <h2 className="font-semibold text-white mb-1">Quick Install ({primaryPlatformLabel})</h2>
+            <p className="text-xs text-gray-600 mb-3">See the tabs above for every platform this record declares.</p>
             <div className="font-mono text-xs text-emerald-400 bg-gray-950 rounded-lg p-3 mb-3 break-all">
               {skill.installCmd}
             </div>

@@ -1,15 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { Pagination } from "../../../../components/Pagination";
+import { PlatformPreferenceSync } from "../../../../components/PlatformPreferenceSync";
 import { SkillCard } from "../../../../components/SkillCard";
 import { getAllSkills, PLATFORM_CONFIG } from "../../../../lib/skills";
+import {
+  getBrowsablePlatformKey,
+  getPlatformFilters,
+  getPlatformQueryPath,
+} from "../../../../lib/platforms";
 
 const DEFAULT_SKILLS_PER_PAGE = 25;
 const SITE_URL = "https://trustedskills.dev";
-
-const VALID_PLATFORMS = ["openclaw", "mcp", "openai", "claude", "cursor", "huggingface"] as const;
-type PlatformSlug = typeof VALID_PLATFORMS[number];
 
 interface PageProps {
   params: Promise<{
@@ -19,14 +22,12 @@ interface PageProps {
 }
 
 function getPlatformPageData(platformSlug: string, pageNum: number) {
-  if (!VALID_PLATFORMS.includes(platformSlug as PlatformSlug)) {
-    return null;
-  }
-
-  const platform = platformSlug as PlatformSlug;
+  const allSkills = getAllSkills();
+  const platform = getBrowsablePlatformKey(platformSlug, allSkills);
+  if (!platform) return null;
   const platformConfig = PLATFORM_CONFIG[platform];
 
-  const skills = getAllSkills()
+  const skills = allSkills
     .filter((skill) => skill.platforms?.includes(platform))
     .sort((a, b) => b.installs - a.installs);
 
@@ -55,7 +56,7 @@ function getPlatformPageData(platformSlug: string, pageNum: number) {
 export function generateStaticParams() {
   const params: { platform: string; page: string }[] = [];
   
-  for (const platform of VALID_PLATFORMS) {
+  for (const { key: platform } of getPlatformFilters(getAllSkills())) {
     const skills = getAllSkills().filter((s) => s.platforms?.includes(platform));
     const totalPages = Math.max(1, Math.ceil(skills.length / DEFAULT_SKILLS_PER_PAGE));
     
@@ -81,12 +82,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `${data.platformConfig.label} Skills - Page ${pageNum}`,
     description: `Browse agent skills compatible with ${data.platformConfig.label} on TrustedSkills. Page ${pageNum} of ${data.totalPages}.`,
     alternates: {
-      canonical: `${SITE_URL}${data.basePath}/page/${pageNum}/`,
+      canonical: `${SITE_URL}${data.basePath}/${pageNum}/`,
     },
     openGraph: {
       title: `${data.platformConfig.label} Agent Skills - Page ${pageNum} | TrustedSkills`,
       description: `Browse ${data.totalSkills} agent skills compatible with ${data.platformConfig.label} on TrustedSkills.`,
-      url: `${SITE_URL}${data.basePath}/page/${pageNum}/`,
+      url: `${SITE_URL}${data.basePath}/${pageNum}/`,
     },
   };
 }
@@ -103,11 +104,16 @@ export default async function PlatformPagePaginated({ params }: PageProps) {
     notFound();
   }
 
+  if (platformSlug !== data.platform) {
+    permanentRedirect(`${data.basePath}/${pageNum}/`);
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <PlatformPreferenceSync platform={data.platform} />
       <div className="mb-6">
         <Link
-          href="/skills"
+          href={getPlatformQueryPath(data.platform)}
           className="text-sm text-gray-500 hover:text-gray-300 transition-colors flex items-center gap-1"
         >
           ← Back to Skills

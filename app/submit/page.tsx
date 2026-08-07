@@ -4,6 +4,9 @@ import { CopyButton } from "../../components/CopyButton";
 export const metadata: Metadata = {
   title: "Submit a Skill",
   description: "Share your AI agent skill with the community. Learn how to submit to the TrustedSkills registry — compatible with OpenClaw, MCP, Claude, OpenAI, and more.",
+  alternates: {
+    canonical: "https://trustedskills.dev/submit",
+  },
 };
 
 const SKILL_TEMPLATE = `---

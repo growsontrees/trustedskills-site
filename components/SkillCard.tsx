@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { Skill, TIER_CONFIG, PLATFORM_CONFIG } from "../lib/skills";
 import { useState } from "react";
-import { usePlatform, getPlatformInstall, PLATFORM_LABELS } from "../hooks/usePlatform";
+import { usePlatform, getPlatformInstall } from "../hooks/usePlatform";
+import { PLATFORM_DEFINITIONS } from "../lib/platforms";
 
 interface SkillCardProps {
   skill: Skill;
@@ -14,8 +15,10 @@ export function SkillCard({ skill, compact = false }: SkillCardProps) {
   const [copied, setCopied] = useState(false);
   const { platform, mounted } = usePlatform();
   const tier = TIER_CONFIG[skill.verified as keyof typeof TIER_CONFIG] ?? TIER_CONFIG['unverified'];
+  const preferredPlatform = platform && skill.platforms.includes(platform) ? platform : null;
+  const effectivePlatform = preferredPlatform ?? skill.platforms[0] ?? null;
 
-  const install = getPlatformInstall(skill.slug, skill.installCmd, skill.repoUrl, platform);
+  const install = getPlatformInstall(skill.slug, skill.installCmd, skill.repoUrl, effectivePlatform);
 
   function handleCopy(e: React.MouseEvent) {
     e.preventDefault();
@@ -25,7 +28,8 @@ export function SkillCard({ skill, compact = false }: SkillCardProps) {
   }
 
   // Label shown on the install button
-  const platformLabel = mounted && platform ? PLATFORM_LABELS[platform] : null;
+  const platformLabel = mounted && preferredPlatform ? PLATFORM_DEFINITIONS[preferredPlatform].label : null;
+  const installLabel = effectivePlatform ? PLATFORM_DEFINITIONS[effectivePlatform].label : "OpenClaw";
 
   return (
     <Link
@@ -73,11 +77,7 @@ export function SkillCard({ skill, compact = false }: SkillCardProps) {
       {!compact && (
         <div className="flex flex-wrap gap-1.5 mb-3">
           {(skill.platforms || []).map((platform) => {
-            const config = PLATFORM_CONFIG[platform] || {
-              label: platform,
-              color: "text-gray-400",
-              bg: "bg-gray-800",
-            };
+            const config = PLATFORM_CONFIG[platform];
             return (
               <span
                 key={platform}
@@ -105,7 +105,7 @@ export function SkillCard({ skill, compact = false }: SkillCardProps) {
         <button
           onClick={handleCopy}
           className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white px-3 py-1 rounded-lg transition-colors flex-shrink-0 whitespace-nowrap"
-          title={`Copy install command for ${platformLabel ?? "OpenClaw"}`}
+          title={`Copy install command for ${installLabel}`}
         >
           {copied
             ? "Copied!"

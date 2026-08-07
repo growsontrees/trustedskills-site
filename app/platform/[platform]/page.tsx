@@ -1,25 +1,27 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { Pagination } from "../../../components/Pagination";
+import { PlatformPreferenceSync } from "../../../components/PlatformPreferenceSync";
 import { SkillCard } from "../../../components/SkillCard";
 import { getAllSkills, PLATFORM_CONFIG } from "../../../lib/skills";
+import {
+  getBrowsablePlatformKey,
+  getPlatformBrowsePath,
+  getPlatformFilters,
+  getPlatformQueryPath,
+} from "../../../lib/platforms";
 
 const DEFAULT_SKILLS_PER_PAGE = 25;
 const SITE_URL = "https://trustedskills.dev";
 
-const VALID_PLATFORMS = ["openclaw", "mcp", "openai", "claude", "cursor", "huggingface"] as const;
-type PlatformSlug = typeof VALID_PLATFORMS[number];
-
 function getPlatformPageData(platformSlug: string) {
-  if (!VALID_PLATFORMS.includes(platformSlug as PlatformSlug)) {
-    return null;
-  }
-
-  const platform = platformSlug as PlatformSlug;
+  const allSkills = getAllSkills();
+  const platform = getBrowsablePlatformKey(platformSlug, allSkills);
+  if (!platform) return null;
   const platformConfig = PLATFORM_CONFIG[platform];
 
-  const skills = getAllSkills()
+  const skills = allSkills
     .filter((skill) => skill.platforms?.includes(platform))
     .sort((a, b) => b.installs - a.installs);
 
@@ -40,7 +42,7 @@ function getPlatformPageData(platformSlug: string) {
 }
 
 export function generateStaticParams() {
-  return VALID_PLATFORMS.map((platform) => ({ platform }));
+  return getPlatformFilters(getAllSkills()).map(({ key: platform }) => ({ platform }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ platform: string }> }): Promise<Metadata> {
@@ -77,11 +79,16 @@ export default async function PlatformPage({ params }: { params: Promise<{ platf
     notFound();
   }
 
+  if (platformSlug !== data.platform) {
+    permanentRedirect(getPlatformBrowsePath(data.platform));
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <PlatformPreferenceSync platform={data.platform} />
       <div className="mb-6">
         <Link
-          href="/skills"
+          href={getPlatformQueryPath(data.platform)}
           className="text-sm text-gray-500 hover:text-gray-300 transition-colors flex items-center gap-1"
         >
           ← Back to Skills

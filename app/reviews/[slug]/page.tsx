@@ -20,6 +20,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: review.title,
     description: review.description,
     keywords: review.targetKeyword,
+    alternates: {
+      canonical: `https://trustedskills.dev/reviews/${review.slug}`,
+    },
     openGraph: {
       title: `${review.title} | TrustedSkills`,
       description: review.description,

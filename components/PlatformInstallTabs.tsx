@@ -1,27 +1,21 @@
 "use client";
 
-import { useState } from "react";
-import { PlatformKey } from "../hooks/usePlatform";
+import { useEffect, useState } from "react";
 import { CopyButton } from "./CopyButton";
 import { usePlatform } from "../hooks/usePlatform";
+import {
+  BROWSABLE_PLATFORM_KEYS,
+  isBrowsablePlatformKey,
+  PLATFORM_DEFINITIONS,
+  PlatformKey,
+} from "../lib/platforms";
 
 interface Props {
   slug: string;
   installCmd: string;
   repoUrl: string;
-  platforms: string[];
+  platforms: PlatformKey[];
 }
-
-const ALL_TABS: { key: PlatformKey; emoji: string; label: string }[] = [
-  { key: "openclaw", emoji: "🦀", label: "OpenClaw" },
-  { key: "claude", emoji: "💬", label: "Claude Desktop" },
-  { key: "claudecode", emoji: "⌨️", label: "Claude Code" },
-  { key: "cursor", emoji: "🖱️", label: "Cursor / VS Code" },
-  { key: "codex", emoji: "🐙", label: "GitHub Copilot / Codex" },
-  { key: "opencode", emoji: "🔓", label: "OpenCode" },
-  { key: "mcp", emoji: "🔌", label: "MCP (generic)" },
-  { key: "openai", emoji: "🤖", label: "OpenAI" },
-];
 
 function StepNumber({ n }: { n: number }) {
   return (
@@ -51,6 +45,18 @@ function OpenClawGuide({ installCmd }: { installCmd: string }) {
       <div className="flex items-start gap-3 text-sm text-gray-400">
         <StepNumber n={1} />
         <span>Run this command in your terminal. The skill is immediately available.</span>
+      </div>
+      <CodeBlock label="terminal" code={installCmd} />
+    </div>
+  );
+}
+
+function RegistryCommandGuide({ installCmd }: { installCmd: string }) {
+  return (
+    <div className="space-y-4">
+      <div className="flex items-start gap-3 text-sm text-gray-400">
+        <StepNumber n={1} />
+        <span>Run the install command supplied by this skill&apos;s registry record.</span>
       </div>
       <CodeBlock label="terminal" code={installCmd} />
     </div>
@@ -294,15 +300,29 @@ function OpenAIGuide({ repoUrl, slug }: { repoUrl: string; slug: string }) {
 
 export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms }: Props) {
   const { platform: storedPlatform } = usePlatform();
-  const defaultTab = (storedPlatform as PlatformKey | null) ?? "openclaw";
+  const defaultTab = isBrowsablePlatformKey(storedPlatform) && platforms.includes(storedPlatform)
+    ? storedPlatform
+    : platforms[0] ?? "openclaw";
   const [activeTab, setActiveTab] = useState<PlatformKey>(defaultTab);
+  const tabs = BROWSABLE_PLATFORM_KEYS.filter((key) => platforms.includes(key)).map((key) => ({
+    key,
+    emoji: PLATFORM_DEFINITIONS[key].emoji,
+    label: PLATFORM_DEFINITIONS[key].label,
+  }));
+
+  useEffect(() => {
+    if (isBrowsablePlatformKey(storedPlatform) && platforms.includes(storedPlatform)) {
+      setActiveTab(storedPlatform);
+    }
+  }, [platforms, storedPlatform]);
 
   function renderGuide() {
     switch (activeTab) {
       case "openclaw":   return <OpenClawGuide installCmd={installCmd} />;
       case "claude":     return <ClaudeDesktopGuide slug={slug} />;
-      case "claudecode": return <ClaudeCodeGuide slug={slug} />;
-      case "cursor":     return <CursorGuide slug={slug} />;
+      case "claudecode": return <RegistryCommandGuide installCmd={installCmd} />;
+      case "vscode":     return <RegistryCommandGuide installCmd={installCmd} />;
+      case "nanoclaw":   return <RegistryCommandGuide installCmd={installCmd} />;
       case "codex":      return <CodexGuide slug={slug} repoUrl={repoUrl} />;
       case "opencode":   return <OpenCodeGuide slug={slug} />;
       case "mcp":        return <McpGuide slug={slug} />;
@@ -318,13 +338,8 @@ export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms }: Pr
 
         {/* Tabs */}
         <div className="flex flex-wrap gap-1 border-b border-gray-800 -mx-5 px-5 pb-0">
-          {ALL_TABS.map((tab) => {
+          {tabs.map((tab) => {
             const isActive = activeTab === tab.key;
-            const isSupported =
-              (platforms || []).includes(tab.key) ||
-              tab.key === "openclaw" ||
-              tab.key === "mcp" ||
-              tab.key === "claudecode";
             return (
               <button
                 key={tab.key}
@@ -333,12 +348,10 @@ export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms }: Pr
                   isActive
                     ? "border-purple-500 text-purple-300"
                     : "border-transparent text-gray-500 hover:text-gray-300 hover:border-gray-600"
-                } ${!isSupported ? "opacity-60" : ""}`}
-                title={!isSupported ? "Not listed as supported — may still work" : undefined}
+                }`}
               >
                 <span>{tab.emoji}</span>
                 <span>{tab.label}</span>
-                {!isSupported && <span className="text-gray-700 text-[10px]">?</span>}
               </button>
             );
           })}

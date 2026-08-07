@@ -1,22 +1,16 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
+import {
+  isPlatformKey,
+  PLATFORM_DEFINITIONS,
+  PlatformKey,
+  resolvePlatformKey,
+} from "../lib/platforms";
 
-export type PlatformKey = "openclaw" | "mcp" | "claude" | "claudecode" | "openai" | "cursor" | "codex" | "opencode" | "other";
+export type { PlatformKey } from "../lib/platforms";
 
 const STORAGE_KEY = "ts-platform-pref";
 const EVENT_NAME = "ts-platform-change";
-
-export const PLATFORM_LABELS: Record<PlatformKey, string> = {
-  openclaw: "OpenClaw",
-  mcp: "MCP",
-  claude: "Claude Desktop",
-  claudecode: "Claude Code",
-  openai: "OpenAI / ChatGPT",
-  cursor: "Cursor / VS Code",
-  codex: "GitHub Copilot / Codex",
-  opencode: "OpenCode",
-  other: "Other / Exploring",
-};
 
 export function usePlatform() {
   const [platform, setPlatformState] = useState<PlatformKey | null>(null);
@@ -25,15 +19,22 @@ export function usePlatform() {
   useEffect(() => {
     setMounted(true);
     try {
-      const stored = localStorage.getItem(STORAGE_KEY) as PlatformKey | null;
-      if (stored) setPlatformState(stored);
+      const stored = localStorage.getItem(STORAGE_KEY);
+      const normalized = resolvePlatformKey(stored);
+      if (normalized) {
+        setPlatformState(normalized);
+        if (stored !== normalized) localStorage.setItem(STORAGE_KEY, normalized);
+      } else if (stored) {
+        localStorage.removeItem(STORAGE_KEY);
+      }
     } catch {}
   }, []);
 
   // Listen for changes emitted by other mounted components on this page
   useEffect(() => {
     function handler(e: Event) {
-      setPlatformState((e as CustomEvent<PlatformKey | null>).detail);
+      const detail = (e as CustomEvent<unknown>).detail;
+      setPlatformState(detail === null || isPlatformKey(detail) ? detail : null);
     }
     window.addEventListener(EVENT_NAME, handler);
     return () => window.removeEventListener(EVENT_NAME, handler);
@@ -77,25 +78,12 @@ export function getPlatformInstall(
         isJson: true,
         lang: "json",
       };
-    case "cursor":
+    case "vscode":
       return {
-        label: "Cursor / VS Code",
-        cmd: JSON.stringify(
-          {
-            mcp: {
-              servers: {
-                [slug]: {
-                  command: "npx",
-                  args: ["-y", `@trustedskills/${slug}`],
-                },
-              },
-            },
-          },
-          null,
-          2
-        ),
-        isJson: true,
-        lang: "json",
+        label: PLATFORM_DEFINITIONS.vscode.label,
+        cmd: installCmd,
+        isJson: false,
+        lang: "bash",
       };
     case "claude":
       return {
@@ -118,7 +106,14 @@ export function getPlatformInstall(
     case "claudecode":
       return {
         label: "Claude Code",
-        cmd: `claude mcp add ${slug} npx -- -y @trustedskills/${slug}`,
+        cmd: installCmd,
+        isJson: false,
+        lang: "bash",
+      };
+    case "nanoclaw":
+      return {
+        label: PLATFORM_DEFINITIONS.nanoclaw.label,
+        cmd: installCmd,
         isJson: false,
         lang: "bash",
       };

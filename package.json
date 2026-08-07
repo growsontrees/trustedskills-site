@@ -7,8 +7,10 @@
     "prebuild": "echo 'Using bundled skills index'",
     "build": "next build",
     "postbuild": "next-sitemap",
+    "check:discovery": "node scripts/check-discovery.mjs",
     "start": "next start",
     "lint": "next lint",
+    "test:platforms": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types --test lib/platforms.test.ts",
     "fetch-index": "node scripts/fetch-index.mjs"
   },
   "dependencies": {

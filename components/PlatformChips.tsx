@@ -3,28 +3,40 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { PLATFORM_CONFIG } from "../lib/skills";
 import { Suspense } from "react";
-
-const PLATFORMS = ["openclaw", "mcp", "openai", "claude", "huggingface"];
+import {
+  BROWSABLE_PLATFORM_KEYS,
+  getPlatformBrowsePath,
+  PlatformKey,
+  resolvePlatformKey,
+} from "../lib/platforms";
 
 function PlatformChipsInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const activePlatform = searchParams.get("platform");
+  const activePlatform = resolvePlatformKey(searchParams.get("platform"));
 
-  function handlePlatformClick(platform: string) {
+  function handlePlatformClick(platform: PlatformKey) {
     const params = new URLSearchParams(searchParams.toString());
     if (activePlatform === platform) {
       params.delete("platform");
     } else {
       params.set("platform", platform);
     }
-    router.push(`/skills?${params.toString()}`);
+
+    const query = params.toString();
+    const hasOtherFilters = [...params.keys()].some((key) => key !== "platform");
+    if (!hasOtherFilters) {
+      router.push(activePlatform === platform ? "/skills" : getPlatformBrowsePath(platform));
+      return;
+    }
+
+    router.push(query ? `/skills?${query}` : "/skills");
   }
 
   return (
     <div className="flex flex-wrap gap-2">
       <span className="text-xs text-gray-500 self-center mr-1">Platforms:</span>
-      {PLATFORMS.map((platform) => {
+      {BROWSABLE_PLATFORM_KEYS.map((platform) => {
         const config = PLATFORM_CONFIG[platform];
         const isActive = activePlatform === platform;
         return (

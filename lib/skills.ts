@@ -1,4 +1,9 @@
 import skillsData from "../data/skills-index.json";
+import {
+  normalizeRegistryPlatforms,
+  PLATFORM_DEFINITIONS,
+  PlatformKey,
+} from "./platforms";
 
 export type VerificationTier = "unverified" | "community" | "verified" | "featured";
 
@@ -14,7 +19,7 @@ export interface Skill {
   category: string;
   emoji: string;
   license: string;
-  platforms: string[];
+  platforms: PlatformKey[];
   requires: {
     bins: string[];
     env: string[];
@@ -50,7 +55,17 @@ export interface SkillsIndex {
   };
 }
 
-export const skillsIndex = skillsData as SkillsIndex;
+const rawSkillsIndex = skillsData as Omit<SkillsIndex, "skills"> & {
+  skills: Array<Omit<Skill, "platforms"> & { platforms?: string[] }>;
+};
+
+export const skillsIndex: SkillsIndex = {
+  ...rawSkillsIndex,
+  skills: rawSkillsIndex.skills.map((skill) => ({
+    ...skill,
+    platforms: normalizeRegistryPlatforms(skill.platforms),
+  })),
+};
 
 export function getAllSkills(): Skill[] {
   return skillsIndex.skills;
@@ -118,11 +133,4 @@ export const TIER_CONFIG: Record<VerificationTier, {
   },
 };
 
-export const PLATFORM_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
-  openclaw:    { label: "OpenClaw",       color: "text-purple-400",  bg: "bg-purple-900/30" },
-  mcp:         { label: "MCP",            color: "text-blue-400",    bg: "bg-blue-900/30" },
-  openai:      { label: "OpenAI",         color: "text-green-400",   bg: "bg-green-900/30" },
-  claude:      { label: "Claude",         color: "text-orange-400",  bg: "bg-orange-900/30" },
-  cursor:      { label: "Cursor / VS Code", color: "text-cyan-400",  bg: "bg-cyan-900/30" },
-  huggingface: { label: "HuggingFace",    color: "text-yellow-400",  bg: "bg-yellow-900/30" },
-};
+export const PLATFORM_CONFIG = PLATFORM_DEFINITIONS;

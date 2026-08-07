@@ -80,12 +80,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `${data.tierConfig.label} Skills - Page ${pageNum}`,
     description: `Browse ${data.tierConfig.label.toLowerCase()} agent skills on TrustedSkills. Page ${pageNum} of ${data.totalPages}.`,
     alternates: {
-      canonical: `${SITE_URL}${data.basePath}/page/${pageNum}/`,
+      canonical: `${SITE_URL}${data.basePath}/${pageNum}/`,
     },
     openGraph: {
       title: `${data.tierConfig.label} Agent Skills - Page ${pageNum} | TrustedSkills`,
       description: `Browse ${data.totalSkills} ${data.tierConfig.label.toLowerCase()} agent skills on TrustedSkills.`,
-      url: `${SITE_URL}${data.basePath}/page/${pageNum}/`,
+      url: `${SITE_URL}${data.basePath}/${pageNum}/`,
     },
   };
 }

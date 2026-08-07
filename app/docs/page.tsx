@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: 'Documentation',
   description:
     'TrustedSkills documentation — learn how to install, use, and build AI agent skills for OpenClaw, MCP, Claude Desktop, Cursor, and more.',
+  alternates: {
+    canonical: 'https://trustedskills.dev/docs',
+  },
 };
 
 const PLATFORM_CARDS = [
