@@ -1,0 +1,99 @@
+name: Cloudflare DNS cutover
+
+# One-off operational workflow for repointing trustedskills.dev at the Coolify
+# VPS after the Elestio host was retired. Defaults to a read-only report; set
+# apply=true to actually change the record.
+
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: 'Apply changes (false = report current state only)'
+        type: boolean
+        default: false
+      target_ip:
+        description: 'Origin IP for the apex A record'
+        type: string
+        default: '76.13.181.236'
+
+jobs:
+  cutover:
+    runs-on: ubuntu-latest
+    env:
+      ZONE: ${{ secrets.CF_ZONE_ID }}
+      TOKEN: ${{ secrets.CF_API_TOKEN }}
+      GLOBAL_KEY: ${{ secrets.CF_API_KEY }}
+      EMAIL: ${{ secrets.CF_EMAIL }}
+      APPLY: ${{ inputs.apply }}
+      TARGET_IP: ${{ inputs.target_ip }}
+    steps:
+      - name: Cloudflare cutover
+        run: |
+          set -euo pipefail
+          API=https://api.cloudflare.com/client/v4
+
+          # Pick whichever credential this zone actually accepts. Bearer token
+          # first; fall back to the legacy global key + email pair.
+          auth_bearer=(-H "Authorization: Bearer ${TOKEN}")
+          auth_global=(-H "X-Auth-Email: ${EMAIL}" -H "X-Auth-Key: ${GLOBAL_KEY}")
+
+          probe() { curl -s "${@}" "$API/zones/$ZONE" | jq -r '.success'; }
+
+          if [ "$(probe "${auth_bearer[@]}")" = "true" ]; then
+            AUTH=("${auth_bearer[@]}"); echo "auth: API token"
+          elif [ "$(probe "${auth_global[@]}")" = "true" ]; then
+            AUTH=("${auth_global[@]}"); echo "auth: global key"
+          else
+            echo "Neither credential could read zone $ZONE"; exit 1
+          fi
+
+          cf() { curl -s "${AUTH[@]}" -H "Content-Type: application/json" "$@"; }
+
+          echo "=== zone ==="
+          cf "$API/zones/$ZONE" | jq -r '.result | "name=\(.name) status=\(.status)"'
+
+          echo "=== current SSL mode ==="
+          cf "$API/zones/$ZONE/settings/ssl" | jq -r '.result.value'
+
+          echo "=== A / CNAME records ==="
+          cf "$API/zones/$ZONE/dns_records?per_page=100" \
+            | jq -r '.result[] | select(.type=="A" or .type=="CNAME")
+                     | "\(.type)\t\(.name)\t\(.content)\tproxied=\(.proxied)\tid=\(.id)"'
+
+          if [ "$APPLY" != "true" ]; then
+            echo ""
+            echo "Report only. Re-run with apply=true to cut over to $TARGET_IP."
+            exit 0
+          fi
+
+          ZONE_NAME=$(cf "$API/zones/$ZONE" | jq -r '.result.name')
+
+          echo ""
+          echo "=== setting SSL mode to full ==="
+          # Coolify redirects http->https at the origin, so Flexible would loop.
+          # Full (not strict) also tolerates Traefik's self-signed cert during
+          # the window before Let's Encrypt can validate the new IP.
+          cf -X PATCH "$API/zones/$ZONE/settings/ssl" --data '{"value":"full"}' \
+            | jq -r 'if .success then "ssl -> \(.result.value)" else "FAILED: \(.errors)" end'
+
+          echo "=== repointing apex A record ==="
+          REC=$(cf "$API/zones/$ZONE/dns_records?type=A&name=$ZONE_NAME" | jq -r '.result[0].id // empty')
+          if [ -z "$REC" ]; then
+            echo "No apex A record found - creating one"
+            cf -X POST "$API/zones/$ZONE/dns_records" \
+              --data "{\"type\":\"A\",\"name\":\"$ZONE_NAME\",\"content\":\"$TARGET_IP\",\"proxied\":true,\"ttl\":1}" \
+              | jq -r 'if .success then "created \(.result.name) -> \(.result.content)" else "FAILED: \(.errors)" end'
+          else
+            cf -X PATCH "$API/zones/$ZONE/dns_records/$REC" \
+              --data "{\"type\":\"A\",\"name\":\"$ZONE_NAME\",\"content\":\"$TARGET_IP\",\"proxied\":true,\"ttl\":1}" \
+              | jq -r 'if .success then "updated \(.result.name) -> \(.result.content) proxied=\(.result.proxied)" else "FAILED: \(.errors)" end'
+          fi
+
+          echo "=== purging cache ==="
+          cf -X POST "$API/zones/$ZONE/purge_cache" --data '{"purge_everything":true}' \
+            | jq -r 'if .success then "purged" else "FAILED: \(.errors)" end'
+
+          echo "=== final record state ==="
+          cf "$API/zones/$ZONE/dns_records?per_page=100" \
+            | jq -r '.result[] | select(.type=="A" or .type=="CNAME")
+                     | "\(.type)\t\(.name)\t\(.content)\tproxied=\(.proxied)"'
