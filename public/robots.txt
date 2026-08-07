@@ -1,4 +1,9 @@
+# *
 User-agent: *
 Allow: /
 
+# Host
+Host: https://trustedskills.dev
+
+# Sitemaps
 Sitemap: https://trustedskills.dev/sitemap.xml
