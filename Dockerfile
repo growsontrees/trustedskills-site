@@ -17,6 +17,8 @@ ENV NODE_OPTIONS=--max-old-space-size=6144
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build
+# Fail the image rather than shipping a sitemap that silently drops routes.
+RUN npm run check:discovery
 
 FROM node:22-alpine AS runner
 WORKDIR /app
