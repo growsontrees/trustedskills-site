@@ -79,21 +79,21 @@ function extractReviewRoutes() {
   return routes;
 }
 
+// Mirrors the route's own VALID_PLATFORMS rather than the richer platform
+// taxonomy: /platform/[platform] 404s on anything outside this list, and the
+// sitemap must describe what the app actually serves.
 function extractBrowsablePlatforms() {
-  const source = readText("lib/platforms.ts");
-  const definitionsBlock = source.match(/export const PLATFORM_DEFINITIONS\s*=\s*\{([\s\S]*?)\n\} as const;/);
-  if (!definitionsBlock) {
-    throw new Error("Discovery contract could not find PLATFORM_DEFINITIONS.");
+  const source = readText("app/platform/[platform]/page.tsx");
+  const listBlock = source.match(/const VALID_PLATFORMS\s*=\s*\[([^\]]*)\]/);
+  if (!listBlock) {
+    throw new Error("Discovery contract could not find VALID_PLATFORMS.");
   }
 
-  const platforms = [];
-  const definitionPattern = /^\s{2}([a-z][a-z0-9]*):\s*\{([\s\S]*?)^\s{2}\},/gm;
-  for (const match of definitionsBlock[1].matchAll(definitionPattern)) {
-    const values = match[2].match(/registryValues:\s*\[([^\]]*)\]/)?.[1]
-      .match(/["']([^"']+)["']/g)
-      ?.map((value) => value.slice(1, -1)) ?? [];
-    if (values.length > 0) platforms.push({ slug: match[1], registryValues: values });
-  }
+  const platforms = (listBlock[1].match(/["']([^"']+)["']/g) ?? [])
+    .map((value) => value.slice(1, -1))
+    // The route filters with skill.platforms.includes(slug), so the slug is
+    // matched against registry values directly.
+    .map((slug) => ({ slug, registryValues: [slug] }));
 
   if (platforms.length === 0) {
     throw new Error("Discovery contract could not find any browsable platform definitions.");

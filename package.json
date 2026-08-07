@@ -10,7 +10,8 @@
     "start": "next start",
     "lint": "next lint",
     "fetch-index": "node scripts/fetch-index.mjs",
-    "verify-deploy": "node scripts/verify-deploy.mjs"
+    "verify-deploy": "node scripts/verify-deploy.mjs",
+    "check:discovery": "node scripts/check-discovery.mjs"
   },
   "dependencies": {
     "next": "^16.1.6",
