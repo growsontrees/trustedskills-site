@@ -43,12 +43,52 @@ jobs:
       # Coolify pulls :latest and restarts the container. Without this the VPS
       # would sit on the previous image until someone redeployed by hand.
       - name: Trigger Coolify deploy
+        id: deploy
         env:
           COOLIFY_WEBHOOK: ${{ secrets.COOLIFY_WEBHOOK }}
           COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
         run: |
+          set -euo pipefail
           if [ -z "$COOLIFY_WEBHOOK" ]; then
             echo "COOLIFY_WEBHOOK not set - image pushed, skipping deploy trigger."
             exit 0
           fi
-          curl -fsSL -X GET "$COOLIFY_WEBHOOK" -H "Authorization: Bearer $COOLIFY_TOKEN"
+          RESP=$(curl -fsSL -X GET "$COOLIFY_WEBHOOK" -H "Authorization: Bearer $COOLIFY_TOKEN")
+          echo "$RESP"
+          UUID=$(echo "$RESP" | jq -r '.deployments[0].deployment_uuid // empty')
+          echo "uuid=$UUID" >> "$GITHUB_OUTPUT"
+
+      # Purging before the new container is live would just re-cache the old
+      # pages, so wait for the deployment to settle first.
+      - name: Wait for deployment
+        if: steps.deploy.outputs.uuid != ''
+        env:
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+          UUID: ${{ steps.deploy.outputs.uuid }}
+        run: |
+          BASE=$(echo "${{ secrets.COOLIFY_WEBHOOK }}" | sed 's#/deploy?.*##')
+          for i in $(seq 1 60); do
+            S=$(curl -s -H "Authorization: Bearer $COOLIFY_TOKEN" "$BASE/deployments/$UUID" | jq -r '.status // "?"')
+            echo "  [$i] $S"
+            case "$S" in
+              finished) exit 0 ;;
+              failed|cancelled) echo "Deployment $S"; exit 1 ;;
+            esac
+            sleep 10
+          done
+          echo "Timed out waiting for deployment"; exit 1
+
+      # Static assets under /public (sitemaps, llms.txt, robots.txt) are cached
+      # at the edge, so a deploy that changes them is invisible without this.
+      - name: Purge Cloudflare cache
+        if: success() && steps.deploy.outputs.uuid != ''
+        env:
+          ZONE: ${{ secrets.CF_ZONE_ID }}
+          EMAIL: ${{ secrets.CF_EMAIL }}
+          GLOBAL_KEY: ${{ secrets.CF_API_KEY }}
+        run: |
+          if [ -z "$ZONE" ]; then echo "CF_ZONE_ID not set - skipping purge."; exit 0; fi
+          curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE/purge_cache" \
+            -H "X-Auth-Email: $EMAIL" -H "X-Auth-Key: $GLOBAL_KEY" \
+            -H "Content-Type: application/json" --data '{"purge_everything":true}' \
+            | jq -r 'if .success then "cache purged" else "purge failed: \(.errors)" end'
