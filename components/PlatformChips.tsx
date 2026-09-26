@@ -1,10 +1,10 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { PLATFORM_CONFIG } from "../lib/skills";
+import { PLATFORM_CONFIG } from "../lib/skill-config";
 import { Suspense } from "react";
 
-const PLATFORMS = ["openclaw", "mcp", "openai", "claude", "huggingface"];
+const PLATFORMS = ["claudecode", "openclaw", "claude", "mcp", "cursor", "openai"];
 
 function PlatformChipsInner() {
   const router = useRouter();

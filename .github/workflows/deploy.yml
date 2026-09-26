@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Daily rebuild so registry updates reach the site without a code push.
+  schedule:
+    - cron: "30 19 * * *" # 05:30 AEST
 
 concurrency:
   group: deploy-${{ github.ref }}
@@ -21,6 +24,35 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Pull the newest registry index and merge it into the committed one,
+      # keeping the site's own descriptions, tiers and categories. The merged
+      # file only lives in this build; the repo keeps the enriched baseline so
+      # it does not gain an 80 MB commit every day. If the registry can't be
+      # reached, the build carries on with the committed index.
+      - name: Sync skills index from registry
+        env:
+          REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
+        run: |
+          set -uo pipefail
+          if [ -z "$REGISTRY_TOKEN" ]; then
+            echo "::warning::REGISTRY_TOKEN not set - building from the committed index."
+            exit 0
+          fi
+          if curl -fsSL --retry 3 --max-time 180 \
+               -H "Authorization: Bearer $REGISTRY_TOKEN" \
+               -H "Accept: application/vnd.github.raw" \
+               -o /tmp/registry-index.json \
+               "https://api.github.com/repos/growsontrees/trustedskills-registry/contents/skills-index.json"; then
+            node scripts/sync-index.mjs /tmp/registry-index.json \
+              || echo "::warning::Registry merge refused - building from the committed index."
+          else
+            echo "::warning::Could not download the registry index - building from the committed index."
+          fi
+
       - uses: docker/setup-buildx-action@v3
 
       - uses: docker/login-action@v3
@@ -33,7 +65,9 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: true
+          # Runs on other branches (manual dispatch) are a build test only:
+          # nothing is pushed and nothing is deployed.
+          push: ${{ github.ref == 'refs/heads/main' }}
           tags: |
             ${{ env.IMAGE }}:latest
             ${{ env.IMAGE }}:${{ github.sha }}
@@ -44,6 +78,7 @@ jobs:
       # would sit on the previous image until someone redeployed by hand.
       - name: Trigger Coolify deploy
         id: deploy
+        if: github.ref == 'refs/heads/main'
         env:
           COOLIFY_WEBHOOK: ${{ secrets.COOLIFY_WEBHOOK }}
           COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}

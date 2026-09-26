@@ -411,7 +411,9 @@ async function main() {
   let stage1Count = 0;
   let stage2Count = 0;
   let stage2Errors = 0;
-  const SAVE_EVERY = 100;
+  // Checkpoints protect long LLM runs; a template-only pass finishes in seconds
+  // and rewriting a 70 MB file every 100 skills is what would make it slow.
+  const SAVE_EVERY = args.includes("--no-checkpoint") ? Infinity : 100;
   const SHOW_EVERY = 10;
 
   for (let i = 0; i < batch.length; i++) {

@@ -8,7 +8,7 @@ import { getAllSkills, PLATFORM_CONFIG, sortByScore } from "../../../../lib/skil
 const DEFAULT_SKILLS_PER_PAGE = 25;
 const SITE_URL = "https://trustedskills.dev";
 
-const VALID_PLATFORMS = ["openclaw", "mcp", "openai", "claude", "cursor", "huggingface"] as const;
+const VALID_PLATFORMS = ["claudecode", "openclaw", "claude", "mcp", "cursor", "openai"] as const;
 type PlatformSlug = typeof VALID_PLATFORMS[number];
 
 interface PageProps {

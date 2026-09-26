@@ -1,6 +1,21 @@
-import skillsData from "../data/skills-index.json";
+import { readFileSync } from "fs";
+import { join } from "path";
+import type { Category, Skill, SkillsIndex, VerificationTier } from "./skill-config";
 
-export type VerificationTier = "unverified" | "community" | "verified" | "featured" | "official";
+// Server-only. The index is read from disk on first use instead of being
+// imported as a module: a JSON import gets inlined into every route bundle
+// (and into the browser bundle of any client component that touched this
+// file), which is what made /skills so heavy.
+export * from "./skill-config";
+
+let _index: SkillsIndex | null = null;
+function loadIndex(): SkillsIndex {
+  if (!_index) {
+    const file = join(process.cwd(), "data", "skills-index.json");
+    _index = JSON.parse(readFileSync(file, "utf8")) as SkillsIndex;
+  }
+  return _index;
+}
 
 // ---------------------------------------------------------------------------
 // Composite ranking
@@ -32,20 +47,6 @@ const TRUSTED_AUTHOR_BONUS: Record<string, number> = {
   "openclaw":          10,
 };
 
-// Official orgs from skills.sh/official
-export const OFFICIAL_ORGS = new Set([
-  'anthropics','apify','apollographql','auth0','automattic','axiomhq','base','better-auth',
-  'bitwarden','brave','browser-use','browserbase','callstackincubator','clerk','clickhouse',
-  'cloudflare','coderabbitai','coinbase','dagster-io','datadog-labs','dbt-labs','denoland',
-  'elevenlabs','encoredev','expo','facebook','figma','firebase','firecrawl','flutter',
-  'getsentry','github','google-gemini','google-labs-code','hashicorp','huggingface','kotlin',
-  'langchain-ai','langfuse','launchdarkly','livekit','makenotion','mapbox','mastra-ai',
-  'mcp-use','medusajs','microsoft','n8n-io','neondatabase','nuxt','openai','openshift',
-  'planetscale','posthog','prisma','pulumi','pytorch','redis','remotion-dev','resend',
-  'rivet-dev','runwayml','sanity-io','semgrep','streamlit','stripe','supabase','sveltejs',
-  'tinybirdco','tldraw','triggerdotdev','upstash','vercel','vercel-labs','webflow','wix','wordpress',
-]);
-
 const TIER_BONUS: Record<VerificationTier, number> = {
   official: 30,
   featured:   15,
@@ -64,7 +65,7 @@ const DESCRIPTION_SCORE = (desc: string): number => {
 let _maxInstalls: number | null = null;
 function getMaxInstalls(): number {
   if (_maxInstalls === null) {
-    _maxInstalls = Math.max(...(skillsData as SkillsIndex).skills.map((s) => s.installs || 0), 1);
+    _maxInstalls = loadIndex().skills.reduce((max, s) => Math.max(max, s.installs || 0), 1);
   }
   return _maxInstalls;
 }
@@ -78,7 +79,11 @@ function getMaxInstalls(): number {
  *   0–15  verification tier bonus
  *   0–5   description quality
  */
+const _scores = new WeakMap<Skill, number>();
+
 export function scoreSkill(skill: Skill): number {
+  const cached = _scores.get(skill);
+  if (cached !== undefined) return cached;
   const maxInstalls = getMaxInstalls();
 
   // Log-scaled popularity: log10(installs+1) / log10(maxInstalls+1) * 50
@@ -91,7 +96,9 @@ export function scoreSkill(skill: Skill): number {
 
   const descScore = DESCRIPTION_SCORE(skill.description ?? "");
 
-  return popularityScore + authorBonus + tierBonus + descScore;
+  const score = popularityScore + authorBonus + tierBonus + descScore;
+  _scores.set(skill, score);
+  return score;
 }
 
 /**
@@ -117,7 +124,7 @@ export function getTopRankedSkills(
   limit = 6,
   maxPerAuthor = 2
 ): Skill[] {
-  const all = sortByScore(skillsIndex.skills);
+  const all = sortByScore(loadIndex().skills);
   const result: Skill[] = [];
   const authorCount: Record<string, number> = {};
 
@@ -138,75 +145,19 @@ export function getTopRankedSkills(
   return result;
 }
 
-export interface Skill {
-  slug: string;
-  name: string;
-  description: string;
-  longDescription?: string;
-  version: string;
-  author: string;
-  homepage: string;
-  source_repo: string;
-  sourceUrl?: string;
-  tags: string[];
-  category: string;
-  emoji: string;
-  license: string;
-  platforms: string[];
-  requires: {
-    bins: string[];
-    env: string[];
-    config: string[];
-  };
-  installCmd: string;
-  repoUrl: string;
-  published_at: string;
-  updated_at: string;
-  installs: number;
-  verified: VerificationTier;
-  verifiedCommit?: string;
-  verifiedAt?: string;
-  verifiedChangedAt?: string;
-  installArchiveUrl?: string;
-  preferredPlatform?: string;
-  installOverrides?: Record<string, {
-    supported?: boolean;
-    mode?: "generated" | "custom";
-    command?: string;
-    note?: string;
-  }>;
-}
-
-export interface Category {
-  slug: string;
-  name: string;
-  emoji: string;
-  count: number;
-}
-
-export interface SkillsIndex {
-  skills: Skill[];
-  categories: Category[];
-  stats: {
-    total_skills: number;
-    total_installs: number;
-    total_authors: number;
-    last_updated: string;
-  };
-}
-
-export const skillsIndex = skillsData as SkillsIndex;
+let _bySlug: Map<string, Skill> | null = null;
 
 export function getAllSkills(): Skill[] {
-  return skillsIndex.skills;
+  return loadIndex().skills;
 }
 
 export function getSkillBySlug(slug: string): Skill | undefined {
-  return skillsIndex.skills.find((s) => s.slug === slug);
+  if (!_bySlug) _bySlug = new Map(loadIndex().skills.map((s) => [s.slug, s]));
+  return _bySlug.get(slug);
 }
 
 export function getFeaturedSkills(): Skill[] {
-  return skillsIndex.skills.filter((s) => s.verified === "featured").slice(0, 6);
+  return loadIndex().skills.filter((s) => s.verified === "featured").slice(0, 6);
 }
 
 /** @deprecated Use getTopRankedSkills() for the homepage instead. */
@@ -215,75 +166,13 @@ export function getFeaturedSkillsLegacy(): Skill[] {
 }
 
 export function getCategories(): Category[] {
-  return skillsIndex.categories;
+  return loadIndex().categories;
 }
 
 export function getCategoryBySlug(slug: string): Category | undefined {
-  return skillsIndex.categories.find((category) => category.slug === slug);
+  return loadIndex().categories.find((category) => category.slug === slug);
 }
 
 export function getStats() {
-  return skillsIndex.stats;
+  return loadIndex().stats;
 }
-
-export const TIER_CONFIG: Record<VerificationTier, {
-  label: string;
-  icon: string;
-  color: string;
-  bg: string;
-  border: string;
-  description: string;
-}> = {
-  unverified: {
-    label: "Unverified",
-    icon: "🔓",
-    color: "text-gray-400",
-    bg: "bg-gray-800/50",
-    border: "border-gray-700",
-    description: "Not yet reviewed. Use with caution.",
-  },
-  community: {
-    label: "Community",
-    icon: "🌐",
-    color: "text-blue-400",
-    bg: "bg-blue-900/30",
-    border: "border-blue-800",
-    description: "Passed automated security scans.",
-  },
-  verified: {
-    label: "Verified",
-    icon: "✅",
-    color: "text-emerald-400",
-    bg: "bg-emerald-900/30",
-    border: "border-emerald-800",
-    description: "Manually reviewed by the TrustedSkills team.",
-  },
-  featured: {
-    label: "Featured",
-    icon: "⭐",
-    color: "text-yellow-400",
-    bg: "bg-yellow-900/30",
-    border: "border-yellow-800",
-    description: "Editorially selected — recommended for any platform.",
-  },
-  official: {
-    label: "Official",
-    icon: "🏢",
-    color: "text-sky-400",
-    bg: "bg-sky-900/30",
-    border: "border-sky-700",
-    description: "Published by the company or team that built the technology.",
-  },
-};
-
-export const PLATFORM_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
-  openclaw:    { label: "OpenClaw",              color: "text-purple-400", bg: "bg-purple-900/30" },
-  mcp:         { label: "MCP",                   color: "text-blue-400",   bg: "bg-blue-900/30" },
-  openai:      { label: "OpenAI / ChatGPT",      color: "text-green-400",  bg: "bg-green-900/30" },
-  claude:      { label: "Claude Desktop",        color: "text-orange-400", bg: "bg-orange-900/30" },
-  claudecode:  { label: "Claude Code",           color: "text-amber-300",  bg: "bg-amber-900/30" },
-  cursor:      { label: "Cursor / VS Code",      color: "text-cyan-400",   bg: "bg-cyan-900/30" },
-  codex:       { label: "GitHub Copilot / Codex",color: "text-sky-400",    bg: "bg-sky-900/30" },
-  opencode:    { label: "OpenCode",              color: "text-emerald-400",bg: "bg-emerald-900/30" },
-  huggingface: { label: "HuggingFace",           color: "text-yellow-400", bg: "bg-yellow-900/30" },
-};

@@ -8,7 +8,7 @@ import { getAllSkills, TIER_CONFIG, VerificationTier, sortByScore } from "../../
 const DEFAULT_SKILLS_PER_PAGE = 25;
 const SITE_URL = "https://trustedskills.dev";
 
-const VALID_TIERS: VerificationTier[] = ["featured", "verified", "community", "unverified"];
+const VALID_TIERS: VerificationTier[] = ["official", "featured", "verified", "community", "unverified"];
 
 interface PageProps {
   params: Promise<{
