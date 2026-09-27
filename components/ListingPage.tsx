@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import type { Skill, TierTone } from "../lib/skill-config";
+import { shownDescription, type Skill, type TierTone } from "../lib/skill-config";
 import { SkillCard } from "./SkillCard";
 import { ArrowLeft, type IconComponent } from "./icons";
 import { cx } from "./ui";
@@ -85,7 +85,8 @@ export function ListingPage({
           {skills.map((skill) => (
             <li key={skill.slug}>
               <Link href={`/skills/${skill.slug}`}>
-                {skill.name} — {skill.description}
+                {skill.name}
+                {shownDescription(skill) ? ` — ${shownDescription(skill)}` : ""}
               </Link>
             </li>
           ))}

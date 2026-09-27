@@ -18,7 +18,7 @@ import { SafetyPanel } from "../../../components/SafetyPanel";
 import { getSafetyCheckList, getSafetyReport } from "../../../lib/safety";
 import { getReviewForSkill } from "../../../lib/reviews";
 import { getCollectionsForSkill } from "../../../lib/collections";
-import { installIsBroken } from "../../../lib/skill-config";
+import { PUBLISHER_DESCRIPTIONS_ONLY, installIsBroken, shownDescription } from "../../../lib/skill-config";
 import type { PlatformKey } from "../../../hooks/usePlatform";
 import type { Metadata } from "next";
 import { canonicalUrl } from "../../../lib/site-url";
@@ -102,13 +102,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const skill = getSkillBySlug(slug);
   if (!skill) return {};
   const categoryName = skill.category.charAt(0).toUpperCase() + skill.category.slice(1);
+  // No publisher text: describe the page, not the skill, so the snippet makes
+  // no claim about what the skill does.
+  const description =
+    shownDescription(skill) ??
+    `${skill.name} by ${skill.author}: install command, supported platforms and install check for this ${skill.category} agent skill.`;
   return {
     title: `${skill.name} Agent Skill`,
-    description: skill.description,
+    description,
     alternates: { canonical: skillUrl(skill.slug) },
     openGraph: {
       title: `${skill.name} Agent Skill | ${categoryName} | TrustedSkills`,
-      description: skill.description,
+      description,
       url: skillUrl(skill.slug),
     },
   };
@@ -120,6 +125,7 @@ export default async function SkillDetailPage({ params }: Props) {
   if (!skill) notFound();
 
   const tier = tierOf(skill);
+  const description = shownDescription(skill);
   const TierIcon = tier.icon;
   const Glyph = categoryIcon(skill.category);
 
@@ -162,7 +168,7 @@ export default async function SkillDetailPage({ params }: Props) {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: skill.name,
-    description: skill.description,
+    ...(description ? { description } : {}),
     applicationCategory: "DeveloperApplication",
     operatingSystem: "Any",
     url: skillUrl(skill.slug),
@@ -229,9 +235,9 @@ export default async function SkillDetailPage({ params }: Props) {
               </div>
             </div>
 
-            {skill.description ? (
+            {description ? (
               <p className="mt-stack-lg text-base leading-relaxed text-ink-300">
-                {skill.description}
+                {description}
               </p>
             ) : null}
 
@@ -361,8 +367,11 @@ export default async function SkillDetailPage({ params }: Props) {
               page never implies a check that has not run. */}
           <SafetyPanel report={safety} checks={safetyChecks} />
 
-          {/* ── About ────────────────────────────────────────────────── */}
-          {(skill.longDescription || skill.description) && (
+          {/* ── About ──────────────────────────────────────────────────
+              Only the generated long text lived here. With publisher text
+              only, the one description is already in the header, so the
+              panel is dropped rather than repeated. */}
+          {!PUBLISHER_DESCRIPTIONS_ONLY && (skill.longDescription || skill.description) && (
             <Panel>
               <h2 className="text-sm font-semibold text-ink-50">About this skill</h2>
               <div className="mt-stack-lg">

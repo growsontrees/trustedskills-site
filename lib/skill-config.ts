@@ -32,6 +32,11 @@ export interface Skill {
   slug: string;
   name: string;
   description: string;
+  /**
+   * Where `description` came from. "skill-md" is the publisher's own SKILL.md
+   * frontmatter, verbatim; "llm", "llm-12b" and "template" were written by us.
+   */
+  descriptionSource?: string;
   longDescription?: string;
   version: string;
   author: string;
@@ -80,6 +85,24 @@ export interface Skill {
     command?: string;
     note?: string;
   }>;
+}
+
+/**
+ * Show only descriptions the publisher wrote. When on, a listing whose
+ * description came from anywhere but its SKILL.md renders no prose at all, and
+ * the generated long text is not read. The index keeps both, so switching this
+ * off puts every page back as it was. NEXT_PUBLIC_PUBLISHER_DESCRIPTIONS_ONLY
+ * ("1" / "0") overrides the default for a local build.
+ */
+export const PUBLISHER_DESCRIPTIONS_ONLY = process.env.NEXT_PUBLIC_PUBLISHER_DESCRIPTIONS_ONLY
+  ? process.env.NEXT_PUBLIC_PUBLISHER_DESCRIPTIONS_ONLY === "1"
+  : false;
+
+/** The description to show for a skill, or null when there is none we can stand behind. */
+export function shownDescription(skill: Pick<Skill, "description" | "descriptionSource">): string | null {
+  if (!skill.description) return null;
+  if (PUBLISHER_DESCRIPTIONS_ONLY && skill.descriptionSource !== "skill-md") return null;
+  return skill.description;
 }
 
 export type InstallStatus = "ok" | "renamed" | "invalid" | "missing" | "repo_gone";

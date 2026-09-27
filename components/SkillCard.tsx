@@ -6,6 +6,7 @@ import {
   PLATFORM_CONFIG,
   formatCount,
   installIsBroken,
+  shownDescription,
   tierOf,
   type Skill,
 } from "../lib/skill-config";
@@ -36,6 +37,7 @@ export function SkillCard({ skill, compact = false }: SkillCardProps) {
 
   const platformLabel = mounted && platform ? PLATFORM_LABELS[platform] : null;
   const installs = formatCount(skill.installs);
+  const description = shownDescription(skill);
 
   // The card is a container, not an anchor: the title carries a stretched link
   // so the whole surface is clickable while the copy button stays a real
@@ -66,9 +68,9 @@ export function SkillCard({ skill, compact = false }: SkillCardProps) {
         <TierChip tier={skill.verified} showLabel={!compact} />
       </div>
 
-      {!compact && skill.description ? (
+      {!compact && description ? (
         <p className="mt-stack line-clamp-2 text-sm leading-relaxed text-ink-400">
-          {skill.description}
+          {description}
         </p>
       ) : null}
 
