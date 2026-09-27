@@ -469,7 +469,7 @@ export const DOC_ARTICLES: DocArticle[] = [
 <p>Only if they're designed to. A filesystem skill can access files; a weather skill can't. Each skill only does what its tools define. This is why checking a skill's verification status matters before installing it.</p>
 
 <h3>What happens when an MCP server crashes?</h3>
-<p>Claude will stop offering that skill's tools and may show an error. Restart your AI client to relaunch the server. Claude Desktop writes crash details to its log files: <code>~/Library/Logs/Claude</code> on Mac, <code>%APPDATA%\Claude\logs</code> on Windows.</p>
+<p>Claude will stop offering that skill's tools and may show an error. Restart your AI client to relaunch the server. Claude Desktop writes crash details to its log files: <code>~/Library/Logs/Claude</code> on Mac, <code>%APPDATA%\\Claude\\logs</code> on Windows.</p>
 
 <h3>Can I run many MCP skills simultaneously?</h3>
 <p>Yes. Each skill runs as a separate subprocess. You can have dozens running at once — Claude picks whichever tools are most relevant for each query.</p>
@@ -1233,7 +1233,7 @@ claude                # start a session
   {
     slug: ['claude-code', 'windows'],
     title: 'Install MCP Skills Claude Code Windows: CLI & Config Guide',
-    description: 'Install MCP skills for Claude Code on Windows using the CLI or manual config editing. Covers the settings.json location, Windows path formatting, and PowerShell commands to get skills working.',
+    description: 'Install MCP skills for Claude Code on Windows using the CLI or manual config editing. Covers where Claude Code stores MCP servers (~/.claude.json and .mcp.json), Windows path formatting, and PowerShell commands.',
     category: 'Claude Code',
     categorySlug: 'claude-code',
     persona: 'developer',
@@ -1241,7 +1241,7 @@ claude                # start a session
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Claude Code Windows: CLI & Config Guide","description":"Install MCP skills for Claude Code on Windows — CLI, settings.json location, and path formatting.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Claude Code Windows: CLI & Config Guide","description":"Install MCP skills for Claude Code on Windows — CLI, ~/.claude.json and .mcp.json, and path formatting.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
@@ -1531,7 +1531,7 @@ code "$env:USERPROFILE\\.cursor\\mcp.json"</code></pre>
   {
     slug: ['openclaw', 'mac'],
     title: 'Install Skills OpenClaw Mac: One-Command Setup Guide',
-    description: 'Install skills on OpenClaw Mac with a single command — no JSON editing needed. OpenClaw manages MCP config automatically for all your AI agent skills. Browse, install, done.',
+    description: 'Install skills on OpenClaw Mac with a single command — no JSON editing needed. Covers the skills CLI for TrustedSkills listings, openclaw skills commands for ClawHub, and where skills are stored.',
     category: 'OpenClaw',
     categorySlug: 'openclaw',
     persona: 'beginner',
@@ -1539,7 +1539,7 @@ code "$env:USERPROFILE\\.cursor\\mcp.json"</code></pre>
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Install Skills OpenClaw Mac: One-Command Setup Guide","description":"Install skills on OpenClaw Mac with one command. No JSON editing — OpenClaw manages everything automatically.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Install Skills OpenClaw Mac: One-Command Setup Guide","description":"Install skills on OpenClaw Mac with one command. No JSON editing: skills are SKILL.md folders.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
@@ -1622,7 +1622,7 @@ clawhub uninstall @owner/&lt;slug&gt;</code></pre>
   {
     slug: ['openclaw', 'windows'],
     title: 'Install Skills OpenClaw Windows: One-Command Setup',
-    description: 'Install skills on OpenClaw Windows with a single command — no JSON config editing needed. Covers openclaw skills install, list, update, and remove commands with Windows-specific notes.',
+    description: 'Install skills on OpenClaw Windows with a single command — no JSON config editing needed. Covers the skills CLI, openclaw skills install, list and update, how to remove a skill, and Windows-specific notes.',
     category: 'OpenClaw',
     categorySlug: 'openclaw',
     persona: 'beginner',
@@ -1630,7 +1630,7 @@ clawhub uninstall @owner/&lt;slug&gt;</code></pre>
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Install Skills OpenClaw Windows: One-Command Setup","description":"Install skills on OpenClaw Windows with one command. OpenClaw handles MCP config automatically.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Install Skills OpenClaw Windows: One-Command Setup","description":"Install skills on OpenClaw Windows with one command. No JSON editing: skills are SKILL.md folders.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
@@ -1720,7 +1720,7 @@ clawhub uninstall @owner/&lt;slug&gt;</code></pre>
   {
     slug: ['openclaw', 'linux'],
     title: 'Install Skills OpenClaw Linux: Quick Setup Guide',
-    description: 'Install skills on OpenClaw Linux with one command — no JSON editing needed. Covers Node.js setup via nvm, skill install/update/remove commands, and Linux-specific configuration tips.',
+    description: 'Install skills on OpenClaw Linux with one command — no JSON editing needed. Covers Node.js setup via nvm, the skills CLI and openclaw skills commands, and where skills are stored.',
     category: 'OpenClaw',
     categorySlug: 'openclaw',
     persona: 'beginner',
