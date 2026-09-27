@@ -398,7 +398,9 @@ async function main() {
   const isStage2Mode = STAGE2_ONLY && STAGE2_URL;
   const toEnrich = isStage2Mode
     ? skills.filter(s => isWeakTemplate(s))
-    : skills.filter(s => isStub(s.description));
+    // The publisher's own text is kept as written, even when it is as short
+    // as a stub.
+    : skills.filter(s => s.descriptionSource !== "skill-md" && isStub(s.description));
 
   console.log(`Total skills: ${skills.length}`);
   console.log(`To enrich: ${toEnrich.length} (${isStage2Mode ? "weak-template LLM upgrade" : "stub replacement"})`);

@@ -9,6 +9,10 @@
  * 16-category taxonomy. This script keeps that work for every skill it already
  * knows, then runs the same (LLM-free) passes over the new skills.
  *
+ * The one exception is a description the registry read from the publisher's
+ * own SKILL.md. That beats anything the site holds, so it is applied on every
+ * run rather than being overwritten by the site's older value.
+ *
  * Usage: node scripts/sync-index.mjs <path-to-registry-skills-index.json>
  */
 
@@ -24,7 +28,8 @@ const SITE_INDEX = join(__dirname, "../data/skills-index.json");
 // Dropping skills removes live pages, so refuse rather than guess.
 const MIN_KEEP_RATIO = 0.9;
 
-// Fields the site owns. Registry values for these are stubs or absent.
+// Fields the site owns. Registry values for these are stubs or absent, except
+// for description (see publisherDescription).
 const SITE_FIELDS = [
   "description",
   "descriptionSource",
@@ -40,6 +45,16 @@ const SITE_FIELDS = [
 // Tiers the site assigns (mark-official) or curates by hand. The registry
 // reports nearly everything as "community", so it must not demote these.
 const CURATED_TIERS = new Set(["official", "featured", "verified"]);
+
+// The SKILL.md frontmatter description, verbatim, as captured by the registry's
+// install check. Anything that is not a non-empty string counts as not captured,
+// and then the site's existing description and source are left alone. So a
+// capture run that comes back empty cannot wipe a description that is already
+// there.
+function publisherDescription(fresh) {
+  const text = fresh.skill_md_description;
+  return typeof text === "string" && text.trim() !== "" ? text : null;
+}
 
 const registryPath = process.argv[2];
 if (!registryPath) {
@@ -66,6 +81,7 @@ const previous = new Map(site.skills.map((skill) => [skill.slug, skill]));
 const seen = new Set();
 let kept = 0;
 let added = 0;
+let publisher = 0;
 
 const skills = [];
 for (const fresh of registry.skills) {
@@ -83,6 +99,21 @@ for (const fresh of registry.skills) {
   } else {
     added++;
   }
+  // After the site fields, so a later crawl that finds changed text wins.
+  const captured = publisherDescription(fresh);
+  if (captured) {
+    merged.description = captured;
+    merged.descriptionSource = "skill-md";
+    publisher++;
+  } else if (old?.skill_md_description_sha !== undefined) {
+    // The kept description keeps the commit it was read at.
+    merged.skill_md_description_sha = old.skill_md_description_sha;
+  } else {
+    delete merged.skill_md_description_sha;
+  }
+  // Already copied into description. Keeping a second copy would only grow
+  // the index.
+  delete merged.skill_md_description;
   skills.push(merged);
 }
 
@@ -90,6 +121,7 @@ const dropped = site.skills.length - kept;
 site.skills = skills;
 writeFileSync(SITE_INDEX, JSON.stringify(site, null, 2));
 console.log(`Merged: ${kept} kept, ${added} new, ${dropped} no longer in the registry.`);
+console.log(`Descriptions: ${publisher} from the publisher's SKILL.md this run.`);
 
 // Same passes the March import used. None of them call an LLM.
 const run = (script, ...args) =>
