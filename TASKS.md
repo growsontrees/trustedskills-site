@@ -7,6 +7,7 @@
 
 ## ✅ Recently Completed
 
+- [x] **Category browse actually works** (2026-09-27) — `other` cut from 44.9% to 10.7% by classifying on the description and `longDescription` the index already held, not the slug alone. See "Category taxonomy" below for the detail and for the description-generator feedback loop it fixed.
 - [x] **Full registry live** (2026-09-27) — site went from 26,001 skills to the registry's full **44,854**. The sync had been failing silently since March; see below.
 - [x] **Registry sync no longer fails silently** (2026-09-27) — the CI sync step warned and carried on when it couldn't reach the registry, so an expired token shipped a 42%-stale catalogue while every build reported success. On `main` the step is now fatal, and the shipped skill count is written to the job summary.
 - [x] **Registry auth moved to a read-only deploy key** (2026-09-27) — `REGISTRY_SSH_KEY`, replacing the `REGISTRY_TOKEN` PAT that expired in March. Deploy keys don't expire and aren't tied to a personal account. The old `REGISTRY_TOKEN` secret is unused and can be deleted.
@@ -60,9 +61,14 @@ Worse, the two signals that *are* populated are misleading:
 **Impact:** Credibility. The homepage says *"Cryptographically signed. Community reviewed."* 127 skills have a pinned commit SHA and none have been reviewed by anyone. 41,324 are labelled `community` because that is the scraper's fallback value.
 **Fix:** rename `community` → `Listed`, rewrite the copy, add the automated "Checked" pass. Tracked as ONE-99, with the copy change folded into the redesign (ONE-100).
 
-### 3. Category and platform taxonomies are degenerate
-**Impact:** Both browse axes barely work. 18,386 skills (41%) are in category `other`; 44,434 (99%) are tagged `claudecode`.
-**Files:** `scripts/reclassify.mjs`, registry platform detection. Tracked in ONE-98.
+### 3. ~~Category taxonomy is degenerate~~ (fixed 2026-09-27) — platform half still open
+**Category — done.** `other` went from 44.9% to 10.7% of the bundled index. The classifier read the slug only and gave up when no hand-written regex matched, while every skill in `other` had a description and a ~1,500-char `longDescription` sitting unused. It now weighs evidence across slug, tags, name, description and `longDescription` by term specificity and field reliability, keeps the old slug rules as one weighted input, and leaves a skill in `other` when nothing clears the evidence threshold. `sync-index.mjs` runs it on every registry sync, so the full 44,854 are reclassified at the next deploy.
+
+It also broke a feedback loop worth knowing about: `enrich-descriptions.mjs` splices the *current* category's verb phrase into generated descriptions ("…as part of building frontend UIs and user experiences workflows"), so the classifier was reading its own previous guess back as evidence and wrong categories were self-confirming on every sync. Those phrases are stripped before classifying.
+
+**Files:** `scripts/reclassify.mjs`, `scripts/lib/{category-lexicon,classify-category,legacy-slug-rules}.mjs`. Run `node scripts/eval-classifier.mjs` before changing the lexicon — it reports distribution, agreement with the old rules, per-skill evidence (`--explain <slug>`) and a threshold sweep.
+
+**Platform — still broken, and blocked.** 98.6% of the bundled index is tagged `claudecode`. This is not a tagging bug: `platforms` comes from the registry and records *where the skill was found*, not what it is compatible with, and 25,649 of them came from skills.sh (a Claude Code directory). Deriving real compatibility needs each skill's actual contents (`SKILL.md` vs MCP manifest vs Cursor rule, plus `requires`), which is what the ONE-97 metadata crawl fetches. Tracked as **ONE-104**, blocked on ONE-97. Asserting broader platform support without that evidence would be inventing compatibility claims.
 
 ---
 
