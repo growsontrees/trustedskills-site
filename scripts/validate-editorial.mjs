@@ -333,6 +333,28 @@ for (const { name, data } of collections) {
       );
     }
   }
+
+  // An evidence note saying nothing was tested goes stale the moment one of
+  // the entries gets a published hands-on review. Fail then, so the note is
+  // rewritten in the same change that publishes the review.
+  const saysNoneTested = /\b(none|no one|not one)\b[^.]*\btested\b/i.test(data.evidenceNote ?? "");
+  if (data.status === "published" && saysNoneTested) {
+    const tested = entries.filter((entry) =>
+      reviews.some(
+        ({ data: review }) =>
+          review.skillSlug === entry?.skillSlug &&
+          review.status === "published" &&
+          review.evidenceBasis === "hands-on"
+      )
+    );
+    if (tested.length > 0) {
+      fail(
+        name,
+        "evidenceNote says none of the entries has been tested, but these have published hands-on " +
+          `reviews: ${tested.map((entry) => entry.skillSlug).join(", ")}. Rewrite the note.`
+      );
+    }
+  }
 }
 
 const collectionSlugs = collections.map(({ data }) => data.slug);
