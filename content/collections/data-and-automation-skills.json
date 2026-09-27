@@ -1,0 +1,84 @@
+{
+  "slug": "data-and-automation-skills",
+  "status": "draft",
+  "title": "13 Data and Automation Skills, Tested on a Real Dataset",
+  "description": "One skill for each data job, from scraping to a scheduled workflow. We ran every one against the same real dataset, our own 26,001-skill registry, and checked the results.",
+  "emoji": "📊",
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "targetKeyword": "best data analysis skills for claude code",
+  "curator": {
+    "name": "TrustedSkills Editorial",
+    "bio": "Picked and tested by the team that builds this site, on the data that runs it."
+  },
+  "intro": "An agent can write a query, a chart or a workflow without any skill. What a skill adds is judgement: which tool to use, what breaks, and how to check the result. In our tests, the skills that helped most were the ones that named a specific failure before the agent hit it.\n\nThis list follows a data job from start to finish, one skill per stage: **collect → check → shape → explore → query → design a schema → tune queries → spreadsheet → charts → data app → write-up → scheduled job → no-code automation.**\n\nWe ran every pick against the same dataset: this site's own registry index, 26,001 skills in one 71 MB JSON file. That file is awkward in realistic ways. It is one large object rather than rows, many fields are sparse, and some fields disagree with each other. Several skills handled that well. Some had never seen data shaped like it, one is built for a different job, and we say so in each entry. The verdict and score on each card come from that run.",
+  "criteria": "**How the thirteen were chosen.** Each pick had to (1) be in this registry with an install command that worked on the day, (2) do one clearly defined data or automation job, and (3) cover a job no other pick covers. Inside a job we started from install count, then spread the picks across publishers: thirteen skills from ten publishers.\n\n**The list was fixed before testing.** We did not drop a skill because it tested badly, or swap in a better one afterwards. That is why the list includes three \"Use With Caution\" verdicts and one \"Not Recommended\". If a job has a better skill, a later update will say so and link the new review.\n\n**What we left out.**\n\n- **Skills that need a paid account or hosted service to do anything:** Apify, Snowflake, BigQuery, Power BI and Google Sheets. You could not repeat those tests for free, and neither could we.\n- **Finance and trading skills.** They are a large part of the data category, but they are a different job.\n- **Two skills for the same job.** There are many SQL and chart skills. One each is enough.",
+  "evidenceNote": "**All thirteen were hands-on tested by us, once each, on the same day and the same dataset.** Each skill was installed with the registry's own command. An agent then ran it on a real task in a private copy of this site's repository: querying the registry, charting it, checking its quality, building a spreadsheet and an app from it, and scheduling jobs around it. We re-counted each run's main figures ourselves, and each entry links to its full review.\n\nOne run on one dataset is one data point, not a benchmark. A skill that struggled with our large JSON file may do well on tidy CSV, and the reverse.",
+  "entries": [
+    {
+      "skillSlug": "web-scraping",
+      "role": "Job 1 — Collect",
+      "note": "Good manners built in: robots.txt, rate limits, an honest User-Agent, and a firm line against bypassing access controls. Its example scrapers delete `<script>` tags, which is where the exact number we wanted lived. Check for JSON-LD before you strip scripts."
+    },
+    {
+      "skillSlug": "data-quality-frameworks",
+      "role": "Job 2 — Check quality",
+      "note": "Its quality dimensions turned into real findings on our data, including about 3,900 install commands that point at a different repo. The main file has a block of broken code in it, and everything assumes a warehouse with Great Expectations or dbt."
+    },
+    {
+      "skillSlug": "polars",
+      "role": "Job 3 — Shape",
+      "note": "A thorough Polars guide with good lazy-API advice, and our tables checked out. It has nothing on JSON shaped like an API export, so parse first and go lazy after."
+    },
+    {
+      "skillSlug": "exploratory-data-analysis",
+      "role": "Job 4 — Explore",
+      "note": "Not what the name suggests. It is built for scientific file formats, its script crashed on Windows, and its JSON analysis only lists top-level keys. Our findings came from a custom analysis. We have not yet tested a replacement for this job."
+    },
+    {
+      "skillSlug": "duckdb",
+      "role": "Job 5 — Query files with SQL",
+      "note": "The right tool and correct answers. Its one JSON example fails on large single-object files. You will need `read_json`, a bigger `maximum_object_size` and `unnest`, none of which it mentions."
+    },
+    {
+      "skillSlug": "database-schema-designer",
+      "role": "Job 6 — Design a schema",
+      "note": "A checklist you can pass or fail, and it made our 21-table schema tidier. It designs forward from a description, not from messy data you already have, and its migration template is MySQL-only."
+    },
+    {
+      "skillSlug": "sql-optimization",
+      "role": "Job 7 — Tune queries",
+      "note": "Its composite-index advice took two of our listing queries from about 20 ms to 0.17 ms. The same advice on another column made a query four times slower. Measure every index it suggests."
+    },
+    {
+      "skillSlug": "xlsx",
+      "role": "Job 8 — Spreadsheet",
+      "note": "The strictest skill here, in a good way: live formulas, a ban on the functions that fail silently, and a zero-errors check. That check needs LibreOffice. Install it first."
+    },
+    {
+      "skillSlug": "data-visualization",
+      "role": "Job 9 — Charts",
+      "note": "Good chart choice and an accessibility checklist; our four charts came out clear and correct. It offers two colour-blind palettes that disagree, and nothing on sparse dates."
+    },
+    {
+      "skillSlug": "developing-with-streamlit",
+      "role": "Job 10 — Data app",
+      "note": "The best design in this list: it reads docs that ship with your installed Streamlit, so the advice matches your version. Its caching advice fitted our large file exactly. On Windows, its running-app check always says none."
+    },
+    {
+      "skillSlug": "data-storytelling",
+      "role": "Job 11 — Write-up",
+      "note": "A clear story structure that kept our draft in order. Its push for a climax led to one wrong framing, and it has no step for checking figures. Edit the result for plain claims."
+    },
+    {
+      "skillSlug": "github-actions-templates",
+      "role": "Job 12 — Scheduled job",
+      "note": "Build-and-deploy templates with sound security basics, but no scheduled pattern and three missing template files. Our weekly check still found a real live-site problem on its first run, mostly without the skill's help."
+    },
+    {
+      "skillSlug": "n8n-workflow-patterns",
+      "role": "Job 13 — No-code automation",
+      "note": "Picked the right pattern at once, and its timezone and no-data advice both changed the design. Its validate and deploy steps need the n8n MCP server, so connect that too."
+    }
+  ]
+}

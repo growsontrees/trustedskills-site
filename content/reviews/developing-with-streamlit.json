@@ -1,0 +1,74 @@
+{
+  "slug": "developing-with-streamlit",
+  "status": "draft",
+  "title": "developing-with-streamlit Review: Docs That Match Your Streamlit Version",
+  "description": "Streamlit's own skill loads reference docs from the Streamlit package you have installed. We built a registry browser with it, and its caching advice fitted the job exactly. One step assumes a Mac or Linux shell.",
+  "skillSlug": "developing-with-streamlit",
+  "verdict": "Recommended",
+  "overallScore": 4.2,
+  "scores": {
+    "installation": 5,
+    "documentation": 5,
+    "depth": 5,
+    "maintenance": 3,
+    "platformSupport": 3
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "streamlit skill claude code",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of thirteen data and automation skills run on the same day against the same dataset: this site's own registry index, 26,001 skills in one 71 MB JSON file. Each run worked in its own private copy of the site's repository. One run on one dataset is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "streamlit/agent-skills@c69a265 (bundled docs from streamlit 1.64.0)",
+      "task": "Build a small Streamlit app to browse the registry: filters for category, tier and install status, a text search on name and description, a results table and one chart. Follow the skill's discovery flow first and its advice on caching the 71 MB load. Run it headless, confirm it serves, then stop it and confirm it stopped.",
+      "outcome": "`npx skills add streamlit/agent-skills --skill developing-with-streamlit` installed it first time. What installs is a 24-line router and a discovery script. The real instructions ship inside the Streamlit package itself (1.57 or later).\n\nThe agent installed Streamlit 1.64.0 in a virtualenv and ran the discovery script. It printed the path to a 249-line SKILL.md inside the package, with 28 reference files.\n\nThe performance reference said to cache the expensive source data and apply cheap filters outside the cached function, and to use no expiry for static data. The agent did exactly that: one cached load of the 71 MB file, with the filters and search running on the cached table. It used the site's real six tiers from the code for the tier filter.\n\nThe app served on the chosen port: the health endpoint returned `ok` and the page returned 200. A headless test run of the script raised no errors and showed all 26,001 skills. The server was then stopped and the port confirmed free.\n\nOne step did not work on Windows. The skill checks for running apps with `lsof`, which Windows does not have. The error is hidden and the command prints \"No Streamlit apps detected\" either way. The agent used `netstat` instead.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit 5169470. Windows 11, Python 3.12 virtualenv, streamlit 1.64.0."
+    }
+  ],
+  "summary": "The best-designed skill in this batch. It installs a small router, then reads the reference docs that ship with your installed Streamlit, so the advice matches the version you actually run. The caching guidance mapped onto our 71 MB data load with no guesswork. On Windows, replace its `lsof` check with `netstat`; that check reports \"no apps\" whether or not one is running.",
+  "strengths": [
+    {
+      "title": "Docs match your installed version",
+      "body": "The discovery script finds the SKILL.md and 28 reference files inside your Streamlit package, so the advice cannot drift from the library."
+    },
+    {
+      "title": "Specific performance advice",
+      "body": "\"Cache the expensive source data, then apply cheap interactive filters outside the cached function.\" That was the right design for a large file."
+    },
+    {
+      "title": "Checks before it builds",
+      "body": "It points to dashboard templates first and says to start from scratch when none fits. None fitted a browse-and-filter app, and it said what to do."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Its running-app check is Unix-only",
+      "body": "The `lsof` command fails quietly on Windows and always reports no apps. Use `netstat` there."
+    },
+    {
+      "title": "Useless until Streamlit is installed",
+      "body": "The installed files are a router. With no Streamlit 1.57 or later in the project, there is nothing to read."
+    },
+    {
+      "title": "Two answers on cache expiry",
+      "body": "The main file says to set a `ttl` or entry limit; the performance reference says static data needs no expiry. We followed the reference."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Internal data apps and dashboards in Streamlit",
+      "body": "Install Streamlit in the project first, then let the skill run its discovery step."
+    }
+  ],
+  "notFor": "Apps that are not built in Streamlit. The skill only routes to Streamlit's own docs.",
+  "links": [
+    { "label": "streamlit/agent-skills repository", "href": "https://github.com/streamlit/agent-skills" }
+  ]
+}

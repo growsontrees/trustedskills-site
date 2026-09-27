@@ -1,0 +1,74 @@
+{
+  "slug": "sql-optimization",
+  "status": "draft",
+  "title": "sql-optimization Skill Review: One Index Made Pages 100x Faster, Another Made One 4x Slower",
+  "description": "We applied GitHub's sql-optimization skill to the queries behind our listing pages, in SQLite. Its composite-index advice cut two queries from about 20 ms to 0.17 ms. The same advice on another column made a query four times slower.",
+  "skillSlug": "sql-optimization",
+  "verdict": "Recommended",
+  "overallScore": 3.6,
+  "scores": {
+    "installation": 5,
+    "documentation": 4,
+    "depth": 3,
+    "maintenance": 2,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "sql optimization skill claude code",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of thirteen data and automation skills run on the same day against the same dataset: this site's own registry index, 26,001 skills in one 71 MB JSON file. Each run worked in its own private copy of the site's repository. One run on one dataset is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "github/awesome-copilot@6c4d33b",
+      "task": "Load the registry index into SQLite and write the queries behind the site's listing pages: category, tier, platform, and a name and description search, matching the site's real sort order and page size. Measure each query with EXPLAIN QUERY PLAN and timing, apply the skill's advice, measure again, and report which advice did or did not apply to SQLite.",
+      "outcome": "`npx skills add github/awesome-copilot --skill sql-optimization` installed it first time.\n\nThe agent read the site's code for the real sort (a computed score) and page sizes (25 per listing page, 24 for search), stored the score in a column, and benchmarked each query 30 times.\n\nThe skill's composite-index example (filter column first, then the sort column) worked almost as written. The category page went from 18.5 ms to 0.17 ms and the tier page from 21.9 ms to 0.17 ms, because the index replaced a full scan and sort.\n\nThe same \"index the filter column\" idea made the platform page slower: 60.5 ms to 263.4 ms. One platform value covers 99.3% of rows, so the index sent SQLite on thousands of random lookups. Dropping the index brought it back to about 50 ms. The skill mentions over-indexing only as a cost to writes.\n\nThe search query did not improve (72.6 ms to 77.0 ms). Its `LIKE '%sql%'` pattern starts with a wildcard, which no ordinary index can serve. Even a prefix search only used the new index after a SQLite setting the skill never mentions. The skill does not mention SQLite at all.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit 5169470. Python virtualenv with SQLite 3.49.1."
+    }
+  ],
+  "summary": "A clear, database-neutral checklist: composite indexes, WHERE clauses that can use an index, cursor pagination, avoiding `SELECT *`. Its main advice gave us a hundredfold speed-up on two pages. Applied without measuring, the same advice made a third page four times slower. Use it with EXPLAIN and a timer, and keep only the indexes that earn their place.",
+  "strengths": [
+    {
+      "title": "The composite-index advice works",
+      "body": "Filter column first, sort column second. On our category and tier pages that took queries from about 20 ms to 0.17 ms."
+    },
+    {
+      "title": "Short, readable examples",
+      "body": "Each pattern shows the slow form next to the better one, for joins, subqueries, pagination and WHERE clauses."
+    },
+    {
+      "title": "Not tied to one database",
+      "body": "It is written for MySQL, PostgreSQL, SQL Server and Oracle, and most of it carried over to SQLite."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Indexes can make reads slower",
+      "body": "It treats over-indexing as a write cost only. An index on a column where one value covers 99% of rows made our reads 4.4 times slower."
+    },
+    {
+      "title": "Nothing on substring search",
+      "body": "Indexing an expression does nothing for `LIKE '%term%'`. It does not point you to full-text search."
+    },
+    {
+      "title": "No SQLite notes, and not recently maintained",
+      "body": "It never mentions SQLite's rules for using indexes with LIKE. The folder was last changed in February 2026."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Reviewing slow queries with a plan in hand",
+      "body": "Run EXPLAIN and time each query before and after every index it suggests."
+    }
+  ],
+  "notFor": "Fixing text search. Use your database's full-text index instead.",
+  "links": [
+    { "label": "github/awesome-copilot repository", "href": "https://github.com/github/awesome-copilot" }
+  ]
+}

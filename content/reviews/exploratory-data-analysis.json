@@ -1,0 +1,74 @@
+{
+  "slug": "exploratory-data-analysis",
+  "status": "draft",
+  "title": "exploratory-data-analysis Review: A Scientific-File Skill, Not a General EDA Tool",
+  "description": "We ran this skill on our 26,001-skill registry file. It is built for scientific formats, its analysis script crashed on Windows, and its JSON handling only lists top-level keys. The analysis we got was written by hand.",
+  "skillSlug": "exploratory-data-analysis",
+  "verdict": "Not Recommended",
+  "overallScore": 2.8,
+  "scores": {
+    "installation": 5,
+    "documentation": 3,
+    "depth": 2,
+    "maintenance": 2,
+    "platformSupport": 2
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "exploratory data analysis skill claude code",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of thirteen data and automation skills run on the same day against the same dataset: this site's own registry index, 26,001 skills in one 71 MB JSON file. Each run worked in its own private copy of the site's repository. One run on one dataset is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "davila7/claude-code-templates@fcf666b",
+      "task": "Run an exploratory data analysis of the registry index as a dataset: field coverage, distributions of installs and stars, categories, verification tiers, install status, platforms, and publish dates by month. Flag anomalies worth a data-quality ticket, and produce the report the skill's workflow produces.",
+      "outcome": "`npx skills add davila7/claude-code-templates --skill exploratory-data-analysis` installed it first time.\n\nThe skill is for scientific data files: chemistry, genomics, microscopy, spectroscopy, proteomics. JSON is covered by one generic checklist in its general-formats reference.\n\nIts analysis script failed on Windows. It opens files without naming UTF-8, so it could not read our file, and its error report then failed again on the warning emoji it writes. Reading the script, its JSON branch only records the data type, the top-level keys and their count. It could not have produced field coverage or distributions even without the crash.\n\nThe skill allows a custom analysis instead, and the agent wrote one. It found real problems: publish dates exist on only 101 of 26,001 records, tags are filled on only 69, and star counts belong to the host repository (13 skills from one repo all show 254,472). We re-counted each of these.\n\nOne anomaly in its report was wrong. It called the `official` tier undocumented, based on an out-of-date note in our own repo; the code defines it. That was our documentation's fault, and we have fixed the note.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit 5169470. Windows 11, Python virtualenv."
+    }
+  ],
+  "summary": "Despite the general name, this skill is a guide to scientific file formats with a report template. On ordinary tabular data it adds little: its script crashed on Windows, and its JSON analysis could only list top-level keys. Our useful findings came from a custom analysis the agent wrote by hand. If you work with FASTQ, PDB or microscopy files it may suit you; we did not test that.",
+  "strengths": [
+    {
+      "title": "Wide scientific format coverage",
+      "body": "Six reference files describe more than 200 scientific file types and what to check in each."
+    },
+    {
+      "title": "A report template",
+      "body": "The bundled template gives a consistent structure for writing up findings."
+    },
+    {
+      "title": "Allows a custom analysis",
+      "body": "When the script does not fit, it says to analyse in conversation instead. That is how our run got results."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Script crashes on Windows",
+      "body": "No UTF-8 encoding on its file reads and writes, plus an emoji in its error output. It failed twice on our file."
+    },
+    {
+      "title": "JSON analysis is a stub",
+      "body": "For JSON the script records only the data type, the top-level keys and a length. It never looks inside records."
+    },
+    {
+      "title": "The name promises more than it does",
+      "body": "It reads as general data analysis. It is scientific-format EDA, and the listing does not make that clear."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Scientific file formats on Mac or Linux",
+      "body": "We did not test this use; the reference material is where the skill's value is."
+    }
+  ],
+  "notFor": "Business, product or registry data in CSV or JSON. A pandas or DuckDB session does the job better.",
+  "links": [
+    { "label": "davila7/claude-code-templates repository", "href": "https://github.com/davila7/claude-code-templates" }
+  ]
+}

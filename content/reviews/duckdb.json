@@ -1,0 +1,74 @@
+{
+  "slug": "duckdb",
+  "status": "draft",
+  "title": "duckdb Skill Review: Right Tool, Thin Guidance on Large JSON",
+  "description": "We used the duckdb skill to query our 71 MB registry file in place. The answers were correct. Its one JSON example failed on our file for two reasons it never mentions.",
+  "skillSlug": "duckdb",
+  "verdict": "Recommended",
+  "overallScore": 3.4,
+  "scores": {
+    "installation": 5,
+    "documentation": 3,
+    "depth": 3,
+    "maintenance": 2,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "duckdb skill claude code",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of thirteen data and automation skills run on the same day against the same dataset: this site's own registry index, 26,001 skills in one 71 MB JSON file. Each run worked in its own private copy of the site's repository. One run on one dataset is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "silvainfm/claude-skills@0af9d5b",
+      "task": "Using DuckDB, query the registry index file in place and answer: the 10 publishers with the most skills that install; the share that install per category; how many skills were updated before they were published; and the top 10 tags. Save the SQL and the results with the query time for each.",
+      "outcome": "`npx skills add silvainfm/claude-skills --skill duckdb` installed it first time. DuckDB itself installed cleanly into a virtualenv, as its installation section says.\n\nThe skill's only JSON example is `SELECT * FROM 'users.json'`. On our file it failed: DuckDB refused a single JSON object larger than its 16 MB default. After the agent raised `maximum_object_size`, the query returned one row, because our skills sit in an array inside one object; it had to `unnest` them first. The skill mentions neither the size limit nor `unnest`.\n\nWith that fixed, all four queries ran, each in about 5 seconds, because every query re-read the 71 MB file. The skill does cover persistent databases, which would have avoided that; the agent kept a view because the task said to query in place.\n\nThe answers: sickn33 has the most skills that install (583); cloud has the highest install share (77.7%); no skill was updated before it was published; and tags are filled on only 69 of 26,001 skills, so a top-tags list means little. We re-counted the headline figures and they match.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit 5169470. Python virtualenv with duckdb 1.5.5."
+    }
+  ],
+  "summary": "DuckDB is the right tool for asking SQL questions of a data file, and this skill is a fair introduction to its Python API, with patterns for DataFrames, Parquet, joins and window functions. Its JSON coverage is one line, and that line fails on any large single-object file. Know about `read_json`, `maximum_object_size` and `unnest` before you point it at an API export.",
+  "strengths": [
+    {
+      "title": "Covers the common workflows",
+      "body": "Querying files, pandas and Polars DataFrames, persistent databases, window functions and joins across sources, with examples."
+    },
+    {
+      "title": "Correct results",
+      "body": "Once the file loaded, every answer we checked matched an independent count."
+    },
+    {
+      "title": "Simple setup",
+      "body": "One pip install, no server. It worked in a virtualenv first time."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "JSON example breaks on large files",
+      "body": "The bare `FROM 'file.json'` pattern hits DuckDB's 16 MB single-object limit, which the skill never mentions."
+    },
+    {
+      "title": "No help with nested arrays",
+      "body": "A file that holds records inside one object needs `unnest`. The skill has no example of it."
+    },
+    {
+      "title": "Python only, and not recently maintained",
+      "body": "It never mentions the DuckDB command-line shell. The folder was last changed in October 2025."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "SQL over CSV and Parquet files in Python",
+      "body": "For JSON exports, load with `read_json`, raise the size limit, and `unnest` the records array."
+    }
+  ],
+  "notFor": "A shared, always-on database for an app. DuckDB is an in-process analytics engine.",
+  "links": [
+    { "label": "silvainfm/claude-skills repository", "href": "https://github.com/silvainfm/claude-skills" }
+  ]
+}

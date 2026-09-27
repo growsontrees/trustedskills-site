@@ -1,0 +1,74 @@
+{
+  "slug": "polars",
+  "status": "draft",
+  "title": "polars Skill Review: A Good Polars Guide With a Gap for Nested JSON",
+  "description": "We used the polars skill to flatten our 26,001-skill index into analysis tables. The lazy-API guidance and references were solid and every count checked out. It has nothing on JSON files shaped like most API exports.",
+  "skillSlug": "polars",
+  "verdict": "Recommended",
+  "overallScore": 3.8,
+  "scores": {
+    "installation": 5,
+    "documentation": 4,
+    "depth": 4,
+    "maintenance": 2,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "polars skill claude code",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of thirteen data and automation skills run on the same day against the same dataset: this site's own registry index, 26,001 skills in one 71 MB JSON file. Each run worked in its own private copy of the site's repository. One run on one dataset is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "davila7/claude-code-templates@fcf666b",
+      "task": "Using Polars, turn the registry index into analysis-ready tables: a flat skills table with one row per skill, and a per-publisher summary with skill count, share that installs, total and median installs, and categories covered. Write both as Parquet and CSV, use the lazy API where the skill recommends it, report timings, and check counts and two sample publisher rows against an independent Node script.",
+      "outcome": "`npx skills add davila7/claude-code-templates --skill polars` installed it first time.\n\nThe skill's best-practice file says to \"always prefer lazy mode for large datasets\" and to scan files rather than read them. Polars has no lazy scan for ordinary JSON, only for newline-delimited JSON. The skill lists the right functions for each format but does not say that plain JSON cannot be scanned. Our file is also one object with the skills in a nested array, a shape the skill has no example for. The agent parsed it with Python's `json` module, then switched to the lazy API for every transform.\n\nIt wrote a 26,001-row flat table and a 3,934-row publisher table. Loading took 2.6 seconds and the transforms took milliseconds. Two gotchas surfaced along the way: CSV export rejects nested columns, so a struct column had to be encoded; and a share calculation returned null instead of 0 for publishers with no checked skills until nulls were filled.\n\nThe row count, two publisher rows and the install total all matched an independent Node count. The 3,934 publishers also match the author total the index itself reports.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit 5169470. Python virtualenv with polars 1.44.2."
+    }
+  ],
+  "summary": "A thorough Polars guide: expressions, lazy evaluation, joins, windows and I/O, with six reference files. The lazy-first advice is right, and our tables came out correct. It covers flat files well and nested JSON not at all, and its advice to always scan does not work for plain JSON. For API exports, plan to parse first and go lazy after.",
+  "strengths": [
+    {
+      "title": "Lazy-first, with reasons",
+      "body": "It explains why lazy queries are faster and pushes you to use them. Our transforms on 26,001 rows took milliseconds."
+    },
+    {
+      "title": "Broad reference files",
+      "body": "Six references cover core concepts, operations, I/O, transformations, pandas migration and best practices."
+    },
+    {
+      "title": "Correct output",
+      "body": "Every count we checked, including the publisher total, matched an independent recount."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "No path for nested JSON",
+      "body": "No example covers a single JSON object holding an array of records, the shape of most API exports."
+    },
+    {
+      "title": "\"Always scan\" meets plain JSON",
+      "body": "Polars can only scan newline-delimited JSON. The skill lists that function but never says plain JSON has no lazy reader."
+    },
+    {
+      "title": "Not recently maintained",
+      "body": "The skill's folder was last changed in December 2025."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Fast transforms on CSV and Parquet",
+      "body": "For JSON exports, parse with the standard library first, then hand Polars a DataFrame."
+    }
+  ],
+  "notFor": "Small one-off tables. A few lines of pandas or a spreadsheet will do.",
+  "links": [
+    { "label": "davila7/claude-code-templates repository", "href": "https://github.com/davila7/claude-code-templates" }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "slug": "n8n-workflow-patterns",
+  "status": "draft",
+  "title": "n8n-workflow-patterns Review: Right Pattern Fast, Validation Needs the n8n MCP Server",
+  "description": "We designed a weekly digest workflow with this skill. It picked the right pattern at once, and its timezone and no-data advice both mattered. Its validation and deploy steps need the n8n MCP tools, which our test did not have.",
+  "skillSlug": "n8n-workflow-patterns",
+  "verdict": "Recommended",
+  "overallScore": 4.0,
+  "scores": {
+    "installation": 5,
+    "documentation": 4,
+    "depth": 4,
+    "maintenance": 5,
+    "platformSupport": 2
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "n8n workflow patterns skill",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of thirteen data and automation skills run on the same day against the same dataset: this site's own registry index, 26,001 skills in one 71 MB JSON file. Each run worked in its own private copy of the site's repository. One run on one dataset is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "czlonkowski/n8n-skills@19cd793",
+      "task": "Design an n8n workflow for a weekly digest of reader reports: every Monday, fetch the open issues from this site's public GitHub repository, group them by issue template or label, and email a summary to the maintainer. Use the pattern the skill recommends, write importable n8n JSON with placeholder credentials, and validate it the way the skill suggests. Do not activate it or send anything.",
+      "outcome": "`npx skills add czlonkowski/n8n-skills --skill n8n-workflow-patterns` installed it first time.\n\nThe pattern guide matched the job straight away. Its \"Scheduled Tasks\" pattern is for \"Recurring reports or summaries\", and its HTTP reference uses fetching GitHub issues as the worked example.\n\nTwo pieces of its advice changed the design. The timezone warning (schedule hours use the instance timezone, not UTC) led the agent to set `Australia/Sydney` explicitly. The \"early exit on no data\" advice added a branch that skips the email when there is nothing to report. That branch mattered: the repository had no issues at all on the day.\n\nThe result is an 8-node workflow (schedule, HTTP request, code to group by label, IF, format, send email, two log steps), saved inactive with placeholder credentials.\n\nThe skill's validation, test and deploy steps all use n8n MCP tools (`validate_workflow`, `n8n_test_workflow` and others). Our test setup did not provide them, so the agent checked the JSON by script: valid JSON, unique node IDs, every connection pointing at a real node. A fallback import into a local n8n did not finish installing within 10 minutes and was stopped. So the workflow is checked for structure but has not been imported or run.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit 5169470. No n8n instance and no n8n MCP server."
+    }
+  ],
+  "summary": "A well-organised, actively maintained guide to n8n workflow design: six core patterns, a selection guide, and practical gotchas that matter in real workflows. It chose the right shape for our job immediately. It is built to work with the n8n MCP server; without it, you can design with it but you cannot follow its own validate, test and deploy steps.",
+  "strengths": [
+    {
+      "title": "Fast pattern selection",
+      "body": "Six named patterns with \"use when\" lists. Our weekly digest matched \"Scheduled Tasks\" at once."
+    },
+    {
+      "title": "Gotchas from real workflows",
+      "body": "The timezone warning and the early exit for no data both changed our design, and the second one fired on day one."
+    },
+    {
+      "title": "Actively maintained",
+      "body": "The skill's folder changed less than two weeks before our test."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Validation depends on the n8n MCP server",
+      "body": "Its validate, test and activate steps name MCP tools. Without that server there is no documented way to check a workflow."
+    },
+    {
+      "title": "No quick local check",
+      "body": "It offers no lightweight way to confirm a workflow imports. Installing n8n locally to try took longer than our 10-minute limit."
+    },
+    {
+      "title": "Generic on the data side",
+      "body": "Nothing on GitHub labels or issue templates. The grouping logic in our workflow was the agent's own."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Designing n8n workflows with the n8n MCP server connected",
+      "body": "Install its companion MCP tools so the validate and test steps work."
+    }
+  ],
+  "notFor": "Zapier, Make or other automation platforms. Everything here is n8n-specific.",
+  "links": [
+    { "label": "czlonkowski/n8n-skills repository", "href": "https://github.com/czlonkowski/n8n-skills" }
+  ]
+}

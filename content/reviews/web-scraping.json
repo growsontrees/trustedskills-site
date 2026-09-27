@@ -1,0 +1,74 @@
+{
+  "slug": "web-scraping",
+  "status": "draft",
+  "title": "web-scraping Skill Review: Strong on Scraping Ethics, Blind to Structured Data",
+  "description": "We used the web-scraping skill to collect install counts from 13 public pages. Its robots.txt and rate-limit rules were exactly right. Its example scrapers delete the part of the page where the exact number lives.",
+  "skillSlug": "web-scraping",
+  "verdict": "Recommended",
+  "overallScore": 3.8,
+  "scores": {
+    "installation": 5,
+    "documentation": 4,
+    "depth": 3,
+    "maintenance": 4,
+    "platformSupport": 3
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "web scraping skill claude code",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of thirteen data and automation skills run on the same day against the same dataset: this site's own registry index, 26,001 skills in one 71 MB JSON file. Each run worked in its own private copy of the site's repository. One run on one dataset is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "jamditis/claude-skills-journalism@fda6048",
+      "task": "Collect the install count that skills.sh shows for each of the 13 skills in this batch by scraping their public pages. Check robots.txt first, make at most one request per second, save a CSV with the displayed count, the parsed number and our index's value, and report which differ and by how much.",
+      "outcome": "`npx skills add jamditis/claude-skills-journalism --skill web-scraping` installed it first time.\n\nThe agent read robots.txt first, as the skill insists. The skill pages were allowed. It used a descriptive User-Agent, one request per second, and the skill's redirect handling that stops on 401, 403 and 429. All 13 pages returned 200.\n\nThe visible count is rounded (\"6.1K\"). The exact figure sits in a JSON-LD block, a `<script>` tag of structured data. The skill's own `RequestsScraper` deletes every `<script>` tag before it reads the page, and its other scraper targets article text. The skill never mentions JSON-LD or structured data. The agent read the block itself.\n\nIts first parser was wrong and it had not saved the pages, so it fetched all 13 again: 26 page requests instead of the 13 we allowed. The run disclosed this.\n\nThe result: every live count is higher than the figure in our index, by 1.4 to 10 times (the xlsx skill shows 174,104 live and 20,838 in our index). Our index's counts date from March 2026 and the live counts are cumulative, so this is our data being old, not a scraping error.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit 5169470. Python virtualenv with requests and BeautifulSoup."
+    }
+  ],
+  "summary": "A scraping skill with good manners built in: read robots.txt, slow down, identify yourself, and never defeat access controls. That part is worth installing on its own. Its extraction code is built for article text, so on a modern page it throws away the structured data where exact numbers often live. Tell it to look for JSON-LD before it strips scripts.",
+  "strengths": [
+    {
+      "title": "Ethics are part of the method",
+      "body": "robots.txt, rate limits and an honest User-Agent are rules, not tips. It also says plainly not to bypass logins, paywalls or CAPTCHAs."
+    },
+    {
+      "title": "Careful redirect and error handling",
+      "body": "Its fetch loop validates each redirect and stops on 401, 403 and 429 instead of retrying into a block."
+    },
+    {
+      "title": "Fallback chain for hard pages",
+      "body": "It cascades from plain HTTP to article extraction to a browser, and suggests an observed API when pages fail."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Strips the data you may want",
+      "body": "The example scraper deletes every `<script>` tag, which removes JSON-LD. The skill never mentions structured data."
+    },
+    {
+      "title": "Weighted toward access problems",
+      "body": "Much of the file covers social media, yt-dlp and blocked pages. Plain extraction of a number from a normal page gets less help."
+    },
+    {
+      "title": "No advice to keep raw pages",
+      "body": "Our run had to fetch everything twice after a parser bug. Saving the HTML on the first pass would have avoided that."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Polite, repeatable collection from public pages",
+      "body": "Save the raw HTML, and check for JSON-LD before running its text extractors."
+    }
+  ],
+  "notFor": "Getting past logins, paywalls or bot protection. The skill refuses that, correctly.",
+  "links": [
+    { "label": "jamditis/claude-skills-journalism repository", "href": "https://github.com/jamditis/claude-skills-journalism" }
+  ]
+}

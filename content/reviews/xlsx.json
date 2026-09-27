@@ -1,0 +1,74 @@
+{
+  "slug": "xlsx",
+  "status": "draft",
+  "title": "xlsx Skill Review: Strict Formula Rules That Catch Real Errors, If You Have LibreOffice",
+  "description": "We used Anthropic's xlsx skill to build a 26,001-row registry report with live formulas. Its rules stopped a silent spreadsheet error before it happened. Its check step needs LibreOffice, and our machine had none.",
+  "skillSlug": "xlsx",
+  "verdict": "Recommended",
+  "overallScore": 4.2,
+  "scores": {
+    "installation": 5,
+    "documentation": 5,
+    "depth": 5,
+    "maintenance": 4,
+    "platformSupport": 2
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "xlsx skill claude code excel",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of thirteen data and automation skills run on the same day against the same dataset: this site's own registry index, 26,001 skills in one 71 MB JSON file. Each run worked in its own private copy of the site's repository. One run on one dataset is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "anthropics/skills@3337550",
+      "task": "Build an Excel workbook as a monthly registry report: a Data sheet with one row per skill, a Summary sheet that counts skills by category, install status and tier with formulas (not pasted values), and a Top 50 sheet by installs. Follow the skill's rules on formulas and recalculation, confirm zero formula errors, and check three Summary cells against an independent count.",
+      "outcome": "`npx skills add anthropics/skills --skill xlsx` installed it first time.\n\nThe agent built the workbook with openpyxl: 26,001 data rows, 397 formulas on the Summary sheet, and a Top 50 sheet. The skill bans `SORT`, `FILTER`, `UNIQUE` and `XLOOKUP`, and warns that a spilled formula can be silently cut to one cell while the error check still reports zero errors. So the agent sorted the Top 50 in Python and pulled every other column with `INDEX`/`MATCH`.\n\nThe skill's check step, `recalc.py`, calls LibreOffice, and our machine had none. The skill's dependency line says LibreOffice is \"auto-configured for sandboxed environments\", but that script only adjusts sockets on Linux and macOS. It does not install or find LibreOffice. The agent recalculated with the copy of Excel already on the machine instead, then ran the skill's error scan: zero formula errors.\n\nOne real bug got past that scan. A lookup into a blank date cell returned 0, and the date format showed it as midnight. The agent found it by reading values back and fixed it. Three Summary cells (backend skills that install, total installs for the official tier, skills never checked) matched an independent count in Node.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit 5169470. Windows 11, Python 3.12 virtualenv with openpyxl. No LibreOffice; recalculated through Microsoft Excel via COM."
+    }
+  ],
+  "summary": "The most careful spreadsheet skill we have tested. Its rules are specific and they matter: use formulas, not pasted numbers; avoid the functions that break silently; prove zero errors before you ship. On our 26,001-row report, those rules prevented a truncated Top 50 that would have looked correct. The weak spot is the check step. It needs LibreOffice, and nothing in the skill helps you when it is missing.",
+  "strengths": [
+    {
+      "title": "Rules aimed at silent failures",
+      "body": "It names the formulas that look fine but return wrong or cut-off results, and says what to use instead. That changed how our Top 50 sheet was built."
+    },
+    {
+      "title": "Formulas, not pasted numbers",
+      "body": "Every Summary figure is a live formula over the data sheet, so the report updates when the data does."
+    },
+    {
+      "title": "Honest about what a clean check proves",
+      "body": "It says outright that a clean recalculation proves formulas evaluate, not that they are right. Our blank-date bug showed why."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Needs LibreOffice to check its work",
+      "body": "The recalculation script stops if LibreOffice is not on the PATH. The \"auto-configured\" note only covers sockets in Linux and macOS sandboxes."
+    },
+    {
+      "title": "No route on Windows without Office",
+      "body": "We got past it only because Excel was already installed. A machine with neither program cannot reach the skill's zero-errors check."
+    },
+    {
+      "title": "Blank cells can slip through",
+      "body": "A lookup into an empty cell returns 0, which a date format hides. The error scan does not flag it, and the skill's gotcha list does not mention it."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Reports that people will edit and rely on",
+      "body": "Install LibreOffice first, and read back a sample of values after every recalculation."
+    }
+  ],
+  "notFor": "A one-off export of numbers nobody will edit. A CSV is simpler and needs none of the checking.",
+  "links": [
+    { "label": "anthropics/skills repository", "href": "https://github.com/anthropics/skills" }
+  ]
+}
