@@ -21,7 +21,7 @@ import { getCollectionsForSkill } from "../../../lib/collections";
 import { PUBLISHER_DESCRIPTIONS_ONLY, installIsBroken, shownDescription } from "../../../lib/skill-config";
 import type { PlatformKey } from "../../../hooks/usePlatform";
 import type { Metadata } from "next";
-import { canonicalUrl } from "../../../lib/site-url";
+import { canonicalUrl, skillPath } from "../../../lib/site-url";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -88,18 +88,31 @@ export async function generateStaticParams() {
   const top5000 = [...skills]
     .sort((a, b) => b.installs - a.installs)
     .slice(0, 1000)
-    .filter((s) => !/[:]/.test(s.slug));
+    // Only slugs that are already URL-safe. Next passes a prerendered param
+    // raw but a requested one percent-encoded, so decoding a slug such as
+    // "react%3Acomponents" at build time would look up the wrong skill.
+    .filter((s) => encodeURIComponent(s.slug) === s.slug);
   return top5000.map((skill) => ({ slug: skill.slug }));
 }
 
 // Same encoding as the sitemap, so canonical, JSON-LD and sitemap agree.
 function skillUrl(slug: string) {
-  return canonicalUrl(`/skills/${encodeURIComponent(slug)}`);
+  return canonicalUrl(skillPath(slug));
+}
+
+// Next hands over the segment still percent-encoded ("phx%3Awork"), so it has
+// to be decoded before it can match the index ("phx:work").
+function slugFromParam(param: string): string {
+  try {
+    return decodeURIComponent(param);
+  } catch {
+    return param;
+  }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const skill = getSkillBySlug(slug);
+  const skill = getSkillBySlug(slugFromParam(slug));
   if (!skill) return {};
   const categoryName = skill.category.charAt(0).toUpperCase() + skill.category.slice(1);
   // No publisher text: describe the page, not the skill, so the snippet makes
@@ -121,7 +134,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function SkillDetailPage({ params }: Props) {
   const { slug } = await params;
-  const skill = getSkillBySlug(slug);
+  const skill = getSkillBySlug(slugFromParam(slug));
   if (!skill) notFound();
 
   const tier = tierOf(skill);

@@ -11,6 +11,7 @@ import {
   type Skill,
 } from "../lib/skill-config";
 import { usePlatform, getPlatformInstall, PLATFORM_LABELS } from "../hooks/usePlatform";
+import { skillPath } from "../lib/site-url";
 import { categoryIcon, Check, Copy, Download } from "./icons";
 import { Chip, TierChip, cx } from "./ui";
 
@@ -58,7 +59,7 @@ export function SkillCard({ skill, compact = false }: SkillCardProps) {
 
         <div className="min-w-0 flex-1">
           <h3 className="truncate text-sm font-semibold text-ink-100 transition-colors duration-fast group-hover:text-ink-50">
-            <Link href={`/skills/${skill.slug}`} className="after:absolute after:inset-0">
+            <Link href={skillPath(skill.slug)} className="after:absolute after:inset-0">
               {skill.name}
             </Link>
           </h3>

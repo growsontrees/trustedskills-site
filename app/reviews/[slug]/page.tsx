@@ -22,6 +22,7 @@ import {
   type IconComponent,
 } from "../../../components/icons";
 import { cx } from "../../../components/ui";
+import { canonicalUrl, skillPath } from "../../../lib/site-url";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -166,7 +167,7 @@ export default async function ReviewDetailPage({ params }: Props) {
             "@type": "SoftwareApplication",
             name: skill?.name ?? review.skillSlug,
             applicationCategory: "DeveloperApplication",
-            url: skill?.repoUrl ?? `https://trustedskills.dev/skills/${review.skillSlug}`,
+            url: skill?.repoUrl ?? canonicalUrl(skillPath(review.skillSlug)),
           },
           reviewRating: {
             "@type": "Rating",
@@ -463,7 +464,7 @@ export default async function ReviewDetailPage({ params }: Props) {
                 <div className="space-y-2 text-sm">
                   {skill && (
                     <Link
-                      href={`/skills/${skill.slug}`}
+                      href={skillPath(skill.slug)}
                       className="flex items-center gap-2 text-ink-400 hover:text-ink-50 transition-colors"
                     >
                       <span>↗</span> Registry entry

@@ -10,6 +10,7 @@ import {
 } from "../../../lib/collections";
 import { getReviewedSkillSlugs, getReviewForSkill } from "../../../lib/reviews";
 import { formatCount, formatDate, installIsBroken, tierOf } from "../../../lib/skill-config";
+import { canonicalUrl, skillPath } from "../../../lib/site-url";
 import { AlertTriangle, ArrowLeft, ExternalLink, Flask, ListChecks, Search } from "../../../components/icons";
 import { Eyebrow, Panel, TierChip } from "../../../components/ui";
 
@@ -75,7 +76,7 @@ export default async function CollectionDetailPage({ params }: Props) {
       "@type": "ListItem",
       position: i + 1,
       name: entry.skill.name,
-      url: `https://trustedskills.dev/skills/${entry.skill.slug}`,
+      url: canonicalUrl(skillPath(entry.skill.slug)),
     })),
   };
 
@@ -165,7 +166,7 @@ export default async function CollectionDetailPage({ params }: Props) {
                       {entry.role && <Eyebrow className="mb-1.5">{entry.role}</Eyebrow>}
                       <h3 className="text-lg font-semibold text-ink-50">
                         <Link
-                          href={`/skills/${entry.skill.slug}`}
+                          href={skillPath(entry.skill.slug)}
                           className="transition-colors hover:text-accent-300"
                         >
                           {entry.skill.name}
@@ -210,7 +211,7 @@ export default async function CollectionDetailPage({ params }: Props) {
 
                       <div className="mt-4 flex flex-wrap items-center gap-4 text-sm">
                         <Link
-                          href={`/skills/${entry.skill.slug}`}
+                          href={skillPath(entry.skill.slug)}
                           className="text-accent-400 transition-colors hover:text-accent-300"
                         >
                           Install instructions →
