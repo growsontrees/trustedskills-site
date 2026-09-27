@@ -32,7 +32,7 @@ const INTENTIONAL_EXCLUSIONS = Object.freeze({
   "/_api_disabled/**": "Source-only disabled route handlers are not public routes.",
 });
 
-const TIER_SLUGS = Object.freeze(["featured", "verified", "community", "unverified"]);
+const TIER_SLUGS = Object.freeze(["official", "featured", "verified", "community", "unverified"]);
 const STATIC_ROUTES = Object.freeze(["/", "/skills", "/docs", "/reviews", "/submit"]);
 
 function readText(relativePath) {

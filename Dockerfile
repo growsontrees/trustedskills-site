@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-# The build pre-renders ~9,200 pages from a 20 MB bundled index, which needs far
+# The build pre-renders several thousand pages from an ~80 MB skills index, which needs far
 # more CPU and memory than the target VPS can spare. It runs in CI instead; the
 # VPS only ever pulls the finished image.
 
@@ -34,6 +34,8 @@ RUN addgroup -g 1001 -S nodejs && adduser -u 1001 -S nextjs -G nodejs
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+# The skills index is read from disk at runtime (lib/skills.ts), not bundled.
+COPY --from=builder --chown=nextjs:nodejs /app/data ./data
 
 # ISR writes revalidated pages back into the cache directory at runtime.
 RUN mkdir -p .next/cache && chown -R nextjs:nodejs .next/cache

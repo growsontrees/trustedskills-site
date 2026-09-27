@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Daily rebuild so registry updates reach the site without a code push.
+  schedule:
+    - cron: "30 19 * * *" # 05:30 AEST
 
 concurrency:
   group: deploy-${{ github.ref }}
@@ -21,6 +24,69 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Pull the newest registry index and merge it into the committed one,
+      # keeping the site's own descriptions, tiers and categories. The merged
+      # file only lives in this build; the repo keeps the enriched baseline so
+      # it does not gain an 80 MB commit every day.
+      #
+      # On main this step is FATAL. It used to warn and carry on, which meant a
+      # dead credential shipped a silently stale catalogue: the site served
+      # 26,001 skills against a registry of 44,854 for weeks while every build
+      # reported success. A publish that quietly drops 42% of the catalogue is
+      # worse than no publish, so the deploy stops instead. Off main the same
+      # failure is only a warning, so branch build tests still work without the
+      # secret.
+      #
+      # Access is a read-only deploy key on the registry rather than a personal
+      # access token. The previous PAT expired silently and is scoped to a human
+      # account; the deploy key is read-only, valid for exactly one repository,
+      # does not expire, and survives people leaving.
+      - name: Sync skills index from registry
+        env:
+          REGISTRY_SSH_KEY: ${{ secrets.REGISTRY_SSH_KEY }}
+          IS_MAIN: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          set -uo pipefail
+
+          fail() {
+            if [ "$IS_MAIN" = "true" ]; then
+              echo "::error::$1"
+              echo "Refusing to deploy a stale catalogue. See the step log above." >> "$GITHUB_STEP_SUMMARY"
+              exit 1
+            fi
+            echo "::warning::$1 (not main - continuing with the committed index)"
+            exit 0
+          }
+
+          [ -n "$REGISTRY_SSH_KEY" ] || fail "REGISTRY_SSH_KEY is not set."
+
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$REGISTRY_SSH_KEY" > ~/.ssh/registry_key
+          chmod 600 ~/.ssh/registry_key
+          ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
+
+          # Shallow clone: only the current index is needed, never the history.
+          GIT_SSH_COMMAND="ssh -i ~/.ssh/registry_key -o IdentitiesOnly=yes" \
+            git clone --depth 1 --quiet \
+              git@github.com:growsontrees/trustedskills-registry.git /tmp/registry \
+            || fail "Could not clone the registry. The REGISTRY_SSH_KEY deploy key is most likely revoked or missing from growsontrees/trustedskills-registry."
+
+          node scripts/sync-index.mjs /tmp/registry/skills-index.json \
+            || fail "Registry merge refused - see the reason above."
+
+          # Record what actually shipped, so drift is visible on the run itself
+          # rather than only by diffing the live site against the registry.
+          node -e '
+            const { skills, stats } = require("./data/skills-index.json");
+            console.log(`Index now carries ${skills.length} skills.`);
+            require("fs").appendFileSync(process.env.GITHUB_STEP_SUMMARY,
+              `### Registry sync\n\n- **${skills.length}** skills\n- **${stats.total_authors}** authors\n- registry generated \`${stats.last_updated}\`\n`);
+          '
+
       - uses: docker/setup-buildx-action@v3
 
       - uses: docker/login-action@v3
@@ -33,7 +99,9 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: true
+          # Runs on other branches (manual dispatch) are a build test only:
+          # nothing is pushed and nothing is deployed.
+          push: ${{ github.ref == 'refs/heads/main' }}
           tags: |
             ${{ env.IMAGE }}:latest
             ${{ env.IMAGE }}:${{ github.sha }}
@@ -44,6 +112,7 @@ jobs:
       # would sit on the previous image until someone redeployed by hand.
       - name: Trigger Coolify deploy
         id: deploy
+        if: github.ref == 'refs/heads/main'
         env:
           COOLIFY_WEBHOOK: ${{ secrets.COOLIFY_WEBHOOK }}
           COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
