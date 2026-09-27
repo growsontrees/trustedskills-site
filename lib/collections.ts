@@ -15,9 +15,12 @@ export const COLLECTIONS_DIR = join(process.cwd(), "content", "collections");
 
 let _collections: Collection[] | null = null;
 
-/** Every collection on disk, drafts included. Ordered newest first. */
+/**
+ * Every collection on disk, drafts included. Ordered newest first. Cached only
+ * in production, for the same reason as getAllReviewsIncludingDrafts().
+ */
 export function getAllCollectionsIncludingDrafts(): Collection[] {
-  if (!_collections) {
+  if (!_collections || process.env.NODE_ENV !== "production") {
     _collections = existsSync(COLLECTIONS_DIR)
       ? readdirSync(COLLECTIONS_DIR)
           .filter((file) => file.endsWith(".json"))

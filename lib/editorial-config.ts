@@ -95,7 +95,8 @@ export const EVIDENCE_BASIS_CONFIG: Record<
     label: "Hands-on tested",
     icon: Flask,
     badge: "border-ok-800 bg-ok-950 text-ok-300",
-    blurb: "We installed this skill and ran it against real work. The runs are listed below.",
+    blurb:
+      "We ran this skill against real work. The runs are listed below, including how it installed — or why it didn't.",
   },
   "source-review": {
     label: "Source review — not run",

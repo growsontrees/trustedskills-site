@@ -463,7 +463,7 @@ export default async function SkillDetailPage({ params }: Props) {
               </p>
               <p className="mt-1.5 text-xs leading-relaxed text-ink-500">
                 {handsOn
-                  ? "We installed this skill and ran it against real work."
+                  ? "We ran this skill against real work."
                   : "Based on reading the source and documentation. We have not run it yet."}
               </p>
               <Link

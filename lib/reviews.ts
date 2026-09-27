@@ -21,9 +21,15 @@ export function draftsVisible(): boolean {
 
 let _reviews: Review[] | null = null;
 
-/** Every review on disk, drafts included. Ordered newest first. */
+/**
+ * Every review on disk, drafts included. Ordered newest first.
+ *
+ * Cached only in production. In development a drafting agent adds files while
+ * `next dev` is running, and the JSON is read with fs, so HMR never invalidates
+ * a module-level cache — new reviews would stay invisible until a restart.
+ */
 export function getAllReviewsIncludingDrafts(): Review[] {
-  if (!_reviews) {
+  if (!_reviews || process.env.NODE_ENV !== "production") {
     _reviews = existsSync(REVIEWS_DIR)
       ? readdirSync(REVIEWS_DIR)
           .filter((file) => file.endsWith(".json"))
