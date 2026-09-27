@@ -12,7 +12,7 @@ export interface DocArticle {
 
 const TRUSTEDSKILLS_AUTHOR = {
   name: 'TrustedSkills Team',
-  bio: 'The TrustedSkills team builds and tests AI agent integrations across Claude, OpenClaw, Cursor, and VS Code. We verify every skill in our registry and have set up hundreds of MCP configs across every major platform.',
+  bio: 'The TrustedSkills team maintains the TrustedSkills index of AI agent skills. The index records where each skill comes from and how to install it. It does not review or audit skill code.',
 };
 
 export const DOC_CATEGORIES = [
@@ -34,11 +34,11 @@ export const DOC_ARTICLES: DocArticle[] = [
     category: 'Foundational Concepts',
     categorySlug: 'concepts',
     persona: 'beginner',
-    lastUpdated: '2026-03-04',
+    lastUpdated: '2026-09-27',
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"MCP vs Skills vs Plugins AI: What's the Difference?","description":"Understand MCP vs skills vs plugins AI terminology. Clear definitions and a comparison table.","dateModified":"2026-03-04","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"MCP vs Skills vs Plugins AI: What's the Difference?","description":"Understand MCP vs skills vs plugins AI terminology. Clear definitions and a comparison table.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
@@ -46,7 +46,7 @@ export const DOC_ARTICLES: DocArticle[] = [
   <p><strong>MCP</strong> is the protocol (how AI talks to tools). <strong>Skills</strong> and <strong>plugins</strong> are both names for the packaged tools themselves — different platforms, same idea. TrustedSkills calls them "skills"; ChatGPT called them "plugins". You'll use all three terms depending on which docs you're reading.</p>
 </div>
 
-<p class="article-intro">I spent my first week with Claude Desktop genuinely confused about whether I needed an "MCP server", a "skill", or a "plugin". Turns out they're all related — but not identical. Here's the breakdown I wish I'd had on day one.</p>
+<p class="article-intro">"MCP server", "skill" and "plugin" get used as if they mean the same thing. They are related, but they are not identical. This page explains how they differ.</p>
 
 <h2>MCP vs Skills vs Plugins AI: The Core Distinction</h2>
 <p>Three terms, one ecosystem. Here's what each actually means:</p>
@@ -55,11 +55,6 @@ export const DOC_ARTICLES: DocArticle[] = [
   <li><strong>Skills</strong> are <em>packages</em> — installable capabilities that use MCP under the hood</li>
   <li><strong>Plugins</strong> are <em>the same thing as skills</em> — just a different word from a different era</li>
 </ul>
-
-<div class="experience-callout">
-  <div class="experience-label">🔬 From the field</div>
-  <p>A client asked us to add a database skill to their Claude Code setup. Their developer called it an "MCP server", their product manager called it a "plugin", and our documentation called it a "skill". All three were correct — they were just describing different layers of the same thing. Once we aligned on that, the confusion evaporated.</p>
-</div>
 
 <h2>The Analogy That Actually Makes It Click</h2>
 <p>Think about the web. <strong>HTTP</strong> is the protocol — nobody argues about whether a website "uses HTTP"; it just does. The website is the thing you care about. HTTP is just how it communicates.</p>
@@ -189,11 +184,11 @@ export const DOC_ARTICLES: DocArticle[] = [
     category: 'Foundational Concepts',
     categorySlug: 'concepts',
     persona: 'beginner',
-    lastUpdated: '2026-03-04',
+    lastUpdated: '2026-09-27',
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"What is npx MCP Server? Why Every MCP Config Uses It","description":"What is npx MCP server — how it runs packages without installing globally, and why every MCP config uses npx -y.","dateModified":"2026-03-04","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"What is npx MCP Server? Why Every MCP Config Uses It","description":"What is npx MCP server — how it runs packages without installing globally, and why every MCP config uses npx -y.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
@@ -201,16 +196,11 @@ export const DOC_ARTICLES: DocArticle[] = [
   <p><strong>npx</strong> runs an npm package without a permanent global install. Every MCP config uses <code>npx -y</code> because it lets your AI client launch skills automatically — no manual setup, always fresh, works on any machine with Node.js. The <code>-y</code> flag just skips the "are you sure?" prompt.</p>
 </div>
 
-<p class="article-intro">When I first saw <code>"command": "npx", "args": ["-y", "@some/package"]</code> in an MCP config, I had no idea what npx was doing. Why not just install the package? Why the <code>-y</code>? Here's the full story — shorter than you'd think.</p>
+<p class="article-intro">Almost every MCP config contains <code>"command": "npx", "args": ["-y", "@some/package"]</code>. This page explains what npx does there, why the package isn't installed first, and what the <code>-y</code> is for.</p>
 
 <h2>The Problem npx Solves for MCP Servers</h2>
 <p>Old way: install globally, then run. <code>npm install -g weather-server</code>, then <code>weather-server</code>. Works fine — but it means every machine needs that pre-install step, version conflicts become a nightmare, and things quietly go stale.</p>
 <p>npx skips all of that. It downloads the package, runs it, caches it locally. No global install. No cleanup. No version drift.</p>
-
-<div class="experience-callout">
-  <div class="experience-label">🔬 From the field</div>
-  <p>We onboarded a team of 8 developers onto a shared MCP setup. Without npx, everyone would've needed to manually run <code>npm install -g</code> for each skill before Claude Code would work. With npx in the config, they cloned the repo, opened the project, and their AI tools just worked. Zero extra setup steps.</p>
-</div>
 
 <h2>The Vending Machine Analogy</h2>
 <p>Global install = buying a snack and storing it in your pantry. Always available, but takes up permanent space and eventually goes stale.</p>
@@ -236,9 +226,8 @@ export const DOC_ARTICLES: DocArticle[] = [
 <pre><code class="language-bash">npx -y @modelcontextprotocol/server-memory
 # Runs immediately. No questions asked.</code></pre>
 
-<div class="experience-callout">
-  <div class="experience-label">🔬 From the field</div>
-  <p>A common support question we see: "My skill isn't starting up." Nine times out of ten, the <code>-y</code> flag is missing. Claude Desktop launches the server, npx waits for a "y" that never comes, and the server quietly times out. Add the <code>-y</code> and it works first time.</p>
+<div class="tip-box">
+  <strong>💡 Why the <code>-y</code>?</strong> It answers yes to npx's "Ok to proceed?" install prompt. Current npm versions skip that prompt when there is no terminal attached, which is how apps launch MCP servers. Keeping <code>-y</code> makes the same command behave the same way when you test it by hand.
 </div>
 
 <h2>A Real MCP Config, Dissected</h2>
@@ -332,11 +321,11 @@ export const DOC_ARTICLES: DocArticle[] = [
     category: 'Foundational Concepts',
     categorySlug: 'concepts',
     persona: 'developer',
-    lastUpdated: '2026-03-04',
+    lastUpdated: '2026-09-27',
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"How MCP Skills Work Together with AI Agents: Full Guide","description":"How MCP skills work together with AI agents — full lifecycle from skill discovery to tool calling.","dateModified":"2026-03-04","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"How MCP Skills Work Together with AI Agents: Full Guide","description":"How MCP skills work together with AI agents — full lifecycle from skill discovery to tool calling.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
@@ -344,7 +333,7 @@ export const DOC_ARTICLES: DocArticle[] = [
   <p>Here's how it works: you find a skill, add its config to your AI client, the client launches the skill as a background subprocess, and the AI model calls that subprocess's tools when your conversation needs them. Communication is JSON-RPC over stdio — no ports, no network config, just pipes between processes.</p>
 </div>
 
-<p class="article-intro">Understanding how MCP skills work under the hood changed how I debug problems and design setups. You don't need to know this to use skills — but once you do, you'll never be confused by a broken config again.</p>
+<p class="article-intro">You don't need to know how MCP works under the hood to use it. Knowing it does make a broken config much easier to debug.</p>
 
 <h2>The Architecture in One Diagram</h2>
 <pre><code class="language-bash">┌─────────────────────────────────────────────────────────┐
@@ -376,11 +365,6 @@ export const DOC_ARTICLES: DocArticle[] = [
 │  → calls get_weather({ location: "Sydney" })            │
 └─────────────────────────────────────────────────────────┘</code></pre>
 <p>The weather server here is a made-up example to show the flow. It is not a package you can install.</p>
-
-<div class="experience-callout">
-  <div class="experience-label">🔬 From the field</div>
-  <p>We built an MCP skill for a legal team that pulled case precedents from their internal database. The AI client, the MCP server, and the database were all on the same machine — no network exposure, no firewall rules to change. The stdio-based architecture meant setup took 20 minutes instead of a day of DevOps work.</p>
-</div>
 
 <h2>The Full Lifecycle, Step by Step</h2>
 
@@ -508,11 +492,11 @@ export const DOC_ARTICLES: DocArticle[] = [
     category: 'Claude Desktop',
     categorySlug: 'claude-desktop',
     persona: 'beginner',
-    lastUpdated: '2026-03-04',
+    lastUpdated: '2026-09-27',
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Claude Desktop Mac: Step-by-Step","description":"Install MCP skills on Claude Desktop Mac — config file location, Node.js setup, and troubleshooting.","dateModified":"2026-03-04","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Claude Desktop Mac: Step-by-Step","description":"Install MCP skills on Claude Desktop Mac — config file location, Node.js setup, and troubleshooting.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
@@ -520,7 +504,7 @@ export const DOC_ARTICLES: DocArticle[] = [
   <p>Open <code>~/Library/Application Support/Claude/claude_desktop_config.json</code>, add your skill inside an <code>mcpServers</code> block, save, and fully restart Claude Desktop. That's it. The skill appears in your next conversation.</p>
 </div>
 
-<p class="article-intro">Last month I helped a non-technical colleague add a calendar tool to her Claude Desktop. She'd never touched a JSON file before. Ten minutes later, Claude was pulling her meetings automatically. Here's exactly how we did it — including the part where TextEdit almost wrecked everything.</p>
+<p class="article-intro">You can add an MCP server to Claude Desktop on a Mac without having edited a JSON file before. This guide goes step by step, including how to stop TextEdit from breaking the file.</p>
 
 <h2>What You'll Need</h2>
 <ul>
@@ -652,11 +636,11 @@ export const DOC_ARTICLES: DocArticle[] = [
     category: 'Claude Desktop',
     categorySlug: 'claude-desktop',
     persona: 'beginner',
-    lastUpdated: '2026-03-04',
+    lastUpdated: '2026-09-27',
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Claude Desktop Windows: Full Guide","description":"Install MCP skills on Claude Desktop Windows — config location, JSON format, Windows gotchas, and troubleshooting.","dateModified":"2026-03-04","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Claude Desktop Windows: Full Guide","description":"Install MCP skills on Claude Desktop Windows — config location, JSON format, Windows gotchas, and troubleshooting.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
@@ -721,9 +705,8 @@ export const DOC_ARTICLES: DocArticle[] = [
   }
 }</code></pre>
 
-<div class="experience-callout">
-  <div class="experience-label">🔬 From the field</div>
-  <p>We've seen this exact issue on almost every Windows machine where Node.js was installed using a non-standard location or an older installer that didn't add to PATH. Two minutes to find the path with <code>where npx</code>, update the config, and everything works. Don't reinstall Node — just use the full path.</p>
+<div class="tip-box">
+  <strong>💡 Use the full path before reinstalling Node:</strong> If npx works in your terminal but the app can't find it, run <code>where.exe npx</code> and put that full path in the config. That is usually quicker than reinstalling Node.js.
 </div>
 
 <h2>Step 4: Save and Restart</h2>
@@ -785,11 +768,11 @@ export const DOC_ARTICLES: DocArticle[] = [
     category: 'Claude Desktop',
     categorySlug: 'claude-desktop',
     persona: 'developer',
-    lastUpdated: '2026-03-04',
+    lastUpdated: '2026-09-27',
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Claude Desktop Linux: Config & Setup Guide","description":"Install MCP Claude Desktop Linux — config path, NVM fixes, and Linux-specific setup tips.","dateModified":"2026-03-04","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Claude Desktop Linux: Config & Setup Guide","description":"Install MCP Claude Desktop Linux — config path, NVM fixes, and Linux-specific setup tips.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
@@ -839,9 +822,8 @@ nano ~/.config/Claude/claude_desktop_config.json</code></pre>
 <h2>The nvm Problem — and Two Ways to Fix It</h2>
 <p>If you installed Node.js via nvm, you've probably noticed: nvm works great in your terminal, but Claude Desktop acts like Node doesn't exist. That's because nvm adds npx to your shell's PATH — but only for interactive shells. Claude Desktop launches non-interactively and never runs those shell initialisation scripts.</p>
 
-<div class="experience-callout">
-  <div class="experience-label">🔬 From the field</div>
-  <p>We set up MCP skills for a developer running Ubuntu 22.04 with nvm. Claude Desktop kept logging "npx: command not found". Adding nvm to <code>~/.profile</code> fixed it for him. But on a second machine with a different login manager, <code>~/.profile</code> wasn't being sourced at all — full path to npx was the only reliable fix. When in doubt, use the full path.</p>
+<div class="tip-box">
+  <strong>💡 When in doubt, use the full path:</strong> Whether your desktop session loads <code>~/.profile</code> depends on your login manager. A full path to npx in the config works whichever start-up files load.
 </div>
 
 <h3>Fix Option 1: Full path (most reliable)</h3>
@@ -892,23 +874,27 @@ nano ~/.config/Claude/claude_desktop_config.json</code></pre>
   {
     slug: ['claude-code', 'beginner-guide'],
     title: 'Claude Code VS Code MCP Setup: Complete Beginner\'s Guide',
-    description: 'Claude Code VS Code MCP setup guide for beginners — install the extension, configure MCP skills in settings.json, reload to apply changes, and verify your tools are working. No experience needed.',
+    description: 'Claude Code VS Code MCP setup guide for beginners — install the extension, add MCP servers with claude mcp add, find them in ~/.claude.json or .mcp.json, and check them with /mcp. No experience needed.',
     category: 'Claude Code',
     categorySlug: 'claude-code',
     persona: 'beginner',
-    lastUpdated: '2026-03-04',
+    lastUpdated: '2026-09-27',
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Claude Code VS Code MCP Setup: Complete Beginner's Guide","description":"Claude Code VS Code MCP setup for beginners — install, configure, and verify MCP skills.","dateModified":"2026-03-04","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Claude Code VS Code MCP Setup: Complete Beginner's Guide","description":"Claude Code VS Code MCP setup for beginners — install, configure, and verify MCP skills.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
-  <p>Install the Claude Code extension from VS Code marketplace, then add skills to <code>~/.claude/settings.json</code> (global) or <code>.claude/settings.json</code> in your project. Use <code>claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory</code> to skip manual JSON editing. Run <code>/tools</code> inside Claude to verify.</p>
+  <p>Install the Claude Code extension from the VS Code marketplace. Add an MCP server with <code>claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory</code>. User and local servers are stored in <code>~/.claude.json</code>. Project servers are stored in <code>.mcp.json</code> in your project root. Type <code>/mcp</code> inside Claude Code to check that the server connected.</p>
 </div>
 
-<p class="article-intro">When I switched from using Claude Desktop to Claude Code for development work, the biggest surprise was how much better the MCP integration is for coding workflows. Files, terminals, and tools — all in one place. Setting it up took me about five minutes once I understood where the config lives.</p>
+<div class="tip-box">
+  <strong>💡 Installing a skill from TrustedSkills?</strong> Most skills listed here are SKILL.md skills, not MCP servers. They need no MCP config. Install one with <code>npx skills add &lt;owner&gt;/&lt;repo&gt; --skill &lt;name&gt; -a claude-code</code>. This guide covers MCP servers.
+</div>
+
+<p class="article-intro">Claude Code can read your files and run terminal commands without any extra setup. MCP servers add more tools on top of that, such as a database client or a search API. This guide shows where Claude Code stores MCP servers, how to add one, and how to check that it loaded.</p>
 
 <h2>Claude Code vs Claude Desktop: What's the Difference?</h2>
 <div class="table-container">
@@ -936,43 +922,42 @@ nano ~/.config/Claude/claude_desktop_config.json</code></pre>
 </ol>
 
 <h2>Two Ways to Run Claude Code</h2>
-<p>You can use Claude Code as a VS Code sidebar panel — or just run <code>claude</code> in your terminal. Both use the same config files and the same MCP skills. This guide covers both.</p>
+<p>You can use Claude Code as a VS Code sidebar panel, or run <code>claude</code> in your terminal. Both read the same MCP configuration. This guide covers both.</p>
 
-<h2>Where MCP Config Lives in Claude Code</h2>
-
-<h3>Global config — for personal tools</h3>
-<pre><code class="language-bash"># Mac / Linux
-~/.claude/settings.json
-
-# Windows
-%USERPROFILE%\.claude\settings.json</code></pre>
-<p>Skills here are available in every project you open.</p>
-
-<h3>Project config — for team tools</h3>
-<pre><code class="language-bash">.claude/settings.json  # in your project root</code></pre>
-<p>Skills here are only available in that project — but you can commit the file to git.</p>
-
-<div class="experience-callout">
-  <div class="experience-label">🔬 From the field</div>
-  <p>A team we worked with added a Postgres MCP skill to their project config and committed it. When a new developer joined and cloned the repo, they had full database query capabilities in Claude Code within two minutes — no setup doc to follow, no "have you installed X?" messages. The config was just there.</p>
+<h2>Where Claude Code Stores MCP Servers</h2>
+<p>Claude Code has three scopes. The <code>--scope</code> flag on <code>claude mcp add</code> picks one. If you leave it out, Claude Code uses <strong>local</strong>.</p>
+<div class="table-container">
+  <table>
+    <thead>
+      <tr><th>Scope</th><th>Where it is stored</th><th>Who gets it</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>local</strong> (default)</td><td><code>~/.claude.json</code>, under the entry for the current project</td><td>Only you, only in this project</td></tr>
+      <tr><td><strong>user</strong></td><td><code>~/.claude.json</code></td><td>Only you, in every project</td></tr>
+      <tr><td><strong>project</strong></td><td><code>.mcp.json</code> in your project root</td><td>Everyone who clones the repo</td></tr>
+    </tbody>
+  </table>
 </div>
+<p>On Windows, <code>~</code> is your user folder, for example <code>C:\\Users\\YourName\\.claude.json</code>. The file <code>~/.claude/settings.json</code> holds other Claude Code settings. It is not where <code>claude mcp add</code> writes MCP servers.</p>
 
-<h2>Adding a Skill: Two Methods</h2>
+<h2>Adding an MCP Server: Two Methods</h2>
 
-<h3>Method A: CLI (fastest)</h3>
-<pre><code class="language-bash"># Install Claude Code CLI if you haven't
-npm install -g @anthropic-ai/claude-code
+<h3>Method A: CLI (recommended)</h3>
+<pre><code class="language-bash"># Install Claude Code if you haven't (macOS, Linux, WSL)
+curl -fsSL https://claude.ai/install.sh | bash
 
-# Add a skill globally
+# Add a server for yourself, in every project
 claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory
 
-# Add to current project only
+# Add a server to this project's .mcp.json (shared through git)
 claude mcp add --scope project memory -- npx -y @modelcontextprotocol/server-memory
 
-# See what's installed
+# See what's configured
 claude mcp list</code></pre>
+<p>On Windows, install Claude Code from PowerShell with <code>irm https://claude.ai/install.ps1 | iex</code>. You can also use <code>npm install -g @anthropic-ai/claude-code</code>.</p>
 
-<h3>Method B: Edit the JSON directly</h3>
+<h3>Method B: Edit .mcp.json directly</h3>
+<p>For a project server, create or edit <code>.mcp.json</code> in your project root:</p>
 <pre><code class="language-json">{
   "mcpServers": {
     "memory": {
@@ -981,21 +966,16 @@ claude mcp list</code></pre>
     }
   }
 }</code></pre>
+<p>Do not hand-edit <code>~/.claude.json</code>. Claude Code also keeps its own state in that file. For a user server, use <code>claude mcp add --scope user</code> or <code>claude mcp add-json --scope user</code> instead.</p>
 
 <h2>Reloading After Changes</h2>
-<ul>
-  <li><strong>VS Code:</strong> <strong>Ctrl+Shift+P</strong> → "Claude Code: Restart"</li>
-  <li><strong>Terminal:</strong> type <code>/quit</code> then rerun <code>claude</code></li>
-</ul>
+<p>Start a new session after you edit a config file. In the terminal, type <code>/exit</code>, then run <code>claude</code> again. The first time Claude Code sees a server in <code>.mcp.json</code>, it asks you to approve it.</p>
 
 <h2>Verify It Worked</h2>
-<pre><code class="language-bash">claude mcp list       # shows configured skills
+<pre><code class="language-bash">claude mcp list       # lists configured servers
+claude mcp get memory # shows one server and checks that it connects
 claude                # start a session
-/tools                # lists available tools inside Claude</code></pre>
-
-<div class="tip-box">
-  <strong>💡 Shortcut:</strong> <code>claude mcp add</code> not only writes to your config — it also reloads the MCP connection immediately. Faster than editing JSON and restarting.
-</div>
+/mcp                  # inside Claude Code: shows each server and its status</code></pre>
 
 <hr/>
 
@@ -1005,13 +985,13 @@ claude                # start a session
 <p>No — they serve different purposes. Claude Desktop is for general AI tasks; Claude Code is for active software development. Many people use both, but you don't need to.</p>
 
 <h3>Where does Claude Code store MCP settings?</h3>
-<p>Global settings at <code>~/.claude/settings.json</code>. Project settings at <code>.claude/settings.json</code> in your project root. The CLI command <code>claude mcp add</code> writes to global by default.</p>
+<p>Local and user servers are in <code>~/.claude.json</code>. Project servers are in <code>.mcp.json</code> in your project root. <code>claude mcp add</code> uses the local scope unless you pass <code>--scope user</code> or <code>--scope project</code>.</p>
 
-<h3>Can I use the same skills in Claude Code and Claude Desktop?</h3>
-<p>Yes — MCP skills are platform-agnostic. You just add the same config entry to both places. Each editor manages its own config file.</p>
+<h3>Can I use the same MCP servers in Claude Code and Claude Desktop?</h3>
+<p>Yes. Add the server to each app. Each app keeps its own config file. On macOS and WSL, <code>claude mcp add-from-claude-desktop</code> copies servers from Claude Desktop into Claude Code.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I need both Claude Desktop and Claude Code?","acceptedAnswer":{"@type":"Answer","text":"No. Claude Desktop is for general AI tasks; Claude Code is for active development. Use whichever fits your workflow."}},{"@type":"Question","name":"Where does Claude Code store MCP settings?","acceptedAnswer":{"@type":"Answer","text":"Global settings at ~/.claude/settings.json. Project settings at .claude/settings.json in your project root."}},{"@type":"Question","name":"Can I use the same skills in Claude Code and Claude Desktop?","acceptedAnswer":{"@type":"Answer","text":"Yes — add the same config entry to both. Each editor manages its own config file separately."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I need both Claude Desktop and Claude Code?","acceptedAnswer":{"@type":"Answer","text":"No. Claude Desktop is for general AI tasks; Claude Code is for active development. Use whichever fits your workflow."}},{"@type":"Question","name":"Where does Claude Code store MCP settings?","acceptedAnswer":{"@type":"Answer","text":"Local and user servers are in ~/.claude.json. Project servers are in .mcp.json in your project root. claude mcp add uses the local scope unless you pass --scope user or --scope project."}},{"@type":"Question","name":"Can I use the same MCP servers in Claude Code and Claude Desktop?","acceptedAnswer":{"@type":"Answer","text":"Yes. Add the server to each app. On macOS and WSL, claude mcp add-from-claude-desktop copies servers from Claude Desktop into Claude Code."}}]}
 </script>
     `,
   },
@@ -1023,82 +1003,71 @@ claude                # start a session
     category: 'Claude Code',
     categorySlug: 'claude-code',
     persona: 'developer',
-    lastUpdated: '2026-03-04',
+    lastUpdated: '2026-09-27',
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Claude Code MCP Global vs Project Config: When to Use Each","description":"Claude Code MCP global vs project config — when to use each and how to share skills with your team.","dateModified":"2026-03-04","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Claude Code MCP Global vs Project Config: When to Use Each","description":"Claude Code MCP global vs project config — when to use each and how to share skills with your team.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
-  <p>Global config (<code>~/.claude/settings.json</code>) = personal tools, your credentials, things you want everywhere. Project config (<code>.claude/settings.json</code>) = team tools, stuff you'll commit to git. Never put API keys directly in project config — use environment variable references instead.</p>
+  <p>User scope (<code>claude mcp add --scope user</code>, stored in <code>~/.claude.json</code>) = personal tools, your credentials, things you want everywhere. Project scope (<code>claude mcp add --scope project</code>, stored in <code>.mcp.json</code>) = team tools you commit to git. Never put API keys directly in <code>.mcp.json</code>. Use <code>$&#123;VAR&#125;</code> references instead.</p>
 </div>
 
-<p class="article-intro">Here's the question I get most from teams adopting Claude Code: "Where should I put the Postgres skill?" The answer depends on who needs it and whether there are secrets involved. Let me walk through the logic.</p>
+<p class="article-intro">When you add an MCP server to Claude Code, you choose who gets it: only you, or everyone who clones the repo. The answer depends on who needs the tool and whether it uses a secret.</p>
 
-<h2>The Two Locations</h2>
+<h2>The Three Scopes</h2>
 <div class="table-container">
   <table>
     <thead>
-      <tr><th>Config type</th><th>Mac/Linux path</th><th>Windows path</th><th>Scope</th></tr>
+      <tr><th>Scope</th><th>Where it is stored</th><th>Who gets it</th></tr>
     </thead>
     <tbody>
       <tr>
-        <td><strong>Global</strong></td>
-        <td><code>~/.claude/settings.json</code></td>
-        <td><code>%USERPROFILE%\\.claude\\settings.json</code></td>
-        <td>All projects, this machine only</td>
+        <td><strong>User</strong> (<code>--scope user</code>)</td>
+        <td><code>~/.claude.json</code></td>
+        <td>Only you, in all projects on this machine</td>
       </tr>
       <tr>
-        <td><strong>Project</strong></td>
-        <td><code>.claude/settings.json</code> (project root)</td>
-        <td><code>.claude\\settings.json</code> (project root)</td>
-        <td>This project only — committable to git</td>
+        <td><strong>Local</strong> (default)</td>
+        <td><code>~/.claude.json</code>, under the current project</td>
+        <td>Only you, only in this project</td>
+      </tr>
+      <tr>
+        <td><strong>Project</strong> (<code>--scope project</code>)</td>
+        <td><code>.mcp.json</code> in the project root</td>
+        <td>Everyone who clones the repo</td>
       </tr>
     </tbody>
   </table>
 </div>
+<p>On Windows, <code>~</code> is your user folder, for example <code>C:\\Users\\YourName\\.claude.json</code>. <code>claude mcp add</code> does not write to <code>~/.claude/settings.json</code> or <code>.claude/settings.json</code>. Those files hold other Claude Code settings.</p>
 
-<h2>Global Config — Your Personal Toolkit</h2>
-<p>Think of global config as your personal workspace. Anything in here follows you across every project you open with Claude Code.</p>
-<p><strong>Good fits for global config:</strong></p>
+<h2>User Scope — Your Personal Toolkit</h2>
+<p>A user-scoped server follows you into every project you open with Claude Code. Nobody else gets it.</p>
+<p><strong>Good fits for user scope:</strong></p>
 <ul>
-  <li>Weather, calculator, notes — tools you want everywhere</li>
+  <li>Notes or memory tools you want everywhere</li>
   <li>Web search with your personal API key</li>
   <li>GitHub tool with your personal access token</li>
   <li>Any tool using credentials that are <em>yours</em>, not the project's</li>
 </ul>
 
-<pre><code class="language-json">{
-  "mcpServers": {
-    "memory": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-memory"]
-    },
-    "brave-search": {
-      "command": "npx",
-      "args": ["-y", "@brave/brave-search-mcp-server"],
-      "env": { "BRAVE_API_KEY": "your-personal-key" }
-    }
-  }
-}</code></pre>
+<pre><code class="language-bash">claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory
+claude mcp add --scope user brave-search -e BRAVE_API_KEY=your-personal-key -- npx -y @brave/brave-search-mcp-server</code></pre>
+<p>Claude Code writes these to <code>~/.claude.json</code>. That file is never inside your repo, so the key is not committed.</p>
 
-<h2>Project Config — Team Tools via Git</h2>
-<p>Project config's superpower is that it lives in your repo. Commit it, push it, and every team member who clones the repo has the same tools automatically.</p>
-<p><strong>Good fits for project config:</strong></p>
+<h2>Project Scope — Team Tools via Git</h2>
+<p>A project-scoped server lives in <code>.mcp.json</code> in your repo. Commit it, and everyone who clones the repo gets the same server. Claude Code asks each person to approve a project server the first time it sees it.</p>
+<p><strong>Good fits for project scope:</strong></p>
 <ul>
   <li>Database tools pointing to the project's dev DB</li>
   <li>Project-specific validators or code generators</li>
   <li>Any tool that should be the same for all developers on the team</li>
 </ul>
 
-<div class="experience-callout">
-  <div class="experience-label">🔬 From the field</div>
-  <p>We added a Supabase MCP skill to a startup's project config. Every new hire cloned the repo and immediately had AI-assisted database queries, schema exploration, and migration help inside Claude Code — with zero additional setup. The client calculated it saved about 30 minutes of onboarding per developer.</p>
-</div>
-
-<h3>Project config example</h3>
+<h3>.mcp.json example</h3>
 <pre><code class="language-json">{
   "mcpServers": {
     "brave-search": {
@@ -1109,54 +1078,54 @@ claude                # start a session
   }
 }</code></pre>
 
-<p>Each developer sets their own <code>BRAVE_API_KEY</code> in their shell or a gitignored <code>.env</code> file. The config commits safely — no actual credentials in the repo.</p>
+<p>Claude Code replaces <code>$&#123;BRAVE_API_KEY&#125;</code> with the value of that environment variable when it starts the server. Each developer sets their own <code>BRAVE_API_KEY</code> in their shell before running <code>claude</code>. Claude Code does not read a <code>.env</code> file for you. The committed file holds no credentials.</p>
 
 <div class="warning-box">
-  <strong>⚠️ Don't commit secrets:</strong> Once a key is in git history, it's compromised — even if you delete it later. Always use <code>$&#123;VAR_NAME&#125;</code> references and set the actual values locally. Add <code>.env</code> to your <code>.gitignore</code>.
+  <strong>⚠️ Don't commit secrets:</strong> Once a key is in git history, treat it as leaked, even if you delete it later. Always use <code>$&#123;VAR_NAME&#125;</code> references in <code>.mcp.json</code> and set the real values in your own environment.
 </div>
 
-<h2>Global vs Project: The Decision Matrix</h2>
+<h2>User vs Project: The Decision Matrix</h2>
 <div class="table-container">
   <table>
     <thead>
-      <tr><th></th><th>Global Config</th><th>Project Config</th></tr>
+      <tr><th></th><th>User scope</th><th>Project scope</th></tr>
     </thead>
     <tbody>
       <tr><td><strong>Team sharing</strong></td><td>Not possible (per-machine)</td><td>Easy via git commit</td></tr>
       <tr><td><strong>Personal credentials</strong></td><td>Safe — never committed</td><td>Risky — don't put secrets here</td></tr>
-      <tr><td><strong>Project-specific tools</strong></td><td>Clutters every project</td><td>Perfect fit</td></tr>
-      <tr><td><strong>Priority when both exist</strong></td><td>Overridden by project config</td><td>Takes precedence</td></tr>
+      <tr><td><strong>Project-specific tools</strong></td><td>Clutters every project</td><td>Good fit</td></tr>
+      <tr><td><strong>Priority when both exist</strong></td><td>Lower</td><td>Higher (only local scope beats it)</td></tr>
     </tbody>
   </table>
 </div>
 
 <h2>The Decision Checklist</h2>
 <ol>
-  <li>Should the whole team have this? → Project config</li>
-  <li>Does it use your personal credentials? → Global config</li>
-  <li>Do you want it in every project? → Global config</li>
-  <li>Is it specific to this project's infrastructure? → Project config</li>
+  <li>Should the whole team have this? → Project scope</li>
+  <li>Does it use your personal credentials? → User scope</li>
+  <li>Do you want it in every project? → User scope</li>
+  <li>Is it specific to this project's infrastructure? → Project scope</li>
 </ol>
 
 <div class="tip-box">
-  <strong>💡 Priority rule:</strong> When the same server name exists in both configs, project config wins. This lets teams override a developer's global defaults for a specific project — useful when you need a project-specific version of a tool.
+  <strong>💡 Priority rule:</strong> When the same server name exists in more than one scope, Claude Code uses local first, then project, then user. It uses the whole entry from the winning scope and does not merge fields.
 </div>
 
 <hr/>
 
 <h2>Frequently Asked Questions</h2>
 
-<h3>What happens if the same skill is in both global and project config?</h3>
-<p>Project config takes precedence. The project version is used when you're working in that project. This lets you override global defaults on a per-project basis.</p>
+<h3>What happens if the same server is in both user and project scope?</h3>
+<p>The project entry wins. A local entry with the same name would beat both. Claude Code uses the whole entry from the winning scope.</p>
 
-<h3>Can I commit the project config to git without exposing secrets?</h3>
-<p>Yes — use <code>$&#123;VAR_NAME&#125;</code> references and keep actual values in your local shell environment or a gitignored <code>.env</code> file. The config file itself contains no secrets.</p>
+<h3>Can I commit .mcp.json to git without exposing secrets?</h3>
+<p>Yes. Use <code>$&#123;VAR_NAME&#125;</code> references and set the real values in your shell environment. The file itself holds no secrets.</p>
 
-<h3>How do I add a project-scoped skill via the CLI?</h3>
+<h3>How do I add a project-scoped server via the CLI?</h3>
 <p>Use <code>--scope project</code>: <code>claude mcp add --scope project my-tool -- npx -y @package/name</code>. This writes to <code>.mcp.json</code> in your project root, which you can commit.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What happens if the same skill is in both global and project config?","acceptedAnswer":{"@type":"Answer","text":"Project config takes precedence when you're in that project."}},{"@type":"Question","name":"Can I commit project config without exposing secrets?","acceptedAnswer":{"@type":"Answer","text":"Yes — use $&#123;VAR_NAME&#125; references. Set actual values in your local shell or a gitignored .env file."}},{"@type":"Question","name":"How do I add a project-scoped skill via CLI?","acceptedAnswer":{"@type":"Answer","text":"claude mcp add --scope project my-tool -- npx -y @package/name"}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What happens if the same server is in both user and project scope?","acceptedAnswer":{"@type":"Answer","text":"The project entry wins. A local entry with the same name would beat both."}},{"@type":"Question","name":"Can I commit .mcp.json to git without exposing secrets?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use $&#123;VAR_NAME&#125; references and set the real values in your shell environment."}},{"@type":"Question","name":"How do I add a project-scoped server via the CLI?","acceptedAnswer":{"@type":"Answer","text":"claude mcp add --scope project my-tool -- npx -y @package/name. This writes to .mcp.json in your project root."}}]}
 </script>
     `,
   },
@@ -1168,47 +1137,50 @@ claude                # start a session
     category: 'Claude Code',
     categorySlug: 'claude-code',
     persona: 'developer',
-    lastUpdated: '2026-03-04',
+    lastUpdated: '2026-09-27',
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Claude Code Mac: CLI & Manual Methods","description":"Install MCP skills for Claude Code on Mac — CLI, manual config, NVM fixes, and verification.","dateModified":"2026-03-04","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Claude Code Mac: CLI & Manual Methods","description":"Install MCP skills for Claude Code on Mac — CLI, manual config, NVM fixes, and verification.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
-  <p>Run <code>claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory</code> — done. Or edit <code>~/.claude/settings.json</code> manually. If you're using nvm and Claude can't find npx, use the full path from <code>which npx</code>.</p>
+  <p>Run <code>claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory</code>. Claude Code saves it in <code>~/.claude.json</code>. For a server the whole team shares, use <code>--scope project</code>, which writes <code>.mcp.json</code> in your project root. If Claude Code can't find npx because you use nvm, use the full path from <code>which npx</code>.</p>
 </div>
 
-<p class="article-intro">When I set this up on my Mac, I used the CLI method and had a working skill in about 45 seconds. The manual method is also fine — good to know for when you want to add environment variables or tweak things the CLI doesn't expose easily.</p>
+<div class="tip-box">
+  <strong>💡 Installing a skill from TrustedSkills?</strong> Most skills listed here are SKILL.md skills, not MCP servers. They need no MCP config. Install one with <code>npx skills add &lt;owner&gt;/&lt;repo&gt; --skill &lt;name&gt; -a claude-code</code>. This guide covers MCP servers.
+</div>
+
+<p class="article-intro">The CLI is the quickest way to add an MCP server to Claude Code on a Mac. It writes the config for you. Editing <code>.mcp.json</code> by hand is useful when you want to review exactly what a project shares with the team.</p>
 
 <h2>Prerequisites</h2>
 <ul>
-  <li>Node.js installed — verify with <code>node --version</code></li>
-  <li>Claude Code CLI: <code>npm install -g @anthropic-ai/claude-code</code></li>
+  <li>Node.js installed, for servers that run with npx. Check with <code>node --version</code></li>
+  <li>Claude Code: <code>curl -fsSL https://claude.ai/install.sh | bash</code> (or <code>brew install --cask claude-code</code>)</li>
 </ul>
 
 <h2>Method 1: CLI (Recommended)</h2>
-<pre><code class="language-bash"># Global — available in every project
+<pre><code class="language-bash"># User scope — available in every project, stored in ~/.claude.json
 claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory
 
-# Project-scoped — current directory only
+# Project scope — written to .mcp.json in the current project
 claude mcp add --scope project memory -- npx -y @modelcontextprotocol/server-memory
 
 # With an env variable (API key, etc.)
 claude mcp add --scope user brave-search -e BRAVE_API_KEY=yourkey -- npx -y @brave/brave-search-mcp-server
 
-# See what's installed
+# See what's configured
 claude mcp list
 
 # Remove something
 claude mcp remove memory</code></pre>
+<p>If you leave out <code>--scope</code>, Claude Code uses the local scope: only you, only in the current project.</p>
 
-<h2>Method 2: Manual Config Edit</h2>
-<pre><code class="language-bash">mkdir -p ~/.claude
-code ~/.claude/settings.json   # VS Code
-# or
-open -e ~/.claude/settings.json  # TextEdit (use Format → Plain Text first)</code></pre>
+<h2>Method 2: Edit .mcp.json by Hand</h2>
+<p>For a project server, create <code>.mcp.json</code> in your project root:</p>
+<pre><code class="language-bash">code .mcp.json   # opens it in VS Code</code></pre>
 
 <pre><code class="language-json">{
   "mcpServers": {
@@ -1218,9 +1190,10 @@ open -e ~/.claude/settings.json  # TextEdit (use Format → Plain Text first)</c
     }
   }
 }</code></pre>
+<p>Do not hand-edit <code>~/.claude.json</code>. Claude Code keeps its own state in that file. Use the CLI for user-scoped servers.</p>
 
 <h2>The nvm Problem on Mac</h2>
-<p>nvm is great for managing Node versions — but Claude Code sometimes can't find the npx that nvm manages, because nvm configures PATH only for interactive shell sessions.</p>
+<p>nvm sets up Node.js in your shell start-up files. If Claude Code starts from somewhere that does not load them, it may not find the npx that nvm manages.</p>
 <pre><code class="language-bash"># Find the full path to npx
 which npx
 # /Users/yourname/.nvm/versions/node/v20.11.0/bin/npx</code></pre>
@@ -1233,32 +1206,29 @@ which npx
     }
   }
 }</code></pre>
-
-<div class="experience-callout">
-  <div class="experience-label">🔬 From the field</div>
-  <p>The most reliable fix we've found for the nvm issue: create a symlink from a stable location to the current nvm npx. <code>ln -sf $(which npx) /usr/local/bin/npx</code>. Now you can use <code>/usr/local/bin/npx</code> in all your configs — and it automatically follows whichever nvm version you switch to.</p>
-</div>
+<p>This path includes the Node.js version. Update it when you change versions with nvm.</p>
 
 <h2>Verify It Worked</h2>
-<pre><code class="language-bash">claude mcp list   # see configured skills
-claude            # start a session
-/tools            # list available tools</code></pre>
+<pre><code class="language-bash">claude mcp list       # lists configured servers
+claude mcp get memory # shows one server and checks that it connects
+claude                # start a session
+/mcp                  # inside Claude Code: shows each server and its status</code></pre>
 
 <hr/>
 
 <h2>Frequently Asked Questions</h2>
 
 <h3>CLI vs manual editing — which should I use?</h3>
-<p>CLI for quick additions — it handles JSON formatting and reloads the connection automatically. Manual editing for complex configs with multiple env variables, specific version pins, or when you want to review exactly what's stored.</p>
+<p>Use the CLI for most additions. It writes valid JSON to the right file. Edit <code>.mcp.json</code> by hand when you want to review exactly what the project shares.</p>
 
-<h3>How do I add an API key to a skill on Mac?</h3>
-<p>With the CLI: <code>claude mcp add my-skill -e API_KEY=abc123 -- npx -y @package/name</code>. Manually: add an <code>"env"</code> block to the skill's entry in settings.json.</p>
+<h3>How do I add an API key to an MCP server on Mac?</h3>
+<p>With the CLI: <code>claude mcp add my-server -e API_KEY=abc123 -- npx -y @package/name</code>. In <code>.mcp.json</code>, add an <code>"env"</code> block and use a <code>$&#123;API_KEY&#125;</code> reference instead of the real key.</p>
 
-<h3>How do I know a skill loaded successfully?</h3>
-<p>Run <code>claude mcp list</code> to see configured skills. Start Claude with <code>claude</code> and type <code>/tools</code> — if the skill's tools appear, it loaded. If they don't, something went wrong at launch.</p>
+<h3>How do I know a server loaded successfully?</h3>
+<p>Run <code>claude mcp get &lt;name&gt;</code>. It shows the server and checks the connection. Inside a session, type <code>/mcp</code> to see each server and its status.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"CLI vs manual editing — which should I use?","acceptedAnswer":{"@type":"Answer","text":"CLI for quick additions. Manual editing for complex configs with env variables or version pins."}},{"@type":"Question","name":"How do I add an API key to a skill on Mac?","acceptedAnswer":{"@type":"Answer","text":"CLI: claude mcp add my-skill -e API_KEY=abc123 -- npx -y @package/name. Or add an env block in settings.json manually."}},{"@type":"Question","name":"How do I know a skill loaded successfully?","acceptedAnswer":{"@type":"Answer","text":"Run 'claude mcp list' to see configured skills, start Claude and type /tools to see loaded tools."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"CLI vs manual editing — which should I use?","acceptedAnswer":{"@type":"Answer","text":"Use the CLI for most additions. Edit .mcp.json by hand when you want to review exactly what the project shares."}},{"@type":"Question","name":"How do I add an API key to an MCP server on Mac?","acceptedAnswer":{"@type":"Answer","text":"CLI: claude mcp add my-server -e API_KEY=abc123 -- npx -y @package/name. In .mcp.json, use a $&#123;API_KEY&#125; reference in an env block."}},{"@type":"Question","name":"How do I know a server loaded successfully?","acceptedAnswer":{"@type":"Answer","text":"Run claude mcp get <name> to check the connection, or type /mcp inside a Claude Code session."}}]}
 </script>
     `,
   },
@@ -1270,42 +1240,45 @@ claude            # start a session
     category: 'Claude Code',
     categorySlug: 'claude-code',
     persona: 'developer',
-    lastUpdated: '2026-03-04',
+    lastUpdated: '2026-09-27',
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Claude Code Windows: CLI & Config Guide","description":"Install MCP skills for Claude Code on Windows — CLI, settings.json location, and path formatting.","dateModified":"2026-03-04","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Claude Code Windows: CLI & Config Guide","description":"Install MCP skills for Claude Code on Windows — CLI, settings.json location, and path formatting.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
-  <p>Open PowerShell and run <code>claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory</code>. Or edit <code>%USERPROFILE%\\.claude\\settings.json</code> manually. If npx isn't found, get the full path with <code>where npx</code> and use that.</p>
+  <p>Open PowerShell and run <code>claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory</code>. Claude Code saves it in <code>%USERPROFILE%\\.claude.json</code>. For a server the whole team shares, use <code>--scope project</code>, which writes <code>.mcp.json</code> in your project root. If npx isn't found, use its full path from <code>where.exe npx.cmd</code>.</p>
 </div>
 
-<p class="article-intro">Setting this up on Windows is straightforward once you know where the config lives and how to handle the occasional "npx not found" situation. Here's exactly what to do.</p>
+<div class="tip-box">
+  <strong>💡 Installing a skill from TrustedSkills?</strong> Most skills listed here are SKILL.md skills, not MCP servers. They need no MCP config. Install one with <code>npx skills add &lt;owner&gt;/&lt;repo&gt; --skill &lt;name&gt; -a claude-code</code>. This guide covers MCP servers.
+</div>
+
+<p class="article-intro">Adding an MCP server to Claude Code on Windows works the same way as on a Mac. The two Windows details are where the config file lives and how to write a Windows path inside JSON.</p>
 
 <h2>Prerequisites</h2>
 <ul>
-  <li>Node.js from <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a> (check "Add to PATH" during install)</li>
-  <li>Claude Code CLI in PowerShell: <code>npm install -g @anthropic-ai/claude-code</code></li>
+  <li>Node.js from <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a>, for servers that run with npx</li>
+  <li>Claude Code, installed from PowerShell: <code>irm https://claude.ai/install.ps1 | iex</code> (or <code>winget install Anthropic.ClaudeCode</code>)</li>
 </ul>
 
 <h2>Method 1: CLI</h2>
-<pre><code class="language-bash"># Add a skill globally
+<pre><code class="language-bash"># Add a server for yourself, in every project
 claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory
 
-# List installed skills
+# List configured servers
 claude mcp list
 
 # Remove
 claude mcp remove memory</code></pre>
+<p>If you leave out <code>--scope</code>, Claude Code uses the local scope: only you, only in the current project.</p>
 
-<h2>Method 2: Manual Config</h2>
-<p>Config location on Windows:</p>
-<pre><code class="language-bash">%USERPROFILE%\.claude\settings.json</code></pre>
-
-<pre><code class="language-bash"># Open in VS Code via PowerShell
-code $env:USERPROFILE\.claude\settings.json</code></pre>
+<h2>Method 2: Edit .mcp.json by Hand</h2>
+<p>For a project server, create <code>.mcp.json</code> in your project root:</p>
+<pre><code class="language-bash"># Open it in VS Code from PowerShell
+code .mcp.json</code></pre>
 
 <pre><code class="language-json">{
   "mcpServers": {
@@ -1315,11 +1288,12 @@ code $env:USERPROFILE\.claude\settings.json</code></pre>
     }
   }
 }</code></pre>
+<p>Do not hand-edit <code>%USERPROFILE%\\.claude.json</code>. Claude Code keeps its own state in that file. Use the CLI for user-scoped servers.</p>
 
 <h2>When npx Isn't in PATH</h2>
 <pre><code class="language-bash"># PowerShell — find full path
-Get-Command npx | Select-Object -ExpandProperty Source
-# C:\Program Files\nodejs\npx.cmd</code></pre>
+(Get-Command npx.cmd).Source
+# C:\\Program Files\\nodejs\\npx.cmd</code></pre>
 
 <pre><code class="language-json">{
   "mcpServers": {
@@ -1331,34 +1305,30 @@ Get-Command npx | Select-Object -ExpandProperty Source
 }</code></pre>
 
 <div class="warning-box">
-  <strong>⚠️ JSON backslash rule:</strong> In JSON strings, every backslash needs to be doubled. <code>C:\Program Files</code> becomes <code>C:\\\\Program Files</code> in your JSON config.
+  <strong>⚠️ JSON backslash rule:</strong> In JSON strings, every backslash needs to be doubled. <code>C:\\Program Files</code> becomes <code>C:\\\\Program Files</code> in your JSON config.
 </div>
 
 <h2>Verify</h2>
-<pre><code class="language-bash">claude mcp list
-claude
-/tools</code></pre>
-
-<div class="experience-callout">
-  <div class="experience-label">🔬 From the field</div>
-  <p>A Windows developer we supported had npx working perfectly in PowerShell but Claude Code couldn't find it. The issue: Node.js was installed for "current user only" rather than "all users", putting it in a PATH that Claude Code's process didn't inherit. Installing Node.js system-wide (or using the full path) fixed it immediately.</p>
-</div>
+<pre><code class="language-bash">claude mcp list        # lists configured servers
+claude mcp get memory  # shows one server and checks that it connects
+claude                 # start a session
+/mcp                   # inside Claude Code: shows each server and its status</code></pre>
 
 <hr/>
 
 <h2>Frequently Asked Questions</h2>
 
-<h3>Where is Claude Code's settings.json on Windows?</h3>
-<p>At <code>%USERPROFILE%\.claude\settings.json</code>. In PowerShell, access it with <code>$env:USERPROFILE\.claude\settings.json</code>.</p>
+<h3>Where does Claude Code store MCP servers on Windows?</h3>
+<p>User and local servers are in <code>%USERPROFILE%\\.claude.json</code>. Project servers are in <code>.mcp.json</code> in the project root. <code>%USERPROFILE%\\.claude\\settings.json</code> holds other settings, not the servers that <code>claude mcp add</code> writes.</p>
 
 <h3>npx not found in Claude Code on Windows — quick fix?</h3>
-<p>Run <code>Get-Command npx | Select-Object -ExpandProperty Source</code> in PowerShell to get the full path. Use that path as the <code>"command"</code> value, doubling all backslashes.</p>
+<p>Run <code>(Get-Command npx.cmd).Source</code> in PowerShell to get the full path. Use that path as the <code>"command"</code> value, doubling all backslashes.</p>
 
 <h3>Can I run Claude Code in WSL?</h3>
-<p>Yes. In WSL, use <code>~/.claude/settings.json</code> and Linux-style paths. WSL and native Windows Claude Code have separate configs — they don't share skills.</p>
+<p>Yes. Install and run it inside WSL. WSL has its own home folder, so it uses its own <code>~/.claude.json</code>. WSL and native Windows Claude Code do not share MCP servers.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where is Claude Code's settings.json on Windows?","acceptedAnswer":{"@type":"Answer","text":"At %USERPROFILE%\\.claude\\settings.json. Access with $env:USERPROFILE\\.claude\\settings.json in PowerShell."}},{"@type":"Question","name":"npx not found in Claude Code on Windows?","acceptedAnswer":{"@type":"Answer","text":"Run 'Get-Command npx | Select-Object -ExpandProperty Source' to get the full path. Use it as the command value with doubled backslashes."}},{"@type":"Question","name":"Can I run Claude Code in WSL?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use ~/.claude/settings.json and Linux paths. WSL and Windows have separate configs."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where does Claude Code store MCP servers on Windows?","acceptedAnswer":{"@type":"Answer","text":"User and local servers are in %USERPROFILE%\\\\.claude.json. Project servers are in .mcp.json in the project root."}},{"@type":"Question","name":"npx not found in Claude Code on Windows?","acceptedAnswer":{"@type":"Answer","text":"Run '(Get-Command npx.cmd).Source' to get the full path. Use it as the command value with doubled backslashes."}},{"@type":"Question","name":"Can I run Claude Code in WSL?","acceptedAnswer":{"@type":"Answer","text":"Yes. WSL uses its own ~/.claude.json. WSL and native Windows Claude Code do not share MCP servers."}}]}
 </script>
     `,
   },
@@ -1371,11 +1341,11 @@ claude
     category: 'Cursor / VS Code',
     categorySlug: 'cursor',
     persona: 'developer',
-    lastUpdated: '2026-03-04',
+    lastUpdated: '2026-09-27',
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Cursor Mac: Config Guide & Reload Tips","description":"Install MCP skills on Cursor Mac — ~/.cursor/mcp.json location, JSON format, reload, and verification.","dateModified":"2026-03-04","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Cursor Mac: Config Guide & Reload Tips","description":"Install MCP skills on Cursor Mac — ~/.cursor/mcp.json location, JSON format, reload, and verification.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
@@ -1438,11 +1408,6 @@ code ~/.cursor/mcp.json</code></pre>
 
 <h2>Reloading Without Restarting</h2>
 <p>You don't have to fully restart Cursor after every change. Go to <strong>Settings (⌘+,) → Features → MCP Servers</strong> and click the refresh button next to your server. It reconnects without touching the rest of the editor.</p>
-
-<div class="experience-callout">
-  <div class="experience-label">🔬 From the field</div>
-  <p>Cursor's MCP status UI (the green/red dot in Settings → Features → MCP Servers) has saved us a lot of debugging time. When a skill isn't working, we check there first — a red dot tells you the server failed to start, and the error message usually points directly at the problem. Beats reading log files.</p>
-</div>
 
 <h2>Verify It Worked</h2>
 <p>Open Cursor Chat (<strong>⌘+L</strong>) and ask:</p>
@@ -1573,75 +1538,66 @@ Get-Command npx | Select-Object -ExpandProperty Source
     category: 'OpenClaw',
     categorySlug: 'openclaw',
     persona: 'beginner',
-    lastUpdated: '2026-03-04',
+    lastUpdated: '2026-09-27',
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Install Skills OpenClaw Mac: One-Command Setup Guide","description":"Install skills on OpenClaw Mac with one command. No JSON editing — OpenClaw manages everything automatically.","dateModified":"2026-03-04","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Install Skills OpenClaw Mac: One-Command Setup Guide","description":"Install skills on OpenClaw Mac with one command. No JSON editing — OpenClaw manages everything automatically.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
-  <p>Run <code>openclaw skills install weather</code>. That's it — OpenClaw downloads the skill, configures MCP, and makes it available immediately. No JSON editing, no restart, no config file hunting.</p>
+  <p>For a skill listed on TrustedSkills, run <code>npx skills add &lt;owner&gt;/&lt;repo&gt; --skill &lt;name&gt; -a openclaw</code> from your OpenClaw agent workspace. For a ClawHub skill, run <code>openclaw skills install @owner/&lt;slug&gt;</code>. Neither needs JSON editing.</p>
 </div>
 
-<p class="article-intro">When I first started comparing MCP setup across platforms, OpenClaw stood out immediately: what takes 5–10 minutes in Claude Desktop or Cursor takes about 10 seconds in OpenClaw. One command, everything handled. Here's how.</p>
+<p class="article-intro">OpenClaw loads skills from folders on disk. Installing a skill means putting its folder where OpenClaw looks. Two command-line tools do that for you: the skills CLI and OpenClaw's own <code>openclaw skills</code> commands.</p>
 
-<h2>Why OpenClaw Is the Easiest MCP Setup on Mac</h2>
-<p>Every other platform requires you to find a config file, edit JSON, and restart something. OpenClaw doesn't. It has a built-in skill manager that handles all of that automatically.</p>
+<h2>Installing a Skill From TrustedSkills</h2>
+<p>Skills on TrustedSkills are SKILL.md skills. They are instruction files, not MCP servers, so there is no JSON config to edit. Run this from your OpenClaw agent workspace:</p>
+<pre><code class="language-bash">npx skills add &lt;owner&gt;/&lt;repo&gt; --skill &lt;name&gt; -a openclaw</code></pre>
+<p>The skills CLI copies the skill into the <code>skills/</code> folder of the current directory. Add <code>-g</code> to install it into <code>~/.openclaw/skills/</code> instead, where every local agent can see it.</p>
 
-<div class="experience-callout">
-  <div class="experience-label">🔬 From the field</div>
-  <p>We ran a workshop teaching 20 non-developers how to extend their AI agents with skills. The Claude Desktop group took about 25 minutes on average to get their first skill working — finding the file, avoiding TextEdit traps, getting the JSON right. The OpenClaw group was done in under 2 minutes each. One command. Done.</p>
-</div>
+<h2>Installing a Skill From ClawHub</h2>
+<p>OpenClaw has its own skill commands for skills published on ClawHub. Skill names include the owner.</p>
+<pre><code class="language-bash"># Search ClawHub
+openclaw skills search "calendar"
 
-<h2>Installing a Skill</h2>
-<pre><code class="language-bash">openclaw skills install weather</code></pre>
-<p>OpenClaw:</p>
-<ol>
-  <li>Fetches skill metadata from TrustedSkills</li>
-  <li>Downloads and installs the package</li>
-  <li>Updates your config automatically</li>
-  <li>Makes it available right now — no restart</li>
-</ol>
+# Install into the active agent workspace
+openclaw skills install @owner/&lt;slug&gt;
 
-<h2>OpenClaw vs Other Platforms: Installation Comparison</h2>
-<div class="table-container">
-  <table>
-    <thead>
-      <tr><th>Platform</th><th>How to install a skill</th><th>Config editing?</th><th>Restart needed?</th></tr>
-    </thead>
-    <tbody>
-      <tr><td><strong>OpenClaw</strong></td><td><code>openclaw skills install weather</code></td><td>No — automatic</td><td>No</td></tr>
-      <tr><td>Claude Desktop</td><td>Edit claude_desktop_config.json</td><td>Yes — manual JSON</td><td>Yes — full restart</td></tr>
-      <tr><td>Claude Code</td><td><code>claude mcp add memory -- npx -y ...</code></td><td>No — CLI handles it</td><td>No — auto-reload</td></tr>
-      <tr><td>Cursor</td><td>Edit ~/.cursor/mcp.json</td><td>Yes — manual JSON</td><td>Yes — reload</td></tr>
-    </tbody>
-  </table>
-</div>
+# Install into the shared skills folder for all local agents
+openclaw skills install @owner/&lt;slug&gt; --global</code></pre>
 
 <h2>Managing Your Skills</h2>
-<pre><code class="language-bash"># See what you've got
+<pre><code class="language-bash"># See every skill OpenClaw can load
 openclaw skills list
 
-# Update one skill
-openclaw skills update weather
+# Details for one skill
+openclaw skills info &lt;name&gt;
 
-# Update everything
+# Which skills are ready, and which are missing requirements
+openclaw skills check
+
+# Update ClawHub skills
 openclaw skills update --all
 
-# Remove a skill
-openclaw skills remove weather
+# Remove a skill installed with the skills CLI
+npx skills remove &lt;name&gt; -a openclaw
 
-# Get details before installing
-openclaw skills info weather</code></pre>
+# Remove a ClawHub skill (needs the ClawHub CLI: npm i -g clawhub)
+clawhub uninstall @owner/&lt;slug&gt;</code></pre>
+<p><code>openclaw skills</code> has no remove command. Use the tool you installed with.</p>
+
+<h2>When a New Skill Shows Up</h2>
+<p>OpenClaw takes a list of skills when a session starts. Its skills watcher can refresh that list during a session. If a new skill does not appear, start a new session.</p>
 
 <h2>Where Skills Live on Mac</h2>
-<pre><code class="language-bash">~/.openclaw/skills/</code></pre>
-<p>Each skill gets its own directory. The auto-generated MCP config is at <code>~/.openclaw/config/skills.json</code> — you can inspect it if you're curious, but you rarely need to touch it.</p>
+<pre><code class="language-bash">&lt;workspace&gt;/skills/    # skills for one agent (checked first)
+~/.openclaw/skills/     # shared skills for all local agents</code></pre>
+<p>Each skill is a folder with a <code>SKILL.md</code> file inside.</p>
 
 <div class="tip-box">
-  <strong>💡 Before installing:</strong> Run <code>openclaw skills info &lt;name&gt;</code> first. It shows the skill's tools, verification status, and version — useful for confirming you're installing the right thing.
+  <strong>💡 Before installing:</strong> Open the skill's source repository and read its <code>SKILL.md</code>. A skill runs with the same access as your agent.
 </div>
 
 <hr/>
@@ -1649,19 +1605,19 @@ openclaw skills info weather</code></pre>
 <h2>Frequently Asked Questions</h2>
 
 <h3>How do I install skills on OpenClaw Mac?</h3>
-<p><code>openclaw skills install &lt;skill-name&gt;</code>. OpenClaw downloads, configures, and activates the skill immediately. No JSON, no restart.</p>
+<p>For a TrustedSkills listing: <code>npx skills add &lt;owner&gt;/&lt;repo&gt; --skill &lt;name&gt; -a openclaw</code>. For ClawHub: <code>openclaw skills install @owner/&lt;slug&gt;</code>. No JSON editing.</p>
 
 <h3>Where does OpenClaw store installed skills on Mac?</h3>
-<p>In <code>~/.openclaw/skills/</code>, each skill in its own directory. The MCP config is auto-generated at <code>~/.openclaw/config/skills.json</code>.</p>
+<p>In the agent workspace's <code>skills/</code> folder, or in <code>~/.openclaw/skills/</code> for skills shared by all local agents. Each skill has its own folder.</p>
 
-<h3>Can I use OpenClaw skills in Claude Desktop or Cursor too?</h3>
-<p>Yes — any skill that uses MCP can be configured in Claude Desktop or Cursor manually. Find the skill's npm package name on TrustedSkills and add it to those platforms' config files.</p>
+<h3>Can I use the same skill in Claude Code too?</h3>
+<p>Yes. SKILL.md skills work in several agents. Run the same <code>npx skills add</code> command with <code>-a claude-code</code>.</p>
 
 <h3>How do I update all skills at once?</h3>
-<p><code>openclaw skills update --all</code>. Takes effect immediately.</p>
+<p><code>openclaw skills update --all</code> updates skills installed from ClawHub. For skills installed with the skills CLI, run <code>npx skills update</code>.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I install skills on OpenClaw Mac?","acceptedAnswer":{"@type":"Answer","text":"openclaw skills install <skill-name>. No JSON editing or restart needed."}},{"@type":"Question","name":"Where does OpenClaw store installed skills on Mac?","acceptedAnswer":{"@type":"Answer","text":"~/.openclaw/skills/ — each skill in its own directory."}},{"@type":"Question","name":"How do I update all skills at once?","acceptedAnswer":{"@type":"Answer","text":"openclaw skills update --all. Takes effect immediately."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I install skills on OpenClaw Mac?","acceptedAnswer":{"@type":"Answer","text":"For a TrustedSkills listing: npx skills add <owner>/<repo> --skill <name> -a openclaw. For ClawHub: openclaw skills install @owner/<slug>."}},{"@type":"Question","name":"Where does OpenClaw store installed skills on Mac?","acceptedAnswer":{"@type":"Answer","text":"In the agent workspace's skills/ folder, or ~/.openclaw/skills/ for skills shared by all local agents."}},{"@type":"Question","name":"Can I use the same skill in Claude Code too?","acceptedAnswer":{"@type":"Answer","text":"Yes. Run the same npx skills add command with -a claude-code."}},{"@type":"Question","name":"How do I update all skills at once?","acceptedAnswer":{"@type":"Answer","text":"openclaw skills update --all for ClawHub skills. npx skills update for skills installed with the skills CLI."}}]}
 </script>
     `,
   },
@@ -1673,80 +1629,93 @@ openclaw skills info weather</code></pre>
     category: 'OpenClaw',
     categorySlug: 'openclaw',
     persona: 'beginner',
-    lastUpdated: '2026-03-04',
+    lastUpdated: '2026-09-27',
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Install Skills OpenClaw Windows: One-Command Setup","description":"Install skills on OpenClaw Windows with one command. OpenClaw handles MCP config automatically.","dateModified":"2026-03-04","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Install Skills OpenClaw Windows: One-Command Setup","description":"Install skills on OpenClaw Windows with one command. OpenClaw handles MCP config automatically.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
-  <p>Open PowerShell or Command Prompt and run <code>openclaw skills install &lt;skill-name&gt;</code>. No JSON, no restart — OpenClaw configures everything automatically.</p>
+  <p>In PowerShell, from your OpenClaw agent workspace, run <code>npx skills add &lt;owner&gt;/&lt;repo&gt; --skill &lt;name&gt; -a openclaw</code> for a skill listed on TrustedSkills. For a ClawHub skill, run <code>openclaw skills install @owner/&lt;slug&gt;</code>. Neither needs JSON editing.</p>
 </div>
 
-<p class="article-intro">Windows adds one potential wrinkle — Windows Defender sometimes flags npx downloads. It's almost always a false positive, but worth knowing about before you hit it unexpectedly.</p>
+<p class="article-intro">OpenClaw runs natively on Windows or inside WSL2. The skill commands are the same in both. The difference is where your home folder is: native Windows uses <code>%USERPROFILE%</code>, and WSL2 uses its own Linux home folder.</p>
 
-<h2>Installing a Skill</h2>
-<pre><code class="language-bash">openclaw skills install weather</code></pre>
+<h2>Installing a Skill From TrustedSkills</h2>
+<p>Skills on TrustedSkills are SKILL.md skills. They are instruction files, not MCP servers, so there is no JSON config to edit. Run this from your OpenClaw agent workspace:</p>
+<pre><code class="language-bash">npx skills add &lt;owner&gt;/&lt;repo&gt; --skill &lt;name&gt; -a openclaw</code></pre>
+<p>The skills CLI copies the skill into the <code>skills/</code> folder of the current directory. Add <code>-g</code> to install it into <code>%USERPROFILE%\\.openclaw\\skills\\</code> instead, where every local agent can see it.</p>
 
-<h2>Common Commands</h2>
-<pre><code class="language-bash"># Install
-openclaw skills install &lt;name&gt;
+<h2>Installing a Skill From ClawHub</h2>
+<p>OpenClaw has its own skill commands for skills published on ClawHub. Skill names include the owner.</p>
+<pre><code class="language-bash"># Search ClawHub
+openclaw skills search "calendar"
 
-# List what's installed
+# Install into the active agent workspace
+openclaw skills install @owner/&lt;slug&gt;
+
+# Install into the shared skills folder for all local agents
+openclaw skills install @owner/&lt;slug&gt; --global</code></pre>
+
+<h2>Managing Your Skills</h2>
+<pre><code class="language-bash"># See every skill OpenClaw can load
 openclaw skills list
 
-# Update one skill
-openclaw skills update &lt;name&gt;
+# Details for one skill
+openclaw skills info &lt;name&gt;
 
-# Update everything
+# Which skills are ready, and which are missing requirements
+openclaw skills check
+
+# Update ClawHub skills
 openclaw skills update --all
 
-# Remove
-openclaw skills remove &lt;name&gt;
+# Remove a skill installed with the skills CLI
+npx skills remove &lt;name&gt; -a openclaw
 
-# Get info before installing
-openclaw skills info &lt;name&gt;</code></pre>
+# Remove a ClawHub skill (needs the ClawHub CLI: npm i -g clawhub)
+clawhub uninstall @owner/&lt;slug&gt;</code></pre>
+<p><code>openclaw skills</code> has no remove command. Use the tool you installed with.</p>
+
+<h2>When a New Skill Shows Up</h2>
+<p>OpenClaw takes a list of skills when a session starts. Its skills watcher can refresh that list during a session. If a new skill does not appear, start a new session.</p>
 
 <h2>Where Skills Are Stored</h2>
-<pre><code class="language-bash">%USERPROFILE%\.openclaw\skills\
-# Usually: C:\Users\YourName\.openclaw\skills\</code></pre>
+<pre><code class="language-bash">&lt;workspace&gt;\\skills\\              # skills for one agent (checked first)
+%USERPROFILE%\\.openclaw\\skills\\   # shared skills for all local agents</code></pre>
+<p>If you run OpenClaw in WSL2, the shared folder is <code>~/.openclaw/skills/</code> inside WSL.</p>
 
 <h2>Windows-Specific Notes</h2>
 <ul>
-  <li>No admin access needed — skills install to your user profile</li>
-  <li>If OpenClaw isn't in PATH after installing, restart PowerShell or log out and back in</li>
-  <li>Windows Defender may flag npx downloads — see below</li>
+  <li>No admin access needed. Skills install into your workspace or your user profile.</li>
+  <li>If a command isn't found after installing Node.js or OpenClaw, open a new PowerShell window.</li>
+  <li>Windows Defender may flag a download. See below.</li>
 </ul>
 
 <div class="warning-box">
-  <strong>⚠️ Windows Defender alerts:</strong> Defender sometimes flags new npm package downloads as suspicious. Don't wave that away on the strength of a TrustedSkills badge — no badge here means anyone has read the code. Open the repository linked from the skill's page and review the source before you allow it.
-</div>
-
-<div class="experience-callout">
-  <div class="experience-label">🔬 From the field</div>
-  <p>A client's corporate Windows machine had Defender configured to block all scripts that weren't digitally signed — which caught npx downloads. The fix was to add an exception for the OpenClaw skills directory in Defender settings. Two minutes with IT, then everything worked. If you're in a corporate environment, check with IT before assuming it's an OpenClaw problem.</p>
+  <strong>⚠️ Windows Defender alerts:</strong> Don't wave an alert away on the strength of a TrustedSkills badge. No badge here means anyone has read the code. Open the repository linked from the skill's page and review the source before you allow it.
 </div>
 
 <h2>Need Node.js?</h2>
-<p>Some skills require Node.js. OpenClaw will tell you if a skill needs it. Install from <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a> — check "Add to PATH" during install.</p>
+<p>The skills CLI runs with npx, so it needs Node.js. OpenClaw itself needs Node.js 24.16 or later. Install from <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a>.</p>
 
 <hr/>
 
 <h2>Frequently Asked Questions</h2>
 
 <h3>How do I install OpenClaw skills on Windows?</h3>
-<p><code>openclaw skills install &lt;skill-name&gt;</code> in PowerShell or Command Prompt. No JSON or restart needed.</p>
+<p>For a TrustedSkills listing: <code>npx skills add &lt;owner&gt;/&lt;repo&gt; --skill &lt;name&gt; -a openclaw</code> in PowerShell. For ClawHub: <code>openclaw skills install @owner/&lt;slug&gt;</code>. No JSON editing.</p>
 
 <h3>Do I need admin privileges to install skills on Windows?</h3>
-<p>No. Skills install to <code>%USERPROFILE%\.openclaw\</code> which is your personal user folder — no admin access required.</p>
+<p>No. Skills go into your agent workspace or <code>%USERPROFILE%\\.openclaw\\skills\\</code>. Neither needs admin access.</p>
 
 <h3>Windows Defender blocked a skill — what now?</h3>
-<p>Check the skill's verification badge on TrustedSkills. Verified and Featured skills are safe to allow. For Unverified skills, review the GitHub repo first before deciding.</p>
+<p>Don't override Defender because of a badge. No TrustedSkills badge means the code was reviewed. Open the linked repository and read the source before you allow it.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I install OpenClaw skills on Windows?","acceptedAnswer":{"@type":"Answer","text":"openclaw skills install <skill-name> in PowerShell. No JSON editing or restart needed."}},{"@type":"Question","name":"Do I need admin privileges on Windows?","acceptedAnswer":{"@type":"Answer","text":"No. Skills install to %USERPROFILE%\\.openclaw\\ which doesn't require admin access."}},{"@type":"Question","name":"Windows Defender blocked a skill?","acceptedAnswer":{"@type":"Answer","text":"Don't override Defender on the strength of a badge — no TrustedSkills badge means the code was reviewed. Open the linked repository and read the source before allowing it."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I install OpenClaw skills on Windows?","acceptedAnswer":{"@type":"Answer","text":"For a TrustedSkills listing: npx skills add <owner>/<repo> --skill <name> -a openclaw. For ClawHub: openclaw skills install @owner/<slug>."}},{"@type":"Question","name":"Do I need admin privileges on Windows?","acceptedAnswer":{"@type":"Answer","text":"No. Skills go into your agent workspace or %USERPROFILE%\\\\.openclaw\\\\skills. Neither needs admin access."}},{"@type":"Question","name":"Windows Defender blocked a skill?","acceptedAnswer":{"@type":"Answer","text":"Don't override Defender on the strength of a badge — no TrustedSkills badge means the code was reviewed. Open the linked repository and read the source before allowing it."}}]}
 </script>
     `,
   },
@@ -1758,56 +1727,72 @@ openclaw skills info &lt;name&gt;</code></pre>
     category: 'OpenClaw',
     categorySlug: 'openclaw',
     persona: 'beginner',
-    lastUpdated: '2026-03-04',
+    lastUpdated: '2026-09-27',
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Install Skills OpenClaw Linux: Quick Setup Guide","description":"Install skills on OpenClaw Linux — one command, no JSON editing needed.","dateModified":"2026-03-04","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Install Skills OpenClaw Linux: Quick Setup Guide","description":"Install skills on OpenClaw Linux — one command, no JSON editing needed.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
-  <p>Run <code>openclaw skills install &lt;skill-name&gt;</code>. No sudo needed — installs to <code>~/.openclaw/skills/</code>. Make sure Node.js is in PATH first.</p>
+  <p>From your OpenClaw agent workspace, run <code>npx skills add &lt;owner&gt;/&lt;repo&gt; --skill &lt;name&gt; -a openclaw</code> for a skill listed on TrustedSkills. For a ClawHub skill, run <code>openclaw skills install @owner/&lt;slug&gt;</code>. No sudo and no JSON editing.</p>
 </div>
 
-<p class="article-intro">OpenClaw on Linux is as simple as on Mac — one command, no config file editing. The main thing to get right upfront is ensuring Node.js is in your PATH before running OpenClaw for the first time.</p>
+<p class="article-intro">Skills on Linux install into your home folder or your agent workspace, so you never need sudo. The one thing to get right first is a recent Node.js on your PATH.</p>
 
-<h2>Installing a Skill</h2>
-<pre><code class="language-bash">openclaw skills install weather</code></pre>
+<h2>Installing a Skill From TrustedSkills</h2>
+<p>Skills on TrustedSkills are SKILL.md skills. They are instruction files, not MCP servers, so there is no JSON config to edit. Run this from your OpenClaw agent workspace:</p>
+<pre><code class="language-bash">npx skills add &lt;owner&gt;/&lt;repo&gt; --skill &lt;name&gt; -a openclaw</code></pre>
+<p>The skills CLI copies the skill into the <code>skills/</code> folder of the current directory. Add <code>-g</code> to install it into <code>~/.openclaw/skills/</code> instead, where every local agent can see it.</p>
 
-<h2>All the Commands You Need</h2>
-<pre><code class="language-bash">openclaw skills install &lt;name&gt;
+<h2>Installing a Skill From ClawHub</h2>
+<p>OpenClaw has its own skill commands for skills published on ClawHub. Skill names include the owner.</p>
+<pre><code class="language-bash"># Search ClawHub
+openclaw skills search "calendar"
+
+# Install into the active agent workspace
+openclaw skills install @owner/&lt;slug&gt;
+
+# Install into the shared skills folder for all local agents
+openclaw skills install @owner/&lt;slug&gt; --global</code></pre>
+
+<h2>Managing Your Skills</h2>
+<pre><code class="language-bash"># See every skill OpenClaw can load
 openclaw skills list
-openclaw skills update &lt;name&gt;
+
+# Details for one skill
+openclaw skills info &lt;name&gt;
+
+# Which skills are ready, and which are missing requirements
+openclaw skills check
+
+# Update ClawHub skills
 openclaw skills update --all
-openclaw skills remove &lt;name&gt;
-openclaw skills info &lt;name&gt;</code></pre>
+
+# Remove a skill installed with the skills CLI
+npx skills remove &lt;name&gt; -a openclaw
+
+# Remove a ClawHub skill (needs the ClawHub CLI: npm i -g clawhub)
+clawhub uninstall @owner/&lt;slug&gt;</code></pre>
+<p><code>openclaw skills</code> has no remove command. Use the tool you installed with.</p>
+
+<h2>When a New Skill Shows Up</h2>
+<p>OpenClaw takes a list of skills when a session starts. Its skills watcher can refresh that list during a session. If a new skill does not appear, start a new session.</p>
 
 <h2>Where Skills Live</h2>
-<pre><code class="language-bash">~/.openclaw/skills/</code></pre>
+<pre><code class="language-bash">&lt;workspace&gt;/skills/    # skills for one agent (checked first)
+~/.openclaw/skills/     # shared skills for all local agents</code></pre>
 
-<h2>Linux Notes</h2>
-<ul>
-  <li>No <code>sudo</code> needed — installs to your home directory</li>
-  <li>If using nvm, make sure Node.js is active before running openclaw</li>
-  <li>Multi-user server setups? See OpenClaw's multi-user documentation</li>
-</ul>
-
-<h2>Node.js Setup Options</h2>
-<pre><code class="language-bash"># Package manager (Ubuntu/Debian)
-sudo apt install nodejs npm
-
-# nvm (recommended — no sudo needed for Node itself)
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-nvm install --lts</code></pre>
+<h2>Node.js Setup</h2>
+<p>OpenClaw needs Node.js 24.16 or later. Distribution packages are often older than that. OpenClaw's installer sets up Node.js for you if it is missing:</p>
+<pre><code class="language-bash">curl -fsSL https://openclaw.ai/install.sh | bash</code></pre>
+<p>To manage Node.js yourself, nvm installs it without sudo:</p>
+<pre><code class="language-bash">curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+nvm install 24</code></pre>
 
 <div class="tip-box">
-  <strong>💡 nvm recommendation:</strong> Use nvm on Linux. It installs Node.js without sudo, keeps versions separate, and makes upgrades trivial. Just make sure to run <code>nvm use --lts</code> (or add nvm init to your <code>~/.bashrc</code>) before using OpenClaw.
-</div>
-
-<div class="experience-callout">
-  <div class="experience-label">🔬 From the field</div>
-  <p>We deployed OpenClaw on a shared Ubuntu server for a team of researchers. The per-user skill installation model worked perfectly — each researcher had their own set of skills without interfering with each other's setups. No root access required, no collision between installs.</p>
+  <strong>💡 nvm tip:</strong> nvm sets up Node.js in your shell start-up file. Open a new terminal after installing it, then check with <code>node --version</code>.
 </div>
 
 <hr/>
@@ -1815,16 +1800,16 @@ nvm install --lts</code></pre>
 <h2>Frequently Asked Questions</h2>
 
 <h3>How do I install OpenClaw skills on Linux?</h3>
-<p><code>openclaw skills install &lt;skill-name&gt;</code>. No sudo, no JSON editing, no restart.</p>
+<p>For a TrustedSkills listing: <code>npx skills add &lt;owner&gt;/&lt;repo&gt; --skill &lt;name&gt; -a openclaw</code>. For ClawHub: <code>openclaw skills install @owner/&lt;slug&gt;</code>. No sudo, no JSON editing.</p>
 
 <h3>What if Node.js isn't in PATH for OpenClaw on Linux?</h3>
-<p>If using nvm, run <code>nvm use --lts</code> first, or add nvm initialisation to <code>~/.bashrc</code>. For system Node installs, just make sure the package is installed: <code>which node</code> should return a path.</p>
+<p>If you use nvm, open a new terminal or run <code>nvm use 24</code>. Then check that <code>which node</code> returns a path and <code>node --version</code> is 24.16 or later.</p>
 
-<h3>Can I install skills for all users on a shared Linux server?</h3>
-<p>By default, skills install per-user to <code>~/.openclaw/</code>. For shared server setups, see OpenClaw's multi-user docs. Per-user installation is recommended for most cases.</p>
+<h3>Do skills install per user on a shared Linux server?</h3>
+<p>Yes. <code>~/.openclaw/skills/</code> is in each user's home folder, and workspace skills live in that agent's workspace. Users do not share skills unless they share a workspace.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I install OpenClaw skills on Linux?","acceptedAnswer":{"@type":"Answer","text":"openclaw skills install <skill-name>. No sudo or JSON editing needed."}},{"@type":"Question","name":"What if Node.js isn't in PATH for OpenClaw on Linux?","acceptedAnswer":{"@type":"Answer","text":"If using nvm, run 'nvm use --lts' or add nvm init to ~/.bashrc."}},{"@type":"Question","name":"Can I install skills for all users on a shared Linux server?","acceptedAnswer":{"@type":"Answer","text":"Skills install per-user by default. See OpenClaw's multi-user docs for shared setups."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I install OpenClaw skills on Linux?","acceptedAnswer":{"@type":"Answer","text":"For a TrustedSkills listing: npx skills add <owner>/<repo> --skill <name> -a openclaw. For ClawHub: openclaw skills install @owner/<slug>. No sudo needed."}},{"@type":"Question","name":"What if Node.js isn't in PATH for OpenClaw on Linux?","acceptedAnswer":{"@type":"Answer","text":"If you use nvm, open a new terminal or run nvm use 24. OpenClaw needs Node.js 24.16 or later."}},{"@type":"Question","name":"Do skills install per user on a shared Linux server?","acceptedAnswer":{"@type":"Answer","text":"Yes. ~/.openclaw/skills/ is in each user's home folder, and workspace skills live in that agent's workspace."}}]}
 </script>
     `,
   },
@@ -1837,22 +1822,22 @@ nvm install --lts</code></pre>
     category: 'Advanced Topics',
     categorySlug: 'advanced',
     persona: 'developer',
-    lastUpdated: '2026-03-04',
+    lastUpdated: '2026-09-27',
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"MCP Skills: Global vs Project Scope Across All Platforms","description":"Global vs project scope for MCP skills — decision framework and config paths across Claude Desktop, Claude Code, Cursor, and OpenClaw.","dateModified":"2026-03-04","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"MCP Skills: Global vs Project Scope Across All Platforms","description":"Global vs project scope for MCP skills — decision framework and config paths across Claude Desktop, Claude Code, Cursor, and OpenClaw.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
-  <p>Global config = personal tools and credentials, available everywhere on your machine. Project config = team tools, committed to git, only active in that project. Never put actual API keys in project config — use <code>$&#123;ENV_VAR&#125;</code> references instead. Project config overrides global when names clash.</p>
+  <p>Global config = personal tools and credentials, available everywhere on your machine. Project config = team tools, committed to git, only active in that project. Never put real API keys in a committed file. In Claude Code, use <code>$&#123;ENV_VAR&#125;</code> references in <code>.mcp.json</code> instead.</p>
 </div>
 
-<p class="article-intro">The question of "should this skill be global or project-scoped?" comes up every time you add something new. Get it wrong and you end up with personal credentials in a git repo (bad) or a useful tool missing from half your projects (annoying). Here's the framework we use.</p>
+<p class="article-intro">Every time you add an MCP server or a skill, you choose where it lives. Get it wrong and you end up with personal credentials in a git repo, or a useful tool missing from half your projects. This page gives a simple rule, then the exact locations for each platform.</p>
 
 <h2>The Decision Logic</h2>
-<pre><code class="language-bash">Is this a personal tool I want everywhere? (weather, notes, search)
+<pre><code class="language-bash">Is this a personal tool I want everywhere? (notes, search)
   → Global config
 
 Does it use credentials that are mine, not the project's?
@@ -1867,9 +1852,8 @@ Is this tool specific to this project's infrastructure?
 Not sure?
   → Start global. Move to project when you share it.</code></pre>
 
-<div class="experience-callout">
-  <div class="experience-label">🔬 From the field</div>
-  <p>We accidentally committed a GitHub personal access token in a project config file once. GitHub's secret scanning caught it and invalidated the token within minutes — then sent an alert. Annoying but not catastrophic. The lesson: don't put any real credential in a committed file, even "just for testing". Use <code>$&#123;GITHUB_TOKEN&#125;</code> and set the value locally.</p>
+<div class="tip-box">
+  <strong>💡 Treat a committed key as leaked:</strong> Deleting a key in a later commit does not remove it from git history. If a real credential reaches a shared repo, revoke it and make a new one. Keep real values in your own environment, never in a committed file.
 </div>
 
 <h2>Config Locations: Every Platform</h2>
@@ -1890,13 +1874,15 @@ Not sure?
 <h3>Claude Code</h3>
 <div class="table-container">
   <table>
-    <thead><tr><th>Scope</th><th>Mac/Linux</th><th>Windows</th></tr></thead>
+    <thead><tr><th>Scope</th><th>How to add</th><th>Where it is stored</th></tr></thead>
     <tbody>
-      <tr><td>Global</td><td><code>~/.claude/settings.json</code></td><td><code>%USERPROFILE%\\.claude\\settings.json</code></td></tr>
-      <tr><td>Project</td><td><code>.claude/settings.json</code></td><td><code>.claude\\settings.json</code></td></tr>
+      <tr><td>User (all your projects)</td><td><code>claude mcp add --scope user</code></td><td><code>~/.claude.json</code></td></tr>
+      <tr><td>Local (default: you, this project)</td><td><code>claude mcp add</code></td><td><code>~/.claude.json</code>, under the project</td></tr>
+      <tr><td>Project (shared through git)</td><td><code>claude mcp add --scope project</code></td><td><code>.mcp.json</code> in the project root</td></tr>
     </tbody>
   </table>
 </div>
+<p>On Windows, <code>~</code> is <code>%USERPROFILE%</code>. When the same name is in more than one scope, Claude Code uses local, then project, then user.</p>
 
 <h3>Cursor</h3>
 <div class="table-container">
@@ -1910,22 +1896,26 @@ Not sure?
 </div>
 
 <h3>OpenClaw</h3>
-<pre><code class="language-bash"># Global (default)
-openclaw skills install weather
+<p>OpenClaw skills are SKILL.md folders, not MCP config. Its "project" level is the agent workspace.</p>
+<pre><code class="language-bash"># One agent: installs into the workspace's skills/ folder (run from the workspace)
+npx skills add &lt;owner&gt;/&lt;repo&gt; --skill &lt;name&gt; -a openclaw
+openclaw skills install @owner/&lt;slug&gt;
 
-# Project-scoped
-openclaw skills install weather --project</code></pre>
+# All local agents: installs into ~/.openclaw/skills/
+npx skills add &lt;owner&gt;/&lt;repo&gt; --skill &lt;name&gt; -a openclaw -g
+openclaw skills install @owner/&lt;slug&gt; --global</code></pre>
+<p>Workspace skills win over shared skills when two have the same name.</p>
 
-<h2>Team Workflow: The Right Way</h2>
+<h2>Team Workflow for Claude Code</h2>
 <ol>
-  <li>Each developer sets up their own global config with personal tools</li>
-  <li>Create a project config with team tools — no personal credentials</li>
-  <li>Commit the project config to git</li>
+  <li>Each developer adds personal tools with <code>claude mcp add --scope user</code></li>
+  <li>Add team tools with <code>claude mcp add --scope project</code>, with no personal credentials</li>
+  <li>Commit <code>.mcp.json</code> to git</li>
   <li>Use <code>$&#123;VAR_NAME&#125;</code> references for anything that varies per developer</li>
-  <li>Document the required env vars in your README</li>
+  <li>List the environment variables each developer must set in your README</li>
 </ol>
 
-<h3>Project config (safe to commit):</h3>
+<h3>.mcp.json (safe to commit):</h3>
 <pre><code class="language-json">{
   "mcpServers": {
     "brave-search": {
@@ -1936,31 +1926,33 @@ openclaw skills install weather --project</code></pre>
   }
 }</code></pre>
 
-<h3>Each developer's local .env (NOT committed):</h3>
-<pre><code class="language-bash">BRAVE_API_KEY=your-own-key</code></pre>
+<h3>Each developer's shell (NOT committed):</h3>
+<pre><code class="language-bash">export BRAVE_API_KEY=your-own-key
+claude</code></pre>
+<p>Claude Code reads the value from the environment it starts in. It does not load a <code>.env</code> file for you.</p>
 
 <div class="warning-box">
-  <strong>⚠️ Add .env to .gitignore right now:</strong> If you're starting a new project, add <code>.env</code> to your <code>.gitignore</code> before you create the file. It's much easier than trying to scrub it from history later.
+  <strong>⚠️ Keep key files out of git:</strong> If you keep keys in a local file such as <code>.env</code>, add it to <code>.gitignore</code> before you create it. That is much easier than removing it from history later.
 </div>
 
 <hr/>
 
 <h2>Frequently Asked Questions</h2>
 
-<h3>Can the same skill be in both global and project config?</h3>
-<p>Yes. Project config takes precedence. This lets you override a global skill with a project-specific version — useful when a project needs a different database connection than your personal setup.</p>
+<h3>Can the same MCP server be in both user and project config?</h3>
+<p>Yes. In Claude Code, the project entry wins over the user entry, and a local entry wins over both. This lets a project use a different database connection from your personal setup.</p>
 
-<h3>How do I share MCP skills with my team?</h3>
-<p>Add the skill config to your project's config file and commit it to git. Every team member who clones the repo gets it automatically.</p>
+<h3>How do I share MCP servers with my team?</h3>
+<p>Add them to the project's config file and commit it. In Claude Code that file is <code>.mcp.json</code>. Each developer approves the servers the first time Claude Code sees them.</p>
 
 <h3>What's the safest way to handle API keys in project config?</h3>
-<p>Use <code>$&#123;VAR_NAME&#125;</code> references. Set actual values in each developer's local environment or a gitignored <code>.env</code> file. The committed config file contains zero secrets.</p>
+<p>Use <code>$&#123;VAR_NAME&#125;</code> references. Each developer sets the real value in their own environment. The committed file holds no secrets.</p>
 
 <h3>Does Claude Desktop support project-level config?</h3>
-<p>No — it's global only. For project-level skill management, use Claude Code or Cursor, which both support project config files.</p>
+<p>No — it's global only. For project-level MCP config, use Claude Code or Cursor.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can the same skill be in both global and project config?","acceptedAnswer":{"@type":"Answer","text":"Yes. Project config takes precedence."}},{"@type":"Question","name":"How do I share MCP skills with my team?","acceptedAnswer":{"@type":"Answer","text":"Add to project config and commit to git."}},{"@type":"Question","name":"What's the safest way to handle API keys?","acceptedAnswer":{"@type":"Answer","text":"Use $&#123;VAR_NAME&#125; references. Set actual values in local .env (gitignored)."}},{"@type":"Question","name":"Does Claude Desktop support project-level config?","acceptedAnswer":{"@type":"Answer","text":"No — global only. Use Claude Code or Cursor for project-level config."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can the same MCP server be in both user and project config?","acceptedAnswer":{"@type":"Answer","text":"Yes. In Claude Code, the project entry wins over the user entry, and a local entry wins over both."}},{"@type":"Question","name":"How do I share MCP servers with my team?","acceptedAnswer":{"@type":"Answer","text":"Add them to the project's config file and commit it. In Claude Code that file is .mcp.json."}},{"@type":"Question","name":"What's the safest way to handle API keys?","acceptedAnswer":{"@type":"Answer","text":"Use $&#123;VAR_NAME&#125; references. Each developer sets the real value in their own environment."}},{"@type":"Question","name":"Does Claude Desktop support project-level config?","acceptedAnswer":{"@type":"Answer","text":"No — global only. Use Claude Code or Cursor for project-level config."}}]}
 </script>
     `,
   },
@@ -1972,11 +1964,11 @@ openclaw skills install weather --project</code></pre>
     category: 'Advanced Topics',
     categorySlug: 'advanced',
     persona: 'advanced',
-    lastUpdated: '2026-03-04',
+    lastUpdated: '2026-09-27',
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"How to Build an AI Agent Skill: Beginner's Complete Guide","description":"How to build an AI agent skill from scratch — create, test, and publish to TrustedSkills.","dateModified":"2026-03-04","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"How to Build an AI Agent Skill: Beginner's Complete Guide","description":"How to build an AI agent skill from scratch — create, test, and publish to TrustedSkills.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
@@ -1984,7 +1976,7 @@ openclaw skills install weather --project</code></pre>
   <p>Create a Node.js project, install <code>@modelcontextprotocol/sdk</code>, write a server that declares tools and handles calls, create a <code>SKILL.md</code> file, publish to npm, submit to TrustedSkills. About 30 minutes for a simple skill. Here's the full walkthrough.</p>
 </div>
 
-<p class="article-intro">When I built my first MCP skill — a simple unit converter — I was surprised how little code it actually took. The MCP SDK handles all the protocol plumbing; you just write the tool logic. Here's the step-by-step guide I wish I'd had.</p>
+<p class="article-intro">A basic MCP server takes very little code. The MCP SDK handles the protocol, so you only write the tool logic. This guide builds a simple temperature converter step by step.</p>
 
 <h2>What You'll Build</h2>
 <p>A temperature converter skill: two tools, <code>celsius_to_fahrenheit</code> and <code>fahrenheit_to_celsius</code>. Simple enough to understand quickly, complete enough to be a real template for anything more complex.</p>
@@ -2102,9 +2094,8 @@ metadata:
 }</code></pre>
 <p>Restart Claude Desktop and ask: <em>"What's 100 Celsius in Fahrenheit?"</em> — you should get "100°C = 212.0°F".</p>
 
-<div class="experience-callout">
-  <div class="experience-label">🔬 From the field</div>
-  <p>I've seen several first-time skill builders publish to npm before testing locally — then spend an hour debugging a bug that would've been obvious in 30 seconds with local testing. Always test with the full local path config before publishing. It's much faster to iterate locally.</p>
+<div class="tip-box">
+  <strong>💡 Test locally before you publish:</strong> Point your config at the local build first. You can fix a bug in seconds locally, but every fix after publishing needs a new release.
 </div>
 
 <h2>Step 5: Publish to npm</h2>
@@ -2393,11 +2384,11 @@ npm publish --access public   # --access public for scoped packages</code></pre>
     category: 'Guides',
     categorySlug: 'guides',
     persona: 'developer',
-    lastUpdated: '2026-03-04',
+    lastUpdated: '2026-09-27',
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"TechArticle","headline":"Google Analytics & Search Console MCP Setup Guide","description":"Step-by-step guide to installing Google Analytics MCP and Google Search Console MCP. Connect GA4 and GSC data to Claude, Cursor, and other AI tools using real MCP servers.","dateModified":"2026-03-04","author":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"},"publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"},"keywords":"Google Analytics MCP, Google Search Console MCP, GA4 MCP setup, GSC MCP Claude, search console AI"}
+{"@context":"https://schema.org","@type":"TechArticle","headline":"Google Analytics & Search Console MCP Setup Guide","description":"Step-by-step guide to installing Google Analytics MCP and Google Search Console MCP. Connect GA4 and GSC data to Claude, Cursor, and other AI tools using real MCP servers.","dateModified":"2026-09-27","author":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"},"publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"},"keywords":"Google Analytics MCP, Google Search Console MCP, GA4 MCP setup, GSC MCP Claude, search console AI"}
 </script>
 
 <div class="tldr-box">
@@ -2405,7 +2396,7 @@ npm publish --access public   # --access public for scoped packages</code></pre>
   <p>You can connect both Google Analytics 4 and Google Search Console to Claude, Cursor, or OpenClaw using free, open-source MCP servers. The setup takes about 20 minutes and requires a Google Cloud service account. Once connected, you can query your site's traffic, keyword rankings, and SEO opportunities in plain English — no more CSV exports.</p>
 </div>
 
-<p class="article-intro">I needed to give my AI agent access to our web analytics without manually exporting spreadsheets every time I wanted to answer a basic question like "which pages lost traffic this month?" Turns out there are solid open-source MCP servers for both GA4 and Google Search Console — and once you've wired them up, the workflow genuinely changes. This guide walks through exactly how to do it.</p>
+<p class="article-intro">Open-source MCP servers exist for both GA4 and Google Search Console. With them, your AI agent can answer questions like "which pages lost traffic this month?" without you exporting spreadsheets. This guide walks through the setup.</p>
 
 <h2>What You'll Need</h2>
 <ul>
@@ -2713,11 +2704,6 @@ pip install -r requirements.txt</code></pre>
   <li><strong>"What's my average position for brand vs non-brand queries?"</strong> — GSC with regex filter on your brand name.</li>
   <li><strong>"Show me my top landing pages and their bounce rates"</strong> — GA4 with landingPagePlusQueryString dimension and bounceRate metric.</li>
 </ul>
-
-<div class="experience-callout">
-  <div class="experience-label">🔬 From the field</div>
-  <p>I connected GSC MCP to Claude Code and asked it to find pages with more than 500 impressions but less than 2% CTR. It returned 23 pages in seconds — a task that used to take 20 minutes of manual filtering through the Search Console interface, exporting to a spreadsheet, and sorting. The agent then ranked them by "opportunity score" (impressions ÷ position) and drafted updated meta descriptions for the top five. Total time: about four minutes.</p>
-</div>
 
 <h2>Frequently Asked Questions</h2>
 
