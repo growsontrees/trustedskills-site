@@ -135,7 +135,9 @@ export default function SubmitPage() {
       <section className="mt-10">
         <h2 className="text-lg font-semibold text-ink-50">What the badges mean</h2>
         <p className="mt-1.5 text-sm text-ink-450">
-          Badges are assigned by the registry. None of them can be applied for.
+          Our scripts set Official (the publisher is the vendor&apos;s own GitHub organisation) and
+          Checked (the automated safety scan passed). We pick Featured and Pinned by hand. Listed and
+          Unverified come from the index itself. None of them can be applied for.
         </p>
 
         <div className="mt-4 grid gap-2 sm:grid-cols-2">
