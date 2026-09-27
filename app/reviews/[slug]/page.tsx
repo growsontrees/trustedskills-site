@@ -14,6 +14,14 @@ import {
 } from "../../../lib/reviews";
 import { getSkillBySlug } from "../../../lib/skills";
 import { getCollectionsForSkill } from "../../../lib/collections";
+import {
+  ChevronDown,
+  Shield,
+  Star,
+  Zap,
+  type IconComponent,
+} from "../../../components/icons";
+import { cx } from "../../../components/ui";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -60,18 +68,26 @@ function Md({ children }: { children: string }) {
   );
 }
 
-function ScoreBar({ label, score, icon }: { label: string; score: number; icon: string }) {
+function ScoreBar({
+  label,
+  score,
+  icon: Icon,
+}: {
+  label: string;
+  score: number;
+  icon: IconComponent;
+}) {
   return (
     <div className="flex items-center gap-3">
-      <span className="text-lg w-6 shrink-0">{icon}</span>
+      <Icon className="h-4 w-4 shrink-0 text-ink-450" />
       <div className="flex-1">
         <div className="flex items-center justify-between mb-1">
-          <span className="text-sm text-gray-300">{label}</span>
-          <span className="text-sm font-semibold text-white">{score}/5</span>
+          <span className="text-sm text-ink-300">{label}</span>
+          <span className="text-sm font-semibold text-ink-50">{score}/5</span>
         </div>
-        <div className="w-full bg-gray-700 rounded-full h-1.5">
+        <div className="w-full bg-ink-800 rounded-full h-1.5">
           <div
-            className="bg-emerald-500 h-1.5 rounded-full"
+            className="bg-ok-500 h-1.5 rounded-full"
             style={{ width: `${(score / 5) * 100}%` }}
           />
         </div>
@@ -86,14 +102,13 @@ function StarScore({ score }: { score: number }) {
   return (
     <div className="flex items-center justify-center gap-1">
       {[1, 2, 3, 4, 5].map((i) => (
-        <span
+        <Star
           key={i}
-          className={
-            i <= full ? "text-yellow-400" : i === full + 1 && half ? "text-yellow-400/60" : "text-gray-600"
-          }
-        >
-          ★
-        </span>
+          className={cx(
+            "h-4 w-4",
+            i <= full ? "text-warn-400" : i === full + 1 && half ? "text-warn-600" : "text-ink-700"
+          )}
+        />
       ))}
     </div>
   );
@@ -112,9 +127,9 @@ function PointList({
       {points.map((point) => (
         <div
           key={point.title}
-          className={`bg-gray-800 rounded-xl p-5 border-l-4 ${accent}`}
+          className={`bg-ink-850 rounded-xl p-5 border-l-4 ${accent}`}
         >
-          <h3 className="font-semibold text-white mb-2">{point.title}</h3>
+          <h3 className="font-semibold text-ink-50 mb-2">{point.title}</h3>
           <div className="text-sm [&_p:last-child]:mb-0">
             <Md>{point.body}</Md>
           </div>
@@ -131,6 +146,7 @@ export default async function ReviewDetailPage({ params }: Props) {
 
   const verdictClass = VERDICT_CONFIG[review.verdict]?.badge ?? NEUTRAL_BADGE;
   const basis = EVIDENCE_BASIS_CONFIG[review.evidenceBasis];
+  const BasisIcon = basis.icon;
   const skill = getSkillBySlug(review.skillSlug);
   const collections = getCollectionsForSkill(review.skillSlug);
 
@@ -207,18 +223,18 @@ export default async function ReviewDetailPage({ params }: Props) {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {review.status === "draft" && (
-          <div className="mb-8 bg-purple-950 border border-purple-700 rounded-xl p-4 text-sm text-purple-200">
+          <div className="mb-8 bg-accent-950 border border-accent-800 rounded-xl p-4 text-sm text-accent-200">
             <strong>Draft — not published.</strong> This review is awaiting editorial approval and is
             not served in production.
           </div>
         )}
 
-        <nav className="mb-8 text-sm text-gray-500 flex items-center gap-2">
-          <Link href="/" className="hover:text-gray-300 transition-colors">Home</Link>
+        <nav className="mb-8 text-sm text-ink-450 flex items-center gap-2">
+          <Link href="/" className="hover:text-ink-300 transition-colors">Home</Link>
           <span>/</span>
-          <Link href="/reviews" className="hover:text-gray-300 transition-colors">Reviews</Link>
+          <Link href="/reviews" className="hover:text-ink-300 transition-colors">Reviews</Link>
           <span>/</span>
-          <span className="text-gray-400 truncate">{review.title}</span>
+          <span className="text-ink-400 truncate">{review.title}</span>
         </nav>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -226,13 +242,18 @@ export default async function ReviewDetailPage({ params }: Props) {
             {/* Header */}
             <div className="mb-8">
               <div className="flex flex-wrap items-center gap-2 mb-4">
-                <span className={`text-xs font-semibold px-3 py-1 rounded-full border ${verdictClass}`}>
+                <span
+                  className={`inline-flex items-center rounded-sm border px-2 py-0.5 text-2xs font-medium ${verdictClass}`}
+                >
                   {review.verdict}
                 </span>
-                <span className={`text-xs font-semibold px-3 py-1 rounded-full border ${basis.badge}`}>
-                  {basis.icon} {basis.label}
+                <span
+                  className={`inline-flex items-center gap-1.5 rounded-sm border px-2 py-0.5 text-2xs font-medium ${basis.badge}`}
+                >
+                  <BasisIcon className="h-3 w-3" />
+                  {basis.label}
                 </span>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-ink-450">
                   Updated{" "}
                   {new Date(review.lastUpdated).toLocaleDateString("en-US", {
                     month: "long",
@@ -241,34 +262,34 @@ export default async function ReviewDetailPage({ params }: Props) {
                   })}
                 </span>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4 leading-tight">
+              <h1 className="text-3xl sm:text-4xl font-bold text-ink-50 mb-4 leading-tight">
                 {review.title}
               </h1>
-              <p className="text-gray-400 text-lg leading-relaxed">{review.description}</p>
+              <p className="text-ink-400 text-lg leading-relaxed">{review.description}</p>
 
-              <div className="mt-6 flex items-start gap-3 text-sm text-gray-500 border-t border-gray-800 pt-4">
-                <div className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center text-base shrink-0">
-                  🛡️
+              <div className="mt-6 flex items-start gap-3 text-sm text-ink-450 border-t border-ink-800 pt-4">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-ink-750 bg-ink-850 text-ink-450">
+                  <Shield className="h-4 w-4" />
                 </div>
                 <div>
-                  <span className="text-gray-300 font-medium">{review.author.name}</span>
-                  <p className="text-xs mt-0.5 text-gray-500">{review.author.bio}</p>
+                  <span className="text-ink-300 font-medium">{review.author.name}</span>
+                  <p className="text-xs mt-0.5 text-ink-450">{review.author.bio}</p>
                 </div>
               </div>
             </div>
 
             {/* How we know — the honesty block, deliberately above the verdict */}
             <div
-              className={`mb-10 rounded-2xl p-5 border ${
+              className={`mb-10 rounded-xl p-5 border ${
                 review.evidenceBasis === "hands-on"
-                  ? "bg-emerald-950/50 border-emerald-800"
-                  : "bg-amber-950/40 border-amber-800"
+                  ? "bg-ok-950 border-ok-800"
+                  : "bg-warn-950 border-warn-800"
               }`}
             >
-              <h2 className="text-sm font-bold text-white mb-2 flex items-center gap-2">
-                <span>{basis.icon}</span> How we know
+              <h2 className="text-sm font-bold text-ink-50 mb-2 flex items-center gap-2">
+                <BasisIcon className="h-4 w-4" /> How we know
               </h2>
-              <p className="text-sm text-gray-300 leading-relaxed">{basis.blurb}</p>
+              <p className="text-sm text-ink-300 leading-relaxed">{basis.blurb}</p>
               {review.basisNote && (
                 <div className="mt-3 text-sm [&_p:last-child]:mb-0">
                   <Md>{review.basisNote}</Md>
@@ -278,10 +299,10 @@ export default async function ReviewDetailPage({ params }: Props) {
 
             {/* Quick verdict */}
             <section className="mb-10">
-              <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+              <div className="bg-ink-900 border border-ink-800 rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="text-xl">⚡</span>
-                  <h2 className="text-lg font-bold text-white">Quick verdict</h2>
+                  <Zap className="h-4 w-4 text-warn-400" />
+                  <h2 className="text-lg font-bold text-ink-50">Quick verdict</h2>
                   <span className={`ml-auto text-xs font-semibold px-3 py-1 rounded-full border ${verdictClass}`}>
                     {review.verdict}
                   </span>
@@ -295,20 +316,20 @@ export default async function ReviewDetailPage({ params }: Props) {
             {/* The runs */}
             {review.runs.length > 0 && (
               <section className="mb-10">
-                <h2 className="text-2xl font-bold text-white mb-4">What we ran it on</h2>
+                <h2 className="text-2xl font-bold text-ink-50 mb-4">What we ran it on</h2>
                 <div className="space-y-4">
                   {review.runs.map((run, i) => (
-                    <div key={i} className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
+                    <div key={i} className="bg-ink-900 border border-ink-800 rounded-xl p-5">
                       <div className="flex flex-wrap items-center gap-2 mb-3 text-xs">
-                        <span className="bg-gray-800 text-gray-300 px-2 py-1 rounded-full font-mono">
+                        <span className="bg-ink-850 text-ink-300 px-2 py-1 rounded-full font-mono">
                           {run.platform}
                         </span>
                         {run.skillVersion && (
-                          <span className="bg-gray-800 text-gray-400 px-2 py-1 rounded-full font-mono">
+                          <span className="bg-ink-850 text-ink-400 px-2 py-1 rounded-full font-mono">
                             {run.skillVersion}
                           </span>
                         )}
-                        <span className="text-gray-500">
+                        <span className="text-ink-450">
                           {new Date(run.testedAt).toLocaleDateString("en-US", {
                             month: "short",
                             day: "numeric",
@@ -316,17 +337,17 @@ export default async function ReviewDetailPage({ params }: Props) {
                           })}
                         </span>
                       </div>
-                      <h3 className="text-sm font-semibold text-gray-200 mb-1">The task</h3>
+                      <h3 className="text-sm font-semibold text-ink-200 mb-1">The task</h3>
                       <div className="text-sm mb-3 [&_p:last-child]:mb-0">
                         <Md>{run.task}</Md>
                       </div>
-                      <h3 className="text-sm font-semibold text-gray-200 mb-1">What happened</h3>
+                      <h3 className="text-sm font-semibold text-ink-200 mb-1">What happened</h3>
                       <div className="text-sm [&_p:last-child]:mb-0">
                         <Md>{run.outcome}</Md>
                       </div>
                       {run.environment && (
-                        <p className="mt-3 text-xs text-gray-500">
-                          <span className="text-gray-400 font-medium">Environment:</span> {run.environment}
+                        <p className="mt-3 text-xs text-ink-450">
+                          <span className="text-ink-400 font-medium">Environment:</span> {run.environment}
                         </p>
                       )}
                     </div>
@@ -338,7 +359,7 @@ export default async function ReviewDetailPage({ params }: Props) {
             {/* Free-form sections */}
             {review.sections?.map((section) => (
               <section key={section.heading} className="mb-10">
-                <h2 className="text-2xl font-bold text-white mb-4">{section.heading}</h2>
+                <h2 className="text-2xl font-bold text-ink-50 mb-4">{section.heading}</h2>
                 <Md>{section.body}</Md>
               </section>
             ))}
@@ -346,7 +367,7 @@ export default async function ReviewDetailPage({ params }: Props) {
             {/* Strengths */}
             {review.strengths.length > 0 && (
               <section className="mb-10">
-                <h2 className="text-2xl font-bold text-white mb-4">What it does well</h2>
+                <h2 className="text-2xl font-bold text-ink-50 mb-4">What it does well</h2>
                 <PointList points={review.strengths} accent="border-green-500" />
               </section>
             )}
@@ -354,19 +375,19 @@ export default async function ReviewDetailPage({ params }: Props) {
             {/* Limitations */}
             {review.limitations.length > 0 && (
               <section className="mb-10">
-                <h2 className="text-2xl font-bold text-white mb-4">Where it stops</h2>
-                <PointList points={review.limitations} accent="border-red-500" />
+                <h2 className="text-2xl font-bold text-ink-50 mb-4">Where it stops</h2>
+                <PointList points={review.limitations} accent="border-risk-500" />
               </section>
             )}
 
             {/* Who it's for */}
             {review.bestFor && review.bestFor.length > 0 && (
               <section className="mb-10">
-                <h2 className="text-2xl font-bold text-white mb-4">Who should use it</h2>
+                <h2 className="text-2xl font-bold text-ink-50 mb-4">Who should use it</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {review.bestFor.map((point) => (
-                    <div key={point.title} className="bg-gray-800 rounded-xl p-5">
-                      <h3 className="font-semibold text-white mb-2">{point.title}</h3>
+                    <div key={point.title} className="bg-ink-850 rounded-xl p-5">
+                      <h3 className="font-semibold text-ink-50 mb-2">{point.title}</h3>
                       <div className="text-sm [&_p:last-child]:mb-0">
                         <Md>{point.body}</Md>
                       </div>
@@ -374,8 +395,8 @@ export default async function ReviewDetailPage({ params }: Props) {
                   ))}
                 </div>
                 {review.notFor && (
-                  <div className="bg-gray-800 rounded-xl p-5 mt-4 border border-red-800">
-                    <h3 className="font-semibold text-white mb-2">🙅 Probably not for you if…</h3>
+                  <div className="bg-ink-850 rounded-xl p-5 mt-4 border border-risk-800">
+                    <h3 className="mb-2 font-semibold text-ink-50">Probably not for you if…</h3>
                     <div className="text-sm [&_p:last-child]:mb-0">
                       <Md>{review.notFor}</Md>
                     </div>
@@ -395,13 +416,13 @@ export default async function ReviewDetailPage({ params }: Props) {
             {/* FAQ */}
             {review.faq && review.faq.length > 0 && (
               <section className="mb-10">
-                <h2 className="text-2xl font-bold text-white mb-6">Frequently asked questions</h2>
+                <h2 className="text-2xl font-bold text-ink-50 mb-6">Frequently asked questions</h2>
                 <div className="space-y-4">
                   {review.faq.map((item) => (
-                    <details key={item.question} className="bg-gray-800 rounded-xl p-5 group">
-                      <summary className="font-semibold text-white cursor-pointer list-none flex items-center justify-between gap-4">
+                    <details key={item.question} className="bg-ink-850 rounded-xl p-5 group">
+                      <summary className="font-semibold text-ink-50 cursor-pointer list-none flex items-center justify-between gap-4">
                         {item.question}
-                        <span className="text-gray-400 group-open:rotate-180 transition-transform shrink-0">▼</span>
+                        <ChevronDown className="h-4 w-4 shrink-0 text-ink-500 transition-transform group-open:rotate-180" />
                       </summary>
                       <div className="text-sm mt-3 [&_p:last-child]:mb-0">
                         <Md>{item.answer}</Md>
@@ -416,11 +437,11 @@ export default async function ReviewDetailPage({ params }: Props) {
           {/* Sidebar */}
           <div className="lg:col-span-1">
             <div className="sticky top-24 space-y-6">
-              <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
+              <div className="bg-ink-900 border border-ink-800 rounded-xl p-6">
                 <div className="text-center mb-6">
-                  <div className="text-5xl font-bold text-white mb-1">
+                  <div className="text-5xl font-bold text-ink-50 mb-1">
                     {review.overallScore.toFixed(1)}
-                    <span className="text-gray-600 text-2xl">/5</span>
+                    <span className="text-ink-500 text-2xl">/5</span>
                   </div>
                   <StarScore score={review.overallScore} />
                   <div
@@ -437,13 +458,13 @@ export default async function ReviewDetailPage({ params }: Props) {
               </div>
 
               {/* Links come from the review, not from hardcoded markup */}
-              <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-                <h3 className="text-sm font-semibold text-gray-300 mb-4">Quick links</h3>
+              <div className="bg-ink-900 border border-ink-800 rounded-xl p-6">
+                <h3 className="text-sm font-semibold text-ink-300 mb-4">Quick links</h3>
                 <div className="space-y-2 text-sm">
                   {skill && (
                     <Link
                       href={`/skills/${skill.slug}`}
-                      className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+                      className="flex items-center gap-2 text-ink-400 hover:text-ink-50 transition-colors"
                     >
                       <span>↗</span> Registry entry
                     </Link>
@@ -454,7 +475,7 @@ export default async function ReviewDetailPage({ params }: Props) {
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
+                      className="flex items-center gap-2 text-ink-400 hover:text-ink-50 transition-colors"
                     >
                       <span>↗</span> {link.label}
                     </a>
@@ -463,14 +484,14 @@ export default async function ReviewDetailPage({ params }: Props) {
               </div>
 
               {collections.length > 0 && (
-                <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-                  <h3 className="text-sm font-semibold text-gray-300 mb-4">Featured in</h3>
+                <div className="bg-ink-900 border border-ink-800 rounded-xl p-6">
+                  <h3 className="text-sm font-semibold text-ink-300 mb-4">Featured in</h3>
                   <div className="space-y-2 text-sm">
                     {collections.map((collection) => (
                       <Link
                         key={collection.slug}
                         href={`/collections/${collection.slug}`}
-                        className="flex items-start gap-2 text-gray-400 hover:text-white transition-colors"
+                        className="flex items-start gap-2 text-ink-400 hover:text-ink-50 transition-colors"
                       >
                         <span>{collection.emoji}</span>
                         <span>{collection.title}</span>
@@ -482,7 +503,7 @@ export default async function ReviewDetailPage({ params }: Props) {
 
               <Link
                 href="/reviews"
-                className="flex items-center justify-center gap-2 w-full py-3 bg-gray-800 hover:bg-gray-700 rounded-xl text-sm text-gray-300 hover:text-white transition-all"
+                className="flex items-center justify-center gap-2 w-full py-3 bg-ink-850 hover:bg-ink-800 rounded-xl text-sm text-ink-300 hover:text-ink-50 transition-all"
               >
                 ← All reviews
               </Link>

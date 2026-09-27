@@ -9,7 +9,9 @@ import {
   resolveEntries,
 } from "../../../lib/collections";
 import { getReviewedSkillSlugs, getReviewForSkill } from "../../../lib/reviews";
-import { formatCount, tierOf } from "../../../lib/skill-config";
+import { formatCount, formatDate, tierOf } from "../../../lib/skill-config";
+import { ArrowLeft, ExternalLink, Flask, ListChecks, Search } from "../../../components/icons";
+import { Eyebrow, Panel, TierChip } from "../../../components/ui";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -84,68 +86,66 @@ export default async function CollectionDetailPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
       />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
         {collection.status === "draft" && (
-          <div className="mb-8 bg-purple-950 border border-purple-700 rounded-xl p-4 text-sm text-purple-200">
-            <strong>Draft — not published.</strong> This collection is awaiting editorial approval and
-            is not served in production.
+          <div className="mb-8 rounded-lg border border-accent-800 bg-accent-950 p-4 text-sm text-accent-200">
+            <strong className="font-semibold">Draft — not published.</strong> This collection is
+            awaiting editorial approval and is not served in production.
           </div>
         )}
 
-        <nav className="mb-8 text-sm text-gray-500 flex items-center gap-2">
-          <Link href="/" className="hover:text-gray-300 transition-colors">Home</Link>
-          <span>/</span>
-          <Link href="/collections" className="hover:text-gray-300 transition-colors">Collections</Link>
-          <span>/</span>
-          <span className="text-gray-400 truncate">{collection.title}</span>
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-ink-500">
+          <Link href="/" className="transition-colors hover:text-ink-200">Home</Link>
+          <span className="text-ink-700">/</span>
+          <Link href="/collections" className="transition-colors hover:text-ink-200">Collections</Link>
+          <span className="text-ink-700">/</span>
+          <span className="truncate text-ink-300">{collection.title}</span>
         </nav>
 
         {/* Header */}
-        <header className="mb-10">
-          <div className="text-5xl mb-4">{collection.emoji}</div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-4 leading-tight">
+        <header className="mt-6 border-b border-ink-800 pb-6">
+          <span className="flex h-11 w-11 items-center justify-center rounded-lg border border-ink-750 bg-ink-850 text-ink-400">
+            <ListChecks className="h-5 w-5" />
+          </span>
+          <h1 className="mt-4 text-3xl font-semibold leading-tight text-ink-50 sm:text-4xl">
             {collection.title}
           </h1>
-          <p className="text-gray-400 text-lg leading-relaxed">{collection.description}</p>
-          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-500 border-t border-gray-800 pt-4">
+          <p className="mt-3 text-lg leading-relaxed text-ink-400">{collection.description}</p>
+          <div className="tabular mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-ink-500">
             <span>
-              <span className="text-gray-300">{entries.length}</span> skills
+              <span className="text-ink-200">{entries.length}</span> skills
             </span>
             <span>
-              Curated by <span className="text-gray-300">{collection.curator.name}</span>
+              Curated by <span className="text-ink-200">{collection.curator.name}</span>
             </span>
-            <span>
-              Updated{" "}
-              {new Date(collection.lastUpdated).toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}
-            </span>
+            {formatDate(collection.lastUpdated) ? (
+              <span>Updated {formatDate(collection.lastUpdated)}</span>
+            ) : null}
           </div>
         </header>
 
         {/* Intro */}
-        <section className="mb-10">
+        <section className="doc-content mt-8">
           <Md>{collection.intro}</Md>
         </section>
 
         {/* Evidence note — above the list, deliberately */}
-        <section className="mb-10">
-          <div className="bg-amber-950/40 border border-amber-800 rounded-2xl p-5">
-            <h2 className="text-sm font-bold text-white mb-2 flex items-center gap-2">
-              <span>🔎</span> What this list is based on
+        <section className="mt-8">
+          <div className="rounded-xl border border-warn-800 bg-warn-950 p-gutter">
+            <h2 className="flex items-center gap-2 text-sm font-semibold text-warn-300">
+              <Search className="h-4 w-4" />
+              What this list is based on
             </h2>
-            <div className="text-sm [&_p:last-child]:mb-0">
+            <div className="doc-content mt-2.5 text-sm [&_p:last-child]:mb-0">
               <Md>{collection.evidenceNote}</Md>
             </div>
           </div>
         </section>
 
         {/* The list */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-6">The list</h2>
-          <ol className="space-y-5">
+        <section className="mt-section">
+          <h2 className="text-xl font-semibold text-ink-50">The list</h2>
+          <ol className="mt-stack-lg space-y-3">
             {entries.map((entry, i) => {
               const tier = tierOf(entry.skill);
               const installs = formatCount(entry.skill.installs);
@@ -155,54 +155,51 @@ export default async function CollectionDetailPage({ params }: Props) {
               return (
                 <li
                   key={entry.skill.slug}
-                  className="bg-gray-900 border border-gray-800 rounded-2xl p-6"
+                  className="rounded-xl border border-ink-750 bg-ink-900 p-gutter-lg shadow-e1"
                 >
                   <div className="flex items-start gap-4">
-                    <span className="shrink-0 w-8 h-8 rounded-lg bg-gray-800 text-gray-400 flex items-center justify-center text-sm font-semibold tabular-nums">
+                    <span className="tabular flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-ink-750 bg-ink-850 text-sm font-semibold text-ink-400">
                       {i + 1}
                     </span>
                     <div className="min-w-0 flex-1">
-                      {entry.role && (
-                        <div className="text-xs font-semibold text-blue-400 uppercase tracking-wide mb-1">
-                          {entry.role}
-                        </div>
-                      )}
-                      <h3 className="text-xl font-bold text-white mb-1">
+                      {entry.role && <Eyebrow className="mb-1.5">{entry.role}</Eyebrow>}
+                      <h3 className="text-lg font-semibold text-ink-50">
                         <Link
                           href={`/skills/${entry.skill.slug}`}
-                          className="hover:text-blue-300 transition-colors"
+                          className="transition-colors hover:text-accent-300"
                         >
                           {entry.skill.name}
                         </Link>
                       </h3>
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500 mb-4">
+                      <div className="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-xs text-ink-500">
                         <span className="font-mono">{entry.skill.author}</span>
-                        <span>·</span>
-                        <span>{tier.label}</span>
+                        <span className="text-ink-700">·</span>
+                        <TierChip tier={entry.skill.verified} />
                         {installs && (
                           <>
-                            <span>·</span>
-                            <span>{installs} installs</span>
+                            <span className="text-ink-700">·</span>
+                            <span className="tabular">{installs} installs</span>
                           </>
                         )}
                         {review && (
                           <Link
                             href={`/reviews/${review.slug}`}
-                            className="text-emerald-400 hover:text-emerald-300 font-semibold"
+                            className="inline-flex items-center gap-1 font-medium text-ok-400 transition-colors hover:text-ok-300"
                           >
-                            🧪 Reviewed
+                            <Flask className="h-3 w-3" />
+                            Reviewed
                           </Link>
                         )}
                       </div>
 
-                      <div className="text-sm [&_p:last-child]:mb-0">
+                      <div className="doc-content mt-3 text-sm [&_p:last-child]:mb-0">
                         <Md>{entry.note}</Md>
                       </div>
 
                       <div className="mt-4 flex flex-wrap items-center gap-4 text-sm">
                         <Link
                           href={`/skills/${entry.skill.slug}`}
-                          className="text-blue-400 hover:text-blue-300 transition-colors"
+                          className="text-accent-400 transition-colors hover:text-accent-300"
                         >
                           Install instructions →
                         </Link>
@@ -211,9 +208,10 @@ export default async function CollectionDetailPage({ params }: Props) {
                             href={entry.skill.repoUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-gray-500 hover:text-gray-300 transition-colors"
+                            className="inline-flex items-center gap-1.5 text-ink-500 transition-colors hover:text-ink-200"
                           >
-                            Source ↗
+                            Source
+                            <ExternalLink className="h-3 w-3" />
                           </a>
                         )}
                       </div>
@@ -226,23 +224,28 @@ export default async function CollectionDetailPage({ params }: Props) {
         </section>
 
         {/* How the list was built */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold text-white mb-4">How this list was built</h2>
-          <Md>{collection.criteria}</Md>
+        <section className="mt-section">
+          <h2 className="text-xl font-semibold text-ink-50">How this list was built</h2>
+          <div className="doc-content mt-stack-lg">
+            <Md>{collection.criteria}</Md>
+          </div>
         </section>
 
         {/* Curator */}
-        <section className="mb-12 bg-gray-900 border border-gray-800 rounded-2xl p-6">
-          <h2 className="text-sm font-semibold text-gray-300 mb-2">About the curator</h2>
-          <p className="text-gray-200 font-medium text-sm">{collection.curator.name}</p>
-          <p className="text-gray-500 text-sm mt-1">{collection.curator.bio}</p>
+        <section className="mt-section">
+          <Panel>
+            <Eyebrow>About the curator</Eyebrow>
+            <p className="mt-2 text-sm font-medium text-ink-100">{collection.curator.name}</p>
+            <p className="mt-1 text-sm leading-relaxed text-ink-450">{collection.curator.bio}</p>
+          </Panel>
         </section>
 
         <Link
           href="/collections"
-          className="inline-flex items-center gap-2 px-5 py-3 bg-gray-800 hover:bg-gray-700 rounded-xl text-sm text-gray-300 hover:text-white transition-all"
+          className="group mt-section inline-flex h-10 items-center gap-2 rounded-md border border-ink-700 bg-ink-850 px-4 text-sm font-medium text-ink-200 transition duration-fast ease-out hover:border-ink-650 hover:bg-ink-800 hover:text-ink-50"
         >
-          ← All collections
+          <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-fast ease-out group-hover:-translate-x-0.5" />
+          All collections
         </Link>
       </div>
     </>

@@ -7,6 +7,9 @@ import {
   NEUTRAL_BADGE,
 } from "../../lib/reviews";
 import { getAllCollections } from "../../lib/collections";
+import { formatDate } from "../../lib/skill-config";
+import { ArrowRight, BarChart, Flask, ListChecks, Shield, Star } from "../../components/icons";
+import { CardLink, Chip, Eyebrow, Panel, SectionHeading, cx } from "../../components/ui";
 
 export const metadata: Metadata = {
   title: "Skill Reviews | TrustedSkills",
@@ -21,22 +24,23 @@ export const metadata: Metadata = {
   },
 };
 
+const BADGE = "inline-flex items-center gap-1.5 rounded-sm border px-2 py-0.5 text-2xs font-medium";
+
 function StarScore({ score }: { score: number }) {
   const full = Math.floor(score);
   const half = score % 1 >= 0.5;
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-0.5" title={`${score.toFixed(1)} out of 5`}>
       {[1, 2, 3, 4, 5].map((i) => (
-        <span
+        <Star
           key={i}
-          className={
-            i <= full ? "text-yellow-400" : i === full + 1 && half ? "text-yellow-400/60" : "text-gray-600"
-          }
-        >
-          ★
-        </span>
+          className={cx(
+            "h-3.5 w-3.5",
+            i <= full ? "text-warn-400" : i === full + 1 && half ? "text-warn-600" : "text-ink-700"
+          )}
+        />
       ))}
-      <span className="ml-1 text-sm text-gray-400">{score.toFixed(1)}</span>
+      <span className="tabular ml-1.5 text-xs text-ink-450">{score.toFixed(1)}</span>
     </div>
   );
 }
@@ -47,148 +51,153 @@ export default function ReviewsPage() {
   const handsOn = reviews.filter((r) => r.evidenceBasis === "hands-on").length;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-12">
-        <h1 className="text-4xl font-bold text-white mb-4">Skill Reviews</h1>
-        <p className="text-gray-400 text-lg max-w-2xl">
-          Independent assessments of AI agent skills. No sponsored content, no affiliate links — and
-          every review says up front whether we ran the skill or only read it.
+    <div className="mx-auto max-w-page px-4 py-10 sm:px-6 lg:px-8">
+      <header className="border-b border-ink-800 pb-6">
+        <h1 className="text-3xl font-semibold text-ink-50">Skill reviews</h1>
+        <p className="mt-2 max-w-2xl text-base leading-relaxed text-ink-400">
+          Independent assessments of AI agent skills. No sponsored content, no affiliate links —
+          and every review says up front whether we ran the skill or only read it.
         </p>
-        <div className="flex flex-wrap items-center gap-6 mt-6 text-sm text-gray-500">
+        <div className="tabular mt-5 flex flex-wrap items-center gap-5 text-sm text-ink-450">
           <span className="flex items-center gap-2">
-            <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
+            <span className="h-1.5 w-1.5 rounded-full bg-ok-500" />
             {reviews.length} review{reviews.length !== 1 ? "s" : ""}
           </span>
-          <span className="flex items-center gap-2">
-            <span>🧪</span>
+          <span className="flex items-center gap-1.5">
+            <Flask className="h-3.5 w-3.5" />
             {handsOn} hands-on tested
           </span>
         </div>
-      </div>
+      </header>
 
       {reviews.length === 0 ? (
-        <div className="text-center py-24 text-gray-500">
-          <p className="text-xl mb-2">No reviews yet</p>
-          <p className="text-sm">Check back soon.</p>
+        <div className="mt-8 rounded-xl border border-dashed border-ink-750 py-20 text-center">
+          <h2 className="text-base font-semibold text-ink-200">No reviews yet</h2>
+          <p className="mt-2 text-sm text-ink-500">Check back soon.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-6">
+        <div className="mt-8 grid grid-cols-1 gap-3">
           {reviews.map((review) => {
             const verdictClass = VERDICT_CONFIG[review.verdict]?.badge ?? NEUTRAL_BADGE;
             const basis = EVIDENCE_BASIS_CONFIG[review.evidenceBasis];
+            const BasisIcon = basis.icon;
+            const updated = formatDate(review.lastUpdated);
             return (
-              <Link
-                key={review.slug}
-                href={`/reviews/${review.slug}`}
-                className="group block bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-gray-600 transition-all hover:bg-gray-800/50"
-              >
-                <div className="flex flex-col sm:flex-row sm:items-start gap-4">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-wrap items-center gap-2 mb-2">
-                      <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${verdictClass}`}>
-                        {review.verdict}
-                      </span>
-                      <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${basis.badge}`}>
-                        {basis.icon} {basis.label}
+              <CardLink key={review.slug} href={`/reviews/${review.slug}`} className="p-gutter-lg">
+                <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className={cx(BADGE, verdictClass)}>{review.verdict}</span>
+                      <span className={cx(BADGE, basis.badge)}>
+                        <BasisIcon className="h-3 w-3" />
+                        {basis.label}
                       </span>
                       {review.status === "draft" && (
-                        <span className="text-xs font-semibold px-2.5 py-1 rounded-full border bg-purple-900 text-purple-300 border-purple-700">
+                        <span className={cx(BADGE, "border-accent-800 bg-accent-950 text-accent-300")}>
                           Draft
                         </span>
                       )}
-                      <span className="text-xs text-gray-500">
-                        Updated{" "}
-                        {new Date(review.lastUpdated).toLocaleDateString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        })}
-                      </span>
+                      {updated ? (
+                        <span className="text-2xs text-ink-500">Updated {updated}</span>
+                      ) : null}
                     </div>
-                    <h2 className="text-xl font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">
+
+                    <h2 className="mt-2.5 text-lg font-semibold text-ink-50 transition-colors group-hover:text-ink-50">
                       {review.title}
                     </h2>
-                    <p className="text-gray-400 text-sm leading-relaxed mb-4">{review.description}</p>
-                    <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500">
+                    <p className="mt-1.5 text-sm leading-relaxed text-ink-400">
+                      {review.description}
+                    </p>
+
+                    <div className="mt-4 flex flex-wrap items-center gap-5 text-xs text-ink-500">
                       <StarScore score={review.overallScore} />
                       <span>by {review.author.name}</span>
                     </div>
                   </div>
+
                   <div className="shrink-0 text-right">
-                    <div className="text-3xl font-bold text-white">
+                    <div className="tabular text-3xl font-semibold text-ink-50">
                       {review.overallScore.toFixed(1)}
-                      <span className="text-gray-600 text-lg">/5</span>
+                      <span className="text-lg text-ink-600">/5</span>
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">Overall</div>
+                    <div className="mt-0.5 text-2xs text-ink-500">Overall</div>
                   </div>
                 </div>
-              </Link>
+              </CardLink>
             );
           })}
         </div>
       )}
 
-      {/* Collections cross-link */}
       {collections.length > 0 && (
-        <div className="mt-16">
-          <div className="flex items-baseline justify-between mb-6">
-            <h2 className="text-2xl font-bold text-white">Curated collections</h2>
-            <Link href="/collections" className="text-sm text-blue-400 hover:text-blue-300">
-              All collections →
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <section className="mt-section">
+          <SectionHeading
+            icon={ListChecks}
+            title="Curated collections"
+            action={{ href: "/collections", label: "All collections" }}
+          />
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {collections.slice(0, 4).map((collection) => (
-              <Link
-                key={collection.slug}
-                href={`/collections/${collection.slug}`}
-                className="group block bg-gray-900 border border-gray-800 rounded-2xl p-5 hover:border-gray-600 transition-all"
-              >
+              <CardLink key={collection.slug} href={`/collections/${collection.slug}`}>
                 <div className="flex items-start gap-3">
-                  <span className="text-2xl shrink-0">{collection.emoji}</span>
-                  <div>
-                    <h3 className="font-semibold text-white group-hover:text-blue-300 transition-colors">
-                      {collection.title}
-                    </h3>
-                    <p className="text-sm text-gray-400 mt-1">{collection.description}</p>
-                    <p className="text-xs text-gray-500 mt-2">{collection.entries.length} skills</p>
+                  <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-ink-750 bg-ink-850 text-ink-450 transition-colors duration-fast group-hover:text-accent-400">
+                    <ListChecks className="h-4 w-4" />
+                  </span>
+                  <div className="min-w-0">
+                    <h3 className="text-sm font-semibold text-ink-100">{collection.title}</h3>
+                    <p className="mt-1 text-sm leading-relaxed text-ink-450">
+                      {collection.description}
+                    </p>
+                    <Chip className="mt-2.5">{collection.entries.length} skills</Chip>
                   </div>
                 </div>
-              </Link>
+              </CardLink>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
-      {/* Methodology */}
-      <div className="mt-16 bg-gray-900 border border-gray-800 rounded-2xl p-6">
-        <h2 className="text-lg font-semibold text-white mb-3">Our methodology</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm text-gray-400">
-          <div>
-            <div className="text-gray-200 font-medium mb-1">🧪 Hands-on, or labelled</div>
-            <p>
-              A hands-on review means the skill was installed and pointed at real work, and the page
-              lists the task and what happened. Where we&apos;ve only read the source, the review says
-              so at the top and carries no measured results.
-            </p>
+      <section className="mt-section">
+        <Panel>
+          <h2 className="text-sm font-semibold text-ink-50">How we review</h2>
+          <div className="mt-stack-lg grid grid-cols-1 gap-6 sm:grid-cols-3">
+            {[
+              {
+                icon: Flask,
+                title: "Hands-on, or labelled",
+                body: "A hands-on review means the skill was installed and pointed at real work, and the page lists the task and what happened. Where we've only read the source, the review says so at the top and carries no measured results.",
+              },
+              {
+                icon: BarChart,
+                title: "Five scored dimensions",
+                body: "Installation ease, documentation quality, feature depth, maintenance track record and platform support — each out of 5. The overall score is their mean, not a separate judgement.",
+              },
+              {
+                icon: Shield,
+                title: "No invented results",
+                body: "We never publish a benchmark we didn't run, a screenshot we didn't take, or a testimonial we didn't receive. If we can't verify something, we write down that we can't.",
+              },
+            ].map((item) => (
+              <div key={item.title}>
+                <Eyebrow className="flex items-center gap-1.5">
+                  <item.icon className="h-3.5 w-3.5" />
+                  {item.title}
+                </Eyebrow>
+                <p className="mt-2 text-sm leading-relaxed text-ink-450">{item.body}</p>
+              </div>
+            ))}
           </div>
-          <div>
-            <div className="text-gray-200 font-medium mb-1">📊 Five scored dimensions</div>
-            <p>
-              Installation ease, documentation quality, feature depth, maintenance track record and
-              platform support — each out of 5. The overall score is their mean, not a separate
-              judgement.
-            </p>
-          </div>
-          <div>
-            <div className="text-gray-200 font-medium mb-1">🚫 No invented results</div>
-            <p>
-              We never publish a benchmark we didn&apos;t run, a screenshot we didn&apos;t take, or a
-              testimonial we didn&apos;t receive. If we can&apos;t verify something, we write down that
-              we can&apos;t.
-            </p>
-          </div>
-        </div>
+        </Panel>
+      </section>
+
+      <div className="mt-section flex justify-center">
+        <Link
+          href="/skills"
+          className="group inline-flex items-center gap-1.5 text-sm text-ink-450 transition-colors hover:text-ink-100"
+        >
+          Browse every skill in the index
+          <ArrowRight className="h-3.5 w-3.5 transition-transform duration-fast ease-out group-hover:translate-x-0.5" />
+        </Link>
       </div>
     </div>
   );

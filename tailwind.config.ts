@@ -49,6 +49,9 @@ const accent = {
   200: "#b4dcfd",
 };
 
+// The semantic ramps carry the same steps as `accent` (950 → 200) so a
+// component can reach for a lighter tint on hover without falling off the
+// end of the scale into a class Tailwind silently drops.
 const ok = {
   950: "#052016",
   900: "#06301f",
@@ -58,6 +61,7 @@ const ok = {
   500: "#18b976",
   400: "#3ed394",
   300: "#79e6b8",
+  200: "#aff2d5",
 };
 
 const warn = {
@@ -69,6 +73,7 @@ const warn = {
   500: "#d18b12",
   400: "#eaa93a",
   300: "#f5c877",
+  200: "#fadfb0",
 };
 
 const risk = {
@@ -80,6 +85,7 @@ const risk = {
   500: "#dc3a5d",
   400: "#ef6a86",
   300: "#f79bad",
+  200: "#fbc4d0",
 };
 
 const config: Config = {

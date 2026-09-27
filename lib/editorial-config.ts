@@ -2,6 +2,20 @@
 // curated collections. Safe to import from client components — nothing here
 // touches the skills index or the filesystem. Server code that loads editorial
 // content uses lib/reviews.ts and lib/collections.ts.
+//
+// Colour and glyphs come from the design system: `ok`/`warn`/`risk` carry
+// meaning, `ink` carries everything else, and icons are components from
+// components/icons.tsx rather than emoji.
+
+import {
+  BarChart,
+  BookOpen,
+  Flask,
+  Monitor,
+  RefreshCw,
+  Wrench,
+  type IconComponent,
+} from "../components/icons";
 
 /**
  * Editorial content is authored as a draft, reviewed by a human, and only then
@@ -17,24 +31,24 @@ export type Verdict =
 
 export const VERDICT_CONFIG: Record<Verdict, { badge: string; accent: string }> = {
   "Highly Recommended": {
-    badge: "bg-emerald-900 text-emerald-300 border-emerald-700",
-    accent: "text-emerald-400",
+    badge: "border-ok-800 bg-ok-950 text-ok-300",
+    accent: "text-ok-400",
   },
   Recommended: {
-    badge: "bg-blue-900 text-blue-300 border-blue-700",
-    accent: "text-blue-400",
+    badge: "border-accent-800 bg-accent-950 text-accent-300",
+    accent: "text-accent-400",
   },
   "Use With Caution": {
-    badge: "bg-yellow-900 text-yellow-300 border-yellow-700",
-    accent: "text-yellow-400",
+    badge: "border-warn-800 bg-warn-950 text-warn-300",
+    accent: "text-warn-400",
   },
   "Not Recommended": {
-    badge: "bg-red-900 text-red-300 border-red-700",
-    accent: "text-red-400",
+    badge: "border-risk-800 bg-risk-950 text-risk-300",
+    accent: "text-risk-400",
   },
 };
 
-export const NEUTRAL_BADGE = "bg-gray-800 text-gray-300 border-gray-700";
+export const NEUTRAL_BADGE = "border-ink-750 bg-ink-850 text-ink-300";
 
 // ---------------------------------------------------------------------------
 // Reviews
@@ -51,13 +65,13 @@ export interface ReviewScores {
 export const SCORE_DIMENSIONS: {
   key: keyof ReviewScores;
   label: string;
-  icon: string;
+  icon: IconComponent;
 }[] = [
-  { key: "installation", label: "Ease of Install", icon: "🔧" },
-  { key: "documentation", label: "Documentation", icon: "📚" },
-  { key: "depth", label: "Depth", icon: "🔬" },
-  { key: "maintenance", label: "Maintenance", icon: "🔄" },
-  { key: "platformSupport", label: "Platform Support", icon: "🖥️" },
+  { key: "installation", label: "Ease of Install", icon: Wrench },
+  { key: "documentation", label: "Documentation", icon: BookOpen },
+  { key: "depth", label: "Depth", icon: BarChart },
+  { key: "maintenance", label: "Maintenance", icon: RefreshCw },
+  { key: "platformSupport", label: "Platform Support", icon: Monitor },
 ];
 
 /**
@@ -75,18 +89,18 @@ export type EvidenceBasis = "hands-on" | "source-review";
 
 export const EVIDENCE_BASIS_CONFIG: Record<
   EvidenceBasis,
-  { label: string; icon: string; badge: string; blurb: string }
+  { label: string; icon: IconComponent; badge: string; blurb: string }
 > = {
   "hands-on": {
     label: "Hands-on tested",
-    icon: "🧪",
-    badge: "bg-emerald-900 text-emerald-300 border-emerald-700",
+    icon: Flask,
+    badge: "border-ok-800 bg-ok-950 text-ok-300",
     blurb: "We installed this skill and ran it against real work. The runs are listed below.",
   },
   "source-review": {
     label: "Source review — not run",
-    icon: "📖",
-    badge: "bg-amber-900 text-amber-300 border-amber-700",
+    icon: BookOpen,
+    badge: "border-warn-800 bg-warn-950 text-warn-300",
     blurb:
       "This assessment is based on reading the source, documentation and release history. We have not run this skill against a real task yet, so nothing here is a measured result.",
   },

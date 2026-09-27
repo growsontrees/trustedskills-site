@@ -272,6 +272,26 @@ export const Plug = stroke(
 
 export const Circle = stroke(<circle cx="12" cy="12" r="9" />);
 
+export const Zap = stroke(
+  <path d="M13 2 4.09 12.91a1 1 0 0 0 .77 1.64H11l-1 7.45 8.91-10.91a1 1 0 0 0-.77-1.64H13z" />
+);
+
+export const RefreshCw = stroke(
+  <>
+    <path d="M3 12a9 9 0 0 1 15-6.7L21 8" />
+    <path d="M21 3v5h-5" />
+    <path d="M21 12a9 9 0 0 1-15 6.7L3 16" />
+    <path d="M3 21v-5h5" />
+  </>
+);
+
+export const Quote = stroke(
+  <>
+    <path d="M10 11H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v8a4 4 0 0 1-4 4" />
+    <path d="M20 11h-4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v8a4 4 0 0 1-4 4" />
+  </>
+);
+
 export const Compass = stroke(
   <>
     <circle cx="12" cy="12" r="9" />
