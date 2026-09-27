@@ -100,7 +100,7 @@ export const DOC_ARTICLES: DocArticle[] = [
         <td><strong>MCP</strong></td>
         <td>Protocol standard for AI-tool communication</td>
         <td>Anthropic, Claude, Cursor, most modern platforms</td>
-        <td>JSON-RPC over stdio or SSE</td>
+        <td>JSON-RPC over stdio (local) or Streamable HTTP (remote)</td>
       </tr>
       <tr>
         <td><strong>Skill</strong></td>
@@ -212,9 +212,9 @@ export const DOC_ARTICLES: DocArticle[] = [
   <li>Checks the local cache — is this package already downloaded?</li>
   <li>If not: fetches the latest version from npm</li>
   <li>Runs it immediately</li>
-  <li>Caches it — so next time it's instant</li>
+  <li>Caches it. Next time, npx checks npm for a newer version, then runs from the cache</li>
 </ol>
-<p>That's it. No installation prompt, no PATH changes, nothing permanent.</p>
+<p>That's it. No global install and no PATH changes.</p>
 
 <h2>Why <code>-y</code>? That One Flag Explained</h2>
 <p>Without <code>-y</code>, npx asks you to confirm before downloading a new package:</p>
@@ -222,13 +222,9 @@ export const DOC_ARTICLES: DocArticle[] = [
 # Need to install the following packages:
 #   @modelcontextprotocol/server-memory
 # Ok to proceed? (y)</code></pre>
-<p>That's fine when you're sitting at a terminal. But MCP servers launch automatically in the background — there's no human there to type "y". So you add <code>-y</code> and it skips the prompt entirely:</p>
+<p>You only see that prompt when you run npx in a terminal. When an app launches an MCP server there is no terminal, and current npm versions install without asking. Configs still include <code>-y</code> so the command never stops to ask, whoever runs it:</p>
 <pre><code class="language-bash">npx -y @modelcontextprotocol/server-memory
 # Runs immediately. No questions asked.</code></pre>
-
-<div class="tip-box">
-  <strong>💡 Why the <code>-y</code>?</strong> It answers yes to npx's "Ok to proceed?" install prompt. Current npm versions skip that prompt when there is no terminal attached, which is how apps launch MCP servers. Keeping <code>-y</code> makes the same command behave the same way when you test it by hand.
-</div>
 
 <h2>A Real MCP Config, Dissected</h2>
 <pre><code class="language-json">{
@@ -282,7 +278,7 @@ export const DOC_ARTICLES: DocArticle[] = [
 <ul>
   <li><strong>Mac:</strong> <code>brew install node</code> or download from <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a></li>
   <li><strong>Windows:</strong> Download the installer from <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a> — check "Add to PATH" during install</li>
-  <li><strong>Linux:</strong> <code>sudo apt install nodejs npm</code> or use <a href="https://github.com/nvm-sh/nvm" target="_blank" rel="noopener">nvm</a></li>
+  <li><strong>Linux:</strong> use <a href="https://github.com/nvm-sh/nvm" target="_blank" rel="noopener">nvm</a> or the installers on <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a>. Distribution packages can be too old: servers built on the official MCP SDK need Node.js 18 or later.</li>
 </ul>
 <p>Verify it worked:</p>
 <pre><code class="language-bash">npx --version
@@ -297,19 +293,19 @@ export const DOC_ARTICLES: DocArticle[] = [
 <h2>Frequently Asked Questions</h2>
 
 <h3>Does npx download the package every single time?</h3>
-<p>No — it caches packages locally after the first download. Subsequent runs are fast. The cache expires periodically, which is actually useful: you automatically get updates when the skill author publishes a new version.</p>
+<p>No. It caches packages after the first download. For a package name without a version, npx checks npm on each launch and downloads a newer version if there is one. Pin a version with <code>@version</code> to stop that.</p>
 
 <h3>What does npx -y do in an MCP config?</h3>
-<p>The <code>-y</code> flag auto-answers "yes" to any install confirmation prompts. Without it, npx waits for user input before downloading a new package — which breaks automated launches from Claude Desktop or Claude Code.</p>
+<p>The <code>-y</code> flag answers "yes" to npx's install prompt. npx only shows that prompt in a terminal, so apps that launch servers in the background work without it. Keeping <code>-y</code> makes the command behave the same everywhere.</p>
 
 <h3>Can I pin a specific version with npx?</h3>
 <p>Yes. Use the <code>@version</code> syntax: <code>npx -y @modelcontextprotocol/server-memory@2026.8.31</code>. Good for production setups where you want reproducible behaviour and don't want surprise updates.</p>
 
 <h3>What if npx isn't found on my system?</h3>
-<p>Install or reinstall Node.js from nodejs.org. npx has been bundled with Node since v5.2.0. On Windows, make sure you checked "Add to PATH" during installation.</p>
+<p>Install or reinstall Node.js from nodejs.org. npx ships with npm, which comes with Node.js. On Windows, make sure you checked "Add to PATH" during installation.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does npx download the package every single time?","acceptedAnswer":{"@type":"Answer","text":"No — it caches packages locally. Subsequent runs are fast. The cache expires periodically so you get updates automatically."}},{"@type":"Question","name":"What does npx -y do in an MCP config?","acceptedAnswer":{"@type":"Answer","text":"The -y flag auto-answers yes to install prompts. Without it, npx waits for user input, which breaks automated launches."}},{"@type":"Question","name":"Can I pin a specific version with npx?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use npx -y @modelcontextprotocol/server-memory@2026.8.31 to pin to a specific version."}},{"@type":"Question","name":"What if npx isn't found on my system?","acceptedAnswer":{"@type":"Answer","text":"Install Node.js from nodejs.org. npx is bundled with Node since v5.2.0."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does npx download the package every single time?","acceptedAnswer":{"@type":"Answer","text":"No. It caches packages after the first download. For a package name without a version, npx checks npm on each launch for a newer version."}},{"@type":"Question","name":"What does npx -y do in an MCP config?","acceptedAnswer":{"@type":"Answer","text":"The -y flag answers yes to npx's install prompt. npx only prompts in a terminal; -y makes the command behave the same everywhere."}},{"@type":"Question","name":"Can I pin a specific version with npx?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use npx -y @modelcontextprotocol/server-memory@2026.8.31 to pin to a specific version."}},{"@type":"Question","name":"What if npx isn't found on my system?","acceptedAnswer":{"@type":"Answer","text":"Install Node.js from nodejs.org. npx ships with npm, which comes with Node.js."}}]}
 </script>
     `,
   },
@@ -434,16 +430,16 @@ export const DOC_ARTICLES: DocArticle[] = [
       <tr>
         <td><strong>Verification</strong></td>
         <td>N/A</td>
-        <td>Unverified / Community / Verified / Featured</td>
+        <td>TrustedSkills badges: Official, Featured, Pinned, Checked, Listed, Unverified</td>
       </tr>
     </tbody>
   </table>
 </div>
 
 <h2>How the Protocol Works (the Short Version)</h2>
-<p>MCP uses JSON-RPC 2.0 over stdio. No HTTP server. No ports. The client writes JSON to the server's stdin; the server writes JSON to its stdout. That's the whole protocol.</p>
+<p>A local MCP server uses JSON-RPC 2.0 over stdio. No HTTP server. No ports. The client writes JSON to the server's stdin; the server writes JSON to its stdout. That's the whole transport.</p>
 <p>It's simple by design — works the same on Mac, Windows, and Linux. No firewall rules, no network configuration, no port conflicts. The subprocess is isolated to process-level communication only.</p>
-<p>Some advanced setups use SSE (Server-Sent Events) over HTTP for remote MCP servers, but that's uncommon for skills installed from TrustedSkills.</p>
+<p>Remote MCP servers use the Streamable HTTP transport instead. The older HTTP+SSE transport is deprecated.</p>
 
 <div class="tip-box">
   <strong>💡 Good to know:</strong> Because MCP uses stdio, you can test any MCP server manually by running it in a terminal and typing JSON at it. It's a great way to debug a skill that isn't behaving as expected.
@@ -473,13 +469,13 @@ export const DOC_ARTICLES: DocArticle[] = [
 <p>Only if they're designed to. A filesystem skill can access files; a weather skill can't. Each skill only does what its tools define. This is why checking a skill's verification status matters before installing it.</p>
 
 <h3>What happens when an MCP server crashes?</h3>
-<p>Claude will stop offering that skill's tools and may show an error. Restart your AI client to relaunch the server. Claude Desktop shows crash details in Settings → Developer → MCP Logs.</p>
+<p>Claude will stop offering that skill's tools and may show an error. Restart your AI client to relaunch the server. Claude Desktop writes crash details to its log files: <code>~/Library/Logs/Claude</code> on Mac, <code>%APPDATA%\Claude\logs</code> on Windows.</p>
 
 <h3>Can I run many MCP skills simultaneously?</h3>
 <p>Yes. Each skill runs as a separate subprocess. You can have dozens running at once — Claude picks whichever tools are most relevant for each query.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does Claude know when to use an MCP tool?","acceptedAnswer":{"@type":"Answer","text":"Tool definitions include a name and description. Claude reads those and decides when a tool is relevant. Better descriptions = more reliable tool usage."}},{"@type":"Question","name":"Can MCP skills access my local files?","acceptedAnswer":{"@type":"Answer","text":"Only if designed to. Each skill only does what its tools define. Check verification status before installing."}},{"@type":"Question","name":"What happens when an MCP server crashes?","acceptedAnswer":{"@type":"Answer","text":"Claude stops offering that skill's tools. Restart your AI client to relaunch. Check Settings → Developer → MCP Logs for details."}},{"@type":"Question","name":"Can I run many MCP skills simultaneously?","acceptedAnswer":{"@type":"Answer","text":"Yes. Each skill is a separate subprocess. Claude picks the most relevant tools for each query."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does Claude know when to use an MCP tool?","acceptedAnswer":{"@type":"Answer","text":"Tool definitions include a name and description. Claude reads those and decides when a tool is relevant. Better descriptions = more reliable tool usage."}},{"@type":"Question","name":"Can MCP skills access my local files?","acceptedAnswer":{"@type":"Answer","text":"Only if designed to. Each skill only does what its tools define. Check verification status before installing."}},{"@type":"Question","name":"What happens when an MCP server crashes?","acceptedAnswer":{"@type":"Answer","text":"Claude stops offering that skill's tools. Restart your AI client to relaunch. Check the Claude Desktop log files for details."}},{"@type":"Question","name":"Can I run many MCP skills simultaneously?","acceptedAnswer":{"@type":"Answer","text":"Yes. Each skill is a separate subprocess. Claude picks the most relevant tools for each query."}}]}
 </script>
     `,
   },
@@ -570,7 +566,7 @@ export const DOC_ARTICLES: DocArticle[] = [
 <p>Claude reads the config only on startup. No restart = no new skills.</p>
 
 <h2>Step 5: Confirm It Worked</h2>
-<p>Open a new conversation. Look for the 🔨 tools icon in the input area, or just ask Claude: <em>"What tools do you have?"</em> Your skill's tools should appear in the list.</p>
+<p>Open a new conversation. Click the <strong>+</strong> button in the message box ("Add files, connectors, and more") and open <strong>Connectors</strong>. Your server and its tools should be listed.</p>
 
 <h2>Config Locations at a Glance</h2>
 <div class="table-container">
@@ -580,9 +576,9 @@ export const DOC_ARTICLES: DocArticle[] = [
     </thead>
     <tbody>
       <tr><td>Claude Desktop Mac</td><td><code>~/Library/Application Support/Claude/claude_desktop_config.json</code></td></tr>
-      <tr><td>Claude Desktop Windows</td><td><code>%APPDATA%\Claude\claude_desktop_config.json</code></td></tr>
+      <tr><td>Claude Desktop Windows</td><td><code>%APPDATA%\\Claude\\claude_desktop_config.json</code></td></tr>
       <tr><td>Claude Desktop Linux</td><td><code>~/.config/Claude/claude_desktop_config.json</code></td></tr>
-      <tr><td>Claude Code (global)</td><td><code>~/.claude/settings.json</code></td></tr>
+      <tr><td>Claude Code (user scope)</td><td><code>~/.claude.json</code> (use <code>claude mcp add</code>)</td></tr>
       <tr><td>Cursor (global)</td><td><code>~/.cursor/mcp.json</code></td></tr>
     </tbody>
   </table>
@@ -597,14 +593,14 @@ export const DOC_ARTICLES: DocArticle[] = [
 <ul>
   <li>Did you fully quit with ⌘+Q? Just closing the window doesn't work.</li>
   <li>Is Node.js installed? Run <code>node --version</code> in Terminal to check.</li>
-  <li>Check the logs: Settings → Developer → MCP Logs</li>
+  <li>Check the logs in <code>~/Library/Logs/Claude/</code></li>
 </ul>
 
 <h3>npx not found (nvm users)</h3>
 <p>If you installed Node.js via nvm, Claude Desktop might not see it. Find your npx path — run <code>which npx</code> in Terminal — then use that full path as the <code>"command"</code> value in your config.</p>
 
 <div class="tip-box">
-  <strong>💡 Pro tip:</strong> Bookmark the MCP Logs page in Claude Desktop's Developer settings. When a skill breaks, that's your first stop. It shows exactly what went wrong when the server tried to start.
+  <strong>💡 Pro tip:</strong> When a server breaks, read its log first: <code>tail -n 20 -F ~/Library/Logs/Claude/mcp*.log</code>. It shows what went wrong when the server tried to start.
 </div>
 
 <hr/>
@@ -645,7 +641,7 @@ export const DOC_ARTICLES: DocArticle[] = [
 
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
-  <p>Open <code>%APPDATA%\Claude\claude_desktop_config.json</code>, add your skill inside <code>mcpServers</code>, save, and fully restart Claude Desktop. If npx isn't found, run <code>where npx</code> in Command Prompt to get the full path — then use that in your config.</p>
+  <p>Open <code>%APPDATA%\\Claude\\claude_desktop_config.json</code>, add your skill inside <code>mcpServers</code>, save, and fully restart Claude Desktop. If npx isn't found, run <code>where npx.cmd</code> in Command Prompt to get the full path — then use that in your config.</p>
 </div>
 
 <p class="article-intro">Windows adds a couple of wrinkles that the Mac guide skips over — Notepad's save-as-type trap, the double-backslash JSON requirement, and npx sometimes hiding from Claude Desktop even when it works fine in your terminal. Here's how to navigate all of it.</p>
@@ -659,8 +655,8 @@ export const DOC_ARTICLES: DocArticle[] = [
 
 <h2>Step 1: Find the Config File</h2>
 <p>Windows stores the Claude Desktop config here:</p>
-<pre><code class="language-bash">%APPDATA%\Claude\claude_desktop_config.json</code></pre>
-<p>Open it fast: press <strong>Windows + R</strong>, type <code>%APPDATA%\Claude</code>, press Enter. Explorer opens right in the Claude config folder.</p>
+<pre><code class="language-bash">%APPDATA%\\Claude\\claude_desktop_config.json</code></pre>
+<p>Open it fast: press <strong>Windows + R</strong>, type <code>%APPDATA%\\Claude</code>, press Enter. Explorer opens right in the Claude config folder.</p>
 <p>Or use Claude Desktop's shortcut: hamburger menu → Settings → Developer → Edit Config.</p>
 
 <h2>Step 2: Open the Config File</h2>
@@ -670,7 +666,7 @@ export const DOC_ARTICLES: DocArticle[] = [
 <ol>
   <li>Open Notepad</li>
   <li>Type <code>{}</code></li>
-  <li>File → Save As → navigate to <code>%APPDATA%\Claude\</code></li>
+  <li>File → Save As → navigate to <code>%APPDATA%\\Claude\\</code></li>
   <li>Change "Save as type" to <strong>All Files (*.*)</strong></li>
   <li>Save as <code>claude_desktop_config.json</code></li>
 </ol>
@@ -690,12 +686,12 @@ export const DOC_ARTICLES: DocArticle[] = [
 }</code></pre>
 
 <h3>The backslash problem</h3>
-<p>If you ever need a local file path in your config, Windows backslashes must be doubled in JSON. <code>C:\Users\Me\tool</code> becomes <code>C:\\\\Users\\\\Me\\\\tool</code>. For skills installed via npx, you don't need any paths — just the package name.</p>
+<p>If you ever need a local file path in your config, Windows backslashes must be doubled in JSON. <code>C:\\Users\\Me\\tool</code> becomes <code>C:\\\\Users\\\\Me\\\\tool</code>. For skills installed via npx, you don't need any paths — just the package name.</p>
 
 <h3>npx not in PATH?</h3>
 <p>Run this in Command Prompt:</p>
-<pre><code class="language-bash">where npx
-# C:\Program Files\nodejs\npx.cmd  ← use this full path</code></pre>
+<pre><code class="language-bash">where npx.cmd
+# C:\\Program Files\\nodejs\\npx.cmd  ← use this full path</code></pre>
 <pre><code class="language-json">{
   "mcpServers": {
     "memory": {
@@ -706,7 +702,7 @@ export const DOC_ARTICLES: DocArticle[] = [
 }</code></pre>
 
 <div class="tip-box">
-  <strong>💡 Use the full path before reinstalling Node:</strong> If npx works in your terminal but the app can't find it, run <code>where.exe npx</code> and put that full path in the config. That is usually quicker than reinstalling Node.js.
+  <strong>💡 Use the full path before reinstalling Node:</strong> If npx works in your terminal but the app can't find it, run <code>where.exe npx.cmd</code> and put that full path in the config. That is usually quicker than reinstalling Node.js.
 </div>
 
 <h2>Step 4: Save and Restart</h2>
@@ -723,7 +719,7 @@ export const DOC_ARTICLES: DocArticle[] = [
       <tr><th>Aspect</th><th>Windows</th><th>Mac</th></tr>
     </thead>
     <tbody>
-      <tr><td>Config location</td><td><code>%APPDATA%\Claude\</code></td><td><code>~/Library/Application Support/Claude/</code></td></tr>
+      <tr><td>Config location</td><td><code>%APPDATA%\\Claude\\</code></td><td><code>~/Library/Application Support/Claude/</code></td></tr>
       <tr><td>Paths in JSON</td><td>Double backslash <code>\\\\</code></td><td>Forward slash <code>/</code></td></tr>
       <tr><td>npx binary name</td><td><code>npx.cmd</code></td><td><code>npx</code></td></tr>
       <tr><td>Default text editor</td><td>Notepad — use "All Files" when saving</td><td>TextEdit — switch to Plain Text mode</td></tr>
@@ -741,22 +737,23 @@ export const DOC_ARTICLES: DocArticle[] = [
 
 <h3>Skill still not showing after restart</h3>
 <p>Check Task Manager — Claude Desktop sometimes leaves a background process running after you "close" it. Kill all Claude processes, then reopen fresh.</p>
+<p>Then read the logs in <code>%APPDATA%\\Claude\\logs</code>. In PowerShell: <code>type "$env:AppData\\Claude\\logs\\mcp*.log"</code>.</p>
 
 <hr/>
 
 <h2>Frequently Asked Questions</h2>
 
 <h3>Where is the Claude Desktop config file on Windows?</h3>
-<p>At <code>%APPDATA%\Claude\claude_desktop_config.json</code>. Press Windows+R and type <code>%APPDATA%\Claude</code> to open the folder directly.</p>
+<p>At <code>%APPDATA%\\Claude\\claude_desktop_config.json</code>. Press Windows+R and type <code>%APPDATA%\\Claude</code> to open the folder directly.</p>
 
 <h3>Why do I need double backslashes in JSON on Windows?</h3>
-<p>Backslash is an escape character in JSON. A single <code>\</code> tells JSON "the next character is special". To represent a literal backslash, you need <code>\\</code>. For npx-based skills using package names, this doesn't matter — no paths involved.</p>
+<p>Backslash is an escape character in JSON. A single <code>\\</code> tells JSON "the next character is special". To represent a literal backslash, you need <code>\\\\</code>. For npx-based skills using package names, this doesn't matter — no paths involved.</p>
 
 <h3>Claude Desktop won't find npx — how do I fix it on Windows?</h3>
-<p>Run <code>where npx</code> in Command Prompt to get the full path, then use that as the <code>"command"</code> value. Remember to double every backslash in the JSON string.</p>
+<p>Run <code>where npx.cmd</code> in Command Prompt to get the full path, then use that as the <code>"command"</code> value. Remember to double every backslash in the JSON string.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where is the Claude Desktop config file on Windows?","acceptedAnswer":{"@type":"Answer","text":"At %APPDATA%\\Claude\\claude_desktop_config.json. Press Windows+R and type %APPDATA%\\Claude to open it."}},{"@type":"Question","name":"Why do I need double backslashes in JSON on Windows?","acceptedAnswer":{"@type":"Answer","text":"Backslash is an escape character in JSON. Use \\\\ for a literal backslash. For npx package names this doesn't apply."}},{"@type":"Question","name":"Claude Desktop won't find npx on Windows?","acceptedAnswer":{"@type":"Answer","text":"Run 'where npx' to get the full path, use it as the command value with doubled backslashes."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where is the Claude Desktop config file on Windows?","acceptedAnswer":{"@type":"Answer","text":"At %APPDATA%\\\\Claude\\\\claude_desktop_config.json. Press Windows+R and type %APPDATA%\\\\Claude to open it."}},{"@type":"Question","name":"Why do I need double backslashes in JSON on Windows?","acceptedAnswer":{"@type":"Answer","text":"Backslash is an escape character in JSON, so each literal backslash is written twice. For npx package names this doesn't apply."}},{"@type":"Question","name":"Claude Desktop won't find npx on Windows?","acceptedAnswer":{"@type":"Answer","text":"Run 'where npx.cmd' to get the full path, then use it as the command value with doubled backslashes."}}]}
 </script>
     `,
   },
@@ -784,12 +781,12 @@ export const DOC_ARTICLES: DocArticle[] = [
 
 <h2>Prerequisites</h2>
 <ul>
-  <li>Claude Desktop (AppImage or .deb from <a href="https://claude.ai/download" target="_blank" rel="noopener">claude.ai/download</a>)</li>
-  <li>Node.js: <code>sudo apt install nodejs npm</code> or via <a href="https://github.com/nvm-sh/nvm" target="_blank" rel="noopener">nvm</a> (recommended)</li>
+  <li>Claude Desktop for Linux (beta), on Ubuntu 22.04+ or Debian 12+. Install it from Anthropic's apt repository: see <a href="https://code.claude.com/docs/en/desktop-linux" target="_blank" rel="noopener">the install guide</a>.</li>
+  <li>Node.js 18 or later, via <a href="https://github.com/nvm-sh/nvm" target="_blank" rel="noopener">nvm</a> (recommended). Distribution packages can be older than that.</li>
 </ul>
 
 <h2>Config File Location</h2>
-<p>Linux follows the XDG spec:</p>
+<p>The quickest way to open the file is <strong>Settings → Developer → Edit Config</strong>. On Linux it normally lives here:</p>
 <pre><code class="language-bash">~/.config/Claude/claude_desktop_config.json</code></pre>
 
 <h2>Setting Up</h2>
@@ -814,7 +811,7 @@ nano ~/.config/Claude/claude_desktop_config.json</code></pre>
     <tbody>
       <tr><td><strong>Linux</strong></td><td><code>~/.config/Claude/claude_desktop_config.json</code></td></tr>
       <tr><td>Mac</td><td><code>~/Library/Application Support/Claude/claude_desktop_config.json</code></td></tr>
-      <tr><td>Windows</td><td><code>%APPDATA%\Claude\claude_desktop_config.json</code></td></tr>
+      <tr><td>Windows</td><td><code>%APPDATA%\\Claude\\claude_desktop_config.json</code></td></tr>
     </tbody>
   </table>
 </div>
@@ -848,24 +845,24 @@ nano ~/.config/Claude/claude_desktop_config.json</code></pre>
   <strong>💡 Recommendation:</strong> Use the full path approach. It's independent of shell init order and works consistently across all login managers and desktop environments.
 </div>
 
-<h2>Checking Logs</h2>
-<pre><code class="language-bash">tail -f ~/.config/Claude/logs/mcp*.log</code></pre>
+<h2>Checking Status</h2>
+<p>Open <strong>Settings → Developer</strong> to see each server's status. In a chat, click the <strong>+</strong> button and open <strong>Connectors</strong> to see which servers connected.</p>
 
 <hr/>
 
 <h2>Frequently Asked Questions</h2>
 
 <h3>Where is the Claude Desktop config on Linux?</h3>
-<p>At <code>~/.config/Claude/claude_desktop_config.json</code>, following XDG spec. Create the directory first: <code>mkdir -p ~/.config/Claude</code>.</p>
+<p>Normally at <code>~/.config/Claude/claude_desktop_config.json</code>. Settings → Developer → Edit Config opens it for you.</p>
 
 <h3>Why can't Claude Desktop find npx on Linux?</h3>
 <p>Almost always nvm. Claude Desktop launches non-interactively and doesn't inherit the shell PATH where nvm puts its binaries. Use the full path to npx from <code>which npx</code>, or add nvm init to <code>~/.profile</code>.</p>
 
 <h3>Does Claude Desktop work on all Linux distros?</h3>
-<p>The AppImage works on most distros. The .deb is for Ubuntu/Debian. MCP config setup is identical across all distributions.</p>
+<p>No. The beta supports Ubuntu 22.04+ and Debian 12+, on x86_64 and arm64. On Fedora, Arch and other distributions, use Claude Code in the terminal instead.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where is the Claude Desktop config on Linux?","acceptedAnswer":{"@type":"Answer","text":"~/.config/Claude/claude_desktop_config.json. Create the directory with mkdir -p ~/.config/Claude."}},{"@type":"Question","name":"Why can't Claude Desktop find npx on Linux?","acceptedAnswer":{"@type":"Answer","text":"Almost always nvm. Claude Desktop launches non-interactively. Use the full path from 'which npx'."}},{"@type":"Question","name":"Does Claude Desktop work on all Linux distros?","acceptedAnswer":{"@type":"Answer","text":"The AppImage works on most distros. The .deb is for Ubuntu/Debian. MCP config setup is identical."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where is the Claude Desktop config on Linux?","acceptedAnswer":{"@type":"Answer","text":"Normally ~/.config/Claude/claude_desktop_config.json. Settings → Developer → Edit Config opens it."}},{"@type":"Question","name":"Why can't Claude Desktop find npx on Linux?","acceptedAnswer":{"@type":"Answer","text":"Almost always nvm. Claude Desktop launches non-interactively. Use the full path from 'which npx'."}},{"@type":"Question","name":"Does Claude Desktop work on all Linux distros?","acceptedAnswer":{"@type":"Answer","text":"No. The beta supports Ubuntu 22.04+ and Debian 12+. On other distributions, use Claude Code in the terminal."}}]}
 </script>
     `,
   },
@@ -1350,10 +1347,10 @@ claude                 # start a session
 
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
-  <p>Edit <code>~/.cursor/mcp.json</code>, add skills under <code>mcpServers</code>, then reload via Settings → Features → MCP Servers → restart button. Open Cursor Chat (⌘+L) and ask "what tools do you have?" to confirm it worked.</p>
+  <p>Edit <code>~/.cursor/mcp.json</code>, add servers under <code>mcpServers</code>, then restart Cursor. Open the <strong>Customize</strong> panel to see your servers and switch them on or off. If one fails, check <strong>MCP Logs</strong> in the Output panel (⌘+Shift+U).</p>
 </div>
 
-<p class="article-intro">Cursor's MCP integration is solid — it has a built-in UI for managing servers and shows status indicators right in the settings panel. Setting it up is very similar to Claude Desktop, just in a different file location.</p>
+<p class="article-intro">Cursor lists your MCP servers in its Customize panel, where you can switch each one on or off. Setting it up is very similar to Claude Desktop, just in a different file location.</p>
 
 <h2>Config File Locations</h2>
 <pre><code class="language-bash"># Global (all projects)
@@ -1364,7 +1361,7 @@ claude                 # start a session
 
 <h2>Creating and Editing the Config</h2>
 <pre><code class="language-bash">mkdir -p ~/.cursor
-code ~/.cursor/mcp.json</code></pre>
+touch ~/.cursor/mcp.json   # then open it in Cursor or any text editor</code></pre>
 
 <pre><code class="language-json">{
   "mcpServers": {
@@ -1397,22 +1394,22 @@ code ~/.cursor/mcp.json</code></pre>
       <tr><th>Aspect</th><th>Cursor Mac</th><th>Claude Code Mac</th></tr>
     </thead>
     <tbody>
-      <tr><td>Global config</td><td><code>~/.cursor/mcp.json</code></td><td><code>~/.claude/settings.json</code></td></tr>
-      <tr><td>Project config</td><td><code>.cursor/mcp.json</code></td><td><code>.claude/settings.json</code></td></tr>
+      <tr><td>Global config</td><td><code>~/.cursor/mcp.json</code></td><td><code>~/.claude.json</code> (user scope)</td></tr>
+      <tr><td>Project config</td><td><code>.cursor/mcp.json</code></td><td><code>.mcp.json</code></td></tr>
       <tr><td>Config format key</td><td><code>mcpServers</code></td><td><code>mcpServers</code></td></tr>
-      <tr><td>CLI to add skills</td><td>Manual only</td><td><code>claude mcp add</code></td></tr>
-      <tr><td>Status UI</td><td>Settings → Features → MCP</td><td><code>claude mcp list</code></td></tr>
+      <tr><td>How to add a server</td><td>Edit <code>mcp.json</code></td><td><code>claude mcp add</code></td></tr>
+      <tr><td>Status</td><td>Customize panel; MCP Logs in the Output panel</td><td><code>/mcp</code> in a session, or <code>claude mcp list</code></td></tr>
     </tbody>
   </table>
 </div>
 
-<h2>Reloading Without Restarting</h2>
-<p>You don't have to fully restart Cursor after every change. Go to <strong>Settings (⌘+,) → Features → MCP Servers</strong> and click the refresh button next to your server. It reconnects without touching the rest of the editor.</p>
+<h2>Reloading After Changes</h2>
+<p>After you edit <code>mcp.json</code>, restart Cursor. You can switch a server on or off from the <strong>Customize</strong> panel without removing it from the file.</p>
 
 <h2>Verify It Worked</h2>
 <p>Open Cursor Chat (<strong>⌘+L</strong>) and ask:</p>
 <pre><code class="language-bash">What tools do you have available?</code></pre>
-<p>If the skill loaded, Cursor will list the tools. If it didn't, there'll be no mention of them — check the status UI.</p>
+<p>If the skill loaded, Cursor will list the tools. If it didn't, open the Output panel (<strong>⌘+Shift+U</strong>), pick <strong>MCP Logs</strong>, and look for the error.</p>
 
 <div class="tip-box">
   <strong>💡 For nvm users:</strong> Same issue as Claude Desktop and Claude Code — use the full path to npx from <code>which npx</code> instead of just <code>"npx"</code>.
@@ -1425,14 +1422,14 @@ code ~/.cursor/mcp.json</code></pre>
 <h3>Where is the Cursor MCP config on Mac?</h3>
 <p><code>~/.cursor/mcp.json</code> for global config. Project-specific: <code>.cursor/mcp.json</code> in your project root. Both use the same JSON format.</p>
 
-<h3>How do I reload MCP skills without restarting Cursor?</h3>
-<p>Settings (⌘+,) → search "MCP" → go to MCP Servers → click the refresh button next to the server. No full editor restart needed.</p>
+<h3>Do I need to restart Cursor after editing mcp.json?</h3>
+<p>Restart Cursor after you change the file. To switch a server on or off without editing the file, use the Customize panel.</p>
 
 <h3>Can I use Cursor and Claude Code MCP skills together?</h3>
-<p>They're separate configs — <code>~/.cursor/mcp.json</code> for Cursor, <code>~/.claude/settings.json</code> for Claude Code. The same skill will work in both; you just need to add the config entry to both files.</p>
+<p>They're separate configs: <code>~/.cursor/mcp.json</code> for Cursor, and <code>claude mcp add</code> (stored in <code>~/.claude.json</code>) for Claude Code. The same server works in both; add it to each.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where is the Cursor MCP config on Mac?","acceptedAnswer":{"@type":"Answer","text":"~/.cursor/mcp.json for global. .cursor/mcp.json in project root for project-specific."}},{"@type":"Question","name":"How do I reload MCP skills without restarting Cursor?","acceptedAnswer":{"@type":"Answer","text":"Settings → search MCP → MCP Servers → click the refresh button next to the server."}},{"@type":"Question","name":"Can I use Cursor and Claude Code MCP skills together?","acceptedAnswer":{"@type":"Answer","text":"Yes, but they're separate configs. Add the same entry to both ~/.cursor/mcp.json and ~/.claude/settings.json."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where is the Cursor MCP config on Mac?","acceptedAnswer":{"@type":"Answer","text":"~/.cursor/mcp.json for global. .cursor/mcp.json in project root for project-specific."}},{"@type":"Question","name":"Do I need to restart Cursor after editing mcp.json?","acceptedAnswer":{"@type":"Answer","text":"Restart Cursor after you change the file. Use the Customize panel to switch a server on or off."}},{"@type":"Question","name":"Can I use Cursor and Claude Code MCP skills together?","acceptedAnswer":{"@type":"Answer","text":"Yes, but they're separate configs. Add the server to ~/.cursor/mcp.json for Cursor and with claude mcp add for Claude Code."}}]}
 </script>
     `,
   },
@@ -1444,28 +1441,28 @@ code ~/.cursor/mcp.json</code></pre>
     category: 'Cursor / VS Code',
     categorySlug: 'cursor',
     persona: 'developer',
-    lastUpdated: '2026-03-04',
+    lastUpdated: '2026-09-27',
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Cursor Windows: Config & Path Guide","description":"Install MCP skills for Cursor on Windows — config location, JSON format, path issues, and verification.","dateModified":"2026-03-04","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Cursor Windows: Config & Path Guide","description":"Install MCP skills for Cursor on Windows — config location, JSON format, path issues, and verification.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
-  <p>Edit <code>%USERPROFILE%\\.cursor\\mcp.json</code>, add skills under <code>mcpServers</code>. If npx isn't found, get the full path with <code>Get-Command npx</code> in PowerShell. Reload via Settings → MCP Servers or just restart Cursor.</p>
+  <p>Edit <code>%USERPROFILE%\\.cursor\\mcp.json</code>, add skills under <code>mcpServers</code>. If npx isn't found, get the full path with <code>(Get-Command npx.cmd).Source</code> in PowerShell. Restart Cursor after you save.</p>
 </div>
 
 <p class="article-intro">Same concept as the Mac guide — different file location, one Windows-specific quirk with backslashes. Here's the whole thing.</p>
 
 <h2>Config File Location</h2>
-<pre><code class="language-bash">%USERPROFILE%\.cursor\mcp.json
-# Usually: C:\Users\YourName\.cursor\mcp.json</code></pre>
+<pre><code class="language-bash">%USERPROFILE%\\.cursor\\mcp.json
+# Usually: C:\\Users\\YourName\\.cursor\\mcp.json</code></pre>
 
 <h2>Creating the Config</h2>
 <pre><code class="language-bash"># PowerShell
-New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.cursor"
-code "$env:USERPROFILE\.cursor\mcp.json"</code></pre>
+New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\\.cursor"
+code "$env:USERPROFILE\\.cursor\\mcp.json"</code></pre>
 
 <pre><code class="language-json">{
   "mcpServers": {
@@ -1478,8 +1475,8 @@ code "$env:USERPROFILE\.cursor\mcp.json"</code></pre>
 
 <h2>npx Not in PATH? Get the Full Path</h2>
 <pre><code class="language-bash"># PowerShell
-Get-Command npx | Select-Object -ExpandProperty Source
-# C:\Program Files\nodejs\npx.cmd</code></pre>
+(Get-Command npx.cmd).Source
+# C:\\Program Files\\nodejs\\npx.cmd</code></pre>
 
 <pre><code class="language-json">{
   "mcpServers": {
@@ -1491,24 +1488,24 @@ Get-Command npx | Select-Object -ExpandProperty Source
 }</code></pre>
 
 <div class="warning-box">
-  <strong>⚠️ Backslash doubling:</strong> In JSON, every backslash must be doubled. <code>C:\Program Files\nodejs\npx.cmd</code> becomes <code>C:\\\\Program Files\\\\nodejs\\\\npx.cmd</code>.
+  <strong>⚠️ Backslash doubling:</strong> In JSON, every backslash must be doubled. <code>C:\\Program Files\\nodejs\\npx.cmd</code> becomes <code>C:\\\\Program Files\\\\nodejs\\\\npx.cmd</code>.
 </div>
 
 <h2>Reloading Cursor</h2>
 <ul>
-  <li>Settings (Ctrl+,) → search "MCP" → click refresh next to your server</li>
-  <li>Or just close and reopen Cursor</li>
+  <li>Close and reopen Cursor after you edit <code>mcp.json</code></li>
+  <li>Switch a server on or off from the <strong>Customize</strong> panel</li>
 </ul>
 
 <h2>Verifying It Works</h2>
 <p>Open Cursor Chat (Ctrl+L) and ask: <em>"What tools do you have?"</em></p>
 
 <div class="tip-box">
-  <strong>💡 If IT policy blocks npx:</strong> install the server globally first (<code>npm install -g @modelcontextprotocol/server-memory</code>), then use its command name (<code>mcp-server-memory</code>) as the <code>"command"</code> instead of npx.
+  <strong>💡 If IT policy blocks npx:</strong> install the server globally first (<code>npm install -g @modelcontextprotocol/server-memory</code>). Then get the full path of its <code>.cmd</code> file with <code>(Get-Command mcp-server-memory.cmd).Source</code> and use that as the <code>"command"</code> instead of npx.
 </div>
 
 <div class="tip-box">
-  <strong>💡 Check the status dot:</strong> In Cursor's Settings → Features → MCP Servers, there's a green/red status indicator for each server. Red means it failed to start. Click to see the error. Much faster than guessing what went wrong.
+  <strong>💡 Check the logs:</strong> Open the Output panel (<strong>Ctrl+Shift+U</strong>) and pick <strong>MCP Logs</strong>. It shows connection errors and server crashes.
 </div>
 
 <hr/>
@@ -1516,16 +1513,16 @@ Get-Command npx | Select-Object -ExpandProperty Source
 <h2>Frequently Asked Questions</h2>
 
 <h3>Where is Cursor's MCP config on Windows?</h3>
-<p>At <code>%USERPROFILE%\.cursor\mcp.json</code>. Open the folder with <code>explorer $env:USERPROFILE\.cursor</code> in PowerShell.</p>
+<p>At <code>%USERPROFILE%\\.cursor\\mcp.json</code>. Open the folder with <code>explorer $env:USERPROFILE\\.cursor</code> in PowerShell.</p>
 
 <h3>How do I fix "npx not recognized" in Cursor on Windows?</h3>
-<p>Get the full path: <code>Get-Command npx | Select-Object -ExpandProperty Source</code>. Use that as the <code>"command"</code> value, doubling all backslashes.</p>
+<p>Get the full path: <code>(Get-Command npx.cmd).Source</code>. Use that as the <code>"command"</code> value, doubling all backslashes.</p>
 
 <h3>Does Cursor support project-level MCP config on Windows?</h3>
-<p>Yes — create <code>.cursor\mcp.json</code> in your project root. Commit it to git for team sharing (without secrets).</p>
+<p>Yes — create <code>.cursor\\mcp.json</code> in your project root. Commit it to git for team sharing (without secrets).</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where is Cursor's MCP config on Windows?","acceptedAnswer":{"@type":"Answer","text":"At %USERPROFILE%\\.cursor\\mcp.json. Open folder with 'explorer $env:USERPROFILE\\.cursor' in PowerShell."}},{"@type":"Question","name":"How do I fix npx not recognized in Cursor on Windows?","acceptedAnswer":{"@type":"Answer","text":"Get full path with 'Get-Command npx | Select-Object -ExpandProperty Source'. Use it as command value with doubled backslashes."}},{"@type":"Question","name":"Does Cursor support project-level MCP config on Windows?","acceptedAnswer":{"@type":"Answer","text":"Yes — .cursor\\mcp.json in project root. Commit for team sharing."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where is Cursor's MCP config on Windows?","acceptedAnswer":{"@type":"Answer","text":"At %USERPROFILE%\\\\.cursor\\\\mcp.json. Open the folder with 'explorer $env:USERPROFILE\\\\.cursor' in PowerShell."}},{"@type":"Question","name":"How do I fix npx not recognized in Cursor on Windows?","acceptedAnswer":{"@type":"Answer","text":"Get the full path with '(Get-Command npx.cmd).Source'. Use it as the command value with doubled backslashes."}},{"@type":"Question","name":"Does Cursor support project-level MCP config on Windows?","acceptedAnswer":{"@type":"Answer","text":"Yes. Create .cursor\\\\mcp.json in the project root and commit it for team sharing, without secrets."}}]}
 </script>
     `,
   },
@@ -1865,7 +1862,7 @@ Not sure?
     <thead><tr><th>OS</th><th>Config path</th></tr></thead>
     <tbody>
       <tr><td>Mac</td><td><code>~/Library/Application Support/Claude/claude_desktop_config.json</code></td></tr>
-      <tr><td>Windows</td><td><code>%APPDATA%\Claude\claude_desktop_config.json</code></td></tr>
+      <tr><td>Windows</td><td><code>%APPDATA%\\Claude\\claude_desktop_config.json</code></td></tr>
       <tr><td>Linux</td><td><code>~/.config/Claude/claude_desktop_config.json</code></td></tr>
     </tbody>
   </table>
@@ -2059,12 +2056,13 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 const transport = new StdioServerTransport();
 await server.connect(transport);</code></pre>
 
-<p>Update <code>package.json</code>:</p>
+<p>Update <code>package.json</code>. Keep the <code>dependencies</code> block that <code>npm install</code> added, or the published package won't start:</p>
 <pre><code class="language-json">{
   "name": "@yourusername/temperature-converter-mcp",
   "version": "1.0.0",
   "type": "module",
-  "bin": { "temperature-converter-mcp": "./index.js" }
+  "bin": { "temperature-converter-mcp": "./index.js" },
+  "dependencies": { "@modelcontextprotocol/sdk": "^1.30.1" }
 }</code></pre>
 
 <pre><code class="language-bash">chmod +x index.js   # Mac/Linux only</code></pre>
@@ -2106,12 +2104,7 @@ npm publish --access public   # --access public for scoped packages</code></pre>
 <pre><code class="language-bash">npx -y @yourusername/temperature-converter-mcp</code></pre>
 
 <h2>Step 6: Submit to TrustedSkills</h2>
-<ol>
-  <li>Fork <a href="https://github.com/growsontrees/trustedskills-registry" target="_blank" rel="noopener">the registry repo</a></li>
-  <li>Create <code>skills/temperature-converter/SKILL.md</code></li>
-  <li>Open a Pull Request</li>
-  <li>Review, merge — your skill appears on the site within minutes</li>
-</ol>
+<p>Follow the <a href="/submit">submission guide</a>. The quickest route: put the skill in a public GitHub repository with a <code>SKILL.md</code> at its root, and add the <code>openclaw-skill</code> topic to the repository. Auto-discovery picks it up on the next scraper run, usually within six hours.</p>
 
 <h2>SKILL.md Fields</h2>
 <div class="table-container">
@@ -2119,7 +2112,7 @@ npm publish --access public   # --access public for scoped packages</code></pre>
     <thead><tr><th>Field</th><th>Required</th><th>Notes</th></tr></thead>
     <tbody>
       <tr><td><code>name</code></td><td>Yes</td><td>Lowercase, hyphens only</td></tr>
-      <tr><td><code>description</code></td><td>Yes</td><td>10–500 characters</td></tr>
+      <tr><td><code>description</code></td><td>Yes</td><td>What the skill does and when to use it</td></tr>
       <tr><td><code>version</code></td><td>Yes</td><td>Semantic version e.g. 1.0.0</td></tr>
       <tr><td><code>platforms</code></td><td>Yes</td><td>mcp, openclaw, claude, cursor, openai</td></tr>
       <tr><td><code>metadata.npm</code></td><td>Recommended</td><td>npm package name</td></tr>
@@ -2145,10 +2138,10 @@ npm publish --access public   # --access public for scoped packages</code></pre>
 <p>Read them from <code>process.env</code>: <code>const apiKey = process.env.MY_API_KEY</code>. Document required env vars in SKILL.md. Users add them to the <code>"env"</code> block in their MCP config.</p>
 
 <h3>How long until a submitted skill appears on TrustedSkills?</h3>
-<p>Minutes after the PR is merged. Community verification takes days (depends on reviewer availability). Formal Verified status takes weeks — it's a proper security review.</p>
+<p>If your repository has the <code>openclaw-skill</code> topic, usually within six hours. Nobody reviews the code by hand. Badges come from provenance (Official, Pinned), an editorial pick (Featured) or an automated scan (Checked). See <a href="/docs/advanced/verification-badges/">what each badge means</a>.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I need TypeScript to build a skill?","acceptedAnswer":{"@type":"Answer","text":"No. JavaScript works perfectly. TypeScript is optional."}},{"@type":"Question","name":"Can I build skills in Python?","acceptedAnswer":{"@type":"Answer","text":"Yes. The 'mcp' package on PyPI provides the same SDK."}},{"@type":"Question","name":"How do I add API keys to my skill?","acceptedAnswer":{"@type":"Answer","text":"Read from process.env. Users add values to the env block in their MCP config."}},{"@type":"Question","name":"How long until a submitted skill appears on TrustedSkills?","acceptedAnswer":{"@type":"Answer","text":"Minutes after PR merge. Community verification days. Formal Verified status weeks."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I need TypeScript to build a skill?","acceptedAnswer":{"@type":"Answer","text":"No. JavaScript works perfectly. TypeScript is optional."}},{"@type":"Question","name":"Can I build skills in Python?","acceptedAnswer":{"@type":"Answer","text":"Yes. The 'mcp' package on PyPI provides the same SDK."}},{"@type":"Question","name":"How do I add API keys to my skill?","acceptedAnswer":{"@type":"Answer","text":"Read from process.env. Users add values to the env block in their MCP config."}},{"@type":"Question","name":"How long until a submitted skill appears on TrustedSkills?","acceptedAnswer":{"@type":"Answer","text":"If your repository has the openclaw-skill topic, usually within six hours. Nobody reviews the code by hand."}}]}
 </script>
     `,
   },
@@ -2160,7 +2153,7 @@ npm publish --access public   # --access public for scoped packages</code></pre>
     category: 'Advanced Topics',
     categorySlug: 'advanced',
     persona: 'developer',
-    lastUpdated: '2026-03-04',
+    lastUpdated: '2026-09-27',
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
@@ -2169,7 +2162,7 @@ npm publish --access public   # --access public for scoped packages</code></pre>
 
 <div class="tldr-box">
   <div class="tldr-label">Quick answer</div>
-  <p><strong>No badge on TrustedSkills means a person has read the code.</strong> The badges describe where a skill came from and what machines have checked: <strong>Official</strong> (published by the vendor's own GitHub org), <strong>Featured</strong> (our editorial pick), <strong>Pinned</strong> (install locked to one commit we stored), <strong>Listed</strong> (indexed, nothing more), <strong>Unverified</strong> (indexed with no extra signal). You are the reviewer. Read the source before you run it.</p>
+  <p><strong>No badge on TrustedSkills means a person has read the code.</strong> The badges describe where a skill came from and what machines have checked: <strong>Official</strong> (published by the vendor's own GitHub org), <strong>Featured</strong> (our editorial pick), <strong>Pinned</strong> (install locked to one commit we stored), <strong>Checked</strong> (passed every automated safety check at a pinned commit), <strong>Listed</strong> (indexed, nothing more), <strong>Unverified</strong> (indexed with no extra signal). You are the reviewer. Read the source before you run it.</p>
 </div>
 
 <p class="article-intro">Installing a skill isn't like installing a browser extension where the worst case is an annoying ad. A skill runs with whatever access you have given your agent - your files, your API keys, your shell. So it matters what a badge is actually claiming. Here is exactly what each one asserts, and what none of them do.</p>
@@ -2214,6 +2207,7 @@ npm publish --access public   # --access public for scoped packages</code></pre>
       <tr><td>Official</td><td>Yes, to a vendor org</td><td>No</td><td>Yes, unless also pinned</td></tr>
       <tr><td>Featured</td><td>No</td><td>No</td><td>Yes, unless also pinned</td></tr>
       <tr><td>Pinned</td><td>No</td><td>No</td><td>No</td></tr>
+      <tr><td>Checked</td><td>No</td><td>No (a machine scanned it)</td><td>No</td></tr>
       <tr><td>Listed</td><td>No</td><td>No</td><td>Yes</td></tr>
       <tr><td>Unverified</td><td>No</td><td>No</td><td>Yes</td></tr>
     </tbody>
@@ -2402,23 +2396,23 @@ npm publish --access public   # --access public for scoped packages</code></pre>
 <ul>
   <li>A Google account with access to GA4 and/or Google Search Console</li>
   <li>A Google Cloud project (free tier is fine)</li>
-  <li>Python 3.10+ installed on your machine</li>
+  <li>Python 3.10+ installed on your machine (3.11+ for mcp-gsc)</li>
   <li>An MCP-compatible client: Claude Desktop, Claude Code, Cursor, or OpenClaw</li>
   <li>About 20–30 minutes</li>
 </ul>
+<p><strong>Privacy note:</strong> <code>google-analytics-mcp</code> sends anonymous usage data by default. Set <code>DISABLE_TELEMETRY=1</code> in its <code>env</code> block to turn that off.</p>
 <p><strong>Heads up:</strong> You'll need real credentials to pull live data. The MCP servers themselves are free and open-source, but GA4 and GSC data lives behind Google's APIs — which require auth. This guide covers the full setup from scratch.</p>
 
 <h2>Part 1: Understanding GA4 MCP and GSC MCP</h2>
 <p>An MCP server is a small background process that sits between your AI client and an external data source. When you ask Claude "what were my top pages last week?", Claude doesn't scrape the Google Analytics UI — it calls an MCP tool that makes an authenticated API request and returns structured data.</p>
 <p>The <strong>GA4 MCP</strong> gives your AI agent access to the Google Analytics Data API. That means you can query dimensions, metrics, date ranges, segments — the same data available in the GA4 interface, but through natural language. The best server currently is <code>surendranb/google-analytics-mcp</code>, which supports 200+ GA4 dimensions and metrics.</p>
-<p>The <strong>GSC MCP</strong> connects to the Google Search Console API. It surfaces search analytics — queries, impressions, clicks, CTR, average position — along with URL inspection, sitemap status, and indexing data. The most capable server is <code>AminForou/mcp-gsc</code> with 460+ GitHub stars and 19 tools.</p>
+<p>The <strong>GSC MCP</strong> connects to the Google Search Console API. It surfaces search analytics — queries, impressions, clicks, CTR, average position — along with URL inspection, sitemap status, and indexing data. The most capable server is <code>AminForou/mcp-gsc</code>.</p>
 <p>Together, they unlock something the individual dashboards don't: cross-referencing organic search performance with on-site behavior. Ask things like "show me pages with high impressions but low engagement" and your agent can correlate GSC click data with GA4 session data in a single response.</p>
 
 <h2>The MCP Servers to Use</h2>
 
 <h3>GA4: google-analytics-mcp by surendranb</h3>
 <div class="skill-meta">
-  <span class="skill-stars">⭐ 185 stars</span> &bull;
   <a href="https://github.com/surendranb/google-analytics-mcp" target="_blank" rel="noopener">github.com/surendranb/google-analytics-mcp</a> &bull;
   <span>Python &bull; MIT License</span>
 </div>
@@ -2438,7 +2432,7 @@ npm publish --access public   # --access public for scoped packages</code></pre>
   "mcpServers": {
     "ga4-analytics": {
       "command": "python3",
-      "args": ["-m", "ga4_mcp_server"],
+      "args": ["-m", "ga4_mcp"],
       "env": {
         "GOOGLE_APPLICATION_CREDENTIALS": "/path/to/service-account-key.json",
         "GA4_PROPERTY_ID": "123456789"
@@ -2449,7 +2443,6 @@ npm publish --access public   # --access public for scoped packages</code></pre>
 
 <h3>GSC: mcp-gsc by AminForou</h3>
 <div class="skill-meta">
-  <span class="skill-stars">⭐ 460 stars</span> &bull;
   <a href="https://github.com/AminForou/mcp-gsc" target="_blank" rel="noopener">github.com/AminForou/mcp-gsc</a> &bull;
   <span>Python &bull; MIT License</span>
 </div>
@@ -2468,9 +2461,10 @@ npm publish --access public   # --access public for scoped packages</code></pre>
   "mcpServers": {
     "gsc": {
       "command": "/path/to/mcp-gsc/.venv/bin/python",
-      "args": ["/path/to/mcp-gsc/server.py"],
+      "args": ["/path/to/mcp-gsc/gsc_server.py"],
       "env": {
-        "GSC_CREDENTIALS_PATH": "/path/to/service_account_credentials.json"
+        "GSC_CREDENTIALS_PATH": "/path/to/service_account_credentials.json",
+        "GSC_SKIP_OAUTH": "true"
       }
     }
   }
@@ -2478,7 +2472,6 @@ npm publish --access public   # --access public for scoped packages</code></pre>
 
 <h3>Bonus: search-console-mcp (GSC + GA4 + Bing in one)</h3>
 <div class="skill-meta">
-  <span class="skill-stars">⭐ 35 stars</span> &bull;
   <a href="https://github.com/saurabhsharma2u/search-console-mcp" target="_blank" rel="noopener">github.com/saurabhsharma2u/search-console-mcp</a> &bull;
   <span>Node.js &bull; npm: search-console-mcp</span>
 </div>
@@ -2489,12 +2482,12 @@ npm publish --access public   # --access public for scoped packages</code></pre>
       "command": "npx",
       "args": ["-y", "search-console-mcp"],
       "env": {
-        "GOOGLE_APPLICATION_CREDENTIALS": "/path/to/credentials.json",
-        "GA4_PROPERTY_ID": "123456789"
+        "GOOGLE_APPLICATION_CREDENTIALS": "/path/to/credentials.json"
       }
     }
   }
 }</code></pre>
+<p>To add GA4 or Bing, run <code>npx search-console-mcp setup</code> once and follow the prompts.</p>
 
 <h2>Step-by-Step Setup: GA4 MCP</h2>
 
@@ -2552,7 +2545,7 @@ npm publish --access public   # --access public for scoped packages</code></pre>
   "mcpServers": {
     "ga4-analytics": {
       "command": "python3",
-      "args": ["-m", "ga4_mcp_server"],
+      "args": ["-m", "ga4_mcp"],
       "env": {
         "GOOGLE_APPLICATION_CREDENTIALS": "/Users/yourname/.config/gcp/mcp-analytics-key.json",
         "GA4_PROPERTY_ID": "123456789"
@@ -2566,7 +2559,7 @@ npm publish --access public   # --access public for scoped packages</code></pre>
   "mcpServers": {
     "ga4-analytics": {
       "command": "python",
-      "args": ["-m", "ga4_mcp_server"],
+      "args": ["-m", "ga4_mcp"],
       "env": {
         "GOOGLE_APPLICATION_CREDENTIALS": "C:\\\\Users\\\\yourname\\\\.config\\\\gcp\\\\mcp-analytics-key.json",
         "GA4_PROPERTY_ID": "123456789"
@@ -2576,15 +2569,15 @@ npm publish --access public   # --access public for scoped packages</code></pre>
 }</code></pre>
 
 <p><strong>Claude Code</strong> (run in terminal):</p>
-<pre><code>claude mcp add ga4-analytics -- python3 -m ga4_mcp_server</code></pre>
-<p>Then set the env vars in your project's <code>.mcp.json</code>.</p>
+<pre><code>claude mcp add ga4-analytics -e GOOGLE_APPLICATION_CREDENTIALS=/path/to/key.json -e GA4_PROPERTY_ID=123456789 -- python3 -m ga4_mcp</code></pre>
+<p>This adds it for you in the current project. Add <code>--scope user</code> to use it in every project.</p>
 
 <p><strong>Cursor</strong> (<code>~/.cursor/mcp.json</code> or project-level <code>.cursor/mcp.json</code>):</p>
 <pre><code class="language-json">{
   "mcpServers": {
     "ga4-analytics": {
       "command": "python3",
-      "args": ["-m", "ga4_mcp_server"],
+      "args": ["-m", "ga4_mcp"],
       "env": {
         "GOOGLE_APPLICATION_CREDENTIALS": "/path/to/key.json",
         "GA4_PROPERTY_ID": "123456789"
@@ -2625,7 +2618,7 @@ pip install -r requirements.txt</code></pre>
   "mcpServers": {
     "ga4-analytics": {
       "command": "python3",
-      "args": ["-m", "ga4_mcp_server"],
+      "args": ["-m", "ga4_mcp"],
       "env": {
         "GOOGLE_APPLICATION_CREDENTIALS": "/path/to/key.json",
         "GA4_PROPERTY_ID": "123456789"
@@ -2633,9 +2626,10 @@ pip install -r requirements.txt</code></pre>
     },
     "gsc": {
       "command": "/path/to/mcp-gsc/.venv/bin/python",
-      "args": ["/path/to/mcp-gsc/server.py"],
+      "args": ["/path/to/mcp-gsc/gsc_server.py"],
       "env": {
-        "GSC_CREDENTIALS_PATH": "/path/to/key.json"
+        "GSC_CREDENTIALS_PATH": "/path/to/key.json",
+        "GSC_SKIP_OAUTH": "true"
       }
     }
   }
@@ -2711,13 +2705,13 @@ pip install -r requirements.txt</code></pre>
 <p>No. Both the Google Analytics Data API and the Search Console API are free, with generous quotas for personal or small-business use. You just need a Google Cloud project — which is free to create. The only cost would be if you're making extremely high query volumes (tens of thousands of requests per day), which is unlikely for typical use.</p>
 
 <h3>Can I use the same service account for both GA4 and GSC?</h3>
-<p>Yes, and that's exactly what I'd recommend. Create one service account, download one JSON key, then grant that service account access to both your GA4 property and your GSC property. Both MCP configs can point to the same key file.</p>
+<p>Yes. That is the simplest setup. Create one service account, download one JSON key, then grant that service account access to both your GA4 property and your GSC property. Both MCP configs can point to the same key file.</p>
 
 <h3>Does this work with Claude Code or just Claude Desktop?</h3>
-<p>Both — and Cursor too. The MCP config format is essentially the same across Claude Desktop, Claude Code, and Cursor. The file location differs (Claude Desktop uses <code>claude_desktop_config.json</code>, Claude Code uses <code>.mcp.json</code>, Cursor uses <code>mcp.json</code>), but the JSON structure inside is identical.</p>
+<p>Both — and Cursor too. The MCP config format is essentially the same across Claude Desktop, Claude Code, and Cursor. The file location differs (Claude Desktop uses <code>claude_desktop_config.json</code>, Claude Code uses <code>~/.claude.json</code> or a project's <code>.mcp.json</code>, Cursor uses <code>mcp.json</code>), but the JSON structure inside is identical.</p>
 
 <h3>What if I manage multiple sites or multiple GA4 properties?</h3>
-<p>The <code>surendranb/google-analytics-mcp</code> server is configured per property (you set a single <code>GA4_PROPERTY_ID</code>). If you have multiple properties, you can either add multiple server entries with different names in your config, or use the <code>search-console-mcp</code> package which supports zero-config multi-account access. The <code>AminForou/mcp-gsc</code> server shows all GSC properties the service account has access to, so you just specify the site URL when querying.</p>
+<p>The <code>surendranb/google-analytics-mcp</code> server is configured per property (you set a single <code>GA4_PROPERTY_ID</code>). If you have multiple properties, you can either add multiple server entries with different names in your config, or use the <code>search-console-mcp</code> package, which supports several accounts once you run its setup command. The <code>AminForou/mcp-gsc</code> server shows all GSC properties the service account has access to, so you just specify the site URL when querying.</p>
 
 <h3>My AI agent returned "no data found" — what's wrong?</h3>
 <p>The most common causes: (1) the service account hasn't been granted access to the property — double-check in both GA4 and GSC admin; (2) the GA4 property ID is the numeric one (like <code>123456789</code>), not the measurement ID (G-XXXXXXX); (3) the JSON key file path in your config is wrong or the file doesn't exist at that location; (4) you need to restart your AI client after changing the config. Check the client's MCP logs for specific error messages.</p>
