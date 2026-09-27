@@ -12,7 +12,7 @@ import { ArrowRight, BarChart, Flask, ListChecks, Shield, Star } from "../../com
 import { CardLink, Chip, Eyebrow, Panel, SectionHeading, cx } from "../../components/ui";
 
 export const metadata: Metadata = {
-  title: "Skill Reviews | TrustedSkills",
+  title: "Skill Reviews",
   description:
     "Independent assessments of AI agent skills. We say plainly which reviews are hands-on tests and which are source reviews — no sponsored content.",
   alternates: { canonical: "https://trustedskills.dev/reviews" },

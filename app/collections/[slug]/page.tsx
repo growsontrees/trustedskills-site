@@ -9,8 +9,8 @@ import {
   resolveEntries,
 } from "../../../lib/collections";
 import { getReviewedSkillSlugs, getReviewForSkill } from "../../../lib/reviews";
-import { formatCount, formatDate, tierOf } from "../../../lib/skill-config";
-import { ArrowLeft, ExternalLink, Flask, ListChecks, Search } from "../../../components/icons";
+import { formatCount, formatDate, installIsBroken, tierOf } from "../../../lib/skill-config";
+import { AlertTriangle, ArrowLeft, ExternalLink, Flask, ListChecks, Search } from "../../../components/icons";
 import { Eyebrow, Panel, TierChip } from "../../../components/ui";
 
 interface Props {
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const collection = getCollectionBySlug(slug);
   if (!collection) return {};
   return {
-    title: `${collection.title} | TrustedSkills`,
+    title: collection.title,
     description: collection.description,
     keywords: collection.targetKeyword,
     robots: collection.status === "draft" ? { index: false, follow: false } : undefined,
@@ -195,6 +195,18 @@ export default async function CollectionDetailPage({ params }: Props) {
                       <div className="doc-content mt-3 text-sm [&_p:last-child]:mb-0">
                         <Md>{entry.note}</Md>
                       </div>
+
+                      {/* Skills drift: renamed, moved, deleted. The registry's nightly
+                          install check says so, and the list must not hide it. */}
+                      {installIsBroken(entry.skill) && (
+                        <p className="mt-3 flex items-start gap-2 rounded-md border border-warn-800 bg-warn-950 px-3 py-2 text-sm text-warn-300">
+                          <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+                          <span>
+                            The listed install command no longer works. The skill page says what we
+                            know about where it went.
+                          </span>
+                        </p>
+                      )}
 
                       <div className="mt-4 flex flex-wrap items-center gap-4 text-sm">
                         <Link

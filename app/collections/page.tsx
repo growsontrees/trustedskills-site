@@ -5,7 +5,7 @@ import { ListChecks } from "../../components/icons";
 import { CardLink, Chip, cx } from "../../components/ui";
 
 export const metadata: Metadata = {
-  title: "Curated Skill Collections | TrustedSkills",
+  title: "Curated Skill Collections",
   description:
     "Hand-made themed lists of AI agent skills worth installing — chosen and ordered by the job they do, not by download count.",
   alternates: { canonical: "https://trustedskills.dev/collections" },
