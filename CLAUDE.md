@@ -53,7 +53,7 @@ Skill detail pages use `revalidate = 86400` (24h ISR) with `dynamicParams = true
 
 ### Verification tiers
 
-Skills have a `verified` field with four tiers defined in `lib/skills.ts`: `unverified → community → verified → featured`. `TIER_CONFIG` maps each tier to display metadata (label, icon, Tailwind classes).
+Skills have a `verified` field with six tiers defined in `lib/skill-config.ts` (`VerificationTier`). `TIER_ORDER` lists them strongest first: `official → featured → verified → checked → community → unverified`. `TIER_CONFIG` maps each tier to display metadata (label, icon, Tailwind classes); a missing or unknown value falls back to `community` in `tierOf()`.
 
 ### Disabled API routes
 
