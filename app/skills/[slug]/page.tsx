@@ -214,7 +214,7 @@ export default async function SkillDetailPage({ params }: Props) {
                   <span className="font-mono text-xs">v{skill.version}</span>
                   <span className="text-ink-700">·</span>
                   <Link
-                    href={`/skills/category/${skill.category}/`}
+                    href={`/skills/category/${skill.category}`}
                     className="transition-colors hover:text-ink-200"
                   >
                     {skill.category}
@@ -550,7 +550,7 @@ export default async function SkillDetailPage({ params }: Props) {
               <Eyebrow>Install snippets available for</Eyebrow>
               <div className="mt-2.5 flex flex-wrap gap-1.5">
                 {skill.platforms.map((key) => (
-                  <Link key={key} href={`/platform/${key}/`}>
+                  <Link key={key} href={`/platform/${key}`}>
                     <Chip className="transition-colors hover:border-ink-650 hover:text-ink-100">
                       {PLATFORM_CONFIG[key]?.label ?? key}
                     </Chip>
@@ -580,7 +580,7 @@ export default async function SkillDetailPage({ params }: Props) {
             </div>
             <p className="mt-2.5 text-sm leading-relaxed text-ink-400">{tier.detail}</p>
             <Link
-              href={`/tier/${skill.verified in TIER_CONFIG ? skill.verified : "community"}/`}
+              href={`/tier/${skill.verified in TIER_CONFIG ? skill.verified : "community"}`}
               className="mt-3 inline-block text-xs text-accent-400 transition-colors hover:text-accent-300"
             >
               See all {tier.label.toLowerCase()} skills →

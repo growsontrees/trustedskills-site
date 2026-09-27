@@ -18,7 +18,7 @@ const COMMIT_LENGTH = 10;
 export function SafetyPanel({
   report,
   checks,
-  methodologyHref = "/docs/advanced/automated-safety-checks/",
+  methodologyHref = "/docs/advanced/automated-safety-checks",
 }: {
   report: SafetyReport | null;
   checks: CheckRow[];

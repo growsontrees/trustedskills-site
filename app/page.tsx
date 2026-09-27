@@ -171,7 +171,7 @@ export default function HomePage() {
             return (
               <Link
                 key={tier}
-                href={`/tier/${tier}/`}
+                href={`/tier/${tier}`}
                 className={cx(
                   "group rounded-xl border bg-ink-900 p-gutter shadow-e1",
                   "transition duration-fast ease-out hover:-translate-y-px hover:bg-ink-850 hover:shadow-e3",
@@ -232,7 +232,7 @@ export default function HomePage() {
             return (
               <Link
                 key={cat.slug}
-                href={`/skills/category/${cat.slug}/`}
+                href={`/skills/category/${cat.slug}`}
                 className="group flex items-center gap-3 rounded-lg border border-ink-750 bg-ink-900 px-3.5 py-3 shadow-e1 transition duration-fast ease-out hover:border-ink-650 hover:bg-ink-850"
               >
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-ink-750 bg-ink-850 text-ink-450 transition-colors duration-fast group-hover:border-ink-700 group-hover:text-accent-400">

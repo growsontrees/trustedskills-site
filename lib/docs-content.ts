@@ -2138,7 +2138,7 @@ npm publish --access public   # --access public for scoped packages</code></pre>
 <p>Read them from <code>process.env</code>: <code>const apiKey = process.env.MY_API_KEY</code>. Document required env vars in SKILL.md. Users add them to the <code>"env"</code> block in their MCP config.</p>
 
 <h3>How long until a submitted skill appears on TrustedSkills?</h3>
-<p>If your repository has the <code>openclaw-skill</code> topic, usually within six hours. Nobody reviews the code by hand. Badges come from provenance (Official, Pinned), an editorial pick (Featured) or an automated scan (Checked). See <a href="/docs/advanced/verification-badges/">what each badge means</a>.</p>
+<p>If your repository has the <code>openclaw-skill</code> topic, usually within six hours. Nobody reviews the code by hand. Badges come from provenance (Official, Pinned), an editorial pick (Featured) or an automated scan (Checked). See <a href="/docs/advanced/verification-badges">what each badge means</a>.</p>
 
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I need TypeScript to build a skill?","acceptedAnswer":{"@type":"Answer","text":"No. JavaScript works perfectly. TypeScript is optional."}},{"@type":"Question","name":"Can I build skills in Python?","acceptedAnswer":{"@type":"Answer","text":"Yes. The 'mcp' package on PyPI provides the same SDK."}},{"@type":"Question","name":"How do I add API keys to my skill?","acceptedAnswer":{"@type":"Answer","text":"Read from process.env. Users add values to the env block in their MCP config."}},{"@type":"Question","name":"How long until a submitted skill appears on TrustedSkills?","acceptedAnswer":{"@type":"Answer","text":"If your repository has the openclaw-skill topic, usually within six hours. Nobody reviews the code by hand."}}]}
@@ -2238,7 +2238,7 @@ npm publish --access public   # --access public for scoped packages</code></pre>
 <h2>Frequently asked questions</h2>
 
 <h3>Does any badge mean the skill has been security reviewed?</h3>
-<p>No. No badge means a person read the code. One badge does mean a machine did: <strong>Checked</strong> is a static scan of the skill's files at a named commit, looking for credential reads, undeclared network calls, encoded payloads that get executed and pipe-to-shell installers. Every result is printed on the skill's page — see <a href="/docs/advanced/automated-safety-checks/">what the automated safety pass covers</a>. The other badges describe provenance: who published the skill, and whether the install is pinned to a fixed commit.</p>
+<p>No. No badge means a person read the code. One badge does mean a machine did: <strong>Checked</strong> is a static scan of the skill's files at a named commit, looking for credential reads, undeclared network calls, encoded payloads that get executed and pipe-to-shell installers. Every result is printed on the skill's page — see <a href="/docs/advanced/automated-safety-checks">what the automated safety pass covers</a>. The other badges describe provenance: who published the skill, and whether the install is pinned to a fixed commit.</p>
 
 <h3>Is it safe to install a Listed skill?</h3>
 <p>It carries exactly as much risk as installing any unreviewed code from the internet, because that is what it is. Read the repository first: check the declared environment variables, any network calls, and anything that executes a string.</p>

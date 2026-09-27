@@ -84,7 +84,7 @@ export function ListingPage({
         <ul>
           {skills.map((skill) => (
             <li key={skill.slug}>
-              <Link href={`/skills/${skill.slug}/`}>
+              <Link href={`/skills/${skill.slug}`}>
                 {skill.name} — {skill.description}
               </Link>
             </li>

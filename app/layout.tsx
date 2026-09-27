@@ -127,18 +127,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   title="Browse"
                   links={[
                     { href: "/skills", label: "All skills" },
-                    { href: "/tier/official/", label: "Official" },
-                    { href: "/tier/featured/", label: "Featured" },
-                    { href: "/tier/verified/", label: "Pinned" },
+                    { href: "/tier/official", label: "Official" },
+                    { href: "/tier/featured", label: "Featured" },
+                    { href: "/tier/verified", label: "Pinned" },
                   ]}
                 />
                 <FooterColumn
                   title="Platforms"
                   links={[
-                    { href: "/platform/claudecode/", label: "Claude Code" },
-                    { href: "/platform/claude/", label: "Claude Desktop" },
-                    { href: "/platform/mcp/", label: "MCP" },
-                    { href: "/platform/cursor/", label: "Cursor" },
+                    { href: "/platform/claudecode", label: "Claude Code" },
+                    { href: "/platform/claude", label: "Claude Desktop" },
+                    { href: "/platform/mcp", label: "MCP" },
+                    { href: "/platform/cursor", label: "Cursor" },
                   ]}
                 />
                 <FooterColumn

@@ -143,7 +143,7 @@ export default function SubmitPage() {
             return (
               <Link
                 key={tier}
-                href={`/tier/${tier}/`}
+                href={`/tier/${tier}`}
                 className="flex items-start gap-3 rounded-lg border border-ink-750 bg-ink-900 p-3.5 transition duration-fast ease-out hover:border-ink-650 hover:bg-ink-850"
               >
                 <Icon

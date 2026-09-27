@@ -20,8 +20,8 @@ const DEFAULT_PAGE_SIZE_OPTIONS = [
 ];
 
 function getPageHref(basePath: string, page: number) {
-  // SEO-optimized URLs: /category/slug/2/ for static export (Next.js [page] segment)
-  return page <= 1 ? `${basePath}/` : `${basePath}/${page}/`;
+  // No trailing slash: next.config.mjs sets trailingSlash: false, so "/x/2/" would 308.
+  return page <= 1 ? basePath : `${basePath}/${page}`;
 }
 
 const STEP = "inline-flex h-9 items-center gap-1.5 rounded-md border px-3 text-sm font-medium transition duration-fast ease-out";
@@ -58,7 +58,7 @@ export function Pagination({
     const separator = basePath.includes("?") ? "&" : "?";
     const basePathWithoutSize = basePath.split("?")[0];
     // Reset to page 1 when changing page size
-    return `${basePathWithoutSize}/${separator}per_page=${sizeParam}`;
+    return `${basePathWithoutSize}${separator}per_page=${sizeParam}`;
   };
 
   return (
