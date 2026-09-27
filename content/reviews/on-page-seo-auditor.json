@@ -1,0 +1,79 @@
+{
+  "slug": "on-page-seo-auditor",
+  "status": "draft",
+  "title": "on-page-seo-auditor Review: A Usable Audit From a Skill That No Longer Installs",
+  "description": "We ran the frozen v9.9.12 copy of aaron-he-zhu's on-page-seo-auditor on a real homepage. It produced a scored, specific audit. It can't be installed by name any more, and most of its links point to files it doesn't ship with.",
+  "skillSlug": "on-page-seo-auditor",
+  "verdict": "Not Recommended",
+  "overallScore": 2.4,
+  "scores": {
+    "installation": 2,
+    "documentation": 3,
+    "depth": 3,
+    "maintenance": 1,
+    "platformSupport": 3
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "on-page-seo-auditor skill review",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve SEO skills run against the same site (trustedskills.dev) on the same day, with no paid SEO data connected. One run on one site is one data point, not a benchmark. The verdict is about installing this listing today; the audit itself was better than the verdict suggests.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "aaron-he-zhu/seo-geo-claude-skills tag v9.9.12 (frozen standalone copy)",
+      "task": "Install the skill, then ask it to audit the on-page SEO of the trustedskills.dev homepage for the keyword \"AI agent skills\".",
+      "outcome": "**Install failed twice.** The original repository is now a signpost with no installable skills. The signpost's own command, `npx skills add aaron-he-zhu/aaron-marketing-skills -s on-page-seo-auditor`, also found nothing: the bundle has since renamed it `on-page-seo-checker`. We installed the frozen v9.9.12 copy by hand from the git tag.\n\nThe run took about four and a half minutes and produced a full audit scored 70/100 (grade B). The top fixes were specific and correct: the title is 70 characters, 10 over its guideline; the meta description doesn't contain the target phrase; and the page has no `ItemList` or `SoftwareApplication` schema for the skills it lists. We checked three facts in the output and all were right.\n\nTen of the eleven files SKILL.md links to outside its own folder were missing from the install, including its page-fetch helper script and its security notes. Its benchmarks are written for articles — a 1,500-word target and link-count bands for body copy — and it has no checklist for a directory homepage, so two sections were scored on judgement.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions. Tools: WebFetch, WebSearch, Bash (curl, node, python). No SEO tool or Search Console connected."
+    }
+  ],
+  "summary": "on-page-seo-auditor produced a clear, scored audit of our homepage with correct, specific fixes. But the listing points at a skill that no longer installs under this name: the original repository is a signpost, and the signpost's replacement command fails because the skill was renamed again. The frozen copy also links to ten files it doesn't ship with. If you want this job done, install the author's maintained `on-page-seo-checker` instead.",
+  "strengths": [
+    {
+      "title": "Specific, checkable fixes",
+      "body": "Character counts, keyword placement, header order and schema gaps, each with a first fix. Every fact we checked in the output was right."
+    },
+    {
+      "title": "Weighted score with a visible formula",
+      "body": "The scoring rubric gives section weights that sum to 100, so you can see why a page scored 70 and what moves it."
+    },
+    {
+      "title": "Marks missing data N/A",
+      "body": "No search volume, no competitor set, no images on the page — each was marked N/A instead of being given an invented score."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Can't be installed by name",
+      "body": "The original repository is a signpost, and the signpost's replacement command fails because the bundle renamed the skill to `on-page-seo-checker`. The only way to get this exact skill is to copy it from the v9.9.12 tag by hand."
+    },
+    {
+      "title": "Links to files it doesn't ship with",
+      "body": "Ten of eleven cross-references — its fetch helper, security notes, skill contract, benchmark and three follow-on skills — were missing from the install."
+    },
+    {
+      "title": "Built for articles",
+      "body": "Checklists cover blog posts, product pages and landing pages only. Its word-count and link-count benchmarks treat a normal directory homepage as thin and over-linked."
+    },
+    {
+      "title": "Two scores that look like one",
+      "body": "The rubric sums eight sections to 100, but the summary template adds a ninth CORE-EEAT row in the same table with nothing marking it as outside the total."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Nobody new",
+      "body": "Use the maintained `on-page-seo-checker` from `aaron-he-zhu/aaron-marketing-skills` for the same job."
+    }
+  ],
+  "notFor": "Anyone installing today — the command fails. Also directory or hub pages, which its benchmarks don't cover.",
+  "links": [
+    { "label": "Frozen copy (tag v9.9.12)", "href": "https://github.com/aaron-he-zhu/seo-geo-claude-skills/tree/v9.9.12/optimize/on-page-seo-auditor" },
+    { "label": "Maintained successor bundle: aaron-marketing-skills", "href": "https://github.com/aaron-he-zhu/aaron-marketing-skills" }
+  ]
+}

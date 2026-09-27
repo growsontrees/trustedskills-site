@@ -1,0 +1,88 @@
+{
+  "slug": "find-keywords",
+  "status": "draft",
+  "title": "find-keywords Review: A Good Method With the Numbers Left Out",
+  "description": "We ran calm-north's find-keywords skill on a real site with no paid SEO data connected. The intent, tiering and cannibalisation method held up. The volume and difficulty columns stayed empty.",
+  "skillSlug": "find-keywords",
+  "verdict": "Use With Caution",
+  "overallScore": 3.4,
+  "scores": {
+    "installation": 5,
+    "documentation": 3,
+    "depth": 3,
+    "maintenance": 2,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "find-keywords skill review",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve SEO skills run against the same site (trustedskills.dev) on the same day, with no paid SEO data connected. One run on one site is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "calm-north/seojuice-skills@c1f633b",
+      "task": "Build a prioritised keyword list for trustedskills.dev, a directory of AI agent skills, with no Ahrefs, SEMrush, Search Console or SEOJuice account connected.",
+      "outcome": "It produced an 18-keyword list in the skill's output format: a priority matrix, four topic clusters and a \"start here\" top five. It took about two and a half minutes.\n\nThe method worked without paid data. Intent classification, head/body/long-tail tiering and the cannibalisation screen all ran. The screen used `site:` searches in place of Search Console and found four existing docs pages that already target install-guide terms, and flagged them \"update, don't duplicate\".\n\nThe numbers did not. The required table has Monthly Volume and Difficulty (0–100) columns, and the workflow never names a source for them. The only pointer is a closing tip to the publisher's SEOJuice tools. We tried the two free ones: both are browser forms that return nothing to a non-interactive fetch. Volume and difficulty stayed empty and the Opportunity Score formula could not be computed. Priorities were qualitative calls based on how crowded each search result page looked.\n\nAll three facts we checked in the output were correct.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions. Tools: WebFetch, WebSearch, Bash. No Ahrefs, SEMrush, Search Console, DataForSEO or SEOJuice connected."
+    }
+  ],
+  "summary": "find-keywords is a sound keyword-research method in one file: intent, tiers, clusters and a cannibalisation check before you build anything. It installed first time and ran without errors. But its output format is built around search volume and difficulty, and it never tells you where to get them — except its publisher's own product. With no data source connected, you get a well-structured list with the numbers missing. Worth it if you already have a volume source.",
+  "strengths": [
+    {
+      "title": "Checks for cannibalisation first",
+      "body": "Step 0 asks whether you already have a page for each term before you plan a new one. In our run that step found four existing docs pages and marked them \"update, don't duplicate\" — the most practical output of the run."
+    },
+    {
+      "title": "Intent and tiering you can use as-is",
+      "body": "The signal-word tables, the content type per intent, and the head/body/long-tail tiers with realistic timelines worked without any external tool."
+    },
+    {
+      "title": "Clear output format",
+      "body": "Summary, priority matrix, cluster seeds and a top five. The run followed it exactly, which makes results comparable between runs."
+    },
+    {
+      "title": "One file, installs cleanly",
+      "body": "A single SKILL.md with no scripts. `npx skills add calm-north/seojuice-skills --skill find-keywords` worked first time."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "No volume or difficulty source",
+      "body": "The table and the Opportunity Score formula both need numbers the workflow never tells you how to get. Without Ahrefs, SEMrush or similar, those columns stay empty and \"priority\" becomes a judgement call."
+    },
+    {
+      "title": "The only data pointer is the publisher's product",
+      "body": "The closing tip sends you to SEOJuice's free web tools or its MCP server. The free tools are browser forms that an agent can't submit, so in practice the path to live data is the paid connection."
+    },
+    {
+      "title": "Not updated since February 2026",
+      "body": "The last commit to `calm-north/seojuice-skills` was on 2026-02-27. The content is generic enough that this matters less than for a tool-specific skill."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Teams with a keyword data source already",
+      "body": "If Ahrefs, SEMrush or SEOJuice is connected, the method fills in properly and the Opportunity Score becomes a real ranking."
+    },
+    {
+      "title": "Planning content on an existing site",
+      "body": "The cannibalisation step alone is worth running before you commission new pages."
+    }
+  ],
+  "notFor": "Anyone who needs real search volumes and has no data provider. This skill doesn't supply them.",
+  "sections": [
+    {
+      "heading": "What it is, and what it isn't",
+      "body": "Despite the name, this is not keyword extraction from a block of text. It is a full keyword-research workflow for a site or topic: build a universe of terms, classify intent, tier them, cluster them, and pick where to start. That is a bigger job, and a more useful one, than the name suggests."
+    }
+  ],
+  "links": [
+    { "label": "calm-north/seojuice-skills repository", "href": "https://github.com/calm-north/seojuice-skills" }
+  ]
+}

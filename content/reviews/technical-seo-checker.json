@@ -1,0 +1,86 @@
+{
+  "slug": "technical-seo-checker",
+  "status": "draft",
+  "title": "technical-seo-checker Review: Found Our Worst Bug, Needs Its Whole Bundle",
+  "description": "We ran aaron-he-zhu's technical-seo-checker on a real site. It found a site-wide canonical error, missing sitemap dates and missing security headers. It has moved repositories, and installed on its own it loses its helper scripts.",
+  "skillSlug": "technical-seo-checker",
+  "verdict": "Recommended",
+  "overallScore": 3.6,
+  "scores": {
+    "installation": 3,
+    "documentation": 4,
+    "depth": 4,
+    "maintenance": 4,
+    "platformSupport": 3
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "technical-seo-checker skill review",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve SEO skills run against the same site (trustedskills.dev) on the same day, with no paid SEO data connected. One run on one site is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "aaron-he-zhu/aaron-marketing-skills@0b1c907",
+      "task": "Install the skill, then ask it to check the technical SEO health of trustedskills.dev with no Search Console, crawler or CDN connector.",
+      "outcome": "**Install:** the original repository is now a signpost, and `npx skills add aaron-he-zhu/seo-geo-claude-skills --skill technical-seo-checker` found no skills. The signpost's command, `npx skills add aaron-he-zhu/aaron-marketing-skills -s technical-seo-checker`, installed it.\n\nThe run took about five minutes and produced a full audit with P0/P1/P2 severities. Its top finding was real and serious: skill, docs and review pages all declared the homepage as their canonical URL. It checked six URLs across page types and ruled out a cache artefact before reporting it. It also found that none of the 50,262 sitemap URLs carries a `lastmod` date, and that the site sends no HSTS or other security headers. We confirmed all three.\n\nCore Web Vitals came back N/A. The skill's own PageSpeed helper script is not part of a single-skill install, and the public PageSpeed API returned a quota error. The skill's rules say to mark missing data N/A rather than estimate it, and the run did that.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions. Tools: WebFetch, WebSearch, Bash (curl, openssl). No Search Console, crawler or paid SEO data connected."
+    }
+  ],
+  "summary": "technical-seo-checker found the most damaging defect any of our twelve runs turned up: a site-wide canonical tag pointing every page at the homepage. Its checks are well-chosen, its severity levels are clear, it uses INP rather than FID, and it refuses to invent missing metrics. Two costs: the skill has moved repositories, so old install commands fail, and it is one module of a larger bundle — installed alone, its helper scripts and shared files are missing.",
+  "strengths": [
+    {
+      "title": "It found a real P0",
+      "body": "Every skill, docs and review page on our site declared the homepage as its canonical. The skill checked several page types and ruled out caching before calling it. That one finding is worth the install."
+    },
+    {
+      "title": "Clear severity model",
+      "body": "P0 blocks indexing or revenue, P1 suppresses performance, P2 is hygiene. Findings are reported as evidence, check, issue, fix."
+    },
+    {
+      "title": "Current metrics",
+      "body": "Core Web Vitals thresholds use INP (under 200 ms), not the retired FID. It also warns that AI crawlers don't run JavaScript, so key content and JSON-LD must be in the initial HTML."
+    },
+    {
+      "title": "Doesn't invent missing data",
+      "body": "With no field data and no PageSpeed access, it marked Core Web Vitals N/A and labelled its timing proxy as an estimate."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Moved, and old commands fail",
+      "body": "It now lives in `aaron-he-zhu/aaron-marketing-skills`. The original `seo-geo-claude-skills` repository is a signpost, and installing from it finds nothing."
+    },
+    {
+      "title": "Not self-contained",
+      "body": "It links to shared files (`CONNECTORS.md`, `SECURITY.md`, a skill contract) and helper scripts at the plugin root. A single-skill install doesn't include them, so its data helpers, hand-off and save steps don't work."
+    },
+    {
+      "title": "Tool permissions don't match the workflow",
+      "body": "The frontmatter allows only `WebFetch`, but the main data path runs Python helper scripts."
+    },
+    {
+      "title": "No roll-up formula",
+      "body": "It scores eight sections out of 10 and says the report rolls up to 100, but never says how, or how to treat N/A sections."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "A first technical pass on any site",
+      "body": "Canonicals, sitemaps, headers, robots, redirects and rendering — the checks that find the expensive mistakes."
+    },
+    {
+      "title": "Teams willing to install the full bundle",
+      "body": "Installed with the rest of `aaron-marketing-skills`, its helper scripts and shared references are present."
+    }
+  ],
+  "notFor": "Anyone who wants Core Web Vitals numbers without a PageSpeed key or field data — it will mark them N/A.",
+  "links": [
+    { "label": "aaron-he-zhu/aaron-marketing-skills repository", "href": "https://github.com/aaron-he-zhu/aaron-marketing-skills" }
+  ]
+}

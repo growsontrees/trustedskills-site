@@ -1,0 +1,81 @@
+{
+  "slug": "seo-meta",
+  "status": "draft",
+  "title": "seo-meta Review: Deleted Upstream, and Built for Plumbers",
+  "description": "We tried to install jezweb's seo-meta skill and ran its last published copy against a real site. It no longer installs, and its templates assume every site is a local trade business.",
+  "skillSlug": "seo-meta",
+  "verdict": "Not Recommended",
+  "overallScore": 1.8,
+  "scores": {
+    "installation": 1,
+    "documentation": 3,
+    "depth": 2,
+    "maintenance": 1,
+    "platformSupport": 2
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "seo-meta skill review",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve SEO skills run against the same site (trustedskills.dev) on the same day, with no paid SEO data connected. One run on one site is one data point, not a benchmark. This skill could not be installed, so the run used the last published copy, restored from the repository's history.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "jezweb/claude-skills@c0cdee6 (last published copy; removed upstream in e60cb4e)",
+      "task": "Install the skill with `npx skills add`, then ask it to write the SEO meta tags for the trustedskills.dev homepage and for one skill detail page (/skills/coreyhaines31-seo-audit).",
+      "outcome": "**Install failed.** `npx skills add jezweb/claude-skills --skill seo-meta` returned \"No matching skills found\". The skill was deleted from the repository on 2026-02-16 in a commit titled \"v2 — strip to 9 workflow/recipe skills\".\n\nWe restored the last copy (2026-02-04) by hand and ran it. It produced a full tag set for both pages in under two minutes: title, description, canonical, Open Graph, Twitter Card and a BreadcrumbList. Its self-referencing canonical rule caught a real bug on our site — our skill pages were declaring the homepage as their canonical.\n\nThe structured-data half did not fit. Every JSON-LD template is `LocalBusiness` or `Service` with a phone number, street address and a service city. A software directory has none of those, and the skill offers no `Organization`, `WebSite` or `SoftwareApplication` alternative, so the two main JSON-LD blocks came out with no `@type` at all — not valid schema.",
+      "environment": "Claude Code subagent (Sonnet 5) with the restored SKILL.md loaded as its instructions. Tools: WebFetch, WebSearch, Bash. No paid SEO data sources connected."
+    }
+  ],
+  "summary": "seo-meta no longer exists: its author removed it in February 2026, and the registry install command fails. We ran the last published copy anyway. The title, description, Open Graph and canonical rules are sound and caught a real canonical bug on our site. But every template assumes a local trade business with a phone number and a street address, so on anything else the structured-data output is unusable. Pick a maintained meta or schema skill instead.",
+  "strengths": [
+    {
+      "title": "Sound canonical and social-card rules",
+      "body": "Self-referencing absolute canonicals, one per page, and page-specific Open Graph and Twitter text. Following these rules exposed that our own skill pages were pointing their canonical at the homepage and reusing the homepage's Twitter card text."
+    },
+    {
+      "title": "Self-contained and fast",
+      "body": "All the rules sit in one SKILL.md, with character limits for titles (50–60) and descriptions (150–160). The run finished in under two minutes."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "It cannot be installed",
+      "body": "Removed from `jezweb/claude-skills` on 2026-02-16. `npx skills add jezweb/claude-skills --skill seo-meta` fails with \"No matching skills found\". There is no successor with the same name."
+    },
+    {
+      "title": "Every template is a local business",
+      "body": "Every worked example is a Sydney plumber. Title and description formulas require a `[Location]`, and the checklist makes `LocalBusiness` JSON-LD mandatory on every homepage. On a site with no premises, the schema output had no valid `@type`."
+    },
+    {
+      "title": "Reference files are never used",
+      "body": "The package ships `references/`, `rules/`, `templates/` and an agent file, but SKILL.md never points to any of them. In our run none were read."
+    },
+    {
+      "title": "Framework advice is dated",
+      "body": "Its only code example is literal `<meta>` tags in `<head>`, and it recommends `react-helmet-async`. Next.js App Router sites set these through the `metadata` export instead."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Local trade sites, if you already have a copy",
+      "body": "If you installed it before February 2026 and you build sites for plumbers, electricians or similar, the templates fit that job. For anything else, look elsewhere."
+    }
+  ],
+  "notFor": "Anyone installing today — it will not install. Also any site that is not a local business with a phone number and a street address.",
+  "sections": [
+    {
+      "heading": "Why review a deleted skill?",
+      "body": "Because the registry still lists it, and people still find it. The most useful thing this page can tell you is that the install command fails and why. We ran the last published copy so the verdict rests on what the skill did, not on the fact that it was deleted."
+    }
+  ],
+  "links": [
+    { "label": "jezweb/claude-skills repository", "href": "https://github.com/jezweb/claude-skills" },
+    { "label": "Last published copy of seo-meta (commit c0cdee6)", "href": "https://github.com/jezweb/claude-skills/tree/c0cdee6/skills/seo-meta" }
+  ]
+}

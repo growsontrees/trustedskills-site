@@ -1,0 +1,83 @@
+{
+  "slug": "analytics-tracking",
+  "status": "draft",
+  "title": "analytics Review: A Solid Tracking Plan, Once You Find It",
+  "description": "We ran coreyhaines31's analytics skill (listed here as analytics-tracking) on a real site. It produced a usable GA4 tracking plan and exposed two untracked key actions, but it has no method for auditing a site you can't log in to.",
+  "skillSlug": "analytics-tracking",
+  "verdict": "Recommended",
+  "overallScore": 3.8,
+  "scores": {
+    "installation": 3,
+    "documentation": 4,
+    "depth": 3,
+    "maintenance": 5,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "analytics tracking skill review",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve SEO skills run against the same site (trustedskills.dev) on the same day, with no paid SEO data connected. One run on one site is one data point, not a benchmark. There was no GA4 or Tag Manager login for this run, so the audit covered the site's source code and live HTML only.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "coreyhaines31/marketingskills@5b2c000 (skill renamed upstream to `analytics`, v2.0.1)",
+      "task": "Audit the analytics tracking on trustedskills.dev and produce a tracking plan. The site's source code was available read-only; there was no GA4 or Tag Manager login.",
+      "outcome": "**Install:** the registry name `analytics-tracking` no longer exists. `npx skills add coreyhaines31/marketingskills --skill analytics-tracking` found nothing; `--skill analytics` installed cleanly.\n\nThe run took just over two minutes and produced a tracking plan in the skill's exact template: overview, ten named events with properties and triggers, custom dimensions and conversions.\n\nThe audit half found that GA4 is the only tracking on the site and that no custom events exist. Copying an install command and clicking through to a skill's source repository — the two actions the site cares most about — fire no event at all. Both findings were confirmed against the source and the live HTML. The plan mapped each proposed event to the component that should fire it.\n\nThe skill itself gave no method for the audit. Its body covers setting tracking up, and its validation steps assume DebugView or Tag Manager preview access. The agent audited by searching the source and the page HTML, which the skill does not describe.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions. Tools: WebFetch, WebSearch, Bash. No GA4, Tag Manager or Search Console access."
+    }
+  ],
+  "summary": "analytics (listed in the registry as analytics-tracking) is a well-organised tracking-plan skill from the marketingskills suite. On our site it produced a practical GA4 event plan and surfaced that our two most important user actions were not tracked at all. Two things to know: it was renamed upstream, so you must install it as `analytics`, and it has no workflow for auditing a site whose dashboards you can't open.",
+  "strengths": [
+    {
+      "title": "A template you can hand to a developer",
+      "body": "The output format — events, properties, triggers, custom dimensions, conversions — came out ready to implement. Each event was tied to the component that should fire it."
+    },
+    {
+      "title": "Good event naming and library",
+      "body": "`object_action` naming and a reference event library by business type. The marketing-site events fitted a no-signup directory with no adaptation."
+    },
+    {
+      "title": "It found what mattered",
+      "body": "Install-command copies and outbound repository clicks were untracked. That is the gap between having analytics and being able to measure the site's goal."
+    },
+    {
+      "title": "Actively maintained",
+      "body": "Part of `coreyhaines31/marketingskills`, updated on 2026-09-04 and versioned (2.0.1)."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Installs only under its new name",
+      "body": "Renamed from `analytics-tracking` to `analytics`. Any guide or registry that still uses the old name gives you a command that finds nothing."
+    },
+    {
+      "title": "No audit workflow",
+      "body": "The description says it can audit tracking, but the body only covers setting it up. With no dashboard access, the agent had to invent its own audit method."
+    },
+    {
+      "title": "Assumes a SaaS funnel",
+      "body": "The core \"essential events\" table is signup, demo request and purchase. None of those exist on a free directory, so most of that table did not apply."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Planning tracking before you build",
+      "body": "Its strongest output is the plan. Use it before implementation, or to replace an ad-hoc set of events with a named, documented one."
+    },
+    {
+      "title": "SaaS and lead-gen sites",
+      "body": "Its default event set fits signup and checkout funnels closely."
+    }
+  ],
+  "notFor": "Anyone who wants a hands-off audit of live tracking data. It doesn't read GA4 for you, and without dashboard access it has no audit method of its own.",
+  "links": [
+    { "label": "coreyhaines31/marketingskills repository", "href": "https://github.com/coreyhaines31/marketingskills" },
+    { "label": "analytics skill source", "href": "https://github.com/coreyhaines31/marketingskills/tree/main/skills/analytics" }
+  ]
+}

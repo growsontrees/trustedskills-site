@@ -1,0 +1,83 @@
+{
+  "slug": "coreyhaines31-seo-audit",
+  "status": "draft",
+  "title": "seo-audit (marketingskills) Review: Found Two Indexing Bugs With Nothing but curl",
+  "description": "We ran coreyhaines31's seo-audit skill on a real site with no paid SEO tools. It found a site-wide canonical error and a canonical-to-404 chain, both confirmed. It can't give you Core Web Vitals or backlinks on its own.",
+  "skillSlug": "coreyhaines31-seo-audit",
+  "verdict": "Highly Recommended",
+  "overallScore": 4.4,
+  "scores": {
+    "installation": 5,
+    "documentation": 4,
+    "depth": 4,
+    "maintenance": 5,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "seo-audit skill review",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve SEO skills run against the same site (trustedskills.dev) on the same day, with no paid SEO data connected. One run on one site is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "coreyhaines31/marketingskills@5b2c000",
+      "task": "Run an SEO audit of trustedskills.dev and say what's wrong and what to fix first. No Search Console, PageSpeed key, Ahrefs or Semrush connected.",
+      "outcome": "`npx skills add coreyhaines31/marketingskills --skill seo-audit` installed it first time. The run took about nine minutes and followed the skill's priority order: crawlability, technical foundations, on-page, content, authority.\n\nIt found two indexing bugs, and we confirmed both. First, skill, docs, review and submit pages all declared the homepage as their canonical URL. Second, paginated tier and platform listings declared a canonical that 308-redirects to a page returning 404. It also counted 50,262 URLs in the sitemap, much of it paginated listings, and noted thin content on skill pages and no privacy, terms or contact pages.\n\nCore Web Vitals were not measured: the public PageSpeed API returned a quota error, so the run reported server response time only and said so. Backlinks and authority were left as a gap, and the skill's orphan-page and click-depth checks were skipped because they need a full crawler.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions. Tools: WebFetch, WebSearch, Bash (curl). No Search Console, PageSpeed key or paid SEO data connected."
+    }
+  ],
+  "summary": "The most-installed SEO skill in our registry earned its place in our run. Working only from curl and a web search, it found two separate indexing bugs on our site — a site-wide canonical error and a canonical that leads to a 404 — and put them at the top of the list, where they belong. It is current (INP, not FID), specific about where its own checks can fail, and actively maintained. What it can't do alone: Core Web Vitals, backlinks, or full-site crawl checks.",
+  "strengths": [
+    {
+      "title": "It found what matters first",
+      "body": "Its priority order starts with crawlability and indexation. That is where both of our real bugs were, and both were at the top of its report."
+    },
+    {
+      "title": "Honest about its own blind spots",
+      "body": "It warns that `curl` and web fetch tools often miss JSON-LD injected by JavaScript, names the plugins that do it, and says how to check properly. Few skills flag their own failure modes this clearly."
+    },
+    {
+      "title": "Current guidance",
+      "body": "Uses INP for responsiveness and does not mention FID anywhere."
+    },
+    {
+      "title": "Maintained, part of a coherent suite",
+      "body": "`coreyhaines31/marketingskills` was updated on 2026-09-04. The audit points to sibling skills for schema and AI search when those are the real problem."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "No measurement of its own",
+      "body": "Core Web Vitals need PageSpeed Insights, WebPageTest or Search Console; backlinks need Ahrefs or Semrush. Without them, those sections are empty."
+    },
+    {
+      "title": "Some checks need a crawler it doesn't have",
+      "body": "\"Important pages within 3 clicks\" and \"no orphan pages\" can't be done with page fetches on a 50,000-URL site, and the skill gives no sampling method."
+    },
+    {
+      "title": "Asks the same questions twice",
+      "body": "Traffic baseline and Search Console access are asked for in the opening assessment and again at the end."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "The first look at an unaudited site",
+      "body": "Run it before anything else. On our site it found the two problems that mattered most."
+    },
+    {
+      "title": "Teams with Search Console and PageSpeed",
+      "body": "Connect those and the empty sections fill in."
+    }
+  ],
+  "notFor": "Anyone who wants a crawler. It samples pages; it doesn't crawl a site end to end.",
+  "links": [
+    { "label": "coreyhaines31/marketingskills repository", "href": "https://github.com/coreyhaines31/marketingskills" },
+    { "label": "seo-audit skill source", "href": "https://github.com/coreyhaines31/marketingskills/tree/main/skills/seo-audit" }
+  ]
+}

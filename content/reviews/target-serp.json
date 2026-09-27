@@ -1,0 +1,78 @@
+{
+  "slug": "target-serp",
+  "status": "draft",
+  "title": "target-serp Review: Clear Playbook, Blind Without a Live SERP",
+  "description": "We ran calm-north's target-serp skill on a real site with no SERP data source. The page-level advice was specific and usable. The core step — see which features are on the results page — could not run.",
+  "skillSlug": "target-serp",
+  "verdict": "Use With Caution",
+  "overallScore": 3.2,
+  "scores": {
+    "installation": 5,
+    "documentation": 3,
+    "depth": 2,
+    "maintenance": 2,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "target-serp skill review",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve SEO skills run against the same site (trustedskills.dev) on the same day, with no paid SEO data connected. One run on one site is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "calm-north/seojuice-skills@c1f633b",
+      "task": "For trustedskills.dev, identify the SERP features we could capture for \"AI agent skills\" and \"best SEO skills for Claude Code\", and say what to change on our pages to win them. No SERP API, Ahrefs, SEMrush or Search Console connected.",
+      "outcome": "It produced the skill's full output in about three and a half minutes: a feature audit table, an action plan, and a schema list.\n\nStep 1 could not run as written. It says to search the keyword and record which features appear and who holds them. The agent had a web search tool, which returns a list of links with no feature information, and a direct request to Google returned a JavaScript wall. The skill has no instruction for this case. The output marked every feature as \"not observed\" and did not guess.\n\nThe page-level work did run, and it was specific. It found that the homepage H1 contains \"AI agent skills\" but the meta description does not, that the homepage has no direct-answer paragraph or FAQ block, and that our collection page targeting \"best SEO skills for Claude Code\" returns 404 because it is still a draft. All three facts we checked were correct.\n\nThe skill ends with a tip that promotes the publisher's SEOJuice tools and MCP server.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions. Tools: WebFetch, WebSearch, Bash. No SERP API or paid SEO data connected."
+    }
+  ],
+  "summary": "target-serp is a tidy playbook for winning featured snippets, People Also Ask and rich results, with a five-step workflow and a fixed output format. The page-level recommendations it produced for us were concrete. But its first and most important step assumes you can see a live Google results page, and it offers no fallback. Without a SERP data source, you get good formatting advice and no evidence about which features are actually there.",
+  "strengths": [
+    {
+      "title": "Specific page changes",
+      "body": "A 40–60 word direct answer under a heading that repeats the query, list headings that echo \"best\" queries, and which schema to add where. Each action named the page to change."
+    },
+    {
+      "title": "Clear structure",
+      "body": "Audit, featured snippet, People Also Ask, schema, action plan — then a fixed output format. The run followed it exactly."
+    },
+    {
+      "title": "One file, installs cleanly",
+      "body": "A single SKILL.md. `npx skills add calm-north/seojuice-skills --skill target-serp` worked first time."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "No fallback without SERP access",
+      "body": "Step 1 — record which features appear and who holds them — needs a live results page or a SERP API. The skill never says what to do if you don't have one."
+    },
+    {
+      "title": "Reference tables with no sources",
+      "body": "The prioritisation matrix and AI-era strategy tables are presented as fact with no citations, and nothing in the workflow checks them against your actual keywords."
+    },
+    {
+      "title": "Ends in an upsell",
+      "body": "The closing tip points to SEOJuice's free tools and to its MCP server for finding keywords where features take your clicks. The free tool pages themselves push the paid product."
+    },
+    {
+      "title": "Not updated since February 2026",
+      "body": "The last commit to `calm-north/seojuice-skills` was on 2026-02-27. Search features change often, so check its FAQ and rich-result guidance against Google's current documentation."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Teams with a SERP tracker",
+      "body": "If you can export which features appear for your keywords, this skill turns that into a clear page-by-page plan."
+    }
+  ],
+  "notFor": "Anyone expecting it to tell you what is on the results page today. It can't see the page.",
+  "links": [
+    { "label": "calm-north/seojuice-skills repository", "href": "https://github.com/calm-north/seojuice-skills" }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "slug": "ai-seo",
+  "status": "draft",
+  "title": "ai-seo Review: The Best-Sourced AI Search Skill We Ran, With Some Loose Numbers",
+  "description": "We ran coreyhaines31's ai-seo skill on a real site. It separated Google's stated position from what other AI engines reward, ran a real agent-readiness scan, and produced a specific fix list. It can't test whether you are actually cited.",
+  "skillSlug": "ai-seo",
+  "verdict": "Recommended",
+  "overallScore": 4.2,
+  "scores": {
+    "installation": 5,
+    "documentation": 3,
+    "depth": 4,
+    "maintenance": 5,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "ai-seo skill review",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve SEO skills run against the same site (trustedskills.dev) on the same day, with no paid SEO data connected. One run on one site is one data point, not a benchmark. We could not query ChatGPT, Perplexity or Google AI Overviews, so nothing here measures whether the advice changes citations.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "coreyhaines31/marketingskills@5b2c000",
+      "task": "How do we get trustedskills.dev cited in AI search answers (ChatGPT, Perplexity, Google AI Overviews)? Audit the site and say what to change.",
+      "outcome": "`npx skills add coreyhaines31/marketingskills --skill ai-seo` installed it first time. The run took about five minutes.\n\nThe citation test — run your key queries on each AI platform and record who is cited — could not be done: the run had no access to those platforms. The skill's table was left unfilled and its no-tools monitoring routine was given as the next step.\n\nThe site audit ran in full. It checked robots.txt (no AI crawler blocked), llms.txt (present), schema by page type, and canonicals, and it found our site-wide canonical bug. It ran the free agent-readiness scanner the skill names, `npx is-agentic trustedskills.dev`, exactly as written: 63/100, with no markdown content negotiation and no about, contact or privacy pages. We confirmed those three pages return 404.\n\nIt skipped the sections that don't fit a free directory — pricing pages, video — and said why.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions. Tools: WebFetch, WebSearch, Bash (curl, npx). No access to ChatGPT, Perplexity or AI Overviews; no AI-visibility tracking tool."
+    }
+  ],
+  "summary": "ai-seo is the most useful AI search skill in this batch. It draws a clear line between Google's stated position — optimise for people, no special AI markup — and what ChatGPT, Perplexity and agents reward. Its audit found real problems on our site, and the free scanner it names worked exactly as written. Two cautions: several headline statistics in the skill have no source, and no skill can tell you whether you are being cited without access to the AI platforms themselves.",
+  "strengths": [
+    {
+      "title": "Quotes Google's actual position",
+      "body": "It quotes and links Google's own guidance, then separates that from what other engines reward. That stopped the run from recommending chunked, AI-bait content for Google."
+    },
+    {
+      "title": "A tool that worked as written",
+      "body": "`npx is-agentic yourdomain.com` ran unmodified and gave a score and a list of specific failures we could check."
+    },
+    {
+      "title": "Dates its volatile claims",
+      "body": "Its notes on how different AI engines treat different formats are dated and sourced, and it tells you to re-check them."
+    },
+    {
+      "title": "Covers the whole AI stack",
+      "body": "Crawler access, llms.txt, schema, trust pages and a no-tools monitoring routine, with its own skip rules for sections that don't fit."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Unsourced headline statistics",
+      "body": "Figures such as how often AI Overviews appear and how much they cut clicks are stated as fact with no source, a few lines above a section that tells you to always cite your statistics."
+    },
+    {
+      "title": "Can't measure citations",
+      "body": "Its first audit step needs you to run queries on ChatGPT, Perplexity and Google yourself, or pay for a tracking tool. Without that, you get recommendations, not a baseline."
+    },
+    {
+      "title": "Our registry summary undersells it",
+      "body": "The one-line description on our listing is auto-generated and thin. The skill is much broader than it suggests."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Sites that want to be cited by AI assistants",
+      "body": "A clear audit of crawler access, machine-readable files and trust signals, with a routine to track citations by hand."
+    },
+    {
+      "title": "Teams confused by GEO advice",
+      "body": "It explains where Google's guidance and other engines differ, which removes most of the contradictions in this area."
+    }
+  ],
+  "notFor": "Anyone who wants proof that the changes work. It gives you the method; measuring it is up to you.",
+  "links": [
+    { "label": "coreyhaines31/marketingskills repository", "href": "https://github.com/coreyhaines31/marketingskills" },
+    { "label": "ai-seo skill source", "href": "https://github.com/coreyhaines31/marketingskills/tree/main/skills/ai-seo" }
+  ]
+}

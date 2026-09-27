@@ -1,0 +1,87 @@
+{
+  "slug": "audit-website",
+  "status": "draft",
+  "title": "audit-website (squirrelscan) Review: Broad Crawl, One Big Miss",
+  "description": "We ran squirrelscan's audit-website skill on a real site, with a quick pass and a 500-page crawl. It found broken links, missing security headers and schema gaps, and mapped them to source files. It did not flag the site-wide canonical error that simpler skills caught.",
+  "skillSlug": "audit-website",
+  "verdict": "Recommended",
+  "overallScore": 3.8,
+  "scores": {
+    "installation": 3,
+    "documentation": 4,
+    "depth": 3,
+    "maintenance": 5,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "audit-website squirrelscan skill review",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve SEO skills run against the same site (trustedskills.dev) on the same day, with no paid SEO data connected. One run on one site is one data point, not a benchmark. The skill's fix loop edits your code; we ran the audit and the proposed-fix step only, and applied nothing.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "squirrelscan/skills@993ff2e, squirrelscan CLI 0.0.98",
+      "task": "Audit trustedskills.dev and say what to fix. The skill's fix loop was stopped at \"propose fixes\"; no code was changed.",
+      "outcome": "`npx skills add squirrelscan/skills --skill audit-website` installed the skill first time. It needs the separate `squirrel` CLI; we installed it from npm into the project folder (`npm i squirrelscan`), with no account.\n\nIt ran both passes the skill prescribes. The quick pass crawled 25 pages in 23 seconds and scored 65 (D). The full pass crawled 500 pages — its cap, against 50,262 URLs in the sitemap — in about 7.5 minutes and scored 68 (D).\n\nConfirmed findings: a broken \"community discussions\" link on /docs (404), no CSP, HSTS or clickjacking headers, and author entities in our JSON-LD with no `@id`. The source mapping was precise to file and line, and it noticed that the live search box lacked a label the current source already has — the deployed build was out of date.\n\nOne of the three findings we checked was wrong: \"Organization missing logo\". The logo is there as an `ImageObject`, which schema.org allows; the validator only accepts a plain URL.\n\nThe full report contains no canonical finding at all. Every skill, docs and review page on the site declared the homepage as its canonical; four other skills in this batch found that with plain page fetches.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions. squirrelscan CLI 0.0.98 from npm, not signed in. Tools: Bash, WebFetch, WebSearch. Site source available read-only."
+    }
+  ],
+  "summary": "audit-website puts a real crawler behind your agent: 260-plus rules across SEO, performance, security, accessibility and agent-readiness, in a compact report built for an LLM to read. On our site it found problems the page-fetch skills didn't — a broken docs link, missing security headers, schema identity gaps — and mapped each to a source file. But across 500 pages it never flagged the canonical error that four simpler skills caught, and one of three findings we checked was a validator false positive. Use it alongside a strategic audit, not instead of one.",
+  "strengths": [
+    {
+      "title": "A real crawl, fast",
+      "body": "25 pages in 23 seconds for a first look, 500 pages in about 7.5 minutes for sign-off. No account needed for the CLI."
+    },
+    {
+      "title": "Findings mapped to code",
+      "body": "Each proposed fix named the file and often the line. That mapping also exposed that our live site was running an older build than our source."
+    },
+    {
+      "title": "Covers what page-fetch skills don't",
+      "body": "Security headers, broken outbound links across hundreds of pages, accessibility labels, performance and agent-readiness checks, all in one pass."
+    },
+    {
+      "title": "Asks before it edits",
+      "body": "The fix loop says to confirm with you before changing anything, and to flag broken links for a human decision rather than guess."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Missed the most damaging bug",
+      "body": "Every skill, docs and review page declared the homepage as its canonical URL. Across 500 crawled pages, the report has no canonical finding at all."
+    },
+    {
+      "title": "Some findings are validator strictness",
+      "body": "\"Organization missing logo\" was wrong: the logo exists as an `ImageObject`, which schema.org allows. Check errors before acting on them."
+    },
+    {
+      "title": "A lot of noise on a large site",
+      "body": "The full pass reported nearly 2,900 SEO warnings and 499 agent warnings, and most of its 71 \"broken\" external links were timeouts. The score barely moved between the 25-page and 500-page passes (65 to 68)."
+    },
+    {
+      "title": "Needs a separate CLI",
+      "body": "The skill does nothing without `squirrel` on your PATH. The site suggests a `curl | bash` installer; there is also an npm package."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Sites with a codebase you can fix",
+      "body": "The audit, fix and re-audit loop is built for an agent working in your repository."
+    },
+    {
+      "title": "A second opinion after a strategic audit",
+      "body": "Pair it with a checklist audit such as coreyhaines31's seo-audit. On our site they found almost entirely different problems."
+    }
+  ],
+  "notFor": "Anyone who wants a single audit to trust on its own. On our site it missed a site-wide indexing error.",
+  "links": [
+    { "label": "squirrelscan/skills repository", "href": "https://github.com/squirrelscan/skills" },
+    { "label": "squirrelscan CLI", "href": "https://squirrelscan.com/download" }
+  ]
+}

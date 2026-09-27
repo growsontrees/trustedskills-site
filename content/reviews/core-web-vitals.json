@@ -1,0 +1,82 @@
+{
+  "slug": "core-web-vitals",
+  "status": "draft",
+  "title": "core-web-vitals Review: Evidence First, and It Uses INP",
+  "description": "We ran Addy Osmani's core-web-vitals skill on a real homepage. It measured before advising, labelled lab and field data correctly, and traced each metric to a specific element. It leans on a sibling skill that isn't installed with it.",
+  "skillSlug": "core-web-vitals",
+  "verdict": "Highly Recommended",
+  "overallScore": 4.2,
+  "scores": {
+    "installation": 5,
+    "documentation": 5,
+    "depth": 4,
+    "maintenance": 4,
+    "platformSupport": 3
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "core web vitals skill review",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve SEO skills run against the same site (trustedskills.dev) on the same day, with no paid SEO data connected. One run on one site is one data point, not a benchmark. Real-user (CrUX) data was not reachable during the run, so every number below is a lab measurement.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "addyosmani/web-quality-skills@afa8da9",
+      "task": "Analyse the Core Web Vitals of the trustedskills.dev homepage and say what to fix. No API keys; the public PageSpeed API and a local Lighthouse run were allowed.",
+      "outcome": "`npx skills add addyosmani/web-quality-skills --skill core-web-vitals` installed it first time. The run took about eight minutes.\n\nThe skill's first step is real-user data. The public PageSpeed API returned a quota error, so no field data was available. The skill's own fallback is Lighthouse, which the run used twice for stability. Mobile lab results: LCP about 2.3–2.4 s and CLS 0.071, both in the \"good\" band. INP was reported as not assessed, because a page-load test doesn't include an interaction and the skill says not to claim a verdict without runtime evidence.\n\nEach number was traced to a cause, and we confirmed all three: the LCP element is the H1 text (the page has no images); all of the layout shift comes from the install-command row; and the Google Analytics loader is the largest third-party script, costing more main-thread time than the site's own largest JavaScript chunk.\n\nTwo files the skill tells you to read belong to a separate `performance` skill and were not installed with it.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions. Tools: WebFetch, WebSearch, Bash (curl, npx lighthouse). No Chrome DevTools MCP, no API keys, no Search Console."
+    }
+  ],
+  "summary": "core-web-vitals is the most disciplined skill in this batch. It measures before it advises, keeps lab and field numbers apart, uses INP rather than the retired FID, and won't call a metric failing without evidence. On our homepage it traced LCP, layout shift and main-thread cost to specific elements and scripts. Its one weakness: it points to measurement guides in a sibling `performance` skill, so install both.",
+  "strengths": [
+    {
+      "title": "Measure first, then fix",
+      "body": "Real-user data first, then a lab trace, then fixes tied to what the trace shows. It says outright not to attach generic millisecond savings to a fix."
+    },
+    {
+      "title": "Current metrics and thresholds",
+      "body": "INP at 200 ms, with no mention of FID in the skill or its references. Our own registry summary of this skill still says FID; the skill itself is correct."
+    },
+    {
+      "title": "Clear fallbacks",
+      "body": "When Chrome DevTools isn't available it names Lighthouse or PageSpeed as the lab fallback, and when page-level field data is missing it says to label the origin fallback."
+    },
+    {
+      "title": "Findings you can act on",
+      "body": "LCP element, layout-shift source and the costliest script were each named precisely enough to go straight to the code."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Depends on a sibling skill",
+      "body": "Its measurement workflow and real-user monitoring guides live in `../performance/`. Install `core-web-vitals` alone and those links go nowhere."
+    },
+    {
+      "title": "No INP without real users",
+      "body": "A lab page-load can't measure interaction delay. Without CrUX or your own monitoring, INP stays unassessed — correctly, but it's the metric most sites fail."
+    },
+    {
+      "title": "Needs a browser or an API",
+      "body": "Lighthouse needs a local Chrome; PageSpeed needs quota. In a locked-down environment it has nothing to measure with."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Diagnosing a slow page properly",
+      "body": "It gives you a cause for each metric, not a checklist of generic speed tips."
+    },
+    {
+      "title": "Teams with real-user data",
+      "body": "With CrUX or your own web-vitals collection, it covers all three metrics, including INP."
+    }
+  ],
+  "notFor": "Anyone wanting a quick score. It is built to find causes, and it will tell you when it doesn't have the data to do that.",
+  "links": [
+    { "label": "addyosmani/web-quality-skills repository", "href": "https://github.com/addyosmani/web-quality-skills" }
+  ]
+}

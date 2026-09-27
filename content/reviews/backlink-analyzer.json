@@ -1,0 +1,79 @@
+{
+  "slug": "backlink-analyzer",
+  "status": "draft",
+  "title": "backlink-analyzer Review: Honest About Having No Data, and Frozen",
+  "description": "We ran aaron-he-zhu's backlink-analyzer on a real site with no backlink database connected. It refused to invent numbers, which is right, and produced very little. The skill is also frozen: its author merged it into a different skill.",
+  "skillSlug": "backlink-analyzer",
+  "verdict": "Not Recommended",
+  "overallScore": 2.2,
+  "scores": {
+    "installation": 2,
+    "documentation": 3,
+    "depth": 2,
+    "maintenance": 1,
+    "platformSupport": 3
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "backlink-analyzer skill review",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve SEO skills run against the same site (trustedskills.dev) on the same day, with no paid SEO data connected. One run on one site is one data point, not a benchmark. A backlink skill without a backlink database is running without its main input — this run tests what it does in that situation, which is the situation most people start in.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "aaron-he-zhu/seo-geo-claude-skills tag v9.9.12 (frozen standalone copy)",
+      "task": "Install the skill, then ask it to analyse the backlink profile of trustedskills.dev with no Ahrefs, Semrush, Moz, Majestic or Search Console connected.",
+      "outcome": "**Install failed twice.** The original repository is now a signpost with no installable skills (`npx skills add aaron-he-zhu/seo-geo-claude-skills --skill backlink-analyzer` found none). The signpost's replacement command, `npx skills add aaron-he-zhu/aaron-marketing-skills -s backlink-analyzer`, also found nothing: the skill was merged into `offsite-signal-analyzer`. We installed the frozen v9.9.12 copy by hand from the git tag.\n\nThe run took just over two minutes. The skill's decision gate stopped the analysis at the right place: with no export and no link database it says to offer three options and not to estimate referring-domain volume. Every metric in the output — referring domains, authority, anchor text, toxic ratio — was marked N/A.\n\nA separate mention search found one real link to the site (from its own GitHub README) and ruled out two false positives. The competitor gap step could not run.\n\nFour files the skill points to (`CONNECTORS.md`, `SECURITY.md`, `skill-contract.md` and the next skill in its chain) are outside the skill folder and were missing from the single-skill install, so its hand-off and save steps could not be completed.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions. Tools: WebFetch, WebSearch, Bash. No backlink database or SEO tool connected."
+    }
+  ],
+  "summary": "backlink-analyzer did the honest thing with no data: it stopped, said what it needed, and marked every metric N/A rather than inventing a profile. Its toxic-link and disavow guidance is careful and useful on its own. But without a paid link database it has almost nothing to analyse, and the skill itself is frozen — the author merged it into `offsite-signal-analyzer` in a new repository. Install that instead, and only if you have a link data source.",
+  "strengths": [
+    {
+      "title": "It refuses to invent a backlink profile",
+      "body": "The decision gate says \"Do not estimate referring-domain volume from the domain alone\", and in our run it didn't. For a category where made-up numbers are common, that is the most important behaviour."
+    },
+    {
+      "title": "Careful disavow guidance",
+      "body": "The link-quality rubric covers toxic-link signals and a disavow safety guide — try removal first, wait before disavowing, never disavow your own domain. Useful without any data."
+    },
+    {
+      "title": "Clean templates",
+      "body": "The analysis templates mapped directly onto the seven workflow steps and needed no interpretation."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Frozen, and merged elsewhere",
+      "body": "The repository is now a signpost. This skill was merged into `offsite-signal-analyzer` in `aaron-he-zhu/aaron-marketing-skills`, and neither the old nor the new install command finds `backlink-analyzer`."
+    },
+    {
+      "title": "Nothing to analyse without paid data",
+      "body": "Link counts, authority, anchors, toxic ratio and competitor gaps all need a link database. The skill names it only as a placeholder (`~~link database`) with no product or setup instructions."
+    },
+    {
+      "title": "Breaks when installed on its own",
+      "body": "It points to four files outside its own folder. A single-skill install doesn't include them, so the hand-off and save steps fail."
+    },
+    {
+      "title": "Contradicts itself on the toxic ratio",
+      "body": "Its \"done when\" contract requires the toxic ratio to be computed; its own rules forbid inventing a number. With no data, the two can't both be met."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Nobody new",
+      "body": "If you want this job done, use the author's maintained `offsite-signal-analyzer`, with a link data source connected."
+    }
+  ],
+  "notFor": "Anyone installing today, and anyone without a backlink database.",
+  "links": [
+    { "label": "Frozen copy (tag v9.9.12)", "href": "https://github.com/aaron-he-zhu/seo-geo-claude-skills/tree/v9.9.12/monitor/backlink-analyzer" },
+    { "label": "Maintained successor bundle: aaron-marketing-skills", "href": "https://github.com/aaron-he-zhu/aaron-marketing-skills" }
+  ]
+}

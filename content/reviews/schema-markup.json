@@ -1,0 +1,83 @@
+{
+  "slug": "schema-markup",
+  "status": "draft",
+  "title": "schema (marketingskills) Review: Valid JSON-LD, and It Didn't Invent Ratings",
+  "description": "We ran coreyhaines31's schema skill (listed here as schema-markup) on two real pages. It produced valid, accurate JSON-LD and caught a redirect bug in our existing markup. It was renamed upstream, and it lists FAQ and HowTo with no caveat.",
+  "skillSlug": "schema-markup",
+  "verdict": "Recommended",
+  "overallScore": 3.8,
+  "scores": {
+    "installation": 3,
+    "documentation": 4,
+    "depth": 3,
+    "maintenance": 5,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "schema markup skill review",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve SEO skills run against the same site (trustedskills.dev) on the same day, with no paid SEO data connected. One run on one site is one data point, not a benchmark. Google's Rich Results Test is a browser tool and was not used; the JSON-LD was checked for syntax and against the visible page.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "coreyhaines31/marketingskills@5b2c000 (skill renamed upstream to `schema`, v2.0.0)",
+      "task": "Review and improve the structured data on the trustedskills.dev homepage and on one skill detail page (/skills/coreyhaines31-seo-audit).",
+      "outcome": "**Install:** the registry name `schema-markup` no longer exists. `npx skills add coreyhaines31/marketingskills --skill schema-markup` found nothing; `--skill schema` installed cleanly.\n\nThe run took about seven minutes. It read the existing markup on both pages correctly — a `WebSite` and `Organization` graph on the homepage, a bare `SoftwareApplication` on the skill page — and produced corrected JSON-LD for both.\n\nIt caught a real bug: both pages' existing JSON-LD used URLs with a trailing slash that our site 308-redirects. It fixed them in the new blocks.\n\nBoth new blocks parsed as valid JSON, and every property matched something visible on the page. It left out `aggregateRating` (no ratings on the page), `offers` (no price) and `BreadcrumbList` (no visible breadcrumb). The skill's own table lists `offers` as required for `SoftwareApplication`; the run followed the skill's accuracy-first rule instead, and the skill doesn't say which rule wins.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions. Tools: WebFetch, WebSearch, Bash (curl, node). No browser, so no Rich Results Test."
+    }
+  ],
+  "summary": "schema (listed in the registry as schema-markup) did the most important thing a schema generator can do: it only marked up what the page actually shows. The JSON-LD was valid, it caught a redirect bug in our existing markup, and it declined to add ratings or prices we don't have. Two cautions: it was renamed upstream, so install it as `schema`; and it lists FAQPage and HowTo as ordinary types with no warning about Google's rich-result restrictions.",
+  "strengths": [
+    {
+      "title": "Accuracy comes first",
+      "body": "Its first principle is not to mark up content that doesn't exist. In our run that kept fake ratings, prices and breadcrumbs out of the output."
+    },
+    {
+      "title": "Valid, page-matched output",
+      "body": "Both generated blocks parsed cleanly, and every property traced back to visible page content."
+    },
+    {
+      "title": "Caught a real bug",
+      "body": "Our existing JSON-LD pointed at trailing-slash URLs that redirect. The skill found and fixed them."
+    },
+    {
+      "title": "Clear, practical reference",
+      "body": "Required-property tables per type, an `@graph` pattern, and a Next.js snippet you can paste. Updated on 2026-09-04."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Installs only under its new name",
+      "body": "Renamed from `schema-markup` to `schema`. Guides and registries using the old name give you a command that finds nothing."
+    },
+    {
+      "title": "No caveat on FAQ and HowTo",
+      "body": "Both appear in its common-types table with no mention of Google's rich-result restrictions. Check Google's current documentation before relying on either for a rich result."
+    },
+    {
+      "title": "Two rules that can conflict",
+      "body": "It lists `offers` as required for `SoftwareApplication` and also says never to mark up what isn't there. For a free listing with no price, it doesn't say which rule wins."
+    },
+    {
+      "title": "Validation needs a browser",
+      "body": "Its validation steps are Google's Rich Results Test, the Schema.org validator and Search Console — all web tools an agent without a browser can't use."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Adding or fixing JSON-LD on real pages",
+      "body": "Give it a URL. It reads what's there, keeps what's accurate and fixes what isn't."
+    }
+  ],
+  "notFor": "Anyone expecting it to confirm Google will show a rich result. It checks structure and accuracy, not eligibility.",
+  "links": [
+    { "label": "coreyhaines31/marketingskills repository", "href": "https://github.com/coreyhaines31/marketingskills" },
+    { "label": "schema skill source", "href": "https://github.com/coreyhaines31/marketingskills/tree/main/skills/schema" }
+  ]
+}
