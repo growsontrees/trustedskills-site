@@ -14,6 +14,7 @@
  *   node scripts/safety-scan.mjs                       # default budget
  *   node scripts/safety-scan.mjs --repos 200           # scan 200 repositories
  *   node scripts/safety-scan.mjs --only slug,slug      # rescan named skills
+ *   node scripts/safety-scan.mjs --only @slugs.txt     # ...or a list of them
  *   node scripts/safety-scan.mjs --force               # ignore the cache
  *   node scripts/safety-scan.mjs --max-minutes 45      # stop and save in time
  *   node scripts/safety-scan.mjs --index /tmp/registry/skills-index.json
@@ -397,9 +398,15 @@ function parseArgs(argv) {
       case "--force":
         parsed.force = true;
         break;
-      case "--only":
-        parsed.only = new Set(String(value()).split(",").map((slug) => slug.trim()).filter(Boolean));
+      case "--only": {
+        // `--only @slugs.txt` reads the list from a file: a targeted rescan
+        // after a check is corrected can run to thousands of slugs, which is
+        // more than a command line takes.
+        const raw = String(value());
+        const source = raw.startsWith("@") ? readFileSync(resolve(raw.slice(1)), "utf8") : raw;
+        parsed.only = new Set(source.split(/[\s,]+/).map((slug) => slug.trim()).filter(Boolean));
         break;
+      }
       case "--fail-on-stop":
         parsed.failOnStop = true;
         break;

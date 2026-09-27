@@ -13,7 +13,7 @@
 import { gunzipSync } from "node:zlib";
 
 const API = "https://api.github.com";
-const CODELOAD = "https://codeload.github.com";
+const ARCHIVE = "https://github.com";
 const USER_AGENT = "TrustedSkills-SafetyScan/1.0";
 
 /**
@@ -279,7 +279,10 @@ async function fetchHeadCommitViaApi(repo, { token } = {}) {
  * the checks only read text.
  */
 export async function fetchRepoFiles(repo, sha, { token } = {}) {
-  const response = await request(`${CODELOAD}/${repo}/tar.gz/${sha}`, {
+  // github.com/<repo>/archive rather than codeload directly: when a repository
+  // has been renamed, github.com redirects to its new name and codeload returns
+  // 404. Whole collections were being reported unscannable for that alone.
+  const response = await request(`${ARCHIVE}/${repo}/archive/${sha}.tar.gz`, {
     token,
     accept: "application/x-gzip",
     // Some skill collections are hundreds of megabytes of vendored docs. The
