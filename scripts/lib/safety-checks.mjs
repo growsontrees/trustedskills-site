@@ -524,7 +524,9 @@ function finding(entry, detail, scope = "code") {
 function result(status, summary, extra = {}) {
   const value = { status, summary, ...extra };
   if (Array.isArray(value.findings)) {
-    value.matches = value.findings.length;
+    // `matches` is how many times the check fired, so the page can say "3 of
+    // 27". A caller that already counted its own occurrences keeps its figure.
+    if (value.matches === undefined) value.matches = value.findings.length;
     value.findings = value.findings.slice(0, MAX_FINDINGS_PER_CHECK);
   }
   return value;
@@ -594,6 +596,7 @@ function checkNetwork(lines, declared) {
   const callSites = lines.filter(isCallSite);
   const hosts = new Map(); // host -> { label, findings }
   const unknown = new Set();
+  let undeclaredCalls = 0;
 
   for (const entry of callSites) {
     if (!entry.text) continue;
@@ -607,6 +610,9 @@ function checkNetwork(lines, declared) {
       const record = hosts.get(host) ?? { host, label, findings: [] };
       if (!label) {
         unknown.add(host);
+        undeclaredCalls += 1;
+        // A few examples per host, so a skill calling three of them shows all
+        // three rather than three lines from the first.
         if (record.findings.length < MAX_FINDINGS_PER_CHECK) {
           record.findings.push(finding(entry, `contacts ${host}`));
         }
@@ -619,11 +625,19 @@ function checkNetwork(lines, declared) {
 
   if (unknown.size) {
     const list = [...unknown].sort();
-    return result("fail", `Contacts ${list.length} host${list.length === 1 ? "" : "s"} that is neither well-known infrastructure nor declared in the skill's frontmatter: ${list.slice(0, 5).join(", ")}${list.length > 5 ? "…" : ""}.`, {
-      hosts: contacted,
-      undeclared: list,
-      findings: [...hosts.values()].flatMap((record) => record.findings),
-    });
+    const plural = list.length === 1 ? "host that is" : "hosts that are";
+    return result(
+      "fail",
+      `Contacts ${list.length} ${plural} neither well-known infrastructure nor declared in the skill's frontmatter: ` +
+        `${list.slice(0, 5).join(", ")}${list.length > 5 ? "…" : ""}.`,
+      {
+        hosts: contacted,
+        undeclared: list,
+        findings: [...hosts.values()].flatMap((record) => record.findings),
+        // Every call site, not just the ones kept as examples.
+        matches: undeclaredCalls,
+      }
+    );
   }
 
   if (contacted.length === 0) {
