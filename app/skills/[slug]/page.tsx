@@ -16,18 +16,23 @@ import remarkGfm from "remark-gfm";
 import { PlatformInstallTabs } from "../../../components/PlatformInstallTabs";
 import { SafetyPanel } from "../../../components/SafetyPanel";
 import { getSafetyCheckList, getSafetyReport } from "../../../lib/safety";
+import { getReviewForSkill } from "../../../lib/reviews";
+import { getCollectionsForSkill } from "../../../lib/collections";
 import type { PlatformKey } from "../../../hooks/usePlatform";
 import type { Metadata } from "next";
 import {
   AlertTriangle,
   ArrowLeft,
+  BookOpen,
   Clock,
   Code,
   Download,
   ExternalLink,
+  Flask,
   GitCommit,
   Github,
   Info,
+  ListChecks,
   Package,
   Scale,
   Star,
@@ -113,6 +118,12 @@ export default async function SkillDetailPage({ params }: Props) {
   const safety = getSafetyReport(skill.slug);
   const safetyChecks = getSafetyCheckList(safety);
 
+  // Editorial. The Reviewed badge is earned only by a hands-on review — a
+  // source review still links from here, but it is labelled as not run.
+  const review = getReviewForSkill(skill.slug);
+  const handsOn = review?.evidenceBasis === "hands-on";
+  const collections = getCollectionsForSkill(skill.slug);
+
   const hasRepoLink = !!skill.repoUrl;
   const hasSourceLink =
     !!skill.sourceUrl &&
@@ -174,6 +185,15 @@ export default async function SkillDetailPage({ params }: Props) {
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
                   <h1 className="text-2xl font-semibold text-ink-50">{skill.name}</h1>
                   <TierChip tier={skill.verified} size="md" />
+                  {handsOn && review ? (
+                    <Link
+                      href={`/reviews/${review.slug}`}
+                      className="inline-flex items-center gap-1.5 rounded-sm border border-ok-800 bg-ok-950 px-2.5 py-1 text-xs font-medium text-ok-300 transition-colors hover:border-ok-700 hover:text-ok-200"
+                    >
+                      <Flask className="h-3.5 w-3.5" />
+                      Reviewed
+                    </Link>
+                  ) : null}
                 </div>
 
                 <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-ink-500">
@@ -300,7 +320,13 @@ export default async function SkillDetailPage({ params }: Props) {
             </div>
 
             <div className="mt-3">
-              {safety && safety.verdict !== "unscannable" ? (
+              {handsOn ? (
+                <Note tone="warn" icon={AlertTriangle}>
+                  <span className="font-medium">Nobody has audited this code.</span> Our review
+                  covers what the skill does when run, not whether its code is safe. A skill runs
+                  with whatever access you give your agent — read the source before you install it.
+                </Note>
+              ) : safety && safety.verdict !== "unscannable" ? (
                 <Note tone="warn" icon={AlertTriangle}>
                   <span className="font-medium">No human has reviewed this code.</span> The checks
                   below are a static scan of the files at one commit — nobody has run this skill or
@@ -416,6 +442,60 @@ export default async function SkillDetailPage({ params }: Props) {
 
         {/* ── Sidebar ─────────────────────────────────────────────────── */}
         <aside className="space-y-6">
+          {/* ── Editorial ────────────────────────────────────────────────
+              Links out to our own review and any collection featuring this
+              skill. Both render nothing when there is none, which is the
+              case for almost every listing. */}
+          {review ? (
+            <Panel>
+              <div className="flex items-center gap-2">
+                {handsOn ? (
+                  <Flask className="h-4 w-4 text-ok-400" />
+                ) : (
+                  <BookOpen className="h-4 w-4 text-ink-450" />
+                )}
+                <h2 className="text-sm font-semibold text-ink-50">Our review</h2>
+              </div>
+              <p className="mt-2.5 text-sm text-ink-200">
+                {review.verdict} <span className="text-ink-600">·</span>{" "}
+                <span className="tabular">{review.overallScore.toFixed(1)}</span>
+                <span className="text-ink-500">/5</span>
+              </p>
+              <p className="mt-1.5 text-xs leading-relaxed text-ink-500">
+                {handsOn
+                  ? "We installed this skill and ran it against real work."
+                  : "Based on reading the source and documentation. We have not run it yet."}
+              </p>
+              <Link
+                href={`/reviews/${review.slug}`}
+                className="mt-3 inline-block text-xs text-accent-400 transition-colors hover:text-accent-300"
+              >
+                Read the review →
+              </Link>
+            </Panel>
+          ) : null}
+
+          {collections.length > 0 ? (
+            <Panel>
+              <div className="flex items-center gap-2">
+                <ListChecks className="h-4 w-4 text-ink-450" />
+                <h2 className="text-sm font-semibold text-ink-50">Featured in</h2>
+              </div>
+              <ul className="mt-2.5 space-y-2">
+                {collections.map((c) => (
+                  <li key={c.slug}>
+                    <Link
+                      href={`/collections/${c.slug}`}
+                      className="text-sm leading-snug text-ink-300 transition-colors hover:text-accent-300"
+                    >
+                      {c.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </Panel>
+          ) : null}
+
           <Panel>
             <h2 className="text-sm font-semibold text-ink-50">Details</h2>
             <div className="mt-2">
