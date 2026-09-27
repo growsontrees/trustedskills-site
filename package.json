@@ -13,7 +13,10 @@
     "sync-index": "node scripts/sync-index.mjs",
     "verify-deploy": "node scripts/verify-deploy.mjs",
     "check:discovery": "node scripts/check-discovery.mjs",
-    "check:editorial": "node scripts/validate-editorial.mjs"
+    "check:editorial": "node scripts/validate-editorial.mjs",
+    "check:safety": "node scripts/test-safety-checks.mjs",
+    "safety:scan": "node scripts/safety-scan.mjs",
+    "safety:apply": "node scripts/apply-safety-tiers.mjs"
   },
   "dependencies": {
     "next": "^16.1.6",

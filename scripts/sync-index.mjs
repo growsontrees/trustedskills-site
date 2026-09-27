@@ -97,6 +97,10 @@ const run = (script, ...args) =>
 run("enrich-descriptions.mjs", "--no-checkpoint"); // template descriptions for stub skills
 run("mark-official.mjs"); // official tier for known publisher orgs
 run("reclassify.mjs"); // category taxonomy + category counts
+// Checked describes a specific commit, so it is reapplied from the stored scan
+// on every build rather than carried through the merge. A skill the scan has
+// not reached stays Listed.
+run("apply-safety-tiers.mjs");
 
 const final = JSON.parse(readFileSync(SITE_INDEX, "utf8"));
 final.generated_at = registry.generated_at ?? new Date().toISOString();

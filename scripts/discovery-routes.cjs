@@ -34,7 +34,22 @@ const INTENTIONAL_EXCLUSIONS = Object.freeze({
   "/_api_disabled/**": "Source-only disabled route handlers are not public routes.",
 });
 
-const TIER_SLUGS = Object.freeze(["official", "featured", "verified", "community", "unverified"]);
+// Mirrors TIER_ORDER, which is what /tier/[tier] accepts. Hardcoding the list
+// here meant a new tier (Checked) shipped pages the sitemap did not describe.
+function extractTierSlugs() {
+  const source = readText("lib/skill-config.ts");
+  const listBlock = source.match(/export const TIER_ORDER:\s*VerificationTier\[\]\s*=\s*\[([^\]]*)\]/);
+  if (!listBlock) {
+    throw new Error("Discovery contract could not find TIER_ORDER.");
+  }
+
+  const tiers = (listBlock[1].match(/["']([^"']+)["']/g) ?? []).map((value) => value.slice(1, -1));
+  if (tiers.length === 0) {
+    throw new Error("Discovery contract could not find any tier slugs in TIER_ORDER.");
+  }
+
+  return tiers;
+}
 const STATIC_ROUTES = Object.freeze([
   "/",
   "/skills",
@@ -153,7 +168,7 @@ function getCanonicalRoutes() {
     if (count > 0) addPaginatedRoutes(routes, `/platform/${routeSegment(platform.slug)}`, count);
   }
 
-  for (const tier of TIER_SLUGS) {
+  for (const tier of extractTierSlugs()) {
     const count = index.skills.filter((skill) => skill.verified === tier).length;
     addPaginatedRoutes(routes, `/tier/${routeSegment(tier)}`, count);
   }

@@ -1,0 +1,130 @@
+name: Safety scan
+
+# The automated "Checked" pass. Pulls each skill's upstream repository at a
+# pinned commit, statically scans the skill's own files, and commits the
+# per-check results to data/safety-reports.json. The deploy build turns those
+# verdicts into the Checked tier (scripts/apply-safety-tiers.mjs).
+#
+# Runs daily on a budget rather than over the whole catalogue at once: a cold
+# catalogue is ~4,500 repositories, and an incremental run only pays for
+# repositories whose head commit moved since the last scan.
+
+on:
+  schedule:
+    - cron: "10 16 * * *" # 02:10 AEST, ahead of the 05:30 deploy
+  workflow_dispatch:
+    inputs:
+      repos:
+        description: Repositories to scan in this run
+        required: false
+        default: "1200"
+      force:
+        description: Ignore the cache and rescan from scratch
+        type: boolean
+        required: false
+        default: false
+
+concurrency:
+  group: safety-scan
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # The checks are the trust claim, so they are tested before they are used
+      # to label 26,000 skills. A pattern that stops catching a credential read
+      # would publish a false pass.
+      - name: Test the checks
+        run: npm run check:safety
+
+      # The committed index is a 26k baseline; the deploy merges the registry's
+      # full 44k into it at build time. Scanning the baseline would leave every
+      # skill added since then permanently unscanned, so the registry's own
+      # index is pulled here and scanned directly. Nothing is committed from it.
+      - name: Fetch the registry index
+        id: registry
+        env:
+          REGISTRY_SSH_KEY: ${{ secrets.REGISTRY_SSH_KEY }}
+        run: |
+          set -uo pipefail
+          if [ -z "${REGISTRY_SSH_KEY:-}" ]; then
+            echo "::warning::REGISTRY_SSH_KEY is not set - scanning the committed index only."
+            exit 0
+          fi
+
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$REGISTRY_SSH_KEY" > ~/.ssh/registry_key
+          chmod 600 ~/.ssh/registry_key
+          ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
+
+          if GIT_SSH_COMMAND="ssh -i ~/.ssh/registry_key -o IdentitiesOnly=yes" \
+               git clone --depth 1 --quiet \
+                 git@github.com:growsontrees/trustedskills-registry.git /tmp/registry; then
+            echo "index=/tmp/registry/skills-index.json" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::Could not clone the registry - scanning the committed index only."
+          fi
+
+      - name: Scan
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOS: ${{ github.event.inputs.repos || '1200' }}
+          FORCE: ${{ github.event.inputs.force == 'true' && '--force' || '' }}
+          INDEX: ${{ steps.registry.outputs.index }}
+        run: |
+          set -euo pipefail
+          node scripts/safety-scan.mjs \
+            --repos "$REPOS" \
+            --concurrency 8 \
+            --max-minutes 90 \
+            ${INDEX:+--index "$INDEX"} \
+            $FORCE | tee scan.log
+
+          {
+            echo "### Safety scan"
+            echo ""
+            echo '```'
+            tail -n 20 scan.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit the results
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- data/safety-reports.json; then
+            echo "No change in scan results."
+            exit 0
+          fi
+
+          git config user.name "trustedskills-bot"
+          git config user.email "bot@trustedskills.dev"
+          git add data/safety-reports.json
+
+          SUMMARY=$(node -e '
+            const { reports } = require("./data/safety-reports.json");
+            const counts = { checked: 0, flagged: 0, unscannable: 0 };
+            for (const report of Object.values(reports)) counts[report.verdict]++;
+            console.log(`${counts.checked} checked, ${counts.flagged} flagged, ${counts.unscannable} unscannable`);
+          ')
+
+          git commit -m "data: safety scan — $SUMMARY"
+          # The deploy workflow also pushes to main, so rebase rather than fail
+          # the run on a race with it.
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash origin main && git push origin HEAD:main && exit 0
+            echo "push attempt $attempt failed; retrying"
+            sleep 10
+          done
+          echo "Could not push the scan results after 3 attempts."
+          exit 1
