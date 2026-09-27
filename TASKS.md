@@ -1,12 +1,19 @@
 # TrustedSkills — Task Tracker
 
-*Last updated: 2026-03-22*
-*Canonical location: `/opt/trustedskills/TASKS.md` (in the site repo)*
-*Also tracked at: `/opt/app/openclaw/workspace/projects/personal/skills-marketplace-project/TASKS.md` (Macros' copy)*
+*Last updated: 2026-09-27*
+*Canonical location: `TASKS.md` in this repo. The old `/opt/trustedskills` path is dead — that host was retired in August.*
 
 ---
 
 ## ✅ Recently Completed
+
+- [x] **Full registry live** (2026-09-27) — site went from 26,001 skills to the registry's full **44,854**. The sync had been failing silently since March; see below.
+- [x] **Registry sync no longer fails silently** (2026-09-27) — the CI sync step warned and carried on when it couldn't reach the registry, so an expired token shipped a 42%-stale catalogue while every build reported success. On `main` the step is now fatal, and the shipped skill count is written to the job summary.
+- [x] **Registry auth moved to a read-only deploy key** (2026-09-27) — `REGISTRY_SSH_KEY`, replacing the `REGISTRY_TOKEN` PAT that expired in March. Deploy keys don't expire and aren't tied to a personal account. The old `REGISTRY_TOKEN` secret is unused and can be deleted.
+- [x] **`/tier/official` 404 fixed** (2026-09-27) — `VALID_TIERS` omitted `official` despite 3,276 skills carrying it.
+- [x] **`/skills` served from the server** (2026-09-26) — filters, sorts and pages server-side; the browser no longer receives the whole index.
+- [x] **Sitemap complete** (2026-08-07) — 50,262 URLs across 11 partitions, gated by `npm run check:discovery`.
+- [x] **Migrated off Elestio to Coolify** (2026-08-07) — see project memory for the deployment topology.
 
 - [x] **301 redirect www → non-www** (2026-03-18) — Cloudflare redirect rule + DNS CNAME fix
 - [x] **GA4 setup** — property `G-JYQN09HXKB` (ID 527337380) installed and verified
@@ -38,7 +45,29 @@
 
 ## 🔴 Broken / Needs Fix (High Priority)
 
-### 1. `/sitemap.xml` returns 404
+### 1. Catalogue metadata is almost entirely missing
+**Impact:** Nothing can be ranked or curated honestly. This is now the top blocker for the product.
+Measured across all 44,854 skills: `updated_at` 0.4%, `license` 0.9%, `stars` 0.9%, `verifiedCommit` 0.3%.
+
+Worse, the two signals that *are* populated are misleading:
+- **`stars` are the host repo's stars.** All 69 skills bundled in `openclaw/openclaw` carry its 372,563. Ranking by stars today would fill the homepage with identical OpenClaw built-ins.
+- **`installs` are scraped from skills.sh** and cluster implausibly (six `prime-skills` entries within 4,000 of each other around 402k). Median is 20.
+
+**Fix:** tracked as ONE-97 (metadata crawl) and ONE-98 (Signal Score). Work happens in the registry repo, not here.
+
+### 2. Trust tiers are hollow — and the homepage over-claims
+**Impact:** Credibility. The homepage says *"Cryptographically signed. Community reviewed."* 127 skills have a pinned commit SHA and none have been reviewed by anyone. 41,324 are labelled `community` because that is the scraper's fallback value.
+**Fix:** rename `community` → `Listed`, rewrite the copy, add the automated "Checked" pass. Tracked as ONE-99, with the copy change folded into the redesign (ONE-100).
+
+### 3. Category and platform taxonomies are degenerate
+**Impact:** Both browse axes barely work. 18,386 skills (41%) are in category `other`; 44,434 (99%) are tagged `claudecode`.
+**Files:** `scripts/reclassify.mjs`, registry platform detection. Tracked in ONE-98.
+
+---
+
+## ✅ Fixed (kept for context)
+
+### ~~`/sitemap.xml` returns 404~~
 **Impact:** SEO — Google can't discover pages efficiently.
 **Root cause:** `next-sitemap` is configured with `outDir: './out'` (static export mode), but the site now runs ISR. The sitemap is generated into `./out/` at build time but ISR serves from `.next/`. The sitemap file is never served.
 **Fix options:**
@@ -47,7 +76,7 @@
 - Must handle 26k+ URLs — likely needs sitemap index with multiple sitemap files
 **Files:** `next-sitemap.config.js`, possibly new `app/sitemap.xml/route.ts`
 
-### 2. `/api/index.json` returns 404
+### ~~`/api/index.json` returns 404~~ (fixed 2026-08-07 — llms.txt no longer advertises it)
 **Impact:** `llms.txt` points to this endpoint. Developers/agents expecting a public API get nothing.
 **Root cause:** API routes were disabled (moved to `app/_api_disabled/`). The endpoint was intentionally killed, but `llms.txt` still references it.
 **Fix options:**
@@ -56,12 +85,12 @@
 - Consider what data should be public vs. private (the full `skills-index.json` is the moat)
 **Files:** `app/_api_disabled/`, `public/llms.txt` or `app/llms.txt/route.ts`
 
-### 3. `/skills` page title is doubled
+### ~~`/skills` page title is doubled~~ (fixed — commit bbacd87)
 **Current:** `Browse Agent Skills | TrustedSkills | TrustedSkills`
 **Expected:** `Browse Agent Skills | TrustedSkills`
 **Files:** Likely in `app/skills/page.tsx` or `app/skills/layout.tsx` metadata export
 
-### 4. Platform filter chips are incomplete
+### ~~Platform filter chips are incomplete~~ (fixed 2026-09-26 — SkillsListClient removed, chips derive from the route allowlist)
 **Current chips in `SkillsListClient.tsx` line 9:**
 ```ts
 const PLATFORMS = ["openclaw", "mcp", "openai", "claude", "cursor", "huggingface"];
