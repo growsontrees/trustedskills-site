@@ -74,6 +74,8 @@ function getMaxInstalls(): number {
   return _maxInstalls;
 }
 
+const _scores = new WeakMap<Skill, number>();
+
 /**
  * Composite score (0–100) for a skill.
  *
@@ -83,8 +85,6 @@ function getMaxInstalls(): number {
  *   0–15  verification tier bonus
  *   0–5   description quality
  */
-const _scores = new WeakMap<Skill, number>();
-
 export function scoreSkill(skill: Skill): number {
   const cached = _scores.get(skill);
   if (cached !== undefined) return cached;
@@ -181,6 +181,8 @@ export function getStats() {
   return loadIndex().stats;
 }
 
+let _tierCounts: Record<VerificationTier, number> | null = null;
+
 /**
  * How many skills sit in each verification tier.
  *
@@ -189,8 +191,6 @@ export function getStats() {
  * `verified` field are counted as `community` — the same fallback `tierOf()`
  * applies when rendering them.
  */
-let _tierCounts: Record<VerificationTier, number> | null = null;
-
 export function getTierCounts(): Record<VerificationTier, number> {
   if (!_tierCounts) {
     // Seeded from TIER_ORDER rather than a literal, so adding a tier to
@@ -209,9 +209,9 @@ export function getTierCounts(): Record<VerificationTier, number> {
   return _tierCounts;
 }
 
-/** Skills whose install is pinned to a recorded commit and stored snapshot. */
 let _pinnedCount: number | null = null;
 
+/** Skills whose install is pinned to a recorded commit and stored snapshot. */
 export function getPinnedCount(): number {
   if (_pinnedCount === null) {
     _pinnedCount = loadIndex().skills.filter((s) => !!s.verifiedCommit).length;
