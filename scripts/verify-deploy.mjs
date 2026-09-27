@@ -28,12 +28,24 @@ function requireIncludes(haystack, needle, label) {
   }
 }
 
+// A root-layout canonical once pointed every page at the homepage. Each page
+// must name itself, in the sitemap's no-trailing-slash form.
+function requireCanonical(html, path, label) {
+  const expected = "https://trustedskills.dev" + path;
+  const found = [...html.matchAll(/<link rel="canonical" href="([^"]*)"/g)].map((m) => m[1]);
+  if (found.length !== 1 || found[0] !== expected) {
+    throw new Error(`${label} canonical is ${JSON.stringify(found)}, expected ${expected}`);
+  }
+}
+
 try {
   const home = await fetchText(baseUrl + "/");
   if (!home.res.ok) throw new Error(`Homepage returned ${home.res.status}`);
   requireIncludes(home.text, "TrustedSkills", "homepage brand");
-  requireIncludes(home.text, "Top Skills", "homepage top skills section");
-  requireIncludes(home.text, "Browse by Category", "homepage category section");
+  // Case-insensitive: the design-system pass changed these headings to sentence case.
+  requireIncludes(home.text.toLowerCase(), "top skills", "homepage top skills section");
+  requireIncludes(home.text.toLowerCase(), "browse by category", "homepage category section");
+  requireCanonical(home.text, "", "homepage");
   ok("homepage html", `HTTP ${home.res.status}`);
 
   const cssMatch = home.text.match(/href="([^"]*\/_next\/static\/chunks\/[^"]+\.css)"/);
@@ -54,6 +66,7 @@ try {
   requireIncludes(claudeSeo.text, "Claude SEO Suite", "claude-seo page title");
   requireIncludes(claudeSeo.text, "Install on your platform", "claude-seo install section");
   requireIncludes(claudeSeo.text, "View repository install instructions", "claude-seo repo-first install link");
+  requireCanonical(claudeSeo.text, "/skills/claude-seo", "claude-seo page");
   ok("claude-seo page", `HTTP ${claudeSeo.res.status}`);
 
   const findSkills = await fetchText(baseUrl + "/skills/find-skills");
@@ -64,6 +77,7 @@ try {
   const searchPage = await fetchText(baseUrl + "/skills?q=seo");
   if (!searchPage.res.ok) throw new Error(`/skills?q=seo returned ${searchPage.res.status}`);
   requireIncludes(searchPage.text, "Skills", "skills listing page");
+  requireCanonical(searchPage.text, "/skills", "skills search route");
   ok("skills search route", `HTTP ${searchPage.res.status}`);
 } catch (error) {
   fail("deployment verification", error instanceof Error ? error.message : String(error));
