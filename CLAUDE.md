@@ -11,20 +11,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 npm run dev          # Start local dev server
 npm run build        # Production build (runs next-sitemap postbuild)
-npm run lint         # ESLint via Next.js
+npm run lint         # ESLint 9 CLI, flat config in eslint.config.mjs
 npm run fetch-index  # Pull latest skills-index.json from GitHub registry
 ```
 
-> **Note:** `next.config.mjs` has `ignoreBuildErrors: true` and `ignoreDuringBuilds: true` for TypeScript and ESLint — build errors won't block the pipeline, but they should still be fixed.
+> **Note:** `next.config.mjs` has `typescript.ignoreBuildErrors: true`, so type errors won't block the build. Next 16 no longer lints during `next build`, so run `npm run lint` yourself.
 
 ## Architecture
 
 ### Data flow
 
-All skill data originates from an external GitHub registry (`growsontrees/trustedskills-registry`) and is stored locally at `data/skills-index.json`. This file is the single source of truth bundled into the Next.js app at build time — there is no runtime database or API.
+All skill data originates from an external GitHub registry (`growsontrees/trustedskills-registry`) and is stored locally at `data/skills-index.json`. This file is the single source of truth. The server reads it from disk on first use (it is not bundled) — there is no runtime database or API.
 
 - `scripts/fetch-index.mjs` — fetches the latest registry; falls back to the bundled file if GitHub is unreachable.
-- `lib/skills.ts` — imports `data/skills-index.json` directly and exports typed accessors (`getAllSkills`, `getSkillBySlug`, `getFeaturedSkills`, etc.) and the `Skill`, `Category`, and `SkillsIndex` types.
+- `lib/skills.ts` — reads `data/skills-index.json` from disk (server-only) and exports typed accessors (`getAllSkills`, `getSkillBySlug`, `getFeaturedSkills`, etc.) and the `Skill`, `Category`, and `SkillsIndex` types.
 
 ### Routing
 
