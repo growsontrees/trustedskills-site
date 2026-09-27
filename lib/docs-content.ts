@@ -265,7 +265,7 @@ export const DOC_ARTICLES: DocArticle[] = [
   <li><code>"-y"</code> — auto-confirm any install prompt</li>
   <li><code>"@modelcontextprotocol/server-memory"</code> — the package to run</li>
 </ul>
-<p>That's the whole thing. Three fields, one working MCP skill.</p>
+<p>That's the whole thing. Three fields, one working MCP server.</p>
 
 <h2>npx vs Global Install: When to Use Which</h2>
 <div class="table-container">
@@ -870,7 +870,7 @@ export const DOC_ARTICLES: DocArticle[] = [
   {
     slug: ['claude-desktop', 'linux'],
     title: 'Install MCP Claude Desktop Linux: Config & Setup Guide',
-    description: 'Install MCP on Claude Desktop Linux — config file path at ~/.config/Claude/, NVM workarounds, and Linux-specific tips for successfully adding MCP skills to your Claude Desktop setup.',
+    description: 'Install MCP on Claude Desktop Linux — config file path at ~/.config/Claude/, NVM workarounds, and Linux-specific tips for successfully adding MCP servers to your Claude Desktop setup.',
     category: 'Claude Desktop',
     categorySlug: 'claude-desktop',
     persona: 'developer',
@@ -1095,7 +1095,7 @@ npx skills remove find-skills</code></pre>
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Claude Code VS Code MCP Setup: Complete Beginner's Guide","description":"Claude Code VS Code MCP setup for beginners — install, configure, and verify MCP skills.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Claude Code VS Code MCP Setup: Complete Beginner's Guide","description":"Claude Code VS Code MCP setup for beginners — install, configure, and verify MCP servers.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
@@ -2288,7 +2288,7 @@ claude</code></pre>
   {
     slug: ['advanced', 'building-your-first-skill'],
     title: 'How to Build an AI Agent Skill: Beginner\'s Complete Guide',
-    description: 'How to build an AI agent skill from scratch — create, test, and publish your first MCP skill to the TrustedSkills registry. Complete guide with working code examples and publishing steps.',
+    description: 'How to build an AI agent skill from scratch — create, test and publish your first MCP server, then submit it to TrustedSkills. Complete guide with working code examples and publishing steps.',
     category: 'Advanced Topics',
     categorySlug: 'advanced',
     persona: 'advanced',
