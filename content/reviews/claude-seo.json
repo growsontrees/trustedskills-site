@@ -1,16 +1,16 @@
 {
   "slug": "claude-seo",
-  "status": "published",
-  "title": "Claude SEO Suite Review: The Most Complete AI SEO Toolkit",
-  "description": "claude-seo ships 12 sub-skills and 6 subagents for Claude Code. We read the source and the docs to work out what it actually does, what's genuinely new, and where it stops.",
+  "status": "draft",
+  "title": "claude-seo Review: We Ran Two Full Audits on Our Own Site",
+  "description": "We ran claude-seo v2.4.0 twice against trustedskills.dev, once with a headless browser and once without. It found every real bug we know about. It also gave two different health scores on the same day, and one run put a made-up star rating into copy-paste schema.",
   "skillSlug": "claude-seo",
-  "verdict": "Highly Recommended",
+  "verdict": "Recommended",
   "overallScore": 4.2,
   "scores": {
     "installation": 4,
-    "documentation": 5,
+    "documentation": 4,
     "depth": 5,
-    "maintenance": 4,
+    "maintenance": 5,
     "platformSupport": 3
   },
   "publishedAt": "2026-03-04",
@@ -19,128 +19,139 @@
     "name": "TrustedSkills Team",
     "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
   },
-  "targetKeyword": "claude-seo review AI SEO skill",
-  "evidenceBasis": "source-review",
-  "basisNote": "This is a source review, not a hands-on test. We read claude-seo's SKILL.md files, installer, documentation and release history, and we assessed the architecture against what we know about SEO tooling. We have **not** run `/seo audit` against a live site for this write-up, so there are no measured results here — no scores from a real crawl, no timings, no before-and-after rankings. The \"Open questions\" section below lists exactly what a hands-on run still needs to settle, and we'll republish this as a hands-on review once it's done.",
-  "runs": [],
-  "summary": "claude-seo is the most structurally complete SEO skill available for Claude Code — 12 specialised sub-skills, 6 subagents that run in parallel, and coverage stretching from Core Web Vitals through GEO (Generative Engine Optimization) for AI search. On architecture and documentation it is clearly ahead of the single-prompt SEO skills it competes with. The catch is that it's Claude Code only, and the richest data paths need paid MCP keys.",
+  "targetKeyword": "claude-seo review",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Both runs used the same command against the same live site on the same day. We changed one thing between them: whether the headless browser (Playwright with Chromium) was available. We then checked the biggest findings against the live site ourselves. The full reports and transcripts are kept on file.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "2.4.0 (commit e77e783)",
+      "task": "`/claude-seo:seo-audit https://trustedskills.dev` with Playwright and Chromium installed. The site is a Next.js registry of about 50,000 pages. We gave no other instructions.",
+      "outcome": "Finished in 19 min 15 s. Model usage came to US$7.22 at API list prices. It launched 10 specialist sub-agents (technical, content, schema, sitemap, visual, performance, GEO, agentic, SXO, backlinks), and all 10 wrote their report. It saved a Markdown report, an action plan, an HTML report, a PDF and 10 screenshots to disk.\n\nIt classed the site as a \"SaaS / developer directory\" with programmatic pages, and crawled a stratified sample of 423 of the 50,262 sitemap URLs. It scored the site 43/100.\n\nIts top findings were real. We checked each one on the live site: about 46,700 inner pages declare the homepage as their canonical; paginated listings declare a canonical that redirects to a 404; the install commands point at an npm scope with no packages in it; and 395 sitemap URLs return 404. It also pulled Search Console data and showed that impressions fell from about 270 a day in late June to 8–23 a day from 18 September.\n\nOne defect: the ready-to-paste JSON-LD for skill pages contained an `aggregateRating` of 4.6 from 12 reviews. The site has no ratings. A note under the block said to include it only once real ratings exist. Pasted as written, it is invented review markup.",
+      "environment": "Windows 11, Claude Code 2.1.282 run headless (`claude -p`), orchestrator on Opus 5.5 with sub-agents on Opus 5.5 and Sonnet 5. claude-seo loaded as a plugin from a fresh clone of v2.4.0; its Python runtime was set up with the bundled `claude-seo setup`. The Claude Code profile had Google Search Console, PageSpeed Insights and Ahrefs MCP servers connected, so both runs could reach paid-tier data."
+    },
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "2.4.0 (commit e77e783)",
+      "task": "The same command against the same site, 2 hours later, with Chromium not installed. We wanted to see what the audit loses without a headless browser.",
+      "outcome": "Finished in 25 min 32 s. Model usage came to US$8.85 at API list prices. The same 10 sub-agents all wrote their report. The screenshot step failed with `Error: playwright required`, and the visual report said so at the top. It then gave a markup-only review and marked every item as not confirmed visually. There were no screenshots and no PDF.\n\nIt classed the site as a \"Directory / registry (developer tools)\". It crawled 441 URLs and scored the site 36/100, 7 points lower than the first run.\n\nThe critical findings matched the first run: homepage canonicals, 404 pagination canonicals, the empty npm scope, and the 395 dead sitemap URLs. It also found things the first run did not. The live review page said \"We tested\" in its meta description while the page itself said the tool was not run. The meta descriptions contained 70 \"workflows workflows\" errors. Its schema blocks used no fake rating, and it said \"Do not fabricate ratings.\"\n\nIt also got some things wrong. It did not call Search Console, which was connected, and then reported \"No Google Search Console data for this property.\" Its homepage lab test gave LCP 4.5 s and ranked that High. The first run measured 1.7–2.4 s on the same page.",
+      "environment": "Windows 11, Claude Code 2.1.282 run headless (`claude -p`), orchestrator on Opus 5.5 with sub-agents on Opus 5.5 and Sonnet 5. claude-seo loaded as a plugin from a fresh clone of v2.4.0; its Python runtime was set up with the bundled `claude-seo setup`. The Claude Code profile had Google Search Console, PageSpeed Insights and Ahrefs MCP servers connected, so both runs could reach paid-tier data. Chromium was left out of this run's data directory, so the browser could not start."
+    }
+  ],
+  "summary": "claude-seo is the most thorough SEO audit we have run in Claude Code. Across two runs on our own site it found every indexing bug we already knew about, plus a few we didn't, and wrote the results to disk as a report, an action plan and (with Playwright) a PDF. The catch is consistency. The same site scored 43 and then 36 on the same day, and one run skipped a data source it had. So treat the findings list as the product and the score as noise, and check any schema before you paste it. Each full audit used about US$7–9 of model time and took 20–25 minutes.",
   "strengths": [
     {
-      "title": "📐 Proper skill architecture",
-      "body": "Most SEO skills are one large prompt file. This has a genuine orchestration layer — a master skill delegating to 12 sub-skills and 6 subagents. That means parallel analysis and clean separation of concerns rather than one monolithic instruction blob."
+      "title": "🎯 It found the bugs that matter, in both runs",
+      "body": "Both runs put the site-wide canonical bug first, and both found the 404 pagination canonicals, the empty npm scope behind the install commands, and 395 dead sitemap URLs. We confirmed all four on the live site. For a 50,000-page site, those are the fixes an experienced SEO would make first, and the tool ranked them first."
     },
     {
-      "title": "🗓️ Up-to-date signals",
-      "body": "INP has replaced FID, FAQ schema is treated as restricted, and HowTo is treated as deprecated. These aren't trivia — an SEO tool carrying stale guidance actively gives wrong advice. The source shows this one tracks the current position."
+      "title": "🧑‍🤝‍🧑 Real parallel specialists",
+      "body": "Each run launched 10 specialist sub-agents, and all 10 finished and wrote a report. The specialists checked each other's work, too. For example, the schema agent re-fetched a page when the crawl data under-reported its markup. The parallel run did not truncate or stall in either run."
     },
     {
-      "title": "🤖 GEO is a real differentiator",
-      "body": "The `seo-geo` sub-skill targets AI Overviews, ChatGPT search and Perplexity citations, checks AI crawler accessibility, and validates `llms.txt`. Very little else in the ecosystem covers this ground."
+      "title": "📁 Reports you can hand over",
+      "body": "Every run wrote `FULL-AUDIT-REPORT.md`, `ACTION-PLAN.md`, an HTML report, raw data and one findings file per specialist into a folder. The Playwright run also made a PDF and 10 desktop and mobile screenshots. You don't copy results out of the chat."
     },
     {
-      "title": "⚠️ Quality gates on programmatic SEO",
-      "body": "The programmatic SEO sub-skill warns at 100+ pages and hard-stops at 500+. That's a responsible default — plenty of tooling in this space cheerfully encourages index bloat. This one pushes back."
+      "title": "🔌 Uses your connected data when it remembers to",
+      "body": "In the first run it queried Search Console, URL Inspection, PageSpeed Insights and Ahrefs on its own. That turned a static audit into a diagnosis: it tied a fall in impressions to the canonical bug and to pages Google had crawled but not indexed."
     },
     {
-      "title": "🔌 MCP ecosystem ready",
-      "body": "First-class hooks for Ahrefs' official MCP server and Semrush's remote endpoint, plus Google Search Console, PageSpeed Insights and DataForSEO. All optional, but the wiring is already there."
-    },
-    {
-      "title": "📦 One-command install",
-      "body": "The install script sets up all sub-skills and agent files in one go, with a PowerShell path for Windows and a clean uninstall. Low friction to try."
+      "title": "🤖 Checks for AI search and agents",
+      "body": "Both runs tested each AI crawler (GPTBot, ClaudeBot, PerplexityBot and others) for a 200 response, checked `llms.txt`, and scored how easy the site is for AI agents to use. Few other SEO skills cover this ground."
     }
   ],
   "limitations": [
     {
-      "title": "🔒 Claude Code only, in practice",
-      "body": "The installer writes into `~/.claude/skills/`. It won't work in OpenClaw, Cursor or Codex without manual adaptation. The knowledge in the SKILL.md files ports fine — the installer doesn't."
+      "title": "🎲 The score moves between runs",
+      "body": "The same site scored 43/100 at 04:31 UTC and 36/100 at 06:58 UTC. The category scores moved by up to 13 points. Homepage LCP was 1.7–2.4 s in one run and 4.5 s in the other. Only the 4.5 s run ranked it as a High issue. Don't track progress by the health score from single runs."
     },
     {
-      "title": "🌐 No rendered-DOM crawl without Playwright",
-      "body": "Without Playwright installed, visual analysis falls back to WebFetch, which means the audit reads HTML source rather than the rendered DOM. On a JavaScript-heavy SPA that risks missing injected content, lazy-loaded images and client-side schema."
+      "title": "🕳️ It can skip a data source and say the data doesn't exist",
+      "body": "Search Console was connected for both runs. The first run used it. The second run didn't call it, and its report said \"No Google Search Console data for this property\". If your audit says a source is missing, check that it really is."
     },
     {
-      "title": "📊 No persistent reports",
-      "body": "Audit output lives in the Claude Code conversation. There's no built-in export to HTML, PDF or JSON. You can ask Claude to save it, but it isn't automated — real friction for an agency running audits across many clients."
+      "title": "⚠️ Check schema before you paste it",
+      "body": "The first run's ready-to-paste skill-page JSON-LD contained a 4.6-star `aggregateRating` from 12 reviews that don't exist. Its URLs had a trailing slash that redirects. A note under the block said not to use placeholder ratings, but the block itself was ready to copy. Invented review markup breaks Google's structured-data rules."
     },
     {
-      "title": "🔑 Paid keys needed for competitive data",
-      "body": "Without Ahrefs or Semrush credentials there's no backlink data and no keyword volume. On-page, technical, schema and GEO analysis still work, but competitive research is limited to what the model already knows."
+      "title": "💸 A full audit isn't cheap",
+      "body": "Each run used about US$7–9 of model time at API list prices (US$7.22 and US$8.85) and took 19–26 minutes on a 50,000-page site. On a Claude subscription, that comes out of your usage limits. The README compares the tool against agency fees, but it doesn't give a per-audit cost."
     },
     {
-      "title": "🆕 Young project",
-      "body": "First published February 2026. Actively maintained and taking community contributions, but there isn't enough history yet to judge how it holds up over time."
+      "title": "🌐 Without a browser, you lose the visual audit only",
+      "body": "Our site is server-rendered, so both runs read the same HTML. Without Chromium, the audit lost the screenshots, the mobile fold check, tap-target sizes, the PDF and a 58 px horizontal overflow on mobile. The technical, content and schema findings were the same. On a JavaScript-rendered site the gap is probably larger. We didn't test that."
+    },
+    {
+      "title": "🔒 Claude Code only",
+      "body": "It ships as a Claude Code plugin with a Python runtime, 26 skills and 19 agents. The SKILL.md files hold useful knowledge, but the scripts, agents and launcher need Claude Code."
     }
   ],
   "bestFor": [
     {
-      "title": "👨‍💻 Indie devs shipping fast",
-      "body": "You've built something and want to know what's technically broken and what the low-hanging SEO fruit is. One command, structured report."
-    },
-    {
-      "title": "📢 Content marketers who code",
-      "body": "Comfortable in a terminal, and you want E-E-A-T analysis, content gap identification and schema recommendations without hiring a consultant."
-    },
-    {
       "title": "🏢 Agencies doing onboarding audits",
-      "body": "Fast structured audits for client onboarding, and with Ahrefs MCP connected there's backlink data too. Budget for copying output by hand — there's no report export."
+      "body": "One command gives a report folder you can hand over, with an action plan sorted by severity. With Search Console and Ahrefs connected, it explained why traffic had fallen, not just what was misconfigured."
+    },
+    {
+      "title": "🧱 Large programmatic sites",
+      "body": "It knew to sample a 50,000-URL sitemap instead of crawling it, and it pulled out template-level bugs that affect tens of thousands of pages at once."
     },
     {
       "title": "🤖 Teams targeting AI search",
-      "body": "If you want to be cited by AI Overviews, Perplexity or ChatGPT, the GEO sub-skill is the reason to pick this over the alternatives."
+      "body": "The GEO and agent-readiness checks go further than any other SEO skill we have run."
     }
   ],
-  "notFor": "You're on Cursor, OpenClaw or Codex and don't want to hand-adapt skill files. Or you need client-ready PDF reports. Or you want rank tracking over time — this does one-shot audits, not monitoring.",
+  "notFor": "You want a stable number to track week to week: the health score moved 7 points between two runs on the same day. You want a quick check. A narrower skill like the marketingskills `seo-audit` found the same two indexing bugs in about nine minutes. You're not on Claude Code.",
   "sections": [
     {
-      "heading": "What is claude-seo?",
-      "body": "[claude-seo](https://github.com/AgriciDaniel/claude-seo) is an open-source SEO skill collection for Claude Code, created by Daniel Agrici and first published in February 2026 under the MIT licence.\n\nIt isn't a single skill. It's an orchestrated suite: 12 sub-skills plus 6 specialised subagents that Claude runs in parallel when you invoke `/seo audit`.\n\nThe pitch is that instead of pasting SEO checklists into prompts, you get a structured skill that knows what to look for, how to prioritise findings, and how to split the analysis across subagents at once."
+      "heading": "What we set out to learn",
+      "body": "Our earlier source review left five questions open. This is what the two runs showed.\n\n| Question | What happened |\n| --- | --- |\n| Does site-type detection work? | Yes, near enough. It classed our registry as \"SaaS / developer directory\" in one run and \"Directory / registry\" in the other. Both runs used the right checks for a programmatic site, such as sampling the sitemap and looking for scaled, templated content. |\n| Is the schema output valid, and about the right page? | All eight JSON-LD blocks across both runs parsed as valid JSON and described the page they were written for. One block in the first run had an invented 4.6-star rating, so the answer is \"valid, not always honest\". |\n| How much does Playwright change the result? | On our server-rendered site, only the visual part changed. Both runs fetched the same raw HTML (`mode_used: raw`), so the technical, content and schema findings were the same. Without Chromium it lost the screenshots, the PDF, the mobile fold and tap-target checks, and one overflow bug. |\n| Does the parallel run finish? | Yes. 10 sub-agents in each run, all 10 reported, with no truncation. The runs took 19 min 15 s and 25 min 32 s. |\n| Is the Critical → Low order right? | The top was right: the canonical bugs and the npm scope come first in both runs. The middle was noisier. Both ranked missing security headers High, which is not a ranking fix. One run ranked 395 dead URLs (0.8% of the sitemap) Critical, and a single lab LCP reading High. |"
     },
     {
-      "heading": "What's included",
-      "body": "This is where claude-seo separates itself. The suite ships as a proper skill architecture rather than one long prompt:\n\n| Sub-skill | What it covers |\n| --- | --- |\n| `seo-audit` | Full-site orchestrator — spawns the other subagents in parallel |\n| `seo-page` | Deep single-page analysis: meta, content, internal links |\n| `seo-technical` | Technical audit across crawlability, indexability, CWV, mobile |\n| `seo-content` | E-E-A-T content quality, expertise signals, content gaps |\n| `seo-schema` | Schema.org detection, validation and generation |\n| `seo-images` | Alt text, WebP/AVIF, lazy loading, file size |\n| `seo-sitemap` | XML sitemap analysis and generation |\n| `seo-geo` | AI Overviews, ChatGPT and Perplexity optimisation |\n| `seo-plan` | Strategic planning for SaaS, local, ecommerce, publisher, agency |\n| `seo-programmatic` | Programmatic SEO with quality gates |\n| `seo-competitor-pages` | \"X vs Y\" and alternatives comparison pages |\n| `seo-hreflang` | Multi-language hreflang validation and generation |\n\n**The 6 subagents.** Running `/seo audit` doesn't analyse everything sequentially. It spawns `seo-technical`, `seo-content`, `seo-schema`, `seo-sitemap`, `seo-performance` and `seo-visual` together, which is what keeps analysis time down on larger sites.\n\n**MCP integrations.** Ahrefs' official MCP (`@ahrefs/mcp`), Semrush remote MCP, Google Search Console, PageSpeed Insights and DataForSEO. None are required — the skill works without external APIs and produces richer output with them."
-    },
-    {
-      "heading": "Open questions a hands-on run needs to answer",
-      "body": "We haven't run this against a live site yet, so rather than guess at findings, here is exactly what we intend to measure — and what we'd advise you to check yourself before relying on it:\n\n- **Does site-type detection work?** The suite claims to classify a site (SaaS, local, publisher, marketplace) and adapt its checks. Worth confirming it classifies yours correctly, because the rest of the audit branches off that.\n- **How good is the schema output?** It generates Schema.org markup. The question isn't whether it emits JSON-LD, it's whether the output validates cleanly and reflects the page it was generated for.\n- **How much does Playwright change the result?** The documented fallback to WebFetch should matter a lot on a JS-heavy site and barely at all on a static one. The size of that gap is the single most useful thing to measure.\n- **Does the parallel run actually finish?** Six subagents on a large site is a lot of concurrent work. Wall-clock time and whether it completes without truncation are open.\n- **Is the prioritisation trustworthy?** It sorts findings Critical → High → Medium → Low. Whether that ordering matches what an experienced SEO would fix first is a judgement call you can only make on real output.\n\nWhen we publish that run, this page becomes a hands-on review and the skill earns the Reviewed badge. Until then, treat everything above as an assessment of design, not of performance."
-    },
-    {
-      "heading": "How it compares",
-      "body": "The main SEO-focused agent skills, by what their repositories and documentation describe:\n\n| Tool | Sub-skills | Platform | GEO / AI search | MCP | Licence |\n| --- | --- | --- | --- | --- | --- |\n| **claude-seo** | 12 + 6 agents | Claude Code | Full GEO coverage | Ahrefs, Semrush | MIT |\n| marketingskills | Broad suite, SEO subset | Multi-agent | Partial | — | Open source |\n| seo-geo-claude-skills | 20 | Multi-agent | GEO-focused | — | Open source |\n| Agentic-SEO-Skill | 12 | Multi, incl. Antigravity | Partial | — | Open source |\n| seo-audit-mcp | 1 (MCP server) | Any MCP client | — | Native MCP | Open source |\n\n**Bottom line.** `marketingskills` is far more popular but it's a broad marketing suite — the SEO component isn't as deep. `seo-geo-claude-skills` is a reasonable alternative if GEO is your only concern. `seo-audit-mcp` takes a different approach entirely and could complement claude-seo rather than replace it. For full-site audits, claude-seo's architecture is the most comprehensive of the group.\n\n*Feature comparison reflects each project's own documentation, read September 2026. We have not run the alternatives either — this is a capability comparison, not a benchmark.*"
+      "heading": "What's included in v2.4.0",
+      "body": "The plugin has grown a lot since its first release. v2.4.0, released 23 September 2026, ships **26 skills and 19 agents**. It also includes a Python runtime for rendering, crawling and reports, and optional extensions for Google APIs, Ahrefs, Semrush, DataForSEO and others.\n\nThe full audit (`/seo-audit`) launched 10 specialists on our site: technical, content, schema, sitemap, visual, performance, GEO, agentic, SXO and backlinks. Other commands cover single pages, local SEO, e-commerce, hreflang, topic clusters, drift monitoring and content briefs.\n\nNone of the external data sources are required. Our runs had Search Console, PageSpeed Insights and Ahrefs connected, so the backlink and traffic findings above depend on that."
     },
     {
       "heading": "How to install",
-      "body": "**Claude Code (supported path)**\n\n```bash\n# Unix / macOS / Linux\ncurl -fsSL https://raw.githubusercontent.com/AgriciDaniel/claude-seo/main/install.sh | bash\n```\n\n```powershell\n# Windows PowerShell\nirm https://raw.githubusercontent.com/AgriciDaniel/claude-seo/main/install.ps1 | iex\n```\n\nThen start Claude Code and run `/seo audit https://yoursite.com`. For visual analysis, install Playwright as well:\n\n```bash\npip install playwright && playwright install chromium\n```\n\nAs always, read an install script before piping it into a shell.\n\n**OpenClaw, Cursor, Codex**\n\nThe installer targets `~/.claude/skills/`, which is Claude Code's directory. To use the suite elsewhere you copy the SKILL.md files into your platform's skills folder and adapt the frontmatter. The sub-skill logic transfers well — the knowledge encoded in those files is genuinely platform-agnostic — but the commands layer is specific to Claude Code."
+      "body": "**Claude Code plugin (recommended)**\n\n```\n/plugin marketplace add AgriciDaniel/claude-seo\n/plugin install claude-seo@agricidaniel-claude-seo\n```\n\nThe first run sets up a Python environment and downloads Chromium for the visual checks. On our Windows machine that setup took 13 min 44 s and finished without errors.\n\n**Manual install**\n\nThe README tells you to clone the repo and read `install.sh` or `install.ps1` before you run it, rather than piping a remote script into a shell. We agree.\n\nThe plugin works without any API keys. For traffic, indexing and backlink data, connect Search Console, PageSpeed Insights or Ahrefs. The setup wizard is `/seo google setup`."
     }
   ],
   "faq": [
     {
-      "question": "Does claude-seo actually crawl my website, or just work from training data?",
-      "answer": "It crawls. The skill uses WebFetch — or Playwright if you've installed it — to fetch your pages at analysis time, so it reads your live HTML and meta tags rather than guessing. Without Playwright, JavaScript-rendered content may not be fully captured."
+      "question": "Does claude-seo actually crawl my website?",
+      "answer": "Yes. On our site it read the sitemap index (50,262 URLs), then fetched a stratified sample of 423 to 441 pages. It also fetched the homepage, robots.txt, llms.txt and redirect chains live. With Playwright installed, it also opened pages in a headless browser for screenshots and layout checks."
     },
     {
-      "question": "Do I need Ahrefs or Semrush to use it?",
-      "answer": "No. Both are optional MCP integrations. Without them you still get on-page, technical, schema, content and GEO analysis. What you lose is backlink data and keyword search volume from external APIs."
+      "question": "Do I need Playwright?",
+      "answer": "For the technical, content and schema checks on a server-rendered site, no. Our two runs found the same issues. You need it for screenshots, the PDF report, and mobile layout checks such as the fold and tap-target sizes. Without it, the visual report says it could not capture anything, and it marks its findings as unconfirmed."
     },
     {
-      "question": "Can I use it with Cursor or OpenClaw instead of Claude Code?",
-      "answer": "Not directly — the installer targets Claude Code's directory structure. The SKILL.md files themselves are portable and can be adapted with some manual work, since the suite follows the AgentSkills spec closely."
+      "question": "Do I need Ahrefs or Search Console?",
+      "answer": "No, but they change what you learn. With Search Console connected, the first run could explain why traffic fell (impressions down from about 270 to under 25 a day, with key pages crawled but not indexed). Without that data, you get a list of what's wrong but not how much it's costing you."
     },
     {
-      "question": "How is this different from just asking Claude to do an SEO audit?",
-      "answer": "Without the skill, Claude has no systematic checklist, no subagent delegation, no encoded schema-deprecation knowledge and no GEO-specific analysis. With it you get a structured 12-category audit that runs in parallel and produces a prioritised action plan. It's the difference between asking a question and following a protocol."
+      "question": "How long does a full audit take, and what does it cost?",
+      "answer": "On a 50,000-page site, 19 and 26 minutes, using US$7.22 and US$8.85 of model time at API list prices. A small site should cost less. We have only measured a large one."
     },
     {
-      "question": "Is the GEO feature actually useful?",
-      "answer": "On design, yes — it checks AI crawler access for GPTBot, ClaudeBot and PerplexityBot, validates llms.txt, and analyses passage-level citability. Traditional SEO tools don't check any of that. How well it performs in practice is one of the open questions we haven't measured yet."
+      "question": "Can I trust the health score?",
+      "answer": "Not as a precise number. Two runs on the same site on the same day scored 43 and 36. The list of Critical findings was the same both times, and it was correct. Use the findings, not the score."
     },
     {
-      "question": "Has TrustedSkills run this skill?",
-      "answer": "Not yet, and we won't pretend otherwise. This page is a source review: we read the code, the installer and the documentation. It carries no measured results, and it's labelled that way at the top. When we complete a hands-on run we'll republish it as a hands-on review."
+      "question": "Can I use it with Cursor or Codex?",
+      "answer": "Not as shipped. It's a Claude Code plugin with its own agents, scripts and launcher. The SKILL.md files contain useful knowledge you could adapt, but the audit workflow we tested runs only in Claude Code."
     }
   ],
   "links": [
-    { "label": "GitHub repository", "href": "https://github.com/AgriciDaniel/claude-seo" },
-    { "label": "Install guide", "href": "https://github.com/AgriciDaniel/claude-seo/blob/main/docs/INSTALLATION.md" }
+    {
+      "label": "GitHub repository",
+      "href": "https://github.com/AgriciDaniel/claude-seo"
+    },
+    {
+      "label": "Install guide",
+      "href": "https://github.com/AgriciDaniel/claude-seo/blob/main/docs/INSTALLATION.md"
+    }
   ]
 }

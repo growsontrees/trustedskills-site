@@ -159,14 +159,12 @@ sync.
 
 ## Known debt
 
-- **`content/reviews/claude-seo.json`** is a `source-review`. The original
-  published version presented predicted findings ("would find", "expected",
-  "likely") in the voice of test results, while the site's methodology block
-  claimed every skill is installed and run. It's now labelled accurately and its
-  speculative section was rewritten as "open questions a hands-on run needs to
-  answer". **It should be re-done as a genuine hands-on review** — it's the
-  flagship page and it's the one review currently not backed by a run.
-- Its comparison table and star counts came from the original draft and have not
-  been re-verified. The table now describes capabilities from project
-  documentation rather than citing unverified star counts, but a fact-check pass
-  is still owed.
+- **`content/reviews/claude-seo.json`** was re-done as a hands-on review on
+  2026-09-27 (ONE-107): two full runs of v2.4.0 against trustedskills.dev, one
+  with Playwright and one without. The unverified comparison table was removed
+  rather than re-checked. It is back at `draft` until Peter approves it, so the
+  flagship review is not served in production until then. Evidence lives outside
+  the repo in `trusted-skills\projects\claude-seo-hands-on\`.
+- The live site still serves the old hand-written review at
+  `/reviews/claude-seo-suite`, which Google has indexed. The structured review
+  lives at `/reviews/claude-seo`, and nothing redirects the old URL yet.
