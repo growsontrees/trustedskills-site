@@ -6,6 +6,7 @@ import { Check, Info, platformIcon } from "../../components/icons";
 import { Eyebrow, Note, Panel, cx } from "../../components/ui";
 import { canonicalUrl } from "../../lib/site-url";
 import { REQUEST_SKILL_URL } from "../../lib/github-links";
+import { DECLARABLE_PLATFORMS } from "../../lib/platform-install";
 
 export const metadata: Metadata = {
   title: "Submit a Skill",
@@ -63,7 +64,7 @@ const FAQ = [
   },
   {
     q: "Can I submit skills for Claude Desktop, Cursor or OpenAI?",
-    a: "Yes. Set the platforms field in your SKILL.md to include mcp, claude, cursor, openai or huggingface. The detail page then shows the install snippet for each platform you declare.",
+    a: `Yes. Set the platforms field in your SKILL.md to include any of ${DECLARABLE_PLATFORMS.join(", ")}. The detail page then shows the install snippet for each platform you declare.`,
   },
   {
     q: "Will anyone review my code?",
@@ -201,9 +202,12 @@ export default function SubmitPage() {
               code={`"platforms": ["openclaw", "mcp", "claude", "openai", "cursor"]`}
             />
             <p className="text-xs text-ink-500">
-              Accepted values: <Code>openclaw</Code> <Code>mcp</Code> <Code>claude</Code>{" "}
-              <Code>claudecode</Code> <Code>openai</Code> <Code>cursor</Code>{" "}
-              <Code>huggingface</Code>
+              Accepted values:{" "}
+              {DECLARABLE_PLATFORMS.map((platform) => (
+                <span key={platform}>
+                  <Code>{platform}</Code>{" "}
+                </span>
+              ))}
             </p>
           </Step>
 

@@ -24,6 +24,15 @@ export const PLATFORM_LABELS: Record<PlatformKey, string> = {
 };
 
 /**
+ * Values a skill can list in its `platforms` field and have the site act on.
+ * The docs and submit pages print this list, so they name only platforms the
+ * site renders an install for.
+ */
+export const DECLARABLE_PLATFORMS = (Object.keys(PLATFORM_LABELS) as PlatformKey[]).filter(
+  (key) => key !== "other"
+);
+
+/**
  * Agent ids the `skills` CLI accepts after `-a`, for the platforms it installs
  * into. The CLI copies a SKILL.md into that agent's skills folder.
  *

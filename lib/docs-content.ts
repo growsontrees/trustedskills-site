@@ -30,6 +30,11 @@ export interface DocArticle {
   category: string;
   categorySlug: string;
   persona: 'beginner' | 'developer' | 'advanced';
+  /**
+   * The day this article's facts last changed, shown on the page. Bump it
+   * only for that article, and only for a content change — not for a sweep
+   * that renames a term or a link across every article.
+   */
   lastUpdated: string;
   author: { name: string; bio: string };
   content: string;

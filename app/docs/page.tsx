@@ -4,6 +4,7 @@ import { DOC_ARTICLES, DOC_CATEGORIES, getArticlesByCategory } from '../../lib/d
 import { BookOpen, Compass, Globe, Terminal as TerminalIcon, docCategoryIcon, platformIcon } from '../../components/icons';
 import { canonicalUrl } from '../../lib/site-url';
 import { GITHUB_ISSUES_URL, REPORT_PROMISE } from '../../lib/github-links';
+import { DECLARABLE_PLATFORMS } from '../../lib/platform-install';
 
 export const metadata: Metadata = {
   title: 'Documentation',
@@ -68,6 +69,7 @@ const QUICK_REFERENCE = [
 
 export default function DocsPage() {
   const totalArticles = DOC_ARTICLES.length;
+  const totalCategories = new Set(DOC_ARTICLES.map((article) => article.categorySlug)).size;
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -78,7 +80,7 @@ export default function DocsPage() {
         <p className="text-ink-400 text-lg">
           Everything you need to install, use, and build AI agent skills — across any platform.
         </p>
-        <p className="text-sm text-ink-500 mt-2">{totalArticles} articles across 6 categories</p>
+        <p className="text-sm text-ink-500 mt-2">{totalArticles} articles across {totalCategories} categories</p>
       </div>
 
       {/* Start Here — Beginners */}
@@ -242,7 +244,7 @@ export default function DocsPage() {
                 { field: 'name',        type: 'string',  desc: 'Unique slug identifier (lowercase, hyphens only)' },
                 { field: 'description', type: 'string',  desc: 'One-line description (10-500 characters)' },
                 { field: 'version',     type: 'semver',  desc: 'Semantic version (e.g. 1.0.0)' },
-                { field: 'platforms',   type: 'array',   desc: 'Supported platforms: openclaw, mcp, claude, openai, cursor, huggingface' },
+                { field: 'platforms',   type: 'array',   desc: `Supported platforms: ${DECLARABLE_PLATFORMS.join(', ')}` },
                 { field: 'metadata',    type: 'JSON',    desc: 'Optional platform-specific config' },
               ].map((row) => (
                 <tr key={row.field}>
