@@ -230,6 +230,10 @@ collections (hand-curated themed lists) now live at `/collections` — see
 ### 15. API keys + rate limits
 **Why:** Future monetization, protect public API from abuse.
 **Depends on:** Task #2 (restore API) and Task #14 (database)
+**If `app/_api_disabled/` is revived, fix these first** (found by reviews batch 3, ONE-125):
+- `skill/[slug]/route.ts` types `params` as a plain object. Since Next 15 it is a Promise and must be awaited.
+- `search` and `skills/popular` pass `parseInt` straight into `Math.max`/`Math.min`. A non-numeric `page` or `limit` gives `NaN`, which serialises as `null` in a 200 response. Reject it with a 400.
+- An empty `q` matches every skill, so `limit=100` pages out the whole index: 261 requests at 26,001 skills, 449 at 44,854. That gives away the full index (the moat, see the `/api/index.json` note above). Require a query, or cap the pages.
 
 ### 16. OpenAI platform adapter
 **Why:** Needs GPT Actions rewrite + author buy-in. Complex.

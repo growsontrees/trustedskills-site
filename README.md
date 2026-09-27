@@ -45,7 +45,7 @@ This fetches the index from the `growsontrees/trustedskills-registry` GitHub rep
 | `npm run fetch-index` | Pull the latest `skills-index.json` from the registry |
 | `npm run sync-index` | Merge the latest registry data into the local index without losing the site's own enrichment (descriptions, tiers, categories) |
 | `npm run verify-deploy` | Smoke-test a deployed instance (checks `TRUSTEDSKILLS_BASE_URL`, defaults to `https://trustedskills.dev`) |
-| `npm run check:discovery` | Fail the build if pages that should be discoverable (sitemap, routes) have silently dropped |
+| `npm run check:discovery` | Fail the build if pages that should be discoverable (sitemap, routes) have silently dropped. Run it after `npm run build`: it reads the sitemaps the build writes, and the committed copies are stale |
 | `npm run check:editorial` | Validate reviews and collections before a build |
 | `npm run check:safety` | Unit tests for the safety pass and the scanner's tarball limits |
 | `npm run safety:scan` | Run the automated safety pass over the catalogue |

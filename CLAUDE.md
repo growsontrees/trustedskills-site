@@ -41,7 +41,7 @@ Uses Next.js App Router with ISR. Key routes:
 | `/reviews` / `/reviews/[slug]` | Hardcoded editorial reviews (`lib/reviews-content.ts`) |
 | `/docs` / `/docs/[...slug]` | Documentation pages (`lib/docs-content.ts`) |
 
-Skill detail pages use `revalidate = 86400` (24h ISR) with `dynamicParams = true` to allow on-demand rendering for slugs outside the top 5000. Related skills are intentionally disabled (`related = []`) to avoid ISR body-too-large errors.
+Skill detail pages use `revalidate = 86400` (24h ISR) with `dynamicParams = true` to allow on-demand rendering for slugs outside the top 1000 by installs (`generateStaticParams`; cut from 5000 because the enriched long descriptions made each page about 3x larger). The page does not render related skills; they were dropped to avoid ISR body-too-large errors.
 
 ### Platform system
 
@@ -49,7 +49,7 @@ Skill detail pages use `revalidate = 86400` (24h ISR) with `dynamicParams = true
 - `localStorage` key `ts-platform-pref`
 - Custom DOM event `ts-platform-change` for same-page sync between mounted components
 
-`getPlatformInstall()` in the same file generates per-platform install commands (bash or JSON config) for: `openclaw`, `mcp`, `claude`, `claudecode`, `openai`, `cursor`, `codex`, `opencode`, `other`.
+`getPlatformInstall()` in `lib/platform-install.ts` generates per-platform install commands (bash or JSON config) for: `openclaw`, `mcp`, `claude`, `claudecode`, `openai`, `cursor`, `codex`, `opencode`, `other`.
 
 ### Verification tiers
 
