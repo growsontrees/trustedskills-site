@@ -110,7 +110,7 @@ export function SkillCard({ skill, compact = false }: SkillCardProps) {
             {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
             {copied ? "Copied" : "Install"}
           </button>
-        ) : skill.installCmd ? (
+        ) : installIsBroken(skill) ? (
           <span className="shrink-0 text-2xs text-warn-400" title={skill.install_reason}>
             Doesn&apos;t install
           </span>

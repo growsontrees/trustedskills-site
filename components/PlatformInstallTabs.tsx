@@ -163,7 +163,7 @@ function UpstreamGuide({ label, installCmd, repoUrl, override }: { label: string
 
 /** The registry checked this skill upstream and the command cannot work. */
 function BrokenInstall({ installCmd, reason, checkedAt, repoUrl }: { installCmd: string; reason?: string; checkedAt?: string; repoUrl: string }) {
-  const name = installCmd.match(/--skill (\S+)/)?.[1];
+  const name = installCmd.match(/--skill ("[^"]*"|\S+)/)?.[1]?.replace(/^"|"$/g, "");
   return (
     <div className="space-y-stack-lg">
       <Note tone="warn" icon={AlertTriangle}>
@@ -185,8 +185,9 @@ function BrokenInstall({ installCmd, reason, checkedAt, repoUrl }: { installCmd:
 function RenamedNote({ installName }: { installName: string }) {
   return (
     <Note icon={Info}>
-      <span className="font-medium text-ink-200">Renamed upstream.</span> The skill is now called{" "}
-      <Code>{installName}</Code>. The command below uses the new name.
+      <span className="font-medium text-ink-200">Installs under a different name.</span> Its SKILL.md
+      names it <Code>{installName}</Code>, not the name it is listed under, so the command below uses
+      that name.
     </Note>
   );
 }
