@@ -26,6 +26,9 @@ const USER_AGENT = "TrustedSkills-SafetyScan/1.0";
  */
 export const LIMITS = Object.freeze({
   tarballBytes: 60 * 1024 * 1024,
+  // The download cap alone does not bound memory: a few MB of gzip can expand
+  // to gigabytes. Past this, the repository goes to the tree-API fallback.
+  unpackedTarBytes: 512 * 1024 * 1024,
   fileBytes: 256 * 1024,
   filesPerSkill: 60,
   rawFilesPerRepo: 120,
@@ -303,14 +306,27 @@ export async function fetchRepoFiles(repo, sha, { token } = {}) {
     return { status: "too-large", reason: `tarball is ${Math.round(buffer.byteLength / 1e6)} MB` };
   }
 
-  let tar;
+  const unpacked = decompressTarball(buffer);
+  if (unpacked.status !== "ok") return unpacked;
+
+  return { status: "ok", files: readTar(unpacked.tar) };
+}
+
+/**
+ * Gunzip a downloaded tarball with a ceiling on the output size.
+ *
+ * Overflow is reported as too-large, like an oversized download, so the scan
+ * reads the repository through the bounded tree API instead of crashing.
+ */
+export function decompressTarball(buffer, { maxBytes = LIMITS.unpackedTarBytes } = {}) {
   try {
-    tar = gunzipSync(buffer);
+    return { status: "ok", tar: gunzipSync(buffer, { maxOutputLength: maxBytes }) };
   } catch (error) {
+    if (error.code === "ERR_BUFFER_TOO_LARGE") {
+      return { status: "too-large", reason: `tarball expands past ${Math.round(maxBytes / 1e6)} MB` };
+    }
     return { status: "error", reason: `tarball could not be decompressed: ${error.message}` };
   }
-
-  return { status: "ok", files: readTar(tar) };
 }
 
 // ---------------------------------------------------------------------------

@@ -11,7 +11,9 @@
  */
 
 import assert from "node:assert/strict";
+import { gzipSync } from "node:zlib";
 
+import { decompressTarball } from "./lib/github-source.mjs";
 import { CHECK_IDS, parseFrontmatter, runSafetyChecks } from "./lib/safety-checks.mjs";
 
 let passed = 0;
@@ -332,6 +334,26 @@ test("findings are capped and carry evidence", () => {
   assert.equal(check.findings.length, 3);
   assert.ok(check.matches >= 12);
   assert.ok(check.findings[0].evidence.length <= 160);
+});
+
+// ── Tarball decompression ─────────────────────────────────────────────────
+
+test("a tarball within the decompressed limit is returned", () => {
+  const result = decompressTarball(gzipSync(Buffer.alloc(1024)), { maxBytes: 4096 });
+  assert.equal(result.status, "ok");
+  assert.equal(result.tar.length, 1024);
+});
+
+test("a small tarball that expands past the limit is too-large, not a crash", () => {
+  const bomb = gzipSync(Buffer.alloc(1024 * 1024));
+  assert.ok(bomb.length < 4096);
+  const result = decompressTarball(bomb, { maxBytes: 64 * 1024 });
+  assert.equal(result.status, "too-large");
+});
+
+test("a corrupt tarball is an error, not too-large", () => {
+  const result = decompressTarball(Buffer.from("not gzip"), { maxBytes: 4096 });
+  assert.equal(result.status, "error");
 });
 
 // ── Report ─────────────────────────────────────────────────────────────────
