@@ -85,7 +85,7 @@ export function ListingPage({
           {skills.map((skill) => (
             <li key={skill.slug}>
               <Link href={`/skills/${skill.slug}`}>
-                {skill.name} — {skill.description}
+                {skill.description ? `${skill.name} — ${skill.description}` : skill.name}
               </Link>
             </li>
           ))}

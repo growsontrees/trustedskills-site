@@ -104,11 +104,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const categoryName = skill.category.charAt(0).toUpperCase() + skill.category.slice(1);
   return {
     title: `${skill.name} Agent Skill`,
-    description: skill.description,
+    description: skill.description || undefined,
     alternates: { canonical: skillUrl(skill.slug) },
     openGraph: {
       title: `${skill.name} Agent Skill | ${categoryName} | TrustedSkills`,
-      description: skill.description,
+      description: skill.description || undefined,
       url: skillUrl(skill.slug),
     },
   };
@@ -162,7 +162,7 @@ export default async function SkillDetailPage({ params }: Props) {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: skill.name,
-    description: skill.description,
+    ...(skill.description ? { description: skill.description } : {}),
     applicationCategory: "DeveloperApplication",
     operatingSystem: "Any",
     url: skillUrl(skill.slug),
@@ -230,8 +230,8 @@ export default async function SkillDetailPage({ params }: Props) {
             </div>
 
             {skill.description ? (
-              <p className="mt-stack-lg text-base leading-relaxed text-ink-300">
-                {skill.description}
+              <p className="mt-stack-lg whitespace-pre-line text-base leading-relaxed text-ink-300">
+                {skill.description.trim()}
               </p>
             ) : null}
 
@@ -361,20 +361,14 @@ export default async function SkillDetailPage({ params }: Props) {
               page never implies a check that has not run. */}
           <SafetyPanel report={safety} checks={safetyChecks} />
 
-          {/* ── About ────────────────────────────────────────────────── */}
-          {(skill.longDescription || skill.description) && (
+          {/* ── About ──────────────────────────────────────────────────
+              Only for a long description. The short one is already in the
+              header, and repeating it here would pad the page. */}
+          {skill.longDescription && (
             <Panel>
               <h2 className="text-sm font-semibold text-ink-50">About this skill</h2>
-              <div className="mt-stack-lg">
-                {skill.longDescription ? (
-                  <div className="doc-content">
-                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                      {skill.longDescription}
-                    </ReactMarkdown>
-                  </div>
-                ) : (
-                  <p className="text-sm leading-relaxed text-ink-400">{skill.description}</p>
-                )}
+              <div className="mt-stack-lg doc-content">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>{skill.longDescription}</ReactMarkdown>
               </div>
             </Panel>
           )}

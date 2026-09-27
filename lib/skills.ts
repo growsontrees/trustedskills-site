@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 import { join } from "path";
-import { TIER_ORDER } from "./skill-config";
+import { PUBLISHER_DESCRIPTIONS_ONLY, TIER_ORDER } from "./skill-config";
 import type { Category, Skill, SkillsIndex, VerificationTier } from "./skill-config";
 
 // Server-only. The index is read from disk on first use instead of being
@@ -14,6 +14,14 @@ function loadIndex(): SkillsIndex {
   if (!_index) {
     const file = join(process.cwd(), "data", "skills-index.json");
     _index = JSON.parse(readFileSync(file, "utf8")) as SkillsIndex;
+    // Here rather than at each render site, so no page, card, meta tag or
+    // search match can show generated text by reading the field directly.
+    if (PUBLISHER_DESCRIPTIONS_ONLY) {
+      for (const skill of _index.skills) {
+        if (skill.descriptionSource !== "skill-md") skill.description = "";
+        delete skill.longDescription;
+      }
+    }
   }
   return _index;
 }

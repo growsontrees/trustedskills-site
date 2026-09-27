@@ -28,10 +28,21 @@ export const OFFICIAL_ORGS = new Set([
   'tinybirdco','tldraw','triggerdotdev','upstash','vercel','vercel-labs','webflow','wix','wordpress',
 ]);
 
+/**
+ * Show only descriptions the publisher wrote in their own SKILL.md. The site's
+ * generated text (template and LLM descriptions, and every longDescription)
+ * was wrong often enough to mislead, so it stays in the index but is not read.
+ * Set to false to put the generated text back. Applied once, in loadIndex.
+ */
+export const PUBLISHER_DESCRIPTIONS_ONLY = true;
+
 export interface Skill {
   slug: string;
   name: string;
+  /** Empty when PUBLISHER_DESCRIPTIONS_ONLY is on and the publisher wrote none. */
   description: string;
+  /** "skill-md" when description is the publisher's SKILL.md text, verbatim. */
+  descriptionSource?: string;
   longDescription?: string;
   version: string;
   author: string;
