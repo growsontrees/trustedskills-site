@@ -1,0 +1,75 @@
+{
+  "slug": "documentation-writer",
+  "status": "draft",
+  "title": "documentation-writer Review: Diátaxis Framing in 45 Lines, and Nothing Else",
+  "description": "We used GitHub's documentation-writer skill to write a help page for our site. Its clarify-then-outline workflow scoped the page well. The skill is 45 lines, has no fact-checking step, and only treats markdown files as context.",
+  "skillSlug": "documentation-writer",
+  "verdict": "Recommended",
+  "overallScore": 3.2,
+  "scores": {
+    "installation": 5,
+    "documentation": 3,
+    "depth": 2,
+    "maintenance": 2,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "documentation writer skill diataxis",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve documentation skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "github/awesome-copilot@6c4d33b",
+      "task": "Write a visitor-facing page, \"How to read a TrustedSkills review\": verdicts, the five scores and the overall score, evidence basis, what a run records, and what the Reviewed chip means. Use the review config, validator, review files and page components as the sources of truth. The agent answered the skill's questions and approved its outline as the site owner.",
+      "outcome": "`npx skills add github/awesome-copilot --skill documentation-writer` installed it first time.\n\nThe skill is a 45-line persona built on the Diátaxis framework: four document types (tutorial, how-to, reference, explanation) and a three-step workflow. It asks clarifying questions first, proposes an outline and waits for approval, then writes. The clarify step made the agent decide the page was an explanation for visitors, not a how-to for editors.\n\nThe agent wrote a 150-line page. We checked its main claims. The overall score is the plain mean of the five scores, and the validator enforces it. The verdict is a separate judgement with no formula linking it to the score. The Reviewed chip shows only when a review is hands-on.\n\nThe skill has no step for checking facts. Its context rule talks about \"other markdown files\" and does not mention source code. That mattered: our own CLAUDE.md lists four trust tiers while the code defines six. The page used the code because our task said to, not because the skill did.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit c7e2736."
+    }
+  ],
+  "summary": "documentation-writer gives an agent the Diátaxis vocabulary and a sensible workflow: clarify the document type, audience and scope, agree an outline, then write. On our help page that was enough to get the scope right. Beyond that it is thin. It says to be accurate but gives no way to check accuracy, and it points the agent at markdown files as context instead of the code. Pair it with an instruction to check every claim against the source.",
+  "strengths": [
+    {
+      "title": "Forces a scope decision",
+      "body": "The agent had to name the document type, audience, goal and exclusions before writing. That settled whether our page was an explanation or a how-to."
+    },
+    {
+      "title": "Outline before prose",
+      "body": "It proposes a structure and waits for approval. Cheap to correct before any writing happens."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "No fact-checking step",
+      "body": "\"Accuracy\" is a stated principle with no method. Our repo has a stale doc that disagrees with the code, and nothing in the skill would catch that."
+    },
+    {
+      "title": "Markdown-only context",
+      "body": "It tells the agent to use \"other markdown files\" for context and says nothing about reading code, which is usually where the truth is."
+    },
+    {
+      "title": "Very short",
+      "body": "45 lines. The Diátaxis summary is correct, but there are no templates or examples for any of the four types."
+    },
+    {
+      "title": "Not recently maintained",
+      "body": "The skill's folder was last changed in February 2026."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Deciding what kind of doc to write",
+      "body": "Use its clarify step to pick tutorial, how-to, reference or explanation. Then give it the source files to check against."
+    }
+  ],
+  "notFor": "Docs that must match fast-changing code, unless you add your own verification step.",
+  "links": [
+    { "label": "github/awesome-copilot repository", "href": "https://github.com/github/awesome-copilot" },
+    { "label": "Diátaxis framework", "href": "https://diataxis.fr/" }
+  ]
+}

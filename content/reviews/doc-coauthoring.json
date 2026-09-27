@@ -1,0 +1,78 @@
+{
+  "slug": "doc-coauthoring",
+  "status": "draft",
+  "title": "doc-coauthoring Review: A Real Method for Design Docs, Written for claude.ai First",
+  "description": "We used Anthropic's doc-coauthoring skill to write a design doc for our own site. Its staged method and its fresh-reader test made the doc better. It is written for claude.ai artifacts, so in Claude Code you follow its fallback branches.",
+  "skillSlug": "doc-coauthoring",
+  "verdict": "Recommended",
+  "overallScore": 3.6,
+  "scores": {
+    "installation": 5,
+    "documentation": 4,
+    "depth": 4,
+    "maintenance": 2,
+    "platformSupport": 3
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "doc coauthoring skill claude",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve documentation skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "anthropics/skills@3337550",
+      "task": "Write a design doc for detecting stale reviews: each review records the skill version it tested, and the site should notice when the upstream skill changes after that. Readers are the site owner and the engineer who builds it. The agent played the human co-author and answered the skill's questions from facts in the repo.",
+      "outcome": "`npx skills add anthropics/skills --skill doc-coauthoring` installed it first time.\n\nThe skill runs in three stages: gather context, build the doc section by section, then test it on a reader who has not seen the conversation. The agent followed all three and wrote a 195-line design doc.\n\nThe doc proposes comparing the commit in each review's `skillVersion` with a commit field the registry index already stores for most skills. We checked both. The field is in the index for 23,391 skills and our code does not read it yet, which the doc lists as the first thing to build. The doc also found that `skillVersion` is free text in some reviews (tags, \"renamed upstream\" notes), so any parser has to handle that.\n\nThe reader test ran as described: a fresh subagent got only the doc and answered questions about it. It answered them correctly and pointed out three weak spots, which the agent then fixed.\n\nThe friction was the platform. The skill tells the agent to create an artifact with `create_file` when it can, and Claude Code has no such tool, so the agent used the skill's own fallback of a markdown file. The skill also asks for 5 to 10 questions and 5 to 20 brainstormed options for each section. The agent cut that down to fit the time box and recorded that it did.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit c7e2736."
+    }
+  ],
+  "summary": "doc-coauthoring is a method, and a good one: gather context, write section by section, then hand the finished doc to a reader with no context and see what they get wrong. On our design doc that last step caught three real problems. Its instructions assume claude.ai artifacts first, so in Claude Code you follow its file-based fallback, and its question counts are sized for a long session with a person. It works best when a human is really there to answer.",
+  "strengths": [
+    {
+      "title": "The reader test works",
+      "body": "A fresh subagent that saw only the finished doc answered our questions correctly and still found three weak spots: an unexplained regular expression, an unexplained piece of jargon, and a claim the doc half-contradicted later."
+    },
+    {
+      "title": "It pushes out filler",
+      "body": "Near the end it asks the agent to look for anything that reads like \"slop\" or generic filler. Our doc leaned on file names and one worked example instead of general advice."
+    },
+    {
+      "title": "Clear file fallback",
+      "body": "When artifacts are not available it says exactly what to do instead: create a markdown file, name it sensibly, and confirm it exists."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Written for claude.ai first",
+      "body": "The main branch of several steps is \"create an artifact\" with a `create_file` tool that Claude Code does not have. Every one of those steps needs its fallback."
+    },
+    {
+      "title": "No sense of scale",
+      "body": "It asks for 5 to 10 questions and 5 to 20 brainstormed options for each section. On a seven-section doc that is far more than a short task needs, and the skill gives no way to scale it down."
+    },
+    {
+      "title": "Needs a person to answer",
+      "body": "The context stage is a conversation. Our run had the agent answer its own questions from the repo, which works for a test but loses the point of co-authoring."
+    },
+    {
+      "title": "Not recently maintained",
+      "body": "The skill's folder was last changed in December 2025."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "A design doc or proposal with a person in the loop",
+      "body": "Answer its questions yourself, let it draft section by section, and keep the reader test at the end."
+    }
+  ],
+  "notFor": "Quick one-page notes. The method has too many steps for them.",
+  "links": [
+    { "label": "anthropics/skills repository", "href": "https://github.com/anthropics/skills" }
+  ]
+}

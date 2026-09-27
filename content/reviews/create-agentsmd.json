@@ -1,0 +1,79 @@
+{
+  "slug": "create-agentsmd",
+  "status": "draft",
+  "title": "create-agentsmd Review: A Good AGENTS.md Guide That Ignores Your Existing CLAUDE.md",
+  "description": "We used GitHub's create-agentsmd skill to write an AGENTS.md for our repo. Its rule to test every listed command found a check that fails on a clean checkout. It has no advice for a repo that already has agent instructions under another name.",
+  "skillSlug": "create-agentsmd",
+  "verdict": "Recommended",
+  "overallScore": 3.8,
+  "scores": {
+    "installation": 5,
+    "documentation": 4,
+    "depth": 3,
+    "maintenance": 2,
+    "platformSupport": 5
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "agents.md generator skill",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve documentation skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "github/awesome-copilot@6c4d33b",
+      "task": "Create AGENTS.md at the repo root. The repo already has a CLAUDE.md, so decide how the two relate. Check every command and path against package.json and the tree, run every safe command it lists, and fix the file where one fails.",
+      "outcome": "`npx skills add github/awesome-copilot --skill create-agentsmd` installed it first time.\n\nThe skill is a 249-line guide to the AGENTS.md format: what the file is for, the sections to include (setup, testing, code style, build and deploy, security, pull requests), monorepo notes and an example. Its checklist says to \"Test the instructions by ensuring all commands work as documented\".\n\nThe agent wrote a 207-line AGENTS.md and ran the commands it lists. That found a real gap: `npm run check:discovery` fails on a clean clone, because it compares against sitemap files that only a full build regenerates. The file now says to run it after a build. `npm run verify-deploy` failed with Node network timeouts while `curl` to the same site returned 200 from the same shell, which the agent recorded as a local networking issue, not an outage.\n\nThe skill assumes AGENTS.md is the first instructions file. Ours already has CLAUDE.md, and the skill gives no guidance for that case. The agent kept both and wrote down which one leads, so they don't drift apart silently. It left out the pull-request and monorepo sections because this repo has neither.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit c7e2736."
+    }
+  ],
+  "summary": "A solid guide to the AGENTS.md format, with the right sections and one rule that pays off: test every command you list. On our repo that caught a check command that fails unless you build first. It assumes you are starting from nothing. If your repo already has a CLAUDE.md, cursor rules or a Copilot instructions file, you have to decide yourself how the files share the work.",
+  "strengths": [
+    {
+      "title": "Test-every-command rule",
+      "body": "It asks the agent to confirm that each listed command works. Ours found a check that fails on a clean clone."
+    },
+    {
+      "title": "A cross-tool format",
+      "body": "AGENTS.md is read by many coding agents, so one file serves more than one tool."
+    },
+    {
+      "title": "Clear section list",
+      "body": "Setup, testing, code style, build and deploy, and security, each with a short note on what belongs there."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Ignores existing instruction files",
+      "body": "No advice for a repo that already has CLAUDE.md or similar. Two files covering the same ground will drift unless someone decides which one leads."
+    },
+    {
+      "title": "Template sections that may not apply",
+      "body": "Pull request and monorepo sections are in the template. On a single-package repo with no PR process, filling them in means inventing content."
+    },
+    {
+      "title": "No help judging safe commands",
+      "body": "It says to run every command but not which ones are destructive or slow. Our agent had to decide to skip the data sync and the safety scan."
+    },
+    {
+      "title": "Not recently maintained",
+      "body": "The skill's folder was last changed in February 2026."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "A first AGENTS.md for a repo with no agent instructions",
+      "body": "Let it run the commands it documents, and tell it which ones are too slow or risky to run."
+    }
+  ],
+  "notFor": "Merging several existing instruction files into one. It doesn't cover that.",
+  "links": [
+    { "label": "github/awesome-copilot repository", "href": "https://github.com/github/awesome-copilot" },
+    { "label": "AGENTS.md format", "href": "https://agents.md/" }
+  ]
+}

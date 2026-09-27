@@ -1,0 +1,78 @@
+{
+  "slug": "obra-writing-clearly-and-concisely",
+  "status": "draft",
+  "title": "writing-clearly-and-concisely Review: Strunk's Rules, Bundled, With No Line Around Code",
+  "description": "We used obra's writing-clearly-and-concisely skill to edit the longest page in our docs. It trimmed and tightened the prose without losing a fact. The skill itself is a pointer to a 12,000-token copy of The Elements of Style.",
+  "skillSlug": "obra-writing-clearly-and-concisely",
+  "verdict": "Recommended",
+  "overallScore": 3.8,
+  "scores": {
+    "installation": 5,
+    "documentation": 4,
+    "depth": 3,
+    "maintenance": 2,
+    "platformSupport": 5
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "writing clearly and concisely skill",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve documentation skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "obra/the-elements-of-style@05fc4f0",
+      "task": "Find the longest page in the site's docs by word count, edit its prose for clarity and concision, and keep every fact, command and link. List every factual claim before editing and check each one after. Report word counts and confirm the file still type-checks.",
+      "outcome": "`npx skills add obra/the-elements-of-style --skill writing-clearly-and-concisely` installed it first time.\n\nSKILL.md is 62 lines: it lists Strunk's 18 rules and tells the agent to read the bundled `elements-of-style.md`, which it warns costs about 12,000 tokens. The guidance is in that file, not in SKILL.md.\n\nThe longest page was the Google Analytics and Search Console setup guide at 2,172 words. The agent edited 22 paragraphs of prose and left every command, config block, link and structured-data block unchanged. The page went to 2,112 words. We read the diff: the edits are wording changes such as \"You can connect both Google Analytics 4 and Google Search Console to Claude\" becoming \"Free, open-source MCP servers connect Google Analytics 4 and Google Search Console to Claude\". `tsc --noEmit` on the file passed before and after.\n\nThe agent applied some rules selectively. \"Omit needless words\" is risky in a setup guide, where the word that looks needless can be the one that tells two steps apart. Nothing in the skill separates prose from code or structured data. Leaving those alone came from our task's rule.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit c7e2736."
+    }
+  ],
+  "summary": "This skill packages Strunk's The Elements of Style for an agent: a short list of the rules plus the full text to consult. On our longest docs page it made the prose tighter and more direct without changing a fact, but the gain was modest, about 3% fewer words. It has no idea what is prose and what is code, config or markup. On technical docs, tell the agent to edit only the sentences.",
+  "strengths": [
+    {
+      "title": "Real rules, not vibes",
+      "body": "Active voice, positive form, related words together, needless words out. The agent could name the rule behind each edit."
+    },
+    {
+      "title": "Kept every fact",
+      "body": "All 22 edits were wording. No command, link or value changed, and the file still type-checks."
+    },
+    {
+      "title": "Works for any prose",
+      "body": "Docs, commit messages, UI text, reports. Nothing ties it to a stack or an agent."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "No boundary around code",
+      "body": "Nothing says to leave code blocks, JSON or structured data alone. On a docs page those sit right next to the prose."
+    },
+    {
+      "title": "Rules can cut meaning",
+      "body": "\"Omit needless words\" is risky in instructions. The agent had to hold back on setup steps and FAQ answers."
+    },
+    {
+      "title": "Expensive to load",
+      "body": "The useful part is a 12,000-token reference file. The skill offers a subagent pattern for when context is tight."
+    },
+    {
+      "title": "Not recently maintained",
+      "body": "The skill's folder was last changed in October 2025. The rules themselves date from 1918."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "A final clarity pass on docs or UI text",
+      "body": "Tell it to edit only sentences, and to leave commands, code and markup untouched."
+    }
+  ],
+  "notFor": "Removing AI-writing patterns specifically. Strunk predates them; use a skill built for that.",
+  "links": [
+    { "label": "obra/the-elements-of-style repository", "href": "https://github.com/obra/the-elements-of-style" }
+  ]
+}

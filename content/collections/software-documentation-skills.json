@@ -1,0 +1,79 @@
+{
+  "slug": "software-documentation-skills",
+  "status": "draft",
+  "title": "12 Documentation Skills for Software Projects, Tested",
+  "description": "One skill for each documentation job, from design doc to final edit. We ran every one against a real task on our own codebase and checked the results.",
+  "emoji": "📝",
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "targetKeyword": "best documentation skills for claude code",
+  "curator": {
+    "name": "TrustedSkills Editorial",
+    "bio": "Picked and tested by the team that builds this site, on the code and docs that run it."
+  },
+  "intro": "An agent will write documentation for you whether or not you give it a skill. The question is whether the result matches the code. In our tests, the output depended less on how well a skill writes and more on whether it made the agent check its claims.\n\nThis list follows the life of a project's docs, one skill per job: **design doc → decision record → diagrams → code comments → API reference → user docs → onboarding guide → agent instructions → clarity edit → AI-pattern check → copy edit → docs audit.**\n\nWe ran every pick against a real task on the codebase behind this site. Several did well. Some are thin, one is built for a different job entirely, and we say so in each entry. The verdict and score on each card come from that run.",
+  "criteria": "**How the twelve were chosen.** Each pick had to (1) be in this registry with an install command that worked on the day, (2) do one clearly defined documentation job, and (3) cover a job no other pick covers. Inside a job we started from install count, then spread the picks across publishers: twelve skills from nine publishers.\n\n**The list was fixed before testing.** We did not drop a skill because it tested badly, or swap in a better one afterwards. That is why the list includes two \"Use With Caution\" verdicts and one \"Not Recommended\". If a job has a better skill, a later update will say so and link the new review.\n\n**What we left out.**\n\n- **README and changelog skills.** We tested one of each in our developer-workflow list, so this list covers the other documentation jobs.\n- **Document-format skills** (Word, PDF, slides). They produce files, not project documentation.\n- **Language-specific doc skills** (Go, Laravel, Spring). This list is for any stack.\n- **Two skills for the same job.** There are dozens of API-doc and diagram skills. One each is enough.",
+  "evidenceNote": "**All twelve were hands-on tested by us, once each, on the same day and the same codebase.** Each skill was installed with the registry's own command. An agent then ran it on a real task in a private copy of this site's repository: writing a design doc, documenting code, auditing our docs pages, editing our own review drafts, and so on. We checked each run's main claims ourselves, and each entry links to its full review.\n\nOne run on one codebase is one data point, not a benchmark. A skill that struggled here can do well on a different stack, and the reverse.",
+  "entries": [
+    {
+      "skillSlug": "doc-coauthoring",
+      "role": "Job 1 — Design doc",
+      "note": "A real method: gather context, write section by section, then test the doc on a reader who has never seen it. That reader test caught three weak spots in our doc. It is written for claude.ai artifacts first, so in Claude Code you follow its file fallback."
+    },
+    {
+      "skillSlug": "create-architectural-decision-record",
+      "role": "Job 2 — Decision record",
+      "note": "A standard ADR template that makes the agent write down alternatives and downsides. It is a Copilot prompt file underneath, and it doesn't ask where the context came from, so add that rule when you record an old decision."
+    },
+    {
+      "skillSlug": "mermaid-diagrams",
+      "role": "Job 3 — Diagrams",
+      "note": "Picks the right diagram type and covers each type in its reference files. Our two diagrams rendered after one fix. Render every diagram before you commit, because the syntax error we hit isn't on its list of pitfalls."
+    },
+    {
+      "skillSlug": "jsdoc-typescript-docs",
+      "role": "Job 4 — Code comments",
+      "note": "A full JSDoc/TSDoc reference with an example for each kind of export. Types and lint were unchanged, and it found two old comments attached to the wrong line. Skip its TypeDoc and CI steps unless you publish a library."
+    },
+    {
+      "skillSlug": "api-documentation-generator",
+      "role": "Job 5 — API reference",
+      "note": "A clear endpoint template, and reading each handler closely found real bugs in ours. Its examples assume authentication, versioning and rate limits exist. If your API has none, tell it to say so."
+    },
+    {
+      "skillSlug": "documentation-writer",
+      "role": "Job 6 — User docs",
+      "note": "Diátaxis in 45 lines: clarify the document type and audience, agree an outline, then write. That got our help page's scope right. It has no fact-checking step, so give it the source files to check against."
+    },
+    {
+      "skillSlug": "developer-onboarding",
+      "role": "Job 7 — Onboarding guide",
+      "note": "The topic outline is right. The reference files describe an Express, Postgres and Redis app, and copying them onto another stack documents services that don't exist. Use the outline, and follow the finished guide yourself."
+    },
+    {
+      "skillSlug": "create-agentsmd",
+      "role": "Job 8 — Agent instructions",
+      "note": "A good guide to AGENTS.md, with a rule to test every listed command. That rule found a check that fails on a clean checkout. It assumes no instructions file exists yet, so decide yourself how it shares the work with a CLAUDE.md."
+    },
+    {
+      "skillSlug": "obra-writing-clearly-and-concisely",
+      "role": "Job 9 — Clarity edit",
+      "note": "Strunk's rules, with the full text bundled. It tightened our longest docs page without losing a fact. It can't tell prose from code or markup, so tell it to edit only sentences."
+    },
+    {
+      "skillSlug": "humanizer",
+      "role": "Job 10 — AI-pattern check",
+      "note": "24 named patterns of AI writing, specific enough to search for. On our own drafts it found one habit used eight times and removed it without touching a fact. Skip its personality advice if you write in a house voice."
+    },
+    {
+      "skillSlug": "copy-editing",
+      "role": "Job 11 — Copy edit",
+      "note": "Seven editing sweeps that make a real method. It is tuned for conversion copy, and on our trust page one edit made a true-ish sentence false. Check every changed factual sentence against the source."
+    },
+    {
+      "skillSlug": "quality-documentation-manager",
+      "role": "Job 12 — Docs audit",
+      "note": "Not what its listing suggests. It is a medical-device compliance persona (ISO 13485), and its reference files are missing. Our docs audit found real errors, but not because of this skill. We have not yet tested a replacement for this job."
+    }
+  ]
+}

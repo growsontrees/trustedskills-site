@@ -1,0 +1,74 @@
+{
+  "slug": "jsdoc-typescript-docs",
+  "status": "draft",
+  "title": "jsdoc-typescript-docs Review: A Good Tag Reference, and It Found Two Misplaced Comments",
+  "description": "We used the jsdoc-typescript-docs skill to document two core modules in our codebase. Types and lint were unchanged, the examples matched the real signatures, and two old comments turned out to sit above the wrong line.",
+  "skillSlug": "jsdoc-typescript-docs",
+  "verdict": "Recommended",
+  "overallScore": 3.8,
+  "scores": {
+    "installation": 5,
+    "documentation": 4,
+    "depth": 4,
+    "maintenance": 2,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "jsdoc typescript skill",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve documentation skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "patricio0312rev/skills@79ea6af",
+      "task": "Add JSDoc/TSDoc comments to every export in the site's two core data modules (`lib/skills.ts` and `lib/reviews.ts`) with no behaviour change. Prove it with the TypeScript check, lint and the diff before and after, and judge whether the skill's TypeDoc and CI steps fit the project.",
+      "outcome": "`npx skills add patricio0312rev/skills --skill jsdoc-typescript-docs` installed it first time.\n\nThe skill is a 588-line reference of worked examples: functions, async functions, interfaces, generics, classes, a tag reference, TypeDoc config and a CI job. The agent documented all 20 exports across the two files with `@param`, `@returns` and `@example` tags.\n\nThe proof held. `tsc --noEmit` reported 0 errors before and after. `npm run lint` reported the same 3 errors and 8 warnings before and after, none in the edited files. The diff was 188 lines added and 9 removed, and the only non-comment change moved two lines.\n\nThose two lines were a real find. Two existing doc comments sat above a private cache variable instead of the exported function they describe, so editors showed them on the wrong symbol. We checked the old file: the comment for the tier counts sits directly above `let _tierCounts`. The agent moved the variables above the comments.\n\nThe skill lists TypeDoc and CI generation as steps 5 and 6 of its workflow. The agent judged them a poor fit for an internal app with no published API. It tried TypeDoc anyway: plain `npx typedoc` failed because it could not find TypeScript, and it worked after a temporary local install. Nothing was committed for it.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit c7e2736."
+    }
+  ],
+  "summary": "A thorough JSDoc/TSDoc reference with an example for most things you document in TypeScript. On our code it produced consistent comments with examples that match the real signatures, changed no behaviour, and exposed two comments attached to the wrong declaration. It treats TypeDoc and CI doc generation as standard steps. That fits a published library, not most apps, so skip them unless you ship an API.",
+  "strengths": [
+    {
+      "title": "Examples for every shape",
+      "body": "Functions, async functions, interfaces, generics, classes and a full tag reference. The agent had a pattern to copy for every export."
+    },
+    {
+      "title": "Safe on real code",
+      "body": "Types and lint were identical before and after. Only comments changed, plus two declarations moved to fix misplaced docs."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Assumes a library",
+      "body": "TypeDoc and a CI doc job are steps in its core workflow, with no guidance on when they are worth it. For an internal app they are not."
+    },
+    {
+      "title": "No warning about misplaced comments",
+      "body": "Every example has the comment directly above its function. It does not mention the common case of a variable sitting in between, which is how our two misplaced comments happened."
+    },
+    {
+      "title": "TypeDoc setup is incomplete",
+      "body": "`npx typedoc` alone failed in our repo. It needed a local install first, and the skill does not say so."
+    },
+    {
+      "title": "Not recently maintained",
+      "body": "The skill's folder was last changed in January 2026."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Documenting the exports of a TypeScript module",
+      "body": "Ask for no behaviour change and compare `tsc` and lint output before and after."
+    }
+  ],
+  "notFor": "Plain JavaScript projects, or teams that do not want doc generation in CI.",
+  "links": [
+    { "label": "patricio0312rev/skills repository", "href": "https://github.com/patricio0312rev/skills" }
+  ]
+}

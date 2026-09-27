@@ -1,0 +1,74 @@
+{
+  "slug": "copy-editing",
+  "status": "draft",
+  "title": "copy-editing Review: A Strong Sweep Method, Tuned for Conversion Copy",
+  "description": "We used the copy-editing skill on our homepage and submit page. Its seven sweeps are a real editing method and found useful fixes. One edit it made turned a slightly wrong sentence about our badges into a wrong one.",
+  "skillSlug": "copy-editing",
+  "verdict": "Use With Caution",
+  "overallScore": 4.0,
+  "scores": {
+    "installation": 5,
+    "documentation": 4,
+    "depth": 4,
+    "maintenance": 3,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "copy editing skill claude",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve documentation skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "coreyhaines31/marketingskills@5b2c000",
+      "task": "Copy-edit the visible copy on the homepage and the submit page with the skill's process. Add no new claims, never make verification sound stronger than it is, check tier wording against the site's badge config, and check every number against its source.",
+      "outcome": "`npx skills add coreyhaines31/marketingskills --skill copy-editing` installed it first time.\n\nThe skill runs seven sweeps in order (clarity, voice and tone, so what, prove it, specificity, heightened emotion, zero risk), looping back after each one, with three reference files including a plain-English word list.\n\nOn the homepage the agent changed nothing. Every number on it matched the data: 26,001 skills, 8.6M installs, 16 categories and the tier counts. The badge wording matched the site's config word for word.\n\nOn the submit page it made three edits. Two are good: it rewrote a sentence that could be misread as \"a badge means a person read your code\", and it added two platform values the site supports to the accepted-values list. The third went wrong. The page said \"Badges are assigned by the registry\". The agent found that some badges are set by the site and one, Featured, is hand-picked, then changed the line to \"Every badge is assigned automatically\". That is false, and it contradicts the agent's own note that Featured is hand-picked. We confirmed it in the badge config, which describes Featured as \"Hand-picked by us\".\n\nThe agent also found that the publisher count shown on the site (3,934) is stale; the data now has 3,958 distinct authors. We confirmed both numbers.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit c7e2736."
+    }
+  ],
+  "summary": "The seven-sweep method is a real editing process, and the loop back to earlier sweeps is a good discipline. On our pages it found an ambiguous sentence and a stale number. But it is built for conversion copy: its Prove It sweep looks for testimonials, logos and guarantees, and it checks that a claim has support nearby, not that it is true. One of our edits made a trust statement false. On any copy where accuracy matters more than persuasion, check every changed sentence against the source.",
+  "strengths": [
+    {
+      "title": "A real editing method",
+      "body": "Seven focused passes, each with what to look for and when to loop back. Easier to follow and audit than \"make it better\"."
+    },
+    {
+      "title": "Caught a misleading sentence",
+      "body": "A line about our badges could be read the wrong way round. The clarity sweep flagged it and the rewrite is clearer."
+    },
+    {
+      "title": "Plain-English word list",
+      "body": "A bundled list of plain alternatives to inflated words, useful beyond marketing copy."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Made a claim false",
+      "body": "It rewrote \"Badges are assigned by the registry\" as \"Every badge is assigned automatically\". One badge is hand-picked. On a page about trust, that is the worst kind of edit."
+    },
+    {
+      "title": "Support is not truth",
+      "body": "The Prove It sweep asks whether proof sits near a claim. It does not ask the agent to check the claim against the source."
+    },
+    {
+      "title": "Pushes toward persuasion",
+      "body": "Several sweeps ask for more emotion, more proof and less risk. On copy that must stay modest, those sweeps pull the wrong way."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Landing pages and marketing copy",
+      "body": "The sweeps fit copy whose job is to persuade. Check any changed factual sentence yourself."
+    }
+  ],
+  "notFor": "Policy, legal or trust statements, where one softened or sharpened word changes what you are promising.",
+  "links": [
+    { "label": "coreyhaines31/marketingskills repository", "href": "https://github.com/coreyhaines31/marketingskills" }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "slug": "developer-onboarding",
+  "status": "draft",
+  "title": "developer-onboarding Review: A Good Outline Wrapped Around Someone Else's Stack",
+  "description": "We used the developer-onboarding skill to write a contributor guide for our repo, then followed the guide step by step. The topic outline was useful. Most of the reference files describe an Express, Postgres and Redis app we don't have.",
+  "skillSlug": "developer-onboarding",
+  "verdict": "Use With Caution",
+  "overallScore": 3.0,
+  "scores": {
+    "installation": 5,
+    "documentation": 2,
+    "depth": 2,
+    "maintenance": 2,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "developer onboarding documentation skill",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve documentation skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "aj-geddes/useful-ai-prompts@3f5182c",
+      "task": "Write CONTRIBUTING.md for a new developer on the repo: setup, scripts, where the data comes from, how to add a review, how to check their work. Then follow the guide's own steps literally in a clean clone and fix whatever fails.",
+      "outcome": "`npx skills add aj-geddes/useful-ai-prompts --skill developer-onboarding` installed it first time.\n\nThe skill is a short SKILL.md with a topic outline (setup, environment, database, structure, scripts, style, git, tests) and nine reference files. The references describe a different project: a `.env` with `DATABASE_URL`, `REDIS_URL`, `JWT_SECRET` and Stripe keys, `createdb` and migrations, a `src/api/controllers` tree, ESLint airbnb-base with Prettier, Mocha and Chai tests, and Git Flow branches. Our repo has no database, no test runner and none of those tools. We checked four of the reference files and all four carry that stack.\n\nThe agent used the outline and wrote the facts from the repo instead. Then it followed the guide. `npm ci`, the editorial validator and loading the homepage worked as written. The dev server started on port 3002 because 3000 was busy, so the guide now says to read the port from the terminal. `npm run lint` exits with 3 errors on a clean checkout, which are known issues in the task list, so the guide now warns about them.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit c7e2736."
+    }
+  ],
+  "summary": "The outline is fine: setup, environment, data, structure, scripts, conventions and tests is the right list of topics for an onboarding guide. The reference files are the problem. They are filled-in examples for a Node API with Postgres, Redis, JWT and Stripe, and an agent that copies them onto a different stack documents infrastructure that doesn't exist. Our guide was good only because the agent ignored them and tested every step.",
+  "strengths": [
+    {
+      "title": "A sensible topic list",
+      "body": "The table of contents covers what a new developer needs, in a reasonable order."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "References describe one specific stack",
+      "body": "Express, Postgres, Redis, JWT, Stripe, SendGrid and AWS. None applied to our Next.js site, and copying them would have documented services we don't run."
+    },
+    {
+      "title": "No step to test the guide",
+      "body": "Nothing says to follow your own setup steps. Ours found a wrong port and a failing lint command only because the task asked for it."
+    },
+    {
+      "title": "Fixed conventions",
+      "body": "It prescribes Git Flow branches, a closed list of commit types and airbnb-base lint rules, whatever the project already uses."
+    },
+    {
+      "title": "Not recently maintained",
+      "body": "The skill's folder was last changed in March 2026."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "An outline for a new onboarding doc",
+      "body": "Use the table of contents, write the content from your own repo, and then follow the guide yourself."
+    }
+  ],
+  "notFor": "Projects that are not a Node API with a SQL database. The references will mislead the agent.",
+  "links": [
+    { "label": "aj-geddes/useful-ai-prompts repository", "href": "https://github.com/aj-geddes/useful-ai-prompts" }
+  ]
+}

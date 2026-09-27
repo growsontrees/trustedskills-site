@@ -1,0 +1,74 @@
+{
+  "slug": "create-architectural-decision-record",
+  "status": "draft",
+  "title": "create-architectural-decision-record Review: A Solid ADR Template in Copilot Prompt Syntax",
+  "description": "We used GitHub's ADR skill to record a decision our site made months ago. The template made the agent cover alternatives and downsides. The skill is a Copilot prompt file underneath, and it does not ask for evidence.",
+  "skillSlug": "create-architectural-decision-record",
+  "verdict": "Recommended",
+  "overallScore": 3.2,
+  "scores": {
+    "installation": 5,
+    "documentation": 3,
+    "depth": 3,
+    "maintenance": 2,
+    "platformSupport": 3
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "architectural decision record skill",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve documentation skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "github/awesome-copilot@6c4d33b",
+      "task": "Write an ADR for a decision the project had already made: related skills were switched off on skill detail pages. Rebuild the context, options and consequences from the code, CLAUDE.md and git history, and mark anything inferred.",
+      "outcome": "`npx skills add github/awesome-copilot --skill create-architectural-decision-record` installed it first time.\n\nThe skill is a 97-line template: front matter, Status, Context, Decision, positive and negative Consequences, Alternatives with rejection reasons, Implementation Notes and References, with coded bullets such as POS-001 and ALT-002. It says to save the file as `docs/adr/adr-NNNN-<slug>.md`. The agent did, and wrote a 181-line ADR.\n\nThe agent traced the decision to a March 2026 commit that removed the related-skills grid right after the site started pre-rendering 5,000 pages. It also found that the commit's own comment said related skills would still show on pre-rendered pages, while the code turned them off everywhere. We checked both in the git history. It also found that our CLAUDE.md still describes a `related = []` line that a later commit deleted. That is correct: the line is gone and the note is stale.\n\nThe inputs are written as `${input:DecisionTitle}` and `${input:Context}`, which is GitHub Copilot prompt-file syntax. Claude Code does not fill them, so the agent took them from the task. The template defaults the status to Proposed; the agent set Accepted, since the decision had shipped.\n\nThe skill does not ask for sources. Every \"why\" in our ADR cites a commit or is marked inferred because our task asked for that. Six points ended up marked inferred.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit c7e2736."
+    }
+  ],
+  "summary": "A clear, standard ADR template. It makes the agent write down alternatives, why they lost, and the downsides of the choice, which are the parts people skip. On our repo it produced a useful record of an old decision and surfaced a stale note in our own agent instructions. It is a GitHub Copilot prompt file with `${input:...}` placeholders, and it has no rule that the context must come from evidence, so add that rule yourself when you are documenting a past decision.",
+  "strengths": [
+    {
+      "title": "Covers the parts people skip",
+      "body": "Negative consequences and rejected alternatives are required sections. Our ADR listed four downsides and three alternatives."
+    },
+    {
+      "title": "Fixed location and naming",
+      "body": "`docs/adr/adr-NNNN-<slug>.md` with sequential numbers. A second ADR lands next to the first without anyone deciding where it goes."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Copilot prompt syntax",
+      "body": "Inputs are `${input:...}` variables that Copilot fills from a form. In Claude Code nothing fills them; the agent has to work them out or ask."
+    },
+    {
+      "title": "No evidence rule",
+      "body": "Nothing asks where the context came from. For a decision made months ago, that is where an agent can fill gaps with guesses. Our task added the rule."
+    },
+    {
+      "title": "Coded bullets add noise",
+      "body": "Every bullet gets a code like POS-001 or IMP-003. That helps machine parsing, but makes a short ADR harder for a person to read."
+    },
+    {
+      "title": "Not recently maintained",
+      "body": "The skill's folder was last changed in February 2026."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Recording a decision as you make it",
+      "body": "When the context is fresh, the template is all you need."
+    }
+  ],
+  "notFor": "Reconstructing old decisions, unless you add your own rule that every reason must cite a commit or a file.",
+  "links": [
+    { "label": "github/awesome-copilot repository", "href": "https://github.com/github/awesome-copilot" }
+  ]
+}

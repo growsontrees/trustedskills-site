@@ -1,0 +1,74 @@
+{
+  "slug": "api-documentation-generator",
+  "status": "draft",
+  "title": "api-documentation-generator Review: A Sound Template That Assumes Every API Has Auth",
+  "description": "We used the api-documentation-generator skill to document three parked API routes in our codebase. The template gave a clear structure. It assumes authentication, versioning and rate limits exist, so you have to tell it to say when they don't.",
+  "skillSlug": "api-documentation-generator",
+  "verdict": "Recommended",
+  "overallScore": 3.8,
+  "scores": {
+    "installation": 5,
+    "documentation": 3,
+    "depth": 3,
+    "maintenance": 4,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "api documentation generator skill",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve documentation skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "sickn33/agentic-awesome-skills@c338e02",
+      "task": "Write the API reference for the three route handlers parked in the repo's disabled API folder (search, single skill, popular skills), as they behave if re-enabled. Every parameter, status code and field must come from the code. Say where the template asks for something the code does not have, and list any problems in the handlers. Do not re-enable them.",
+      "outcome": "`npx skills add sickn33/agentic-awesome-skills --skill api-documentation-generator` installed it first time.\n\nThe skill is a five-step method (analyse the API, document each endpoint, add usage guidelines, document error handling, create interactive examples) with example templates for REST, GraphQL and WebSocket APIs. The agent wrote `docs/api.md` covering all three endpoints, their parameters, responses and errors.\n\nReading the handlers closely turned up real problems, which we checked. The single-skill handler uses the old synchronous `params` style while every live dynamic route in this Next.js 16 app awaits `params`. Non-numeric `page` or `limit` values become `NaN` and come back as `null` in a normal 200 response. And an empty search with the maximum page size of 100 would let anyone page through all 26,001 skills in 261 requests, which our own task list says a public API should not allow.\n\nThe template's examples all show Bearer auth, versioned URLs and rate limits, and its \"don't do this\" list says \"Don't Forget Authentication\". These routes have none of those. Because our task said to state gaps instead of inventing them, the doc says so. The skill itself has no step for an API without auth, and no step to check whether the routes are live.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit c7e2736."
+    }
+  ],
+  "summary": "A clear, well-organised template for REST API reference docs, with good examples of endpoint pages and error tables. On our three routes the method of reading each handler closely found real problems worth fixing before they go live. The template treats authentication, versioning and rate limits as always present. If your API lacks them, tell the agent to say so, or it has every reason to fill those sections in.",
+  "strengths": [
+    {
+      "title": "A clear endpoint template",
+      "body": "Parameters, request and response examples, and an error table for each endpoint. The finished doc was easy to scan."
+    },
+    {
+      "title": "Close reading finds bugs",
+      "body": "Documenting each parameter from the code exposed a stale Next.js pattern, silent `null` pages on bad input, and a way to download the whole index."
+    },
+    {
+      "title": "Recently updated",
+      "body": "The skill's folder changed in July 2026, the most recent of this batch."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Assumes auth, versions and limits",
+      "body": "Every example has them and the checklist says not to forget authentication. There is no branch for an API that has none."
+    },
+    {
+      "title": "No check that the API is live",
+      "body": "It never asks whether the routes are reachable. Ours sit in a disabled folder. The agent noticed that from the repo, not from the skill."
+    },
+    {
+      "title": "Extra deliverables it can't back up",
+      "body": "Its last step asks for Postman collections, OpenAPI specs and interactive examples. For a parked API that means inventing them, so our run skipped that step."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Reference docs for a live REST API",
+      "body": "Add one rule: document only what the code does, and say plainly what it doesn't."
+    }
+  ],
+  "notFor": "Generating an OpenAPI spec as the source of truth. It writes prose docs from code.",
+  "links": [
+    { "label": "sickn33/agentic-awesome-skills repository", "href": "https://github.com/sickn33/agentic-awesome-skills" }
+  ]
+}

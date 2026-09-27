@@ -1,0 +1,78 @@
+{
+  "slug": "humanizer",
+  "status": "draft",
+  "title": "humanizer Review: A Precise Catalogue of AI-Writing Patterns",
+  "description": "We ran the humanizer skill over two of our own AI-assisted review drafts. Its 24-pattern catalogue found one pattern repeated eight times, and the rewrite kept every fact. Its advice on adding personality does not suit a house style.",
+  "skillSlug": "humanizer",
+  "verdict": "Recommended",
+  "overallScore": 4.0,
+  "scores": {
+    "installation": 5,
+    "documentation": 4,
+    "depth": 4,
+    "maintenance": 2,
+    "platformSupport": 5
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "humanizer skill ai writing",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve documentation skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "softaworks/agent-toolkit@3027f20",
+      "task": "Run the skill over the prose of two of our own hands-on review drafts (dependency-upgrade and changelog-generator). Count each AI-writing pattern it lists, with the exact phrases, then rewrite to remove them. Keep every fact, score and verdict, keep the JSON valid, and pass the editorial validator.",
+      "outcome": "`npx skills add softaworks/agent-toolkit --skill humanizer` installed it first time.\n\nThe skill is a catalogue of 24 named patterns of AI writing, each with a before-and-after example: inflated significance, AI vocabulary, em dash overuse, rule of three, vague attribution, negative parallelisms and so on. It is a reference, so the agent applied it by searching the text for each pattern.\n\nThe drafts were clean on 23 of the 24. The one pattern present was the negative parallelism, the \"X, not Y\" construction, eight times across the two files. In one review the same point appeared three times this way, in the title, the summary and a best-for note. The agent rewrote seven of them and kept one where the rewrite would have changed the claim. For example, the title \"A Reference Card, Not a Method\" became \"A Command Reference Without a Method\". We read the diff: no score, verdict, date or number changed, and the validator passed before and after.\n\nThe skill's output format assumes a chat turn with pasted text. Its section on adding personality (opinions, varied rhythm, first person) did not fit a shared house voice across 25 reviews, so the agent did not apply it.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit c7e2736."
+    }
+  ],
+  "summary": "The best part of humanizer is the catalogue: 24 named AI-writing patterns, each with an example, specific enough to search for. On our own drafts it found one habit we had not noticed, the \"X, not Y\" contrast used eight times, and the rewrite removed it without touching a fact. It can't tell normal use of a pattern from overuse, and its advice to add personality suits personal writing more than a house style.",
+  "strengths": [
+    {
+      "title": "Specific, searchable patterns",
+      "body": "Each of the 24 patterns has a name and an example, so an agent can search for it instead of guessing what sounds robotic."
+    },
+    {
+      "title": "Found a habit we missed",
+      "body": "One review made the same point three times with the same \"X, not Y\" shape. That is easy to write and hard to see."
+    },
+    {
+      "title": "Facts survived",
+      "body": "Scores, verdicts, dates and numbers were unchanged, and the validator passed."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "No sense of degree",
+      "body": "One \"X, not Y\" is ordinary English. The skill doesn't say how many make a pattern."
+    },
+    {
+      "title": "Personality advice doesn't fit every voice",
+      "body": "It suggests opinions, varied rhythm and first person. For a shared editorial voice, the agent had to ignore that section."
+    },
+    {
+      "title": "Chat-shaped output",
+      "body": "It asks for the rewritten text plus a summary of changes, as if the text was pasted into a chat. Editing fields inside a file needs your own instructions."
+    },
+    {
+      "title": "Not recently maintained",
+      "body": "The skill's folder was last changed in January 2026."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Checking AI-assisted drafts before they publish",
+      "body": "Use the catalogue as a checklist and ask for counts per pattern, so you can see what it found."
+    }
+  ],
+  "notFor": "General copy editing. It finds AI patterns; it does not check structure, accuracy or tone for an audience.",
+  "links": [
+    { "label": "softaworks/agent-toolkit repository", "href": "https://github.com/softaworks/agent-toolkit" }
+  ]
+}

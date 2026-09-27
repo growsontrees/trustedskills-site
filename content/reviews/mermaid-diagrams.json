@@ -1,0 +1,74 @@
+{
+  "slug": "mermaid-diagrams",
+  "status": "draft",
+  "title": "mermaid-diagrams Review: Good Diagram Choices, One Syntax Trap It Misses",
+  "description": "We used the mermaid-diagrams skill to draw our site's two data flows. Its guide picked the right diagram type and both diagrams rendered. The first render failed on a syntax trap the skill's pitfall list does not name.",
+  "skillSlug": "mermaid-diagrams",
+  "verdict": "Recommended",
+  "overallScore": 4.0,
+  "scores": {
+    "installation": 5,
+    "documentation": 4,
+    "depth": 4,
+    "maintenance": 2,
+    "platformSupport": 5
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "mermaid diagrams skill claude code",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve documentation skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "softaworks/agent-toolkit@3027f20",
+      "task": "Document the site's architecture as Mermaid diagrams: the skill data flow from the registry to the pages, and the editorial flow from review files to the pages that show them. Check every node and edge against the code, then render each diagram with a real renderer.",
+      "outcome": "`npx skills add softaworks/agent-toolkit --skill mermaid-diagrams` installed it first time.\n\nThe skill's diagram-type guide sends processes and pipelines to flowcharts and timed message exchanges to sequence diagrams. The agent chose flowcharts for both views and wrote them to `docs/architecture.md`.\n\nChecking the edges against the code caught real detail. Only three routes use timed revalidation (skill, review and collection pages), and the editorial validator reads the JSON files directly as a `prebuild` step instead of going through the site's loader code. We confirmed both.\n\nThe first render with the Mermaid CLI failed. An edge label contained `entries[].skillSlug`, and the square brackets broke the parser. Quoting the label fixed it and both diagrams rendered. The skill's pitfall list warns about `{}` in comments and says to validate syntax in Mermaid Live, but it does not mention brackets in edge labels, and validation is a tip at the end, not a step in the workflow.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit c7e2736. Rendered with @mermaid-js/mermaid-cli via npx."
+    }
+  ],
+  "summary": "A practical Mermaid skill. The type-selection guide makes the agent pick the right kind of diagram, and seven reference files cover class, sequence, ER, C4 and architecture diagrams in more depth. Both of our diagrams rendered after one fix. Make rendering part of your own process: the skill mentions validation only as a pitfall, and the error we hit is not on its list.",
+  "strengths": [
+    {
+      "title": "Picks the right diagram",
+      "body": "A short table maps what you want to show to a diagram type. It stopped our agent drawing a pipeline as a sequence diagram."
+    },
+    {
+      "title": "Deep references when you need them",
+      "body": "Seven bundled guides cover each diagram family. Our run needed only the main file, and the depth is there for class, ER or C4 work."
+    },
+    {
+      "title": "Works everywhere Mermaid does",
+      "body": "The output is plain Mermaid in markdown, which GitHub and GitLab render directly. Nothing ties it to one agent."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Validation is only a tip",
+      "body": "It says to validate syntax in Mermaid Live and gives the CLI command, but no step says to render before you commit."
+    },
+    {
+      "title": "Missed a common syntax trap",
+      "body": "Square brackets inside an unquoted edge label break the parser. The pitfall list names curly braces in comments, not this."
+    },
+    {
+      "title": "Not recently maintained",
+      "body": "The skill's folder was last changed in February 2026."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Architecture and data-flow diagrams that live next to the code",
+      "body": "Ask it to render each diagram with the Mermaid CLI before it commits."
+    }
+  ],
+  "notFor": "Polished diagrams for slides. Mermaid layouts are automatic, and the skill does not cover styling in depth.",
+  "links": [
+    { "label": "softaworks/agent-toolkit repository", "href": "https://github.com/softaworks/agent-toolkit" }
+  ]
+}

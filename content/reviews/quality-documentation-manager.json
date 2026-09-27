@@ -1,0 +1,70 @@
+{
+  "slug": "quality-documentation-manager",
+  "status": "draft",
+  "title": "quality-documentation-manager Review: A Medical-Device Compliance Skill, Not a Docs Tool",
+  "description": "We tried the quality-documentation-manager skill as a docs accuracy audit. It is an ISO 13485 medical-device document-control persona, and the reference files it names are not in the package. Our audit found real errors, but not because of the skill.",
+  "skillSlug": "quality-documentation-manager",
+  "verdict": "Not Recommended",
+  "overallScore": 2.6,
+  "scores": {
+    "installation": 5,
+    "documentation": 1,
+    "depth": 2,
+    "maintenance": 2,
+    "platformSupport": 3
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "documentation audit skill",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve documentation skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "davila7/claude-code-templates@fcf666b",
+      "task": "Audit the site's public documentation (the pages in `lib/docs-content.ts`) for accuracy, completeness and consistency, and propose a lightweight way to keep it accurate. Check every command, path, number and claim against the code and data. Record which parts of the skill were used and which were skipped.",
+      "outcome": "`npx skills add davila7/claude-code-templates --skill quality-documentation-manager` installed it first time.\n\nThe skill is a \"Senior Quality Documentation Manager\" persona for regulated medical-device companies: document control under ISO 13485 clause 4.2.3, 21 CFR Part 11 electronic records, change control, retention and disposal. It points to reference files such as `references/dms-storage-design.md` and `references/workflow-automation.md`. None of them are in the package. It ships `references/api_reference.md`, `scripts/example.py` and `assets/example_asset.txt`, and the script describes itself as \"a placeholder script\". We checked the installed folder.\n\nThe agent used one general idea from the skill (periodic review) and dropped the rest, and said so in the audit. It then checked the 20 docs pages against the code. We confirmed three of its findings. The docs index says \"6 categories\" while the docs define 7, and all 7 have articles. A field reference lists `huggingface` as a platform, and no skill in our 26,001-skill index declares it. Every article has the same hard-coded `lastUpdated` date, so the date says nothing about freshness.\n\nThose findings came from the audit task. The skill contributed almost nothing to them.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit c7e2736."
+    }
+  ],
+  "summary": "This is a compliance persona for medical-device quality systems, built around ISO 13485 and 21 CFR Part 11. If that is your job, the outline may be a starting point, but the reference files and scripts it names are missing and the ones present are template placeholders. As a tool for checking that software documentation is accurate, it has nothing to offer. Registry listings, ours included, describe it as a general documentation-quality skill, which it is not.",
+  "strengths": [
+    {
+      "title": "A broad outline for regulated document control",
+      "body": "Document classification, approval workflows, change control and retention, in one structured list."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Wrong job for software docs",
+      "body": "Every section is about regulated document control. Nothing covers checking a doc against code, commands or data."
+    },
+    {
+      "title": "Missing reference files",
+      "body": "SKILL.md sends the agent to reference guides that are not in the package. The files that ship are unfilled template placeholders."
+    },
+    {
+      "title": "Misleading listing",
+      "body": "Its registry description, ours included, presents it as a general documentation-accuracy skill. Read the SKILL.md before you install it."
+    },
+    {
+      "title": "Not recently maintained",
+      "body": "The skill's folder was last changed in December 2025."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "A checklist of topics for a medical-device document control system",
+      "body": "Only as an outline. You would need to write the missing reference material yourself."
+    }
+  ],
+  "notFor": "Auditing README files, docs sites or API docs for accuracy.",
+  "links": [
+    { "label": "davila7/claude-code-templates repository", "href": "https://github.com/davila7/claude-code-templates" }
+  ]
+}
