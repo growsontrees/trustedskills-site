@@ -1,4 +1,27 @@
 import { REPORT_SKILL_URL, REPORT_PROMISE } from './github-links';
+import { getPlatformInstall } from './platform-install';
+
+/**
+ * The worked example on the `install-a-skill` pages: a real listing,
+ * https://trustedskills.dev/skills/find-skills. 25,634 of the 26,001 indexed
+ * skills carry an install command of exactly this shape.
+ */
+const EXAMPLE_INSTALL = 'npx skills add vercel-labs/skills --skill find-skills';
+
+/**
+ * Every command printed on an `install-a-skill` page comes from
+ * `getPlatformInstall()` — the same generator behind the install box on each
+ * skill page and each card. A change to the generator changes the docs, so the
+ * two cannot drift apart.
+ *
+ * Claude Desktop returns `isFallback: true`: the skills CLI has no agent target
+ * for it, so that page says so instead of printing an aimed command.
+ * Each command was run once against the skills CLI on 2026-09-27.
+ */
+const INSTALL_CLAUDE_CODE = getPlatformInstall(EXAMPLE_INSTALL, 'claudecode');
+const INSTALL_CURSOR = getPlatformInstall(EXAMPLE_INSTALL, 'cursor');
+const INSTALL_CLAUDE_DESKTOP = getPlatformInstall(EXAMPLE_INSTALL, 'claude');
+const EXAMPLE_USE = EXAMPLE_INSTALL.replace('skills add', 'skills use');
 
 export interface DocArticle {
   slug: string[];
@@ -484,6 +507,82 @@ export const DOC_ARTICLES: DocArticle[] = [
 
   // ─── CLAUDE DESKTOP ─────────────────────────────────────────────────────────
   {
+    slug: ['claude-desktop', 'install-a-skill'],
+    title: 'Install a TrustedSkills Skill in Claude Desktop',
+    description: 'The skills CLI has no Claude Desktop target. Here is what does work: paste a skill into a conversation with npx skills use, or install it into Claude Code on the same machine.',
+    category: 'Claude Desktop',
+    categorySlug: 'claude-desktop',
+    persona: 'beginner',
+    lastUpdated: '2026-09-27',
+    author: TRUSTEDSKILLS_AUTHOR,
+    content: `
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Install a TrustedSkills Skill in Claude Desktop","description":"The skills CLI has no Claude Desktop target. The two paths that do work: npx skills use to paste a skill into a conversation, or installing into Claude Code on the same machine.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+</script>
+
+<div class="tldr-box">
+  <div class="tldr-label">⚡ Quick Answer</div>
+  <p><strong>The skills CLI cannot install into Claude Desktop.</strong> It has no agent target for it. What works: run <code>npx skills use</code> to print the skill as a prompt and paste that into a Claude Desktop conversation, or install the skill into Claude Code on the same machine, where the CLI does have a target.</p>
+</div>
+
+<p class="article-intro">This is the honest version of a page most directories fill with a command that does not exist. The skills CLI installs a SKILL.md into an agent's skills folder, and Claude Desktop is not one of the agents it knows how to write to. Below is what the CLI actually accepts, and the two routes that get a skill in front of Claude Desktop anyway.</p>
+
+<h2>What the CLI Says</h2>
+<p>Ask the skills CLI to install into Claude Desktop and it refuses by name:</p>
+<pre><code class="language-bash">$ ${INSTALL_CLAUDE_DESKTOP.cmd} -a claude-desktop
+
+■  Invalid agents: claude-desktop
+●  Valid agents: aider-desk, amp, antigravity, … claude-code, … cursor, … universal</code></pre>
+<p>The valid list runs to more than seventy agents. Claude Desktop is not on it, under that name or any other. We are not going to invent a flag to fill this gap.</p>
+<p>Without <code>-a</code> the command still runs, but it installs into whichever agent folders it finds in the current directory — not into Claude Desktop:</p>
+<pre><code class="language-bash">${INSTALL_CLAUDE_DESKTOP.cmd}</code></pre>
+
+<div class="warning-box">
+  <strong>⚠️ <code>-a universal</code> is not a Claude Desktop install.</strong> It is a valid target, and it writes to <code>.agents/skills/</code> on disk — a folder Claude Desktop does not read. The files being there does not mean Claude Desktop can see them.
+</div>
+
+<h2>Option 1: Paste the Skill Into a Conversation</h2>
+<p>The CLI can print a skill as a ready-made prompt instead of installing it. This works with any chat interface, Claude Desktop included:</p>
+<pre><code class="language-bash">${EXAMPLE_USE}</code></pre>
+<p>It prints the skill's instructions wrapped in a short preamble — <em>"You are being given a Skill to execute for the user's next request"</em> — followed by the whole SKILL.md. Copy the output, paste it as your first message in a new Claude Desktop conversation, then ask for what you want.</p>
+<p><strong>The limit:</strong> this lasts one conversation. There is no persistence, and a long skill eats into the context you have for the actual work. For a skill you use daily, option 2 is better.</p>
+
+<h2>Option 2: Install It Into Claude Code Instead</h2>
+<p>Claude Code is a supported target and usually sits on the same machine. If your reason for wanting the skill is the work rather than the window, install it there:</p>
+<pre><code class="language-bash">${INSTALL_CLAUDE_CODE.cmd}</code></pre>
+<p>Full walkthrough: <a href="/docs/claude-code/install-a-skill">installing a skill in Claude Code</a>.</p>
+
+<h2>What claude_desktop_config.json Is For</h2>
+<p>Claude Desktop does have a config file, and readers often try to put a skill in it. That file configures <strong>MCP servers</strong> — separate programs that hand your agent new tools. It has no field for a SKILL.md skill, and adding one does nothing.</p>
+<p>If what you have is an MCP server, those guides are the right ones: <a href="/docs/claude-desktop/mac">Mac</a>, <a href="/docs/claude-desktop/windows">Windows</a>, <a href="/docs/claude-desktop/linux">Linux</a>. If you are not sure which of the two you are holding, <a href="/docs/concepts/mcp-vs-skills-vs-plugins">MCP servers vs skills vs plugins</a> settles it in a minute.</p>
+
+<div class="tip-box">
+  <strong>💡 Check the skill page first.</strong> Every listing on TrustedSkills shows its own install command. If it starts with <code>npx skills add</code> it is a SKILL.md skill and this page applies. If it is a <code>claude mcp add</code> or a JSON block, it is an MCP server — use the config guides above.
+</div>
+
+<hr/>
+
+<h2>Frequently Asked Questions</h2>
+
+<h3>Can I install a TrustedSkills skill into Claude Desktop with one command?</h3>
+<p>No. The skills CLI has no Claude Desktop agent target, so there is no single command that does it. Paste the skill in with <code>npx skills use</code>, or install it into Claude Code on the same machine.</p>
+
+<h3>Does putting the skill folder somewhere by hand work?</h3>
+<p>Not into Claude Desktop. The CLI's folders — <code>.agents/skills/</code>, <code>.claude/skills/</code> — are read by coding agents. Copying a folder around does not give Claude Desktop a way to find it.</p>
+
+<h3>Is this a limitation of TrustedSkills?</h3>
+<p>No — it is the skills CLI's set of supported agents. When Claude Desktop appears in that list, this page changes. We would rather tell you the gap exists than publish a command that fails.</p>
+
+<h3>What goes in claude_desktop_config.json then?</h3>
+<p>MCP servers only. See <a href="/docs/claude-desktop/mac">installing an MCP server in Claude Desktop on Mac</a>.</p>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Can I install a TrustedSkills skill into Claude Desktop with one command?","acceptedAnswer":{"@type":"Answer","text":"No. The skills CLI has no Claude Desktop agent target. Paste the skill in with npx skills use, or install it into Claude Code on the same machine."}},{"@type":"Question","name":"Does putting the skill folder somewhere by hand work?","acceptedAnswer":{"@type":"Answer","text":"Not into Claude Desktop. The CLI's folders, .agents/skills/ and .claude/skills/, are read by coding agents. Copying a folder does not give Claude Desktop a way to find it."}},{"@type":"Question","name":"Is this a limitation of TrustedSkills?","acceptedAnswer":{"@type":"Answer","text":"No, it is the skills CLI's set of supported agents. When Claude Desktop appears in that list, this page changes."}},{"@type":"Question","name":"What goes in claude_desktop_config.json then?","acceptedAnswer":{"@type":"Answer","text":"MCP servers only, not SKILL.md skills."}}]}
+</script>
+    `,
+  },
+
+  {
     slug: ['claude-desktop', 'mac'],
     title: 'Install an MCP Server in Claude Desktop on Mac: Step-by-Step',
     description: 'Install an MCP server on Claude Desktop Mac with this complete step-by-step guide. Covers config file location, Node.js setup, adding a server, and troubleshooting — no coding experience needed.',
@@ -500,6 +599,10 @@ export const DOC_ARTICLES: DocArticle[] = [
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
   <p>Open <code>~/Library/Application Support/Claude/claude_desktop_config.json</code>, add your skill inside an <code>mcpServers</code> block, save, and fully restart Claude Desktop. That's it. The skill appears in your next conversation.</p>
+</div>
+
+<div class="tip-box">
+  <strong>💡 Installing a skill from TrustedSkills?</strong> Most listings here are SKILL.md skills, not MCP servers, and this config file has no field for one. See <a href="/docs/claude-desktop/install-a-skill">install a skill in Claude Desktop</a> — including why the skills CLI has no Claude Desktop target. This guide covers MCP servers.
 </div>
 
 <p class="article-intro">You can add an MCP server to Claude Desktop on a Mac without having edited a JSON file before. This guide goes step by step, including how to stop TextEdit from breaking the file.</p>
@@ -629,8 +732,8 @@ export const DOC_ARTICLES: DocArticle[] = [
 
   {
     slug: ['claude-desktop', 'windows'],
-    title: 'Install MCP Skills Claude Desktop Windows: Full Guide',
-    description: 'Install MCP skills on Claude Desktop Windows step-by-step. Covers the config file location, JSON format, Windows path gotchas with npx, and troubleshooting tips for getting skills working.',
+    title: 'Install an MCP Server in Claude Desktop on Windows: Full Guide',
+    description: 'Install an MCP server on Claude Desktop Windows step-by-step. Covers the config file location, JSON format, Windows path gotchas with npx, and troubleshooting tips for getting a server working.',
     category: 'Claude Desktop',
     categorySlug: 'claude-desktop',
     persona: 'beginner',
@@ -638,12 +741,16 @@ export const DOC_ARTICLES: DocArticle[] = [
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Claude Desktop Windows: Full Guide","description":"Install MCP skills on Claude Desktop Windows — config location, JSON format, Windows gotchas, and troubleshooting.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Install an MCP Server in Claude Desktop on Windows: Full Guide","description":"Install an MCP server on Claude Desktop Windows — config location, JSON format, Windows gotchas, and troubleshooting.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
   <p>Open <code>%APPDATA%\\Claude\\claude_desktop_config.json</code>, add your skill inside <code>mcpServers</code>, save, and fully restart Claude Desktop. If npx isn't found, run <code>where npx.cmd</code> in Command Prompt to get the full path — then use that in your config.</p>
+</div>
+
+<div class="tip-box">
+  <strong>💡 Installing a skill from TrustedSkills?</strong> Most listings here are SKILL.md skills, not MCP servers, and this config file has no field for one. See <a href="/docs/claude-desktop/install-a-skill">install a skill in Claude Desktop</a> — including why the skills CLI has no Claude Desktop target. This guide covers MCP servers.
 </div>
 
 <p class="article-intro">Windows adds a couple of wrinkles that the Mac guide skips over — Notepad's save-as-type trap, the double-backslash JSON requirement, and npx sometimes hiding from Claude Desktop even when it works fine in your terminal. Here's how to navigate all of it.</p>
@@ -779,6 +886,10 @@ export const DOC_ARTICLES: DocArticle[] = [
   <p>Edit <code>~/.config/Claude/claude_desktop_config.json</code>, add skills under <code>mcpServers</code>, restart Claude Desktop. The nvm PATH issue is the most common problem on Linux — fix it by using the full path to npx or adding nvm to <code>~/.profile</code>.</p>
 </div>
 
+<div class="tip-box">
+  <strong>💡 Installing a skill from TrustedSkills?</strong> Most listings here are SKILL.md skills, not MCP servers, and this config file has no field for one. See <a href="/docs/claude-desktop/install-a-skill">install a skill in Claude Desktop</a> — including why the skills CLI has no Claude Desktop target. This guide covers MCP servers.
+</div>
+
 <p class="article-intro">Linux adds one gotcha that catches almost everyone who uses nvm: Claude Desktop launches as a non-interactive process and doesn't inherit the shell PATH where nvm lives. Here's how to navigate that — plus the rest of the setup.</p>
 
 <h2>Prerequisites</h2>
@@ -871,6 +982,109 @@ nano ~/.config/Claude/claude_desktop_config.json</code></pre>
 
   // ─── CLAUDE CODE ────────────────────────────────────────────────────────────
   {
+    slug: ['claude-code', 'install-a-skill'],
+    title: 'Install a TrustedSkills Skill in Claude Code',
+    description: 'Install a SKILL.md skill from TrustedSkills into Claude Code with one skills CLI command. Covers project vs global scope, where the files land, how to confirm it loaded, and how to remove it.',
+    category: 'Claude Code',
+    categorySlug: 'claude-code',
+    persona: 'beginner',
+    lastUpdated: '2026-09-27',
+    author: TRUSTEDSKILLS_AUTHOR,
+    content: `
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Install a TrustedSkills Skill in Claude Code","description":"Install a SKILL.md skill from TrustedSkills into Claude Code with one skills CLI command — scope, file locations, verification, and removal.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+</script>
+
+<div class="tldr-box">
+  <div class="tldr-label">⚡ Quick Answer</div>
+  <p>Run the install command from the skill's page in your project folder, adding <code>-a claude-code</code>. The skill lands in <code>.claude/skills/&lt;name&gt;/</code> and Claude Code picks it up in your next session. No JSON to edit.</p>
+</div>
+
+<p class="article-intro">Almost every listing on TrustedSkills is a SKILL.md skill: a folder with an instruction file in it. It is not an MCP server, so there is no config file to edit and nothing to restart. One command copies it into place.</p>
+
+<h2>The Command</h2>
+<p>Every skill page shows its own install command. Copy that command and add <code>-a claude-code</code>. Using <a href="/skills/find-skills">find-skills</a> as the example:</p>
+<pre><code class="language-bash">${INSTALL_CLAUDE_CODE.cmd}</code></pre>
+<p>That is the exact line the skill page gives you when Claude Code is your selected platform — this page and that box are generated by the same function, so they cannot disagree.</p>
+
+<div class="warning-box">
+  <strong>⚠️ A skill runs with your agent's permissions.</strong> The CLI says so itself when it finishes: <em>"Review skills before use; they run with full agent permissions."</em> A skill is instructions your agent will follow, with access to your files, your keys and your shell. Read the SKILL.md before you let it run. No badge on TrustedSkills means a person read the code.
+</div>
+
+<h2>What You'll Need</h2>
+<ul>
+  <li><strong>Node.js</strong> — the skills CLI runs through <code>npx</code>. Check with <code>node --version</code>; install from <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a> if it is missing.</li>
+  <li><strong>Claude Code</strong> — see <a href="/docs/claude-code/beginner-guide">the Claude Code setup guide</a> if you have not installed it yet.</li>
+</ul>
+
+<h2>This Project, or Every Project</h2>
+<p>Run the command with no flags and the skill is installed for the current project only. Add <code>-g</code> and it goes to your home folder, where every project sees it:</p>
+<div class="table-container">
+  <table>
+    <thead>
+      <tr><th>Command</th><th>Where the skill lands</th><th>Who sees it</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>${INSTALL_CLAUDE_CODE.cmd}</code></td><td><code>.claude/skills/&lt;name&gt;/</code> in the current folder</td><td>This project</td></tr>
+      <tr><td><code>${INSTALL_CLAUDE_CODE.cmd} -g</code></td><td><code>~/.claude/skills/&lt;name&gt;/</code></td><td>Every project on this machine</td></tr>
+    </tbody>
+  </table>
+</div>
+<p>Project scope also writes a <code>skills-lock.json</code> next to the folder, recording each skill's source repo and a hash of its contents. Commit it and a teammate can restore the same version with <code>npx skills experimental_install</code>. One wrinkle worth knowing: the lock file does not record which agent you installed for, so the restore lands in the shared <code>.agents/skills/</code> folder. To get it into <code>.claude/skills/</code> specifically, re-run the add command with <code>-a claude-code</code>.</p>
+
+<h2>Confirm It Worked</h2>
+<p>Ask the CLI what is installed:</p>
+<pre><code class="language-bash">npx skills list</code></pre>
+<p>It prints each skill, the full path it was written to, and which agents it was installed for. If the skill you just added is not listed, you ran the command in a different folder than you think.</p>
+<p>Then start a new Claude Code session. Skills are matched by their <code>description</code> field, so you do not call one by name — ask for the thing it does, and the agent reaches for it.</p>
+
+<h2>Updating and Removing</h2>
+<pre><code class="language-bash"># Update every installed skill
+npx skills update
+
+# Remove one skill
+npx skills remove find-skills</code></pre>
+<p>Leave <code>-a</code> off: with the flag, the CLI only clears that agent's links, which can report success while leaving the files in place. Without it, the folder goes. Nothing else on your machine is touched.</p>
+
+<h2>Troubleshooting</h2>
+
+<h3>"command not found: npx"</h3>
+<p>Node.js is not installed, or your terminal was open before you installed it. Close the terminal, open a new one, and run <code>node --version</code> again. See <a href="/docs/concepts/what-is-npx">what npx actually does</a>.</p>
+
+<h3>The skill installed but the agent ignores it</h3>
+<p>Two usual causes. You installed into a project folder and are running Claude Code somewhere else — check the path in <code>npx skills list</code>. Or the session was already open: skills are read when the session starts, so start a new one.</p>
+
+<h3>The repo has several skills and I got the wrong one</h3>
+<p>Add <code>-l</code> to list what a repo contains without installing anything:</p>
+<pre><code class="language-bash">npx skills add vercel-labs/skills -l</code></pre>
+
+<div class="tip-box">
+  <strong>💡 Looking for MCP servers instead?</strong> A skill is an instruction file; an MCP server is a program that gives your agent new tools. They install completely differently. For MCP servers see <a href="/docs/claude-code/mac">Claude Code on Mac</a> or <a href="/docs/claude-code/windows">Claude Code on Windows</a>, and <a href="/docs/concepts/mcp-vs-skills-vs-plugins">how the two differ</a>.
+</div>
+
+<hr/>
+
+<h2>Frequently Asked Questions</h2>
+
+<h3>Do I need to edit a JSON config file to install a skill?</h3>
+<p>No. SKILL.md skills are folders on disk, not MCP servers. The <code>claude mcp add</code> command and the <code>.mcp.json</code> file are for MCP servers only.</p>
+
+<h3>Where does Claude Code keep installed skills?</h3>
+<p><code>.claude/skills/&lt;name&gt;/</code> inside the project for a project install, and <code>~/.claude/skills/&lt;name&gt;/</code> for a global one with <code>-g</code>.</p>
+
+<h3>Can I use the same skill in another agent?</h3>
+<p>Yes. Run the same command with a different <code>-a</code> target: <code>cursor</code>, <code>openclaw</code>, <code>codex</code> and <code>opencode</code> are all valid targets, and you can repeat the flag to cover several at once — <code>-a cursor -a claude-code</code>. A comma-separated list is rejected. See <a href="/docs/cursor/install-a-skill">installing a skill in Cursor</a>.</p>
+
+<h3>How do I know what a skill will do before I run it?</h3>
+<p>Open the SKILL.md the CLI wrote, or read it on the skill's page before installing. A badge on TrustedSkills never means a person reviewed the code — <a href="/docs/advanced/verification-badges">see what each badge actually claims</a>.</p>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I need to edit a JSON config file to install a skill?","acceptedAnswer":{"@type":"Answer","text":"No. SKILL.md skills are folders on disk, not MCP servers. claude mcp add and .mcp.json are for MCP servers only."}},{"@type":"Question","name":"Where does Claude Code keep installed skills?","acceptedAnswer":{"@type":"Answer","text":".claude/skills/<name>/ inside the project, or ~/.claude/skills/<name>/ for a global install with -g."}},{"@type":"Question","name":"Can I use the same skill in another agent?","acceptedAnswer":{"@type":"Answer","text":"Yes. Run the same command with a different -a target: cursor, openclaw, codex and opencode are all valid. Repeat the flag to cover several at once; a comma-separated list is rejected."}},{"@type":"Question","name":"How do I know what a skill will do before I run it?","acceptedAnswer":{"@type":"Answer","text":"Read the SKILL.md before you let it run. A badge on TrustedSkills never means a person reviewed the code."}}]}
+</script>
+    `,
+  },
+
+  {
     slug: ['claude-code', 'beginner-guide'],
     title: 'Claude Code VS Code MCP Setup: Complete Beginner\'s Guide',
     description: 'Claude Code VS Code MCP setup guide for beginners — install the extension, add MCP servers with claude mcp add, find them in ~/.claude.json or .mcp.json, and check them with /mcp. No experience needed.',
@@ -890,7 +1104,7 @@ nano ~/.config/Claude/claude_desktop_config.json</code></pre>
 </div>
 
 <div class="tip-box">
-  <strong>💡 Installing a skill from TrustedSkills?</strong> Most skills listed here are SKILL.md skills, not MCP servers. They need no MCP config. Install one with <code>npx skills add &lt;owner&gt;/&lt;repo&gt; --skill &lt;name&gt; -a claude-code</code>. This guide covers MCP servers.
+  <strong>💡 Installing a skill from TrustedSkills?</strong> Most listings here are SKILL.md skills, not MCP servers, and they need no MCP config at all. One command installs one — see <a href="/docs/claude-code/install-a-skill">install a skill in Claude Code</a>. This guide covers MCP servers.
 </div>
 
 <p class="article-intro">Claude Code can read your files and run terminal commands without any extra setup. MCP servers add more tools on top of that, such as a database client or a search API. This guide shows where Claude Code stores MCP servers, how to add one, and how to check that it loaded.</p>
@@ -1014,6 +1228,10 @@ claude                # start a session
   <p>User scope (<code>claude mcp add --scope user</code>, stored in <code>~/.claude.json</code>) = personal tools, your credentials, things you want everywhere. Project scope (<code>claude mcp add --scope project</code>, stored in <code>.mcp.json</code>) = team tools you commit to git. Never put API keys directly in <code>.mcp.json</code>. Use <code>$&#123;VAR&#125;</code> references instead.</p>
 </div>
 
+<div class="tip-box">
+  <strong>💡 Installing a skill from TrustedSkills?</strong> Most listings here are SKILL.md skills, not MCP servers, and they need no MCP config at all. One command installs one — see <a href="/docs/claude-code/install-a-skill">install a skill in Claude Code</a>. This guide covers MCP servers.
+</div>
+
 <p class="article-intro">When you add an MCP server to Claude Code, you choose who gets it: only you, or everyone who clones the repo. The answer depends on who needs the tool and whether it uses a secret.</p>
 
 <h2>The Three Scopes</h2>
@@ -1131,8 +1349,8 @@ claude mcp add --scope user brave-search -e BRAVE_API_KEY=your-personal-key -- n
 
   {
     slug: ['claude-code', 'mac'],
-    title: 'Install MCP Skills Claude Code Mac: CLI & Manual Methods',
-    description: 'Install MCP skills for Claude Code on Mac using the CLI or manual config editing. Covers global vs project scope, NVM path fixes, and how to verify tools are loading correctly.',
+    title: 'Install an MCP Server in Claude Code on Mac: CLI & Manual Methods',
+    description: 'Install an MCP server for Claude Code on Mac using the CLI or manual config editing. Covers global vs project scope, NVM path fixes, and how to verify tools are loading correctly.',
     category: 'Claude Code',
     categorySlug: 'claude-code',
     persona: 'developer',
@@ -1140,7 +1358,7 @@ claude mcp add --scope user brave-search -e BRAVE_API_KEY=your-personal-key -- n
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Claude Code Mac: CLI & Manual Methods","description":"Install MCP skills for Claude Code on Mac — CLI, manual config, NVM fixes, and verification.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Install an MCP Server in Claude Code on Mac: CLI & Manual Methods","description":"Install an MCP server for Claude Code on Mac — CLI, manual config, NVM fixes, and verification.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
@@ -1149,7 +1367,7 @@ claude mcp add --scope user brave-search -e BRAVE_API_KEY=your-personal-key -- n
 </div>
 
 <div class="tip-box">
-  <strong>💡 Installing a skill from TrustedSkills?</strong> Most skills listed here are SKILL.md skills, not MCP servers. They need no MCP config. Install one with <code>npx skills add &lt;owner&gt;/&lt;repo&gt; --skill &lt;name&gt; -a claude-code</code>. This guide covers MCP servers.
+  <strong>💡 Installing a skill from TrustedSkills?</strong> Most listings here are SKILL.md skills, not MCP servers, and they need no MCP config at all. One command installs one — see <a href="/docs/claude-code/install-a-skill">install a skill in Claude Code</a>. This guide covers MCP servers.
 </div>
 
 <p class="article-intro">The CLI is the quickest way to add an MCP server to Claude Code on a Mac. It writes the config for you. Editing <code>.mcp.json</code> by hand is useful when you want to review exactly what a project shares with the team.</p>
@@ -1234,8 +1452,8 @@ claude                # start a session
 
   {
     slug: ['claude-code', 'windows'],
-    title: 'Install MCP Skills Claude Code Windows: CLI & Config Guide',
-    description: 'Install MCP skills for Claude Code on Windows using the CLI or manual config editing. Covers where Claude Code stores MCP servers (~/.claude.json and .mcp.json), Windows path formatting, and PowerShell commands.',
+    title: 'Install an MCP Server in Claude Code on Windows: CLI & Config Guide',
+    description: 'Install an MCP server for Claude Code on Windows using the CLI or manual config editing. Covers where Claude Code stores MCP servers (~/.claude.json and .mcp.json), Windows path formatting, and PowerShell commands.',
     category: 'Claude Code',
     categorySlug: 'claude-code',
     persona: 'developer',
@@ -1243,7 +1461,7 @@ claude                # start a session
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Claude Code Windows: CLI & Config Guide","description":"Install MCP skills for Claude Code on Windows — CLI, ~/.claude.json and .mcp.json, and path formatting.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Install an MCP Server in Claude Code on Windows: CLI & Config Guide","description":"Install an MCP server for Claude Code on Windows — CLI, ~/.claude.json and .mcp.json, and path formatting.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
@@ -1252,7 +1470,7 @@ claude                # start a session
 </div>
 
 <div class="tip-box">
-  <strong>💡 Installing a skill from TrustedSkills?</strong> Most skills listed here are SKILL.md skills, not MCP servers. They need no MCP config. Install one with <code>npx skills add &lt;owner&gt;/&lt;repo&gt; --skill &lt;name&gt; -a claude-code</code>. This guide covers MCP servers.
+  <strong>💡 Installing a skill from TrustedSkills?</strong> Most listings here are SKILL.md skills, not MCP servers, and they need no MCP config at all. One command installs one — see <a href="/docs/claude-code/install-a-skill">install a skill in Claude Code</a>. This guide covers MCP servers.
 </div>
 
 <p class="article-intro">Adding an MCP server to Claude Code on Windows works the same way as on a Mac. The two Windows details are where the config file lives and how to write a Windows path inside JSON.</p>
@@ -1334,9 +1552,112 @@ claude                 # start a session
 
   // ─── CURSOR ─────────────────────────────────────────────────────────────────
   {
+    slug: ['cursor', 'install-a-skill'],
+    title: 'Install a TrustedSkills Skill in Cursor',
+    description: 'Install a SKILL.md skill from TrustedSkills into Cursor with one skills CLI command. Covers the .agents/skills folder Cursor loads from, project vs global scope, verification, and removal.',
+    category: 'Cursor / VS Code',
+    categorySlug: 'cursor',
+    persona: 'beginner',
+    lastUpdated: '2026-09-27',
+    author: TRUSTEDSKILLS_AUTHOR,
+    content: `
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Install a TrustedSkills Skill in Cursor","description":"Install a SKILL.md skill from TrustedSkills into Cursor with one skills CLI command — the .agents/skills folder, scope, verification, and removal.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+</script>
+
+<div class="tldr-box">
+  <div class="tldr-label">⚡ Quick Answer</div>
+  <p>Run the install command from the skill's page in your project folder, adding <code>-a cursor</code>. The skill lands in <code>.agents/skills/&lt;name&gt;/</code> — one of the folders Cursor loads skills from automatically. Nothing to configure, no <code>mcp.json</code> involved.</p>
+</div>
+
+<p class="article-intro">Almost every listing on TrustedSkills is a SKILL.md skill: a folder with an instruction file in it. It is not an MCP server, so Cursor's <code>mcp.json</code> has nothing to do with it. One command puts the folder where Cursor already looks.</p>
+
+<h2>The Command</h2>
+<p>Every skill page shows its own install command. Copy that command and add <code>-a cursor</code>. Using <a href="/skills/find-skills">find-skills</a> as the example:</p>
+<pre><code class="language-bash">${INSTALL_CURSOR.cmd}</code></pre>
+<p>That is the exact line the skill page gives you when Cursor is your selected platform — this page and that box are generated by the same function, so they cannot disagree.</p>
+
+<div class="warning-box">
+  <strong>⚠️ A skill runs with your agent's permissions.</strong> The CLI says so itself when it finishes: <em>"Review skills before use; they run with full agent permissions."</em> A skill is instructions your agent will follow, with access to your files, your keys and your shell. Read the SKILL.md before you let it run. No badge on TrustedSkills means a person read the code.
+</div>
+
+<h2>Where the Files Go</h2>
+<p>The CLI's <code>cursor</code> target writes to <code>.agents/skills/</code> — the shared agent-skills folder, not <code>.cursor/</code>. Cursor loads skills from both, so either works:</p>
+<div class="table-container">
+  <table>
+    <thead>
+      <tr><th>Command</th><th>Where the skill lands</th><th>Who sees it</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>${INSTALL_CURSOR.cmd}</code></td><td><code>.agents/skills/&lt;name&gt;/</code> in the current folder</td><td>This project</td></tr>
+      <tr><td><code>${INSTALL_CURSOR.cmd} -g</code></td><td><code>~/.agents/skills/&lt;name&gt;/</code></td><td>Every project on this machine</td></tr>
+    </tbody>
+  </table>
+</div>
+<p>Cursor's own documentation lists <code>.agents/skills/</code>, <code>.cursor/skills/</code> and their <code>~/</code> equivalents as the locations it loads skills from automatically — see <a href="https://cursor.com/docs/context/skills" target="_blank" rel="noopener">Cursor's skills documentation</a>. It also reads <code>.claude/skills/</code> for compatibility, so a skill you installed for Claude Code in the same project is usually visible to Cursor too.</p>
+
+<h2>What You'll Need</h2>
+<ul>
+  <li><strong>Node.js</strong> — the skills CLI runs through <code>npx</code>. Check with <code>node --version</code>; install from <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a> if it is missing.</li>
+  <li><strong>A recent Cursor</strong> — skills loading is a current Cursor feature. If the folder exists and the agent never uses the skill, update Cursor first.</li>
+</ul>
+
+<h2>Confirm It Worked</h2>
+<p>Ask the CLI what is installed:</p>
+<pre><code class="language-bash">npx skills list</code></pre>
+<p>It prints each skill, the full path it was written to, and which agents it was installed for. If the skill you just added is not listed, you ran the command in a different folder than you think.</p>
+<p>Then reload Cursor and start a new chat. Skills are matched by their <code>description</code> field, so you do not call one by name — ask for the thing it does, and the agent reaches for it.</p>
+
+<h2>Updating and Removing</h2>
+<pre><code class="language-bash"># Update every installed skill
+npx skills update
+
+# Remove one skill
+npx skills remove find-skills</code></pre>
+<p>Leave <code>-a</code> off the remove command. Because the skill lives in the shared <code>.agents/skills/</code> folder, <code>remove -a cursor</code> reports success and leaves the files exactly where they were — it only clears agent-specific links, and there is no Cursor-specific one to clear. Without the flag it deletes the folder. Nothing else in your project is touched.</p>
+
+<h2>Troubleshooting</h2>
+
+<h3>"command not found: npx"</h3>
+<p>Node.js is not installed, or your terminal was open before you installed it. Close the terminal, open a new one, and run <code>node --version</code> again. See <a href="/docs/concepts/what-is-npx">what npx actually does</a>.</p>
+
+<h3>The folder is there but the agent ignores the skill</h3>
+<p>Reload Cursor — skills are read when the window loads. If it still does nothing, check that you opened the same folder you ran the command in: a project install only applies to that folder.</p>
+
+<h3>The repo has several skills and I got the wrong one</h3>
+<p>Add <code>-l</code> to list what a repo contains without installing anything:</p>
+<pre><code class="language-bash">npx skills add vercel-labs/skills -l</code></pre>
+
+<div class="tip-box">
+  <strong>💡 Looking for MCP servers instead?</strong> A skill is an instruction file; an MCP server is a program that gives your agent new tools. They install completely differently. For MCP servers see <a href="/docs/cursor/mac">Cursor on Mac</a> or <a href="/docs/cursor/windows">Cursor on Windows</a>, and <a href="/docs/concepts/mcp-vs-skills-vs-plugins">how the two differ</a>.
+</div>
+
+<hr/>
+
+<h2>Frequently Asked Questions</h2>
+
+<h3>Do I add a skill to Cursor's mcp.json?</h3>
+<p>No. <code>mcp.json</code> is only for MCP servers. A SKILL.md skill is a folder Cursor reads, with no config entry at all.</p>
+
+<h3>Why does the CLI write to .agents/skills and not .cursor/skills?</h3>
+<p><code>.agents/skills/</code> is the shared location several agents read, so one install can serve more than one tool. Cursor loads from it automatically, alongside <code>.cursor/skills/</code>.</p>
+
+<h3>Can I use the same skill in Claude Code?</h3>
+<p>Yes. Run the same command with <code>-a claude-code</code>, or cover both in one go by repeating the flag: <code>-a cursor -a claude-code</code>. Repeat it — a comma-separated list is rejected as an invalid agent name. See <a href="/docs/claude-code/install-a-skill">installing a skill in Claude Code</a>.</p>
+
+<h3>Does this work in VS Code too?</h3>
+<p>The CLI has its own targets for other editors and agents — <code>github-copilot</code>, <code>windsurf</code>, <code>zed</code> and others. Run <code>npx skills add &lt;repo&gt; -a</code> with an unknown name and it prints the full list of valid targets.</p>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Do I add a skill to Cursor's mcp.json?","acceptedAnswer":{"@type":"Answer","text":"No. mcp.json is only for MCP servers. A SKILL.md skill is a folder Cursor reads, with no config entry at all."}},{"@type":"Question","name":"Why does the CLI write to .agents/skills and not .cursor/skills?","acceptedAnswer":{"@type":"Answer","text":".agents/skills/ is the shared location several agents read. Cursor loads from it automatically, alongside .cursor/skills/."}},{"@type":"Question","name":"Can I use the same skill in Claude Code?","acceptedAnswer":{"@type":"Answer","text":"Yes. Run the same command with -a claude-code, or repeat the flag: -a cursor -a claude-code. A comma-separated list is rejected."}},{"@type":"Question","name":"Does this work in VS Code too?","acceptedAnswer":{"@type":"Answer","text":"The CLI has targets for other editors and agents, including github-copilot, windsurf and zed. Passing an unknown -a name prints the full list of valid targets."}}]}
+</script>
+    `,
+  },
+
+  {
     slug: ['cursor', 'mac'],
-    title: 'Install MCP Skills Cursor Mac: Config Guide & Reload Tips',
-    description: 'Install MCP skills on Cursor Mac — find the ~/.cursor/mcp.json config location, add skills in JSON format, reload Cursor to apply changes, and verify tools are working in the AI assistant.',
+    title: 'Install an MCP Server in Cursor on Mac: Config Guide & Reload Tips',
+    description: 'Install an MCP server on Cursor Mac — find the ~/.cursor/mcp.json config location, add a server in JSON format, reload Cursor to apply changes, and verify tools are working in the AI assistant.',
     category: 'Cursor / VS Code',
     categorySlug: 'cursor',
     persona: 'developer',
@@ -1344,12 +1665,16 @@ claude                 # start a session
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Cursor Mac: Config Guide & Reload Tips","description":"Install MCP skills on Cursor Mac — ~/.cursor/mcp.json location, JSON format, reload, and verification.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Install an MCP Server in Cursor on Mac: Config Guide & Reload Tips","description":"Install an MCP server on Cursor Mac — ~/.cursor/mcp.json location, JSON format, reload, and verification.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
   <p>Edit <code>~/.cursor/mcp.json</code>, add servers under <code>mcpServers</code>, then restart Cursor. Open the <strong>Customize</strong> panel to see your servers and switch them on or off. If one fails, check <strong>MCP Logs</strong> in the Output panel (⌘+Shift+U).</p>
+</div>
+
+<div class="tip-box">
+  <strong>💡 Installing a skill from TrustedSkills?</strong> Most listings here are SKILL.md skills, not MCP servers, and they need no <code>mcp.json</code> entry at all. One command installs one — see <a href="/docs/cursor/install-a-skill">install a skill in Cursor</a>. This guide covers MCP servers.
 </div>
 
 <p class="article-intro">Cursor lists your MCP servers in its Customize panel, where you can switch each one on or off. Setting it up is very similar to Claude Desktop, just in a different file location.</p>
@@ -1427,19 +1752,19 @@ touch ~/.cursor/mcp.json   # then open it in Cursor or any text editor</code></p
 <h3>Do I need to restart Cursor after editing mcp.json?</h3>
 <p>Restart Cursor after you change the file. To switch a server on or off without editing the file, use the Customize panel.</p>
 
-<h3>Can I use Cursor and Claude Code MCP skills together?</h3>
+<h3>Can I use the same MCP server in Cursor and Claude Code?</h3>
 <p>They're separate configs: <code>~/.cursor/mcp.json</code> for Cursor, and <code>claude mcp add</code> (stored in <code>~/.claude.json</code>) for Claude Code. The same server works in both; add it to each.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where is the Cursor MCP config on Mac?","acceptedAnswer":{"@type":"Answer","text":"~/.cursor/mcp.json for global. .cursor/mcp.json in project root for project-specific."}},{"@type":"Question","name":"Do I need to restart Cursor after editing mcp.json?","acceptedAnswer":{"@type":"Answer","text":"Restart Cursor after you change the file. Use the Customize panel to switch a server on or off."}},{"@type":"Question","name":"Can I use Cursor and Claude Code MCP skills together?","acceptedAnswer":{"@type":"Answer","text":"Yes, but they're separate configs. Add the server to ~/.cursor/mcp.json for Cursor and with claude mcp add for Claude Code."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where is the Cursor MCP config on Mac?","acceptedAnswer":{"@type":"Answer","text":"~/.cursor/mcp.json for global. .cursor/mcp.json in project root for project-specific."}},{"@type":"Question","name":"Do I need to restart Cursor after editing mcp.json?","acceptedAnswer":{"@type":"Answer","text":"Restart Cursor after you change the file. Use the Customize panel to switch a server on or off."}},{"@type":"Question","name":"Can I use the same MCP server in Cursor and Claude Code?","acceptedAnswer":{"@type":"Answer","text":"Yes, but they're separate configs. Add the server to ~/.cursor/mcp.json for Cursor and with claude mcp add for Claude Code."}}]}
 </script>
     `,
   },
 
   {
     slug: ['cursor', 'windows'],
-    title: 'Install MCP Skills Cursor Windows: Config & Path Guide',
-    description: 'Install MCP skills for Cursor on Windows — config file location at %USERPROFILE%\\.cursor\\mcp.json, JSON format, Windows path gotchas with npx, and how to reload and verify skills.',
+    title: 'Install an MCP Server in Cursor on Windows: Config & Path Guide',
+    description: 'Install an MCP server for Cursor on Windows — config file location at %USERPROFILE%\\.cursor\\mcp.json, JSON format, Windows path gotchas with npx, and how to reload and verify a server.',
     category: 'Cursor / VS Code',
     categorySlug: 'cursor',
     persona: 'developer',
@@ -1447,12 +1772,16 @@ touch ~/.cursor/mcp.json   # then open it in Cursor or any text editor</code></p
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Cursor Windows: Config & Path Guide","description":"Install MCP skills for Cursor on Windows — config location, JSON format, path issues, and verification.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Install an MCP Server in Cursor on Windows: Config & Path Guide","description":"Install an MCP server for Cursor on Windows — config location, JSON format, path issues, and verification.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
   <p>Edit <code>%USERPROFILE%\\.cursor\\mcp.json</code>, add skills under <code>mcpServers</code>. If npx isn't found, get the full path with <code>(Get-Command npx.cmd).Source</code> in PowerShell. Restart Cursor after you save.</p>
+</div>
+
+<div class="tip-box">
+  <strong>💡 Installing a skill from TrustedSkills?</strong> Most listings here are SKILL.md skills, not MCP servers, and they need no <code>mcp.json</code> entry at all. One command installs one — see <a href="/docs/cursor/install-a-skill">install a skill in Cursor</a>. This guide covers MCP servers.
 </div>
 
 <p class="article-intro">Same concept as the Mac guide — different file location, one Windows-specific quirk with backslashes. Here's the whole thing.</p>
@@ -1816,8 +2145,8 @@ nvm install 24</code></pre>
   // ─── ADVANCED ───────────────────────────────────────────────────────────────
   {
     slug: ['advanced', 'all-projects-vs-one'],
-    title: 'MCP Skills: Global vs Project Scope Across All Platforms',
-    description: 'When to make an MCP skill available to all projects vs one project — decision framework, config paths for every platform, team collaboration workflow, and how to handle secrets safely.',
+    title: 'MCP Servers: Global vs Project Scope Across All Platforms',
+    description: 'When to make an MCP server available to all projects vs one project — decision framework, config paths for every platform, team collaboration workflow, and how to handle secrets safely.',
     category: 'Advanced Topics',
     categorySlug: 'advanced',
     persona: 'developer',
@@ -1825,7 +2154,7 @@ nvm install 24</code></pre>
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"MCP Skills: Global vs Project Scope Across All Platforms","description":"Global vs project scope for MCP skills — decision framework and config paths across Claude Desktop, Claude Code, Cursor, and OpenClaw.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"MCP Servers: Global vs Project Scope Across All Platforms","description":"Global vs project scope for MCP servers — decision framework and config paths across Claude Desktop, Claude Code, Cursor, and OpenClaw.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
