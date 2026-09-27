@@ -7,10 +7,13 @@ import {
   scoreSkill,
   PLATFORM_CONFIG,
   TIER_CONFIG,
+  TIER_ORDER,
   type Skill,
   type VerificationTier,
 } from "../../lib/skills";
 import { SkillCard } from "../../components/SkillCard";
+import { ChevronLeft, ChevronRight, Search, categoryIcon } from "../../components/icons";
+import { Eyebrow, cx } from "../../components/ui";
 
 export const metadata: Metadata = {
   title: "Browse Agent Skills",
@@ -29,12 +32,11 @@ export const metadata: Metadata = {
 // one page of cards, not the whole registry (it used to get every skill).
 const PAGE_SIZE = 24;
 const PLATFORMS = ["claudecode", "openclaw", "claude", "mcp", "cursor", "openai"];
-const TIERS: VerificationTier[] = ["official", "featured", "verified", "community", "unverified"];
 const SORTS = {
-  ranked: "Top Ranked",
-  installs: "Most Popular",
-  updated: "Recently Updated",
-  name: "Alphabetical",
+  ranked: "Top ranked",
+  installs: "Most installed",
+  updated: "Recently updated",
+  name: "A–Z",
 } as const;
 type SortKey = keyof typeof SORTS;
 
@@ -50,7 +52,7 @@ function updatedAt(skill: Skill): number {
   return Number.isFinite(time) ? time : 0;
 }
 
-// Each full sort of ~45k skills is done once per process and reused.
+// Each full sort of ~26k skills is done once per process and reused.
 const sortedCache = new Map<SortKey, Skill[]>();
 function sortedSkills(sort: SortKey): Skill[] {
   let list = sortedCache.get(sort);
@@ -119,105 +121,145 @@ export default async function SkillsPage({ searchParams }: { searchParams: Promi
     return s ? `/skills?${s}` : "/skills";
   };
 
+  const hasFilters = !!(params.q || params.category || params.platform || params.tier);
+
   const chip = (active: boolean) =>
-    `text-sm px-3 py-1.5 rounded-full border font-medium transition-colors ${
+    cx(
+      "inline-flex h-7 items-center rounded-sm border px-2.5 text-xs font-medium transition duration-fast ease-out",
       active
-        ? "bg-purple-900/50 text-purple-200 border-purple-700"
-        : "bg-gray-800 text-gray-400 border-gray-700 hover:border-gray-500 hover:text-gray-200"
-    }`;
+        ? "border-accent-700 bg-accent-950 text-accent-200"
+        : "border-ink-750 bg-ink-900 text-ink-400 hover:border-ink-700 hover:bg-ink-850 hover:text-ink-100"
+    );
+
   const side = (active: boolean) =>
-    `w-full text-left flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-colors ${
-      active ? "bg-purple-900/50 text-purple-200" : "text-gray-400 hover:text-gray-200 hover:bg-gray-800"
-    }`;
+    cx(
+      "flex w-full items-center gap-2 rounded-md px-2.5 py-1.5 text-sm transition duration-fast ease-out",
+      active
+        ? "bg-ink-850 font-medium text-ink-50 shadow-hairline"
+        : "text-ink-400 hover:bg-ink-900 hover:text-ink-100"
+    );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-10">
-        <h1 className="text-3xl font-bold text-white mb-2">Browse Skills</h1>
-        <p className="text-gray-400">
-          {stats.total_skills.toLocaleString("en-US")} skills available · {(stats.total_installs / 1_000_000).toFixed(1)}M total installs
+    <div className="mx-auto max-w-page px-4 py-10 sm:px-6 lg:px-8">
+      <header className="border-b border-ink-800 pb-6">
+        <h1 className="text-3xl font-semibold text-ink-50">Browse skills</h1>
+        <p className="mt-2 text-sm text-ink-450">
+          {stats.total_skills.toLocaleString("en-GB")} listings from across the agent ecosystem.
+          None of them have been code-reviewed — check the source before you install.
         </p>
-      </div>
+      </header>
 
-      <div className="mb-8 p-4 bg-gray-900/50 border border-gray-800 rounded-xl">
-        <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-sm font-semibold text-gray-300 mr-1">Platform:</span>
-          <Link href={href({ platform: undefined })} className={chip(!params.platform)}>
-            All platforms
-          </Link>
-          {PLATFORMS.map((platform) => (
-            <Link key={platform} href={href({ platform })} className={chip(params.platform === platform)}>
-              {PLATFORM_CONFIG[platform]?.label ?? platform}
-            </Link>
-          ))}
-        </div>
-      </div>
+      <div className="mt-6 flex flex-col gap-8 lg:flex-row">
+        {/* ── Filters ─────────────────────────────────────────────────── */}
+        <aside className="w-full shrink-0 lg:w-56">
+          <div className="space-y-6 lg:sticky lg:top-20">
+            <form action="/skills" method="get" role="search">
+              <label htmlFor="skills-q" className="sr-only">
+                Search skills
+              </label>
+              <div className="relative">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-ink-500" />
+                <input
+                  id="skills-q"
+                  type="search"
+                  name="q"
+                  defaultValue={params.q}
+                  placeholder="Search…"
+                  className="h-9 w-full rounded-md border border-ink-750 bg-ink-900 pl-9 pr-3 text-sm text-ink-100 outline-none transition duration-fast ease-out placeholder:text-ink-600 hover:border-ink-700 focus:border-accent-600"
+                />
+              </div>
+              {params.category && <input type="hidden" name="category" value={params.category} />}
+              {params.platform && <input type="hidden" name="platform" value={params.platform} />}
+              {params.tier && <input type="hidden" name="tier" value={params.tier} />}
+              {sort !== "ranked" && <input type="hidden" name="sort" value={sort} />}
+            </form>
 
-      <div className="flex flex-col lg:flex-row gap-8">
-        <aside className="w-full lg:w-56 flex-shrink-0 space-y-6">
-          <form action="/skills" method="get" role="search">
-            <label htmlFor="skills-q" className="text-xs font-medium text-gray-500 uppercase tracking-wider block mb-2">
-              Search
-            </label>
-            <input
-              id="skills-q"
-              type="search"
-              name="q"
-              defaultValue={params.q}
-              placeholder="Search skills..."
-              className="w-full bg-gray-900 border border-gray-700 focus:border-purple-600 rounded-lg px-3 py-2 text-sm text-gray-200 placeholder-gray-600 outline-none transition-colors"
-            />
-            {params.category && <input type="hidden" name="category" value={params.category} />}
-            {params.platform && <input type="hidden" name="platform" value={params.platform} />}
-            {params.tier && <input type="hidden" name="tier" value={params.tier} />}
-            {sort !== "ranked" && <input type="hidden" name="sort" value={sort} />}
-          </form>
-
-          <div>
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Verification</p>
-            <div className="space-y-1">
-              <Link href={href({ tier: undefined })} className={side(!params.tier)}>
-                All tiers
+            {hasFilters && (
+              <Link
+                href="/skills"
+                className="inline-flex text-xs text-accent-400 transition-colors hover:text-accent-300"
+              >
+                Clear all filters
               </Link>
-              {TIERS.map((tier) => (
-                <Link key={tier} href={href({ tier })} className={side(params.tier === tier)}>
-                  <span>{TIER_CONFIG[tier].icon}</span>
-                  <span>{TIER_CONFIG[tier].label}</span>
+            )}
+
+            <div>
+              <Eyebrow className="mb-2">Badge</Eyebrow>
+              <div className="space-y-0.5">
+                <Link href={href({ tier: undefined })} className={side(!params.tier)}>
+                  All badges
                 </Link>
-              ))}
+                {TIER_ORDER.map((tier) => {
+                  const config = TIER_CONFIG[tier];
+                  const Icon = config.icon;
+                  return (
+                    <Link
+                      key={tier}
+                      href={href({ tier })}
+                      title={config.description}
+                      className={side(params.tier === tier)}
+                    >
+                      <Icon className="h-3.5 w-3.5 shrink-0 text-ink-500" />
+                      <span>{config.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
-          </div>
 
-          <div>
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Category</p>
-            <div className="space-y-1">
-              <Link href={href({ category: undefined })} className={side(!params.category)}>
-                <span className="flex-1">All</span>
-              </Link>
-              {categories.map((cat) => (
-                <Link key={cat.slug} href={href({ category: cat.slug })} className={side(params.category === cat.slug)}>
-                  <span>{cat.emoji}</span>
-                  <span className="flex-1">{cat.name}</span>
-                  <span className="text-xs text-gray-600">{cat.count.toLocaleString("en-US")}</span>
+            <div>
+              <Eyebrow className="mb-2">Category</Eyebrow>
+              <div className="space-y-0.5">
+                <Link href={href({ category: undefined })} className={side(!params.category)}>
+                  <span className="flex-1">All categories</span>
                 </Link>
-              ))}
+                {categories.map((cat) => {
+                  const Icon = categoryIcon(cat.slug);
+                  return (
+                    <Link
+                      key={cat.slug}
+                      href={href({ category: cat.slug })}
+                      className={side(params.category === cat.slug)}
+                    >
+                      <Icon className="h-3.5 w-3.5 shrink-0 text-ink-500" />
+                      <span className="flex-1 truncate">{cat.name}</span>
+                      <span className="tabular text-2xs text-ink-600">
+                        {cat.count.toLocaleString("en-GB")}
+                      </span>
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </aside>
 
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
-            <p className="text-sm text-gray-500">
-              {filtered.length.toLocaleString("en-US")} skills
-              {params.q && <> matching “{params.q}”</>}
+        {/* ── Results ─────────────────────────────────────────────────── */}
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-1.5 border-b border-ink-800 pb-4">
+            <span className="mr-1 text-xs text-ink-500">Platform</span>
+            <Link href={href({ platform: undefined })} className={chip(!params.platform)}>
+              All
+            </Link>
+            {PLATFORMS.map((platform) => (
+              <Link key={platform} href={href({ platform })} className={chip(params.platform === platform)}>
+                {PLATFORM_CONFIG[platform]?.short ?? platform}
+              </Link>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-4 py-4">
+            <p className="tabular text-sm text-ink-450">
+              <span className="font-medium text-ink-100">
+                {filtered.length.toLocaleString("en-GB")}
+              </span>{" "}
+              {filtered.length === 1 ? "skill" : "skills"}
+              {params.q && <> matching &ldquo;{params.q}&rdquo;</>}
             </p>
-            <div className="flex gap-2 text-sm">
+            <div className="flex items-center gap-1">
+              <span className="mr-1 text-xs text-ink-500">Sort</span>
               {(Object.keys(SORTS) as SortKey[]).map((key) => (
-                <Link
-                  key={key}
-                  href={href({ sort: key })}
-                  className={sort === key ? "text-purple-300 font-medium" : "text-gray-500 hover:text-gray-300"}
-                >
+                <Link key={key} href={href({ sort: key })} className={chip(sort === key)}>
                   {SORTS[key]}
                 </Link>
               ))}
@@ -225,15 +267,20 @@ export default async function SkillsPage({ searchParams }: { searchParams: Promi
           </div>
 
           {pageSkills.length === 0 ? (
-            <div className="text-center py-20">
-              <h3 className="text-lg font-semibold text-gray-300 mb-2">No skills found</h3>
-              <p className="text-gray-500 text-sm mb-6">Try a different search or remove a filter.</p>
-              <Link href="/skills" className="text-purple-300 hover:text-purple-200 text-sm">
+            <div className="rounded-xl border border-dashed border-ink-750 py-20 text-center">
+              <h2 className="text-base font-semibold text-ink-200">No skills match those filters</h2>
+              <p className="mx-auto mt-2 max-w-sm text-sm text-ink-500">
+                Try a broader search term, or drop one of the filters.
+              </p>
+              <Link
+                href="/skills"
+                className="mt-5 inline-flex text-sm text-accent-400 transition-colors hover:text-accent-300"
+              >
                 Clear all filters
               </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
               {pageSkills.map((skill) => (
                 <SkillCard key={skill.slug} skill={skill} />
               ))}
@@ -241,20 +288,33 @@ export default async function SkillsPage({ searchParams }: { searchParams: Promi
           )}
 
           {totalPages > 1 && (
-            <nav aria-label="Pagination" className="mt-10 flex items-center justify-between border-t border-gray-800 pt-6 text-sm">
+            <nav
+              aria-label="Pagination"
+              className="mt-section flex items-center justify-between gap-4 border-t border-ink-800 pt-6"
+            >
               {page > 1 ? (
-                <Link href={href({ page: String(page - 1) })} className="text-gray-300 hover:text-white">
-                  ← Previous
+                <Link
+                  href={href({ page: String(page - 1) })}
+                  rel="prev"
+                  className="inline-flex h-9 items-center gap-1.5 rounded-md border border-ink-700 bg-ink-850 px-3 text-sm font-medium text-ink-200 transition duration-fast ease-out hover:border-ink-650 hover:bg-ink-800 hover:text-ink-50"
+                >
+                  <ChevronLeft className="h-3.5 w-3.5" />
+                  Previous
                 </Link>
               ) : (
                 <span />
               )}
-              <span className="text-gray-500">
-                Page {page.toLocaleString("en-US")} of {totalPages.toLocaleString("en-US")}
+              <span className="tabular text-sm text-ink-500">
+                Page {page.toLocaleString("en-GB")} of {totalPages.toLocaleString("en-GB")}
               </span>
               {page < totalPages ? (
-                <Link href={href({ page: String(page + 1) })} className="text-gray-300 hover:text-white">
-                  Next →
+                <Link
+                  href={href({ page: String(page + 1) })}
+                  rel="next"
+                  className="inline-flex h-9 items-center gap-1.5 rounded-md border border-ink-700 bg-ink-850 px-3 text-sm font-medium text-ink-200 transition duration-fast ease-out hover:border-ink-650 hover:bg-ink-800 hover:text-ink-50"
+                >
+                  Next
+                  <ChevronRight className="h-3.5 w-3.5" />
                 </Link>
               ) : (
                 <span />
@@ -262,23 +322,23 @@ export default async function SkillsPage({ searchParams }: { searchParams: Promi
             </nav>
           )}
 
-          <div className="mt-12 pt-8 border-t border-gray-800 text-center">
-            <p className="text-gray-500 text-sm mb-4">Can&#39;t find what you need?</p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <div className="mt-section rounded-xl border border-ink-800 bg-ink-950 p-gutter-lg text-center">
+            <p className="text-sm text-ink-400">Can&apos;t find what you need?</p>
+            <div className="mt-4 flex flex-col items-center justify-center gap-2 sm:flex-row">
               <a
                 href="https://github.com/growsontrees/trustedskills-registry/issues/new?template=skill-request.md&title=Skill+Request:+&labels=skill-request"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-purple-900/50 hover:bg-purple-800/60 border border-purple-700 text-purple-300 text-sm rounded-lg transition-colors"
+                className="inline-flex h-9 items-center rounded-md border border-ink-700 bg-ink-850 px-4 text-sm font-medium text-ink-200 transition duration-fast ease-out hover:border-ink-650 hover:bg-ink-800 hover:text-ink-50"
               >
                 Request a skill
               </a>
-              <a
+              <Link
                 href="/submit"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 text-gray-300 text-sm rounded-lg transition-colors"
+                className="inline-flex h-9 items-center rounded-md border border-transparent px-4 text-sm font-medium text-ink-400 transition duration-fast ease-out hover:bg-ink-900 hover:text-ink-100"
               >
                 Submit a skill
-              </a>
+              </Link>
             </div>
           </div>
         </div>

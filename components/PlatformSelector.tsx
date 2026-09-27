@@ -1,56 +1,54 @@
 "use client";
 
 import { usePlatform, PlatformKey } from "../hooks/usePlatform";
+import { Check } from "./icons";
+import { cx } from "./ui";
 
-const OPTIONS: { key: PlatformKey; emoji: string; label: string; sublabel: string }[] = [
-  { key: "openclaw", emoji: "🦀", label: "OpenClaw", sublabel: "openclaw skills install" },
-  { key: "claude", emoji: "💬", label: "Claude Desktop", sublabel: "claude_desktop_config.json" },
-  { key: "openai", emoji: "🤖", label: "OpenAI / ChatGPT", sublabel: "Function calling" },
-  { key: "cursor", emoji: "🖱️", label: "Cursor / VS Code", sublabel: "MCP extension" },
-  { key: "other", emoji: "🔬", label: "Just exploring", sublabel: "Show me everything" },
+const OPTIONS: { key: PlatformKey; label: string }[] = [
+  { key: "claudecode", label: "Claude Code" },
+  { key: "claude", label: "Claude Desktop" },
+  { key: "cursor", label: "Cursor / VS Code" },
+  { key: "mcp", label: "MCP" },
+  { key: "openclaw", label: "OpenClaw" },
 ];
 
-export function PlatformSelector() {
+/**
+ * Sets the reader's platform once; every install snippet on the site then
+ * defaults to it. Stored in localStorage, so it renders nothing until mounted
+ * to avoid a hydration mismatch.
+ */
+export function PlatformSelector({ align = "start" }: { align?: "start" | "center" }) {
   const { platform, setPlatform, mounted } = usePlatform();
 
-  if (!mounted) return null;
+  if (!mounted) {
+    // Reserve the row's height so the masthead doesn't jump on hydration.
+    return <div className="h-8" aria-hidden="true" />;
+  }
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <p className="text-sm text-gray-500 mb-3 text-center font-medium">
-        What are you using?{" "}
-        <span className="text-gray-600">— we&apos;ll show the right install command</span>
-      </p>
-      <div className="flex flex-wrap justify-center gap-2">
-        {OPTIONS.map((opt) => {
-          const isActive = platform === opt.key;
-          return (
-            <button
-              key={opt.key}
-              onClick={() => setPlatform(isActive ? null : opt.key)}
-              className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-sm font-medium transition-all ${
-                isActive
-                  ? "bg-purple-900/60 border-purple-600 text-purple-200 shadow-lg shadow-purple-900/30"
-                  : "bg-gray-900/80 border-gray-700 text-gray-400 hover:border-gray-500 hover:text-gray-200"
-              }`}
-            >
-              <span>{opt.emoji}</span>
-              <span>{opt.label}</span>
-              {isActive && <span className="text-purple-400">✓</span>}
-            </button>
-          );
-        })}
-      </div>
-      {platform && (
-        <p className="text-center text-xs text-gray-600 mt-2">
-          Showing install commands for{" "}
-          <span className="text-purple-400">{OPTIONS.find((o) => o.key === platform)?.label}</span>
-          {" · "}
-          <button onClick={() => setPlatform(null)} className="hover:text-gray-400 transition-colors underline">
-            clear
+    <div className={cx("flex flex-wrap items-center gap-1.5", align === "center" && "justify-center")}>
+      <span className="mr-1 text-xs text-ink-500">Your platform</span>
+      {OPTIONS.map((opt) => {
+        const isActive = platform === opt.key;
+        return (
+          <button
+            key={opt.key}
+            type="button"
+            onClick={() => setPlatform(isActive ? null : opt.key)}
+            aria-pressed={isActive}
+            className={cx(
+              "inline-flex h-7 items-center gap-1.5 rounded-sm border px-2 text-xs font-medium",
+              "transition duration-fast ease-out",
+              isActive
+                ? "border-accent-700 bg-accent-950 text-accent-200"
+                : "border-ink-750 bg-ink-900 text-ink-400 hover:border-ink-700 hover:bg-ink-850 hover:text-ink-100"
+            )}
+          >
+            {isActive ? <Check className="h-3 w-3" /> : null}
+            {opt.label}
           </button>
-        </p>
-      )}
+        );
+      })}
     </div>
   );
 }

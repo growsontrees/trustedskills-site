@@ -12,7 +12,14 @@ TrustedSkills provides public skill listings, category and platform indexes, ins
 - Reviews: https://trustedskills.dev/reviews
 
 ## Skill Categories
-- Productivity, SEO, Development, Data, Communication, Research, Automation, Media
+- Frontend, Backend, Cloud, Database, DevOps, Testing, Security, AI/ML, Agents, Marketing, Writing, Data, Video & Media, Productivity, Utilities, Other
+
+## Verification
+- Badges describe provenance, not a security audit. No listing has been code-reviewed.
+- Official: publisher matched to the vendor's own GitHub organisation.
+- Featured: editorial pick. Pinned: install locked to a stored commit snapshot.
+- Listed: indexed from a public source, nothing further. Unverified: no additional signal.
+- Details: https://trustedskills.dev/docs/advanced/verification-badges
 
 ## Supported Platforms
 - OpenClaw (primary), MCP (Model Context Protocol), Claude Desktop, OpenAI Assistants, Cursor, VS Code

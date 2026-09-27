@@ -1,256 +1,312 @@
 import Link from "next/link";
-import { getAllSkills, getCategories, getTopRankedSkills, getStats, TIER_CONFIG } from "../lib/skills";
+import {
+  getCategories,
+  getTopRankedSkills,
+  getStats,
+  getTierCounts,
+  getPinnedCount,
+  TIER_CONFIG,
+  TIER_ORDER,
+  formatCount,
+  formatDate,
+} from "../lib/skills";
 import { SkillCard } from "../components/SkillCard";
 import { PlatformSelector } from "../components/PlatformSelector";
 import { HeroInstallCommand } from "../components/HeroInstallCommand";
 import { SearchBar } from "../components/SearchBar";
+import {
+  ArrowRight,
+  Boxes,
+  Search as SearchIcon,
+  Sliders,
+  Terminal,
+  TrendingUp,
+  categoryIcon,
+} from "../components/icons";
+import { ButtonLink, Eyebrow, Panel, SectionHeading, Stat, cx } from "../components/ui";
 
 export default function HomePage() {
-  const skills = getAllSkills();
+  const featured = getTopRankedSkills(6);
+  const categories = getCategories();
+  const stats = getStats();
+  const tierCounts = getTierCounts();
+  const pinned = getPinnedCount();
+  const syncedOn = formatDate(stats.last_updated);
+  // Rounded down to the nearest thousand, so the placeholder never overstates.
+  const searchHint = `${Math.floor(stats.total_skills / 1000).toLocaleString("en-GB")},000+`;
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "WebSite",
         "@id": "https://trustedskills.dev/#website",
-        "url": "https://trustedskills.dev",
-        "name": "TrustedSkills",
-        "description": "The trusted registry for AI agent skills",
-        "potentialAction": {
+        url: "https://trustedskills.dev",
+        name: "TrustedSkills",
+        description: "An index of AI agent skills",
+        potentialAction: {
           "@type": "SearchAction",
-          "target": {
+          target: {
             "@type": "EntryPoint",
-            "urlTemplate": "https://trustedskills.dev/skills/?q={search_term_string}"
+            urlTemplate: "https://trustedskills.dev/skills/?q={search_term_string}",
           },
-          "query-input": "required name=search_term_string"
-        }
+          "query-input": "required name=search_term_string",
+        },
       },
       {
         "@type": "Organization",
         "@id": "https://trustedskills.dev/#organization",
-        "name": "TrustedSkills",
-        "url": "https://trustedskills.dev",
-        "logo": {
+        name: "TrustedSkills",
+        url: "https://trustedskills.dev",
+        logo: {
           "@type": "ImageObject",
-          "url": "https://trustedskills.dev/og-image.svg"
+          url: "https://trustedskills.dev/og-image.svg",
         },
-        "sameAs": []
-      }
-    ]
+        sameAs: [],
+      },
+    ],
   };
-  const featured = getTopRankedSkills(6);
-  const categories = getCategories();
-  const stats = getStats();
-  const recent = [...skills].sort((a, b) =>
-    new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
-  ).slice(0, 4);
 
   return (
     <div>
-      {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-950/40 via-gray-950 to-blue-950/30 pointer-events-none" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-purple-900/10 rounded-full blur-3xl pointer-events-none" />
+      {/* ── Masthead ──────────────────────────────────────────────────────
+          No gradient, no glow. The page opens on the size of the catalogue
+          and a search field, because that is what the site is for. */}
+      <section className="relative overflow-hidden border-b border-ink-800">
+        <div className="bg-page-grid pointer-events-none absolute inset-0" aria-hidden="true" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
-              <span className="text-white">The trusted registry for </span>
-              <span className="text-gradient-primary">AI agent skills</span>
+        <div className="relative mx-auto max-w-page px-4 pb-16 pt-16 sm:px-6 lg:px-8 lg:pt-22">
+          <div className="max-w-3xl">
+            {syncedOn ? (
+              <Eyebrow className="mb-5 flex items-center gap-2">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-ok-500" />
+                Index last synced {syncedOn}
+              </Eyebrow>
+            ) : null}
+
+            <h1 className="text-4xl font-semibold text-ink-50 sm:text-5xl">
+              Every agent skill, in one place.
             </h1>
 
-            <p className="text-xl text-gray-400 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Find, verify, and install skills for any AI agent platform.
-              Cryptographically signed. Community reviewed.
+            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-ink-400">
+              {stats.total_skills.toLocaleString("en-GB")} skills indexed from across the
+              ecosystem. Search for what you need, see who publishes it, and copy the install
+              command for your platform.
             </p>
 
-            {/* Search box */}
-            <div className="w-full max-w-2xl mx-auto mb-8">
-              <SearchBar placeholder="Search skills..." />
+            <div className="mt-8 max-w-xl">
+              {/* The bundled index is a fallback; CI builds against the full
+                  registry, so the count is read rather than written in. */}
+              <SearchBar
+                size="lg"
+                placeholder={`Search ${searchHint} skills…`}
+              />
             </div>
 
-            {/* Platform selector */}
-            <div className="mb-8">
+            <div className="mt-4">
               <PlatformSelector />
             </div>
 
-            {/* Dynamic install command + CTA */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
-              <HeroInstallCommand />
-              <Link
-                href="/skills"
-                className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white font-medium px-6 py-3 rounded-xl transition-colors"
-              >
-                Browse all skills →
-              </Link>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="min-w-0 sm:w-[24rem]">
+                <HeroInstallCommand />
+              </div>
+              <ButtonLink href="/skills" variant="primary" size="md">
+                Browse the index
+                <ArrowRight className="h-4 w-4" />
+              </ButtonLink>
             </div>
+          </div>
 
-            {/* Stats */}
-            <div className="flex flex-wrap items-center justify-center gap-8 text-sm">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-white">{stats.total_skills}</div>
-                <div className="text-gray-500">skills</div>
-              </div>
-              <div className="w-px h-8 bg-gray-800 hidden sm:block" />
-              <div className="text-center">
-                <div className="text-2xl font-bold text-white">
-                  {(stats.total_installs / 1000).toFixed(1)}k
-                </div>
-                <div className="text-gray-500">installs</div>
-              </div>
-              <div className="w-px h-8 bg-gray-800 hidden sm:block" />
-              <div className="text-center">
-                <div className="text-2xl font-bold text-white">{stats.total_authors}</div>
-                <div className="text-gray-500">authors</div>
-              </div>
-              <div className="w-px h-8 bg-gray-800 hidden sm:block" />
-              <div className="text-center">
-                <div className="text-2xl font-bold text-white">5+</div>
-                <div className="text-gray-500">platforms</div>
-              </div>
-            </div>
+          {/* The total is in the lead paragraph and the badge breakdown is in
+              the next section, so this rail carries only what neither says. */}
+          <div className="mt-14 grid max-w-3xl grid-cols-3 gap-x-8 border-t border-ink-800 pt-8">
+            <Stat
+              value={stats.total_authors.toLocaleString("en-GB")}
+              label="publishers"
+              hint="Distinct author accounts across the index"
+            />
+            <Stat value={categories.length.toLocaleString("en-GB")} label="categories" />
+            <Stat
+              value={formatCount(stats.total_installs) ?? "—"}
+              label="installs, reported upstream"
+              hint="Install counts come from the source registries, not from TrustedSkills. We pass them through unchanged rather than presenting them as our own."
+            />
           </div>
         </div>
       </section>
 
-      {/* Trust tier badges — centered, clickable, filter skills */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-        <div className="flex flex-wrap gap-3 justify-center">
-          {Object.entries(TIER_CONFIG).map(([tier, config]) => (
-            <Link
-              key={tier}
-              href={`/tier/${tier}/`}
-              title={config.description}
-              className={`inline-flex items-center gap-2 text-xs px-3 py-1.5 rounded-full border ${config.bg} ${config.border} ${config.color} hover:opacity-80 transition-opacity cursor-pointer`}
-            >
-              <span>{config.icon}</span>
-              <span className="font-medium">{config.label}</span>
-            </Link>
-          ))}
+      {/* ── What the badges mean ──────────────────────────────────────────
+          The trust signal, stated as counts rather than as a claim. This
+          section replaces the old "Cryptographically signed. Community
+          reviewed." line, which described work nobody had done. */}
+      <section className="mx-auto max-w-page px-4 py-section sm:px-6 lg:px-8">
+        <SectionHeading
+          title="What the badges mean"
+          description="Every listing carries one. Here is exactly what each one is asserting — and what it isn't."
+        />
+
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {/* A tier with nothing in it would assert a check we aren't yet
+              running, so it stays off the homepage until it has listings. */}
+          {TIER_ORDER.filter((tier) => tierCounts[tier] > 0).map((tier) => {
+            const config = TIER_CONFIG[tier];
+            const Icon = config.icon;
+            const count = tierCounts[tier];
+            const tone =
+              config.tone === "accent"
+                ? "border-accent-800/60 text-accent-300"
+                : config.tone === "ok"
+                ? "border-ok-800/60 text-ok-300"
+                : config.tone === "warn"
+                ? "border-warn-800/60 text-warn-300"
+                : "border-ink-750 text-ink-400";
+
+            return (
+              <Link
+                key={tier}
+                href={`/tier/${tier}/`}
+                className={cx(
+                  "group rounded-xl border bg-ink-900 p-gutter shadow-e1",
+                  "transition duration-fast ease-out hover:-translate-y-px hover:bg-ink-850 hover:shadow-e3",
+                  tone
+                )}
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span className="inline-flex items-center gap-2 text-sm font-semibold">
+                    <Icon className="h-4 w-4" />
+                    {config.label}
+                  </span>
+                  <span className="tabular text-sm text-ink-500">
+                    {count.toLocaleString("en-GB")}
+                  </span>
+                </div>
+                <p className="mt-2.5 text-sm leading-relaxed text-ink-450">{config.description}</p>
+              </Link>
+            );
+          })}
+
+          {/* The honest counterweight. It gets the same visual weight as a
+              tier card so it can't be read as fine print. Figures are counted
+              from the index so this can't drift as the scan coverage grows. */}
+          <div className="rounded-xl border border-dashed border-ink-700 bg-ink-950 p-gutter">
+            <p className="text-sm font-semibold text-ink-200">What we don&apos;t do</p>
+            <p className="mt-2.5 text-sm leading-relaxed text-ink-450">
+              No person has read the code behind any listing here. The Checked badge is a static
+              scan, not an audit — we never execute a skill.{" "}
+              {pinned.toLocaleString("en-GB")} skills install from a stored snapshot; the rest
+              resolve to whatever their repository holds today.{" "}
+              <span className="text-ink-300">Read the source before you run it.</span>
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Featured Skills */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-            <span>🏆</span> Top Skills
-          </h2>
-          <Link href="/skills" className="text-sm text-purple-400 hover:text-purple-300 transition-colors">
-            View all →
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* ── Top skills ────────────────────────────────────────────────── */}
+      <section className="mx-auto max-w-page px-4 pb-section sm:px-6 lg:px-8">
+        <SectionHeading
+          icon={TrendingUp}
+          title="Top skills"
+          description="Ranked by install count, publisher and listing quality, capped at two per publisher."
+          action={{ href: "/skills", label: "Browse all" }}
+        />
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((skill) => (
             <SkillCard key={skill.slug} skill={skill} />
           ))}
         </div>
       </section>
 
-      {/* Categories */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <h2 className="text-xl font-semibold text-white mb-6">Browse by Category</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-          {categories.map((cat) => (
-            <Link
-              key={cat.slug}
-              href={`/skills/category/${cat.slug}/`}
-              className="flex items-center gap-3 p-4 bg-gray-900 hover:bg-gray-800 border border-gray-800 hover:border-gray-700 rounded-xl transition-all group"
-            >
-              <span className="text-2xl">{cat.emoji}</span>
-              <div>
-                <div className="font-medium text-gray-200 group-hover:text-white text-sm transition-colors">
-                  {cat.name}
-                </div>
-                <div className="text-xs text-gray-500">{cat.count} skill{cat.count !== 1 ? "s" : ""}</div>
-              </div>
-            </Link>
-          ))}
+      {/* ── Categories ────────────────────────────────────────────────── */}
+      <section className="mx-auto max-w-page px-4 pb-section sm:px-6 lg:px-8">
+        <SectionHeading icon={Boxes} title="Browse by category" />
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+          {categories.map((cat) => {
+            const Icon = categoryIcon(cat.slug);
+            return (
+              <Link
+                key={cat.slug}
+                href={`/skills/category/${cat.slug}/`}
+                className="group flex items-center gap-3 rounded-lg border border-ink-750 bg-ink-900 px-3.5 py-3 shadow-e1 transition duration-fast ease-out hover:border-ink-650 hover:bg-ink-850"
+              >
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-ink-750 bg-ink-850 text-ink-450 transition-colors duration-fast group-hover:border-ink-700 group-hover:text-accent-400">
+                  <Icon className="h-4 w-4" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block truncate text-sm font-medium text-ink-200 transition-colors group-hover:text-ink-50">
+                    {cat.name}
+                  </span>
+                  <span className="tabular block text-2xs text-ink-500">
+                    {cat.count.toLocaleString("en-GB")}
+                  </span>
+                </span>
+              </Link>
+            );
+          })}
         </div>
       </section>
 
-      {/* Recently Updated */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-            <span>🕐</span> Recently Updated
-          </h2>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {recent.map((skill) => (
-            <SkillCard key={skill.slug} skill={skill} compact />
-          ))}
-        </div>
-      </section>
+      {/* ── How installing works ──────────────────────────────────────── */}
+      <section className="border-y border-ink-800 bg-ink-950">
+        <div className="mx-auto max-w-page px-4 py-section sm:px-6 lg:px-8">
+          <SectionHeading
+            title="Installing takes one command"
+            description="Set your platform once and every snippet on the site follows it."
+          />
 
-      {/* How it works */}
-      <section className="border-t border-gray-800 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-white text-center mb-4">
-            Install any skill in seconds
-          </h2>
-          <p className="text-center text-gray-500 text-sm mb-12 max-w-lg mx-auto">
-            Works the same way regardless of which AI platform you use.
-            Pick your platform above to see the exact command.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="grid gap-3 md:grid-cols-3">
             {[
               {
-                step: "1",
-                icon: "🔍",
-                title: "Browse",
-                desc: "Find the skill you need using search, categories, or platform filters.",
+                icon: SearchIcon,
+                title: "Find it",
+                body: "Search by name, publisher or tag, then narrow by category, platform or badge.",
               },
               {
-                step: "2",
-                icon: "📋",
-                title: "Select your platform",
-                desc: "Pick OpenClaw, Claude Desktop, Cursor, OpenAI, or MCP — we show the right install command automatically.",
+                icon: Sliders,
+                title: "Pick your platform",
+                body: "Claude Code, Claude Desktop, Cursor, MCP or OpenClaw. The install snippet changes with it.",
               },
               {
-                step: "3",
-                icon: "✅",
-                title: "Install",
-                desc: "Copy and run (or paste into your config). The skill is ready to use instantly.",
+                icon: Terminal,
+                title: "Run the command",
+                body: "Copy the command or the config block. Pinned skills install from a stored snapshot rather than the live repo.",
               },
-            ].map((item) => (
-              <div key={item.step} className="text-center">
-                <div className="w-12 h-12 rounded-full bg-purple-900/50 border border-purple-800 flex items-center justify-center text-xl mx-auto mb-4">
-                  {item.icon}
+            ].map((step, i) => (
+              <Panel key={step.title} className="bg-ink-900">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-ink-750 bg-ink-850 text-accent-400">
+                    <step.icon className="h-4 w-4" />
+                  </span>
+                  <span className="tabular text-2xs font-semibold text-ink-600">
+                    STEP {i + 1}
+                  </span>
                 </div>
-                <h3 className="font-semibold text-white mb-2">
-                  Step {item.step}: {item.title}
-                </h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
-              </div>
+                <h3 className="mt-4 text-sm font-semibold text-ink-50">{step.title}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-ink-450">{step.body}</p>
+              </Panel>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-950/30 via-gray-950 to-blue-950/30 pointer-events-none" />
-        <div className="relative max-w-3xl mx-auto text-center px-4">
-          <h2 className="text-3xl font-bold text-white mb-4">Built a skill? Share it.</h2>
-          <p className="text-gray-400 mb-8">
-            The TrustedSkills registry grows with community contributions.
-            Submit your skill and reach developers across the entire AI agent ecosystem.
-          </p>
-          <Link
-            href="/submit"
-            className="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-500 text-white font-medium px-8 py-4 rounded-xl transition-colors text-lg"
-          >
-            Submit a Skill →
-          </Link>
-        </div>
+      {/* ── Submit ────────────────────────────────────────────────────── */}
+      <section className="mx-auto max-w-page px-4 py-section sm:px-6 lg:px-8">
+        <Panel className="flex flex-col items-start justify-between gap-6 bg-ink-900 md:flex-row md:items-center">
+          <div className="max-w-xl">
+            <h2 className="text-xl font-semibold text-ink-50">Published a skill?</h2>
+            <p className="mt-2 text-sm leading-relaxed text-ink-450">
+              Add it to the index so it turns up when someone searches for what it does.
+              Submissions go through the public registry repository.
+            </p>
+          </div>
+          <ButtonLink href="/submit" variant="primary" size="md" className="shrink-0">
+            Submit a skill
+            <ArrowRight className="h-4 w-4" />
+          </ButtonLink>
+        </Panel>
       </section>
 
-      {/* JSON-LD Structured Data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { PLATFORM_CONFIG } from "../lib/skill-config";
+import { cx } from "./ui";
 import { Suspense } from "react";
 
 const PLATFORMS = ["claudecode", "openclaw", "claude", "mcp", "cursor", "openai"];
@@ -22,22 +23,26 @@ function PlatformChipsInner() {
   }
 
   return (
-    <div className="flex flex-wrap gap-2">
-      <span className="text-xs text-gray-500 self-center mr-1">Platforms:</span>
+    <div className="flex flex-wrap items-center gap-1.5">
+      <span className="mr-1 text-xs text-ink-500">Platform</span>
       {PLATFORMS.map((platform) => {
         const config = PLATFORM_CONFIG[platform];
         const isActive = activePlatform === platform;
         return (
           <button
             key={platform}
+            type="button"
             onClick={() => handlePlatformClick(platform)}
-            className={`text-xs px-3 py-1.5 rounded-full border transition-all font-medium ${
+            aria-pressed={isActive}
+            className={cx(
+              "inline-flex h-7 items-center rounded-sm border px-2.5 text-xs font-medium",
+              "transition duration-fast ease-out",
               isActive
-                ? `${config.bg} ${config.color} border-current`
-                : "bg-gray-800/50 text-gray-400 border-gray-700 hover:border-gray-600 hover:text-gray-300"
-            }`}
+                ? "border-accent-700 bg-accent-950 text-accent-200"
+                : "border-ink-750 bg-ink-900 text-ink-400 hover:border-ink-700 hover:bg-ink-850 hover:text-ink-100"
+            )}
           >
-            {config.label}
+            {config?.short ?? platform}
           </button>
         );
       })}

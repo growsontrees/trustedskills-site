@@ -1,9 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { Skill, TIER_CONFIG, PLATFORM_CONFIG } from "../lib/skill-config";
 import { useState } from "react";
+import {
+  PLATFORM_CONFIG,
+  formatCount,
+  tierOf,
+  type Skill,
+} from "../lib/skill-config";
 import { usePlatform, getPlatformInstall, PLATFORM_LABELS } from "../hooks/usePlatform";
+import { categoryIcon, Check, Copy, Download } from "./icons";
+import { Chip, TierChip, cx } from "./ui";
 
 interface SkillCardProps {
   skill: Skill;
@@ -13,107 +20,101 @@ interface SkillCardProps {
 export function SkillCard({ skill, compact = false }: SkillCardProps) {
   const [copied, setCopied] = useState(false);
   const { platform, mounted } = usePlatform();
-  const tier = TIER_CONFIG[skill.verified as keyof typeof TIER_CONFIG] ?? TIER_CONFIG['unverified'];
+  const tier = tierOf(skill);
+  const Glyph = categoryIcon(skill.category);
 
-  const install = getPlatformInstall(skill.slug, skill.installCmd, skill.repoUrl, platform, skill.platforms || []);
+  const install = getPlatformInstall(
+    skill.slug,
+    skill.installCmd,
+    skill.repoUrl,
+    platform,
+    skill.platforms || []
+  );
 
-  function handleCopy(e: React.MouseEvent) {
-    e.preventDefault();
+  function handleCopy() {
     navigator.clipboard.writeText(install.cmd);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }
 
-  // Label shown on the install button
   const platformLabel = mounted && platform ? PLATFORM_LABELS[platform] : null;
+  const installs = formatCount(skill.installs);
 
+  // The card is a container, not an anchor: the title carries a stretched link
+  // so the whole surface is clickable while the copy button stays a real
+  // button rather than a <button> nested inside an <a>.
   return (
-    <Link
-      href={`/skills/${skill.slug}`}
-      className="group block bg-gray-900 hover:bg-gray-800/80 border border-gray-800 hover:border-gray-700 rounded-xl p-4 transition-all"
+    <article
+      className={cx(
+        "group relative flex flex-col rounded-xl border border-ink-750 bg-ink-900 p-gutter",
+        "shadow-e1 transition duration-fast ease-out",
+        "hover:border-ink-650 hover:bg-ink-850 hover:shadow-e3",
+        "focus-within:border-accent-700"
+      )}
     >
-      <div className="flex items-start gap-3 mb-3">
-        <span className="text-2xl flex-shrink-0">{skill.emoji}</span>
+      <div className="flex items-start gap-3">
+        <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-ink-750 bg-ink-850 text-ink-450 transition-colors duration-fast group-hover:border-ink-700 group-hover:text-ink-300">
+          <Glyph className="h-4 w-4" />
+        </span>
+
         <div className="min-w-0 flex-1">
-          <h3 className="font-semibold text-gray-100 group-hover:text-white transition-colors truncate">
-            {skill.name}
+          <h3 className="truncate text-sm font-semibold text-ink-100 transition-colors duration-fast group-hover:text-ink-50">
+            <Link href={`/skills/${skill.slug}`} className="after:absolute after:inset-0">
+              {skill.name}
+            </Link>
           </h3>
-          <div className="text-xs text-gray-500">by {skill.author}</div>
+          <p className="truncate text-xs text-ink-500">{skill.author}</p>
         </div>
+
+        <TierChip tier={skill.verified} showLabel={!compact} />
       </div>
 
-      {!compact && (
-        <p className="text-sm text-gray-400 leading-relaxed mb-3 line-clamp-2">
+      {!compact && skill.description ? (
+        <p className="mt-stack line-clamp-2 text-sm leading-relaxed text-ink-400">
           {skill.description}
         </p>
-      )}
+      ) : null}
 
-      {!compact && (
-        <div className="flex items-center gap-2 mb-3">
-          <div
-            className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border ${tier.bg} ${tier.border} ${tier.color}`}
-            title={tier.description}
-          >
-            <span>{tier.icon}</span>
-            <span>{tier.label}</span>
-          </div>
-          {skill.verified === "verified" && skill.verifiedAt && (
-            <span className="text-xs text-gray-600">
-              pinned {skill.verifiedAt}
-            </span>
-          )}
-          {skill.verified === "community" && skill.verifiedChangedAt && (
-            <span className="text-xs text-amber-600">
-              ⚠️ re-review needed
-            </span>
-          )}
+      {!compact && skill.platforms?.length ? (
+        <div className="mt-stack flex flex-wrap gap-1">
+          {skill.platforms.slice(0, 4).map((key) => (
+            <Chip key={key}>{PLATFORM_CONFIG[key]?.short ?? key}</Chip>
+          ))}
+          {skill.platforms.length > 4 ? (
+            <Chip className="text-ink-500">+{skill.platforms.length - 4}</Chip>
+          ) : null}
         </div>
-      )}
+      ) : null}
 
-      {!compact && (
-        <div className="flex flex-wrap gap-1.5 mb-3">
-          {(skill.platforms || []).map((platform) => {
-            const config = PLATFORM_CONFIG[platform] || {
-              label: platform,
-              color: "text-gray-400",
-              bg: "bg-gray-800",
-            };
-            return (
-              <span
-                key={platform}
-                className={`text-xs px-2 py-0.5 rounded-md font-mono ${config.bg} ${config.color}`}
-              >
-                {config.label}
-              </span>
-            );
-          })}
-        </div>
-      )}
-
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-3 text-xs text-gray-500 min-w-0">
+      <div className="mt-auto flex items-center justify-between gap-3 pt-stack-lg">
+        <div className="tabular flex min-w-0 items-center gap-3 text-2xs text-ink-500">
           <span className="font-mono">v{skill.version}</span>
-          {skill.installs > 0 && (
-            <span>
-              {skill.installs >= 1000
-                ? `${(skill.installs / 1000).toFixed(1)}k`
-                : skill.installs}{" "}
-              installs
+          {installs ? (
+            <span className="inline-flex items-center gap-1" title="Install count reported by the source registry">
+              <Download className="h-3 w-3" />
+              {installs}
             </span>
-          )}
+          ) : null}
         </div>
+
         <button
+          type="button"
           onClick={handleCopy}
-          className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white px-3 py-1 rounded-lg transition-colors flex-shrink-0 whitespace-nowrap"
-          title={`Copy install command for ${platformLabel ?? "OpenClaw"}`}
+          className={cx(
+            "relative z-10 inline-flex h-7 shrink-0 items-center gap-1.5 rounded-sm border px-2 text-2xs font-medium",
+            "transition duration-fast ease-out",
+            copied
+              ? "border-ok-800 bg-ok-950 text-ok-300"
+              : "border-ink-700 bg-ink-850 text-ink-400 hover:border-ink-650 hover:bg-ink-800 hover:text-ink-100"
+          )}
+          title={`Copy the ${platformLabel ?? "OpenClaw"} install command`}
         >
-          {copied
-            ? "Copied!"
-            : platformLabel
-            ? `Install (${platformLabel})`
-            : "Install"}
+          {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+          {copied ? "Copied" : "Install"}
         </button>
       </div>
-    </Link>
+
+      <span className="sr-only">{tier.label}</span>
+    </article>
   );
 }

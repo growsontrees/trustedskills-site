@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "./icons";
+import { cx } from "./ui";
 
 interface PaginationProps {
   currentPage: number;
@@ -22,9 +24,14 @@ function getPageHref(basePath: string, page: number) {
   return page <= 1 ? `${basePath}/` : `${basePath}/${page}/`;
 }
 
-export function Pagination({ 
-  currentPage, 
-  totalPages, 
+const STEP = "inline-flex h-9 items-center gap-1.5 rounded-md border px-3 text-sm font-medium transition duration-fast ease-out";
+const STEP_ON = "border-ink-700 bg-ink-850 text-ink-200 hover:border-ink-650 hover:bg-ink-800 hover:text-ink-50";
+const STEP_OFF = "cursor-default border-ink-800 bg-ink-950 text-ink-600";
+const NUM = "inline-flex h-9 min-w-9 items-center justify-center rounded-md border px-2 text-sm tabular transition duration-fast ease-out";
+
+export function Pagination({
+  currentPage,
+  totalPages,
   basePath,
   currentPageSize = 25,
   totalItems,
@@ -32,12 +39,12 @@ export function Pagination({
 }: PaginationProps) {
   const hasMultiplePages = totalPages > 1;
   const showPageSelector = totalItems !== undefined && totalItems > 25;
-  
+
   if (!hasMultiplePages && !showPageSelector) return null;
 
   const prevPage = currentPage > 1 ? currentPage - 1 : null;
   const nextPage = currentPage < totalPages ? currentPage + 1 : null;
-  
+
   // Calculate which page numbers to show (max 10)
   let pageNumbers: number[] = [];
   if (hasMultiplePages) {
@@ -47,63 +54,56 @@ export function Pagination({
   }
 
   const getSizeHref = (size: number) => {
-    const sizeParam = size === Infinity ? 'all' : String(size);
-    const separator = basePath.includes('?') ? '&' : '?';
-    const basePathWithoutSize = basePath.split('?')[0];
+    const sizeParam = size === Infinity ? "all" : String(size);
+    const separator = basePath.includes("?") ? "&" : "?";
+    const basePathWithoutSize = basePath.split("?")[0];
     // Reset to page 1 when changing page size
     return `${basePathWithoutSize}/${separator}per_page=${sizeParam}`;
   };
 
   return (
-    <nav
-      aria-label="Pagination"
-      className="mt-10 flex flex-col gap-4 border-t border-gray-800 pt-6"
-    >
+    <nav aria-label="Pagination" className="mt-section flex flex-col gap-stack-lg border-t border-ink-800 pt-6">
       {hasMultiplePages && (
         <>
           <div className="flex items-center justify-between gap-3">
             {prevPage ? (
-              <Link
-                href={getPageHref(basePath, prevPage)}
-                rel="prev"
-                className="inline-flex items-center rounded-lg border border-gray-700 bg-gray-900 px-4 py-2 text-sm text-gray-300 transition-colors hover:border-gray-600 hover:text-white"
-              >
-                ← Previous
+              <Link href={getPageHref(basePath, prevPage)} rel="prev" className={cx(STEP, STEP_ON)}>
+                <ChevronLeft className="h-3.5 w-3.5" />
+                Previous
               </Link>
             ) : (
-              <span className="inline-flex items-center rounded-lg border border-gray-800 bg-gray-950 px-4 py-2 text-sm text-gray-600">
-                ← Previous
+              <span className={cx(STEP, STEP_OFF)} aria-hidden="true">
+                <ChevronLeft className="h-3.5 w-3.5" />
+                Previous
               </span>
             )}
 
-            <span className="text-sm text-gray-500">
-              Page {currentPage} of {totalPages}
+            <span className="tabular text-sm text-ink-500">
+              Page {currentPage.toLocaleString("en-GB")} of {totalPages.toLocaleString("en-GB")}
             </span>
 
             {nextPage ? (
-              <Link
-                href={getPageHref(basePath, nextPage)}
-                rel="next"
-                className="inline-flex items-center rounded-lg border border-gray-700 bg-gray-900 px-4 py-2 text-sm text-gray-300 transition-colors hover:border-gray-600 hover:text-white"
-              >
-                Next →
+              <Link href={getPageHref(basePath, nextPage)} rel="next" className={cx(STEP, STEP_ON)}>
+                Next
+                <ChevronRight className="h-3.5 w-3.5" />
               </Link>
             ) : (
-              <span className="inline-flex items-center rounded-lg border border-gray-800 bg-gray-950 px-4 py-2 text-sm text-gray-600">
-                Next →
+              <span className={cx(STEP, STEP_OFF)} aria-hidden="true">
+                Next
+                <ChevronRight className="h-3.5 w-3.5" />
               </span>
             )}
           </div>
 
           {pageNumbers.length > 1 && (
-            <div className="flex flex-wrap items-center justify-center gap-2">
+            <div className="flex flex-wrap items-center justify-center gap-1.5">
               {pageNumbers.map((pageNumber) => {
                 const isActive = pageNumber === currentPage;
                 return isActive ? (
                   <span
                     key={pageNumber}
                     aria-current="page"
-                    className="inline-flex min-w-10 justify-center rounded-lg border border-purple-700 bg-purple-900/50 px-3 py-2 text-sm font-medium text-purple-200"
+                    className={cx(NUM, "border-accent-700 bg-accent-950 font-medium text-accent-200")}
                   >
                     {pageNumber}
                   </span>
@@ -111,7 +111,7 @@ export function Pagination({
                   <Link
                     key={pageNumber}
                     href={getPageHref(basePath, pageNumber)}
-                    className="inline-flex min-w-10 justify-center rounded-lg border border-gray-700 bg-gray-900 px-3 py-2 text-sm text-gray-300 transition-colors hover:border-gray-600 hover:text-white"
+                    className={cx(NUM, "border-ink-750 bg-ink-900 text-ink-400 hover:border-ink-650 hover:bg-ink-850 hover:text-ink-100")}
                   >
                     {pageNumber}
                   </Link>
@@ -123,35 +123,32 @@ export function Pagination({
       )}
 
       {showPageSelector && (
-        <div className="flex items-center justify-center gap-3 text-sm">
-          <span className="text-gray-500">Skills per page:</span>
+        <div className="flex flex-wrap items-center justify-center gap-2 text-sm">
+          <span className="text-ink-500">Per page</span>
           <div className="flex items-center gap-1">
             {pageSizeOptions.map((option) => {
-              const value = typeof option === 'number' ? option : option.value;
-              const label = typeof option === 'number' ? String(option) : option.label;
-              const isActive = value === currentPageSize || 
-                (value === Infinity && currentPageSize === Infinity) ||
-                (Number.isFinite(value) && Number.isFinite(currentPageSize) && value === currentPageSize);
-              
+              const value = typeof option === "number" ? option : option.value;
+              const label = typeof option === "number" ? String(option) : option.label;
+              const isActive = value === currentPageSize;
+
               return isActive ? (
-                <span
-                  key={label}
-                  className="px-3 py-1.5 rounded-lg border border-purple-700 bg-purple-900/50 text-purple-200 font-medium"
-                >
+                <span key={label} className={cx(NUM, "border-accent-700 bg-accent-950 font-medium text-accent-200")}>
                   {label}
                 </span>
               ) : (
                 <Link
                   key={label}
                   href={getSizeHref(value)}
-                  className="px-3 py-1.5 rounded-lg border border-gray-700 bg-gray-900 text-gray-300 hover:border-gray-600 hover:text-white transition-colors"
+                  className={cx(NUM, "border-ink-750 bg-ink-900 text-ink-400 hover:border-ink-650 hover:bg-ink-850 hover:text-ink-100")}
                 >
                   {label}
                 </Link>
               );
             })}
           </div>
-          <span className="text-gray-500">of {totalItems} total</span>
+          {totalItems !== undefined && (
+            <span className="tabular text-ink-500">of {totalItems.toLocaleString("en-GB")}</span>
+          )}
         </div>
       )}
     </nav>

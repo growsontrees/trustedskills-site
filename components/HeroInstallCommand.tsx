@@ -2,71 +2,50 @@
 
 import { useState } from "react";
 import { usePlatform, getPlatformInstall } from "../hooks/usePlatform";
+import { Check, Copy } from "./icons";
+import { cx } from "./ui";
 
 const EXAMPLE_SLUG = "weather";
 const EXAMPLE_REPO = "https://github.com/trustedskills/weather";
+const FALLBACK_CMD = `openclaw skills install ${EXAMPLE_SLUG}`;
 
+/**
+ * A worked example of the install command, following the reader's chosen
+ * platform. Server-renders the OpenClaw form so there's something concrete
+ * above the fold before hydration.
+ */
 export function HeroInstallCommand() {
   const { platform, mounted } = usePlatform();
   const [copied, setCopied] = useState(false);
 
-  const install = getPlatformInstall(EXAMPLE_SLUG, `openclaw skills install ${EXAMPLE_SLUG}`, EXAMPLE_REPO, platform, ["openclaw"]);
+  const install = getPlatformInstall(EXAMPLE_SLUG, FALLBACK_CMD, EXAMPLE_REPO, platform, ["openclaw"]);
+  const isConfig = install.isJson || install.isComingSoon;
+  const display = mounted && !isConfig ? install.cmd : FALLBACK_CMD;
 
   function handleCopy() {
-    navigator.clipboard.writeText(install.cmd);
+    navigator.clipboard.writeText(display);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }
 
-  if (!mounted) {
-    // SSR placeholder
-    return (
-      <div className="flex items-center gap-3 bg-gray-900 border border-gray-700 rounded-xl px-5 py-3 font-mono text-sm w-full sm:w-auto min-w-0">
-        <span className="text-gray-500 select-none">$</span>
-        <span className="text-emerald-400">openclaw skills install</span>
-        <span className="text-gray-300">weather</span>
-      </div>
-    );
-  }
-
-  if (install.isComingSoon) {
-    return (
-      <div className="flex flex-col items-center gap-2 w-full sm:w-auto">
-        <div className="flex items-center gap-3 bg-gray-900 border border-dashed border-gray-600 rounded-xl px-5 py-3 text-sm w-full sm:w-auto opacity-70">
-          <span className="text-yellow-400/80">⏳</span>
-          <span className="text-gray-400">{install.label} — coming soon</span>
-        </div>
-        <p className="text-xs text-yellow-500/80">
-          OpenAI plugin support is on our roadmap
-        </p>
-      </div>
-    );
-  }
-
-  if (install.isJson) {
-    return (
-      <div className="flex items-center gap-3 bg-gray-900 border border-gray-700 rounded-xl px-5 py-3 font-mono text-xs w-full sm:w-auto min-w-0 group max-w-sm">
-        <span className="text-gray-500 select-none">📋</span>
-        <span className="flex-1 text-gray-300 truncate">Paste JSON config → {install.label} settings</span>
-        <button
-          onClick={handleCopy}
-          className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white px-2 py-1 rounded transition-colors flex-shrink-0"
-        >
-          {copied ? "✓" : "Copy"}
-        </button>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex items-center gap-3 bg-gray-900 border border-gray-700 rounded-xl px-5 py-3 font-mono text-sm w-full sm:w-auto min-w-0 group">
-      <span className="text-gray-500 select-none">$</span>
-      <span className="flex-1 text-emerald-400 truncate">{install.cmd}</span>
+    <div className="flex items-center gap-2 rounded-lg border border-ink-750 bg-ink-1000 py-1.5 pl-3 pr-1.5 shadow-e1">
+      <code className="min-w-0 flex-1 truncate font-mono text-xs text-ink-200">
+        <span className="select-none text-ink-600">$ </span>
+        {display}
+      </code>
       <button
+        type="button"
         onClick={handleCopy}
-        className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white px-2 py-1 rounded transition-colors flex-shrink-0"
+        className={cx(
+          "inline-flex h-7 shrink-0 items-center gap-1.5 rounded-sm px-2 text-2xs font-medium",
+          "transition duration-fast ease-out",
+          copied ? "text-ok-300" : "text-ink-500 hover:bg-ink-850 hover:text-ink-100"
+        )}
+        aria-label="Copy the example install command"
       >
-        {copied ? "✓" : "Copy"}
+        {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+        {copied ? "Copied" : "Copy"}
       </button>
     </div>
   );

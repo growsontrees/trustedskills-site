@@ -1721,7 +1721,7 @@ openclaw skills info &lt;name&gt;</code></pre>
 </ul>
 
 <div class="warning-box">
-  <strong>⚠️ Windows Defender alerts:</strong> Defender sometimes flags new npm package downloads as suspicious. Before allowing it, check the skill's verification status on TrustedSkills. Verified and Featured skills have been formally audited and are safe. For Unverified skills, review the source code on GitHub first.
+  <strong>⚠️ Windows Defender alerts:</strong> Defender sometimes flags new npm package downloads as suspicious. Don't wave that away on the strength of a TrustedSkills badge — no badge here means anyone has read the code. Open the repository linked from the skill's page and review the source before you allow it.
 </div>
 
 <div class="experience-callout">
@@ -1746,7 +1746,7 @@ openclaw skills info &lt;name&gt;</code></pre>
 <p>Check the skill's verification badge on TrustedSkills. Verified and Featured skills are safe to allow. For Unverified skills, review the GitHub repo first before deciding.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I install OpenClaw skills on Windows?","acceptedAnswer":{"@type":"Answer","text":"openclaw skills install <skill-name> in PowerShell. No JSON editing or restart needed."}},{"@type":"Question","name":"Do I need admin privileges on Windows?","acceptedAnswer":{"@type":"Answer","text":"No. Skills install to %USERPROFILE%\\.openclaw\\ which doesn't require admin access."}},{"@type":"Question","name":"Windows Defender blocked a skill?","acceptedAnswer":{"@type":"Answer","text":"Check the skill's verification badge. Verified and Featured skills are audited and safe."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I install OpenClaw skills on Windows?","acceptedAnswer":{"@type":"Answer","text":"openclaw skills install <skill-name> in PowerShell. No JSON editing or restart needed."}},{"@type":"Question","name":"Do I need admin privileges on Windows?","acceptedAnswer":{"@type":"Answer","text":"No. Skills install to %USERPROFILE%\\.openclaw\\ which doesn't require admin access."}},{"@type":"Question","name":"Windows Defender blocked a skill?","acceptedAnswer":{"@type":"Answer","text":"Don't override Defender on the strength of a badge — no TrustedSkills badge means the code was reviewed. Open the linked repository and read the source before allowing it."}}]}
 </script>
     `,
   },
@@ -2164,8 +2164,8 @@ npm publish --access public   # --access public for scoped packages</code></pre>
 
   {
     slug: ['advanced', 'verification-badges'],
-    title: 'AI Skill Verification Trust Badges: What Each Level Means',
-    description: 'AI skill verification trust badges explained — what Unverified, Community, Verified, and Featured mean, why it matters for security against supply chain attacks, and how to get verified.',
+    title: 'What Each TrustedSkills Badge Actually Means',
+    description: 'The TrustedSkills badges explained honestly: Official, Featured, Pinned, Listed and Unverified describe provenance, not a security audit. Plus a checklist for vetting a skill yourself.',
     category: 'Advanced Topics',
     categorySlug: 'advanced',
     persona: 'developer',
@@ -2173,107 +2173,214 @@ npm publish --access public   # --access public for scoped packages</code></pre>
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"AI Skill Verification Trust Badges: What Each Level Means","description":"AI skill verification trust badges — Unverified, Community, Verified, Featured levels explained.","dateModified":"2026-03-04","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"What Each TrustedSkills Badge Actually Means","description":"The TrustedSkills badges describe provenance and machine checks, not security audits.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+</script>
+
+<div class="tldr-box">
+  <div class="tldr-label">Quick answer</div>
+  <p><strong>No badge on TrustedSkills means a person has read the code.</strong> The badges describe where a skill came from and what machines have checked: <strong>Official</strong> (published by the vendor's own GitHub org), <strong>Featured</strong> (our editorial pick), <strong>Pinned</strong> (install locked to one commit we stored), <strong>Listed</strong> (indexed, nothing more), <strong>Unverified</strong> (indexed with no extra signal). You are the reviewer. Read the source before you run it.</p>
+</div>
+
+<p class="article-intro">Installing a skill isn't like installing a browser extension where the worst case is an annoying ad. A skill runs with whatever access you have given your agent - your files, your API keys, your shell. So it matters what a badge is actually claiming. Here is exactly what each one asserts, and what none of them do.</p>
+
+<h2>What TrustedSkills does and doesn't do</h2>
+<p>TrustedSkills is an <em>index</em>. We crawl public sources and record where each skill came from, who publishes it, what it declares it needs, and how to install it on your platform. That is the product.</p>
+<p>What we do not do: we do not read skill code, we do not run it, we do not commission audits, and we do not operate a volunteer review programme. An earlier version of this page claimed several of those things. They were not true, and they have been removed.</p>
+
+<div class="warning-box">
+  <strong>There is no badge here that means "safe".</strong> A skill carrying every badge we offer can still be malicious. The badges narrow down <em>who published it</em> and <em>whether the code can change under you</em> - not whether the code is trustworthy.
+</div>
+
+<h2>The badges</h2>
+
+<h3>Official</h3>
+<p>The publishing account matches a GitHub organisation we recognise as the vendor behind the underlying product - Anthropic's own skills, Stripe's own skills, and so on. The match is against a maintained allowlist of organisation names.</p>
+<p><strong>What it tells you:</strong> the skill almost certainly comes from the company whose product it wraps, rather than from someone imitating them.</p>
+<p><strong>What it doesn't tell you:</strong> anything about the code. Vendors ship bugs and over-broad permissions too.</p>
+
+<h3>Featured</h3>
+<p>A small hand-picked set we think are a reasonable first thing to try on a new setup. It is an editorial opinion about usefulness.</p>
+<p><strong>What it doesn't tell you:</strong> anything about security. It is a recommendation, not a review.</p>
+
+<h3>Pinned</h3>
+<p>We recorded a specific commit hash for the skill and stored a snapshot of the repository at that commit. Installing fetches the snapshot, not whatever the repository holds today.</p>
+<p><strong>What it tells you:</strong> the code cannot change under you after the fact. If you audit it once, that audit stays valid for that pinned version. This is real protection against a maintainer - or whoever takes over their account - pushing a malicious update to a package you already trust.</p>
+<p><strong>What it doesn't tell you:</strong> whether the pinned code was ever any good. We pinned it; we didn't read it.</p>
+
+<h3>Listed</h3>
+<p>The default, and the overwhelming majority of the index. We found the skill on a public source and recorded its metadata. Installing resolves against the live repository, so you get whatever is there when you run the command.</p>
+
+<h3>Unverified</h3>
+<p>In the index, but we hold nothing beyond the bare listing - no matched publisher, no pinned commit. Treat it as a complete unknown.</p>
+
+<h2>At a glance</h2>
+<div class="table-container">
+  <table>
+    <thead>
+      <tr><th>Badge</th><th>Publisher matched</th><th>Code read by a human</th><th>Install can change under you</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Official</td><td>Yes, to a vendor org</td><td>No</td><td>Yes, unless also pinned</td></tr>
+      <tr><td>Featured</td><td>No</td><td>No</td><td>Yes, unless also pinned</td></tr>
+      <tr><td>Pinned</td><td>No</td><td>No</td><td>No</td></tr>
+      <tr><td>Listed</td><td>No</td><td>No</td><td>Yes</td></tr>
+      <tr><td>Unverified</td><td>No</td><td>No</td><td>Yes</td></tr>
+    </tbody>
+  </table>
+</div>
+<p>The "code read by a human" column is all No. That is the honest state of this registry today, and printing it is more use to you than a badge implying otherwise.</p>
+
+<h2>How to check a skill yourself</h2>
+<p>Since nobody else has, here is what to actually look at. It takes about five minutes and catches most of what matters.</p>
+<ol>
+  <li><strong>Open the repository</strong> linked from the skill's page. Check it exists, has real history, and isn't a single drive-by commit.</li>
+  <li><strong>Read the manifest.</strong> <code>SKILL.md</code> declares the environment variables and binaries the skill wants. If a Markdown formatter asks for <code>AWS_SECRET_ACCESS_KEY</code>, stop there.</li>
+  <li><strong>Grep for network calls.</strong> Look for <code>fetch(</code>, <code>axios</code>, <code>http.request</code>, <code>curl</code>. Every destination host should be one the skill's stated purpose explains.</li>
+  <li><strong>Grep for dynamic execution.</strong> <code>eval(</code>, <code>new Function(</code>, <code>child_process</code>, <code>exec(</code>, and base64 blobs that get decoded and run. Legitimate skills rarely need these, and they are how a payload hides.</li>
+  <li><strong>Check the install script.</strong> A <code>postinstall</code> hook, or anything piping <code>curl</code> into a shell, runs before you have looked at anything.</li>
+  <li><strong>Check file access.</strong> Reads of <code>~/.ssh</code>, <code>~/.aws</code>, <code>.env</code>, browser profiles or credential stores are almost never justified.</li>
+</ol>
+
+<div class="tip-box">
+  <strong>Reduce the blast radius.</strong> Whatever the badge says, the strongest move is to give the agent less to lose: run it in a container or a scratch account, keep production credentials out of its environment, and prefer skills pinned to a commit so a later update can't change what you already checked.
+</div>
+
+<h2>Reporting a problem</h2>
+<p>If you find a skill in this index doing something it shouldn't, open an issue in the <a href="https://github.com/growsontrees/trustedskills-registry">TrustedSkills registry repository</a>. We can delist it. If it also ships as an npm package, report that separately to npm at <code>security@npmjs.com</code> - delisting here does not remove it from npm.</p>
+
+<hr/>
+
+<h2>Frequently asked questions</h2>
+
+<h3>Does any badge mean the skill has been security reviewed?</h3>
+<p>No. No badge means a person read the code. One badge does mean a machine did: <strong>Checked</strong> is a static scan of the skill's files at a named commit, looking for credential reads, undeclared network calls, encoded payloads that get executed and pipe-to-shell installers. Every result is printed on the skill's page — see <a href="/docs/advanced/automated-safety-checks/">what the automated safety pass covers</a>. The other badges describe provenance: who published the skill, and whether the install is pinned to a fixed commit.</p>
+
+<h3>Is it safe to install a Listed skill?</h3>
+<p>It carries exactly as much risk as installing any unreviewed code from the internet, because that is what it is. Read the repository first: check the declared environment variables, any network calls, and anything that executes a string.</p>
+
+<h3>What is the practical difference between Pinned and everything else?</h3>
+<p>A pinned skill installs from a snapshot we stored at a specific commit, so it cannot change after you have looked at it. Everything else resolves against the live repository, which means a later push changes what you install.</p>
+
+<h3>How do I get a badge for my skill?</h3>
+<p>You can't apply. Official is assigned automatically when your publishing org matches the vendor allowlist, Pinned when the registry records and stores a commit for your skill, and Featured is an editorial pick.</p>
+
+<h3>How do I report a malicious skill?</h3>
+<p>Open an issue in the TrustedSkills registry on GitHub and mark it as a security report. Report any npm package separately to <code>security@npmjs.com</code>.</p>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does any TrustedSkills badge mean the skill has been security reviewed?","acceptedAnswer":{"@type":"Answer","text":"No badge means a person read the code. The Checked badge means a machine statically scanned the skill's files at a named commit for credential reads, undeclared network calls, encoded payloads and pipe-to-shell installers, and the individual results are published on the skill page. The other badges describe provenance - who published the skill and whether the install is pinned to a fixed commit."}},{"@type":"Question","name":"Is it safe to install a Listed skill?","acceptedAnswer":{"@type":"Answer","text":"It carries the same risk as any unreviewed code from the internet. Read the repository first: check declared environment variables, network calls, and anything that executes a string."}},{"@type":"Question","name":"What is the difference between Pinned and other badges?","acceptedAnswer":{"@type":"Answer","text":"A pinned skill installs from a stored snapshot at a specific commit, so it cannot change after you review it. Other skills resolve against the live repository."}},{"@type":"Question","name":"How do I report a malicious skill?","acceptedAnswer":{"@type":"Answer","text":"Open an issue in the TrustedSkills registry on GitHub marked as a security report, and report any npm package to security@npmjs.com."}}]}
+</script>
+
+    `,
+  },
+
+  {
+    slug: ['advanced', 'automated-safety-checks'],
+    title: 'The Automated Safety Pass: What "Checked" Actually Means',
+    description: 'Exactly what the TrustedSkills automated safety scan looks for in every skill — credential access, undeclared network calls, obfuscated payloads, pipe-to-shell installers — how it decides, and what it cannot tell you.',
+    category: 'Advanced Topics',
+    categorySlug: 'advanced',
+    persona: 'developer',
+    lastUpdated: '2026-09-27',
+    author: TRUSTEDSKILLS_AUTHOR,
+    content: `
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"The Automated Safety Pass: What Checked Actually Means","description":"What the TrustedSkills automated safety scan looks for in every skill, how it decides, and what it cannot tell you.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
-  <p>Four levels: <strong>🔲 Unverified</strong> (automated acceptance only), <strong>👥 Community</strong> (peer-reviewed by volunteer developers), <strong>✅ Verified</strong> (formally audited by the TrustedSkills team), <strong>⭐ Featured</strong> (verified + selected for quality). Check the badge before installing — a skill is code running on your machine.</p>
+  <p><strong>Checked</strong> means we pulled the skill's files at a specific commit and statically scanned them for six things: a manifest that parses, no reads of credential stores, no network calls to undeclared hosts, no encoded payloads that get executed, no <code>curl … | sh</code> installers, and a recorded commit SHA. Every individual result — pass or fail, with the line that decided it — is printed on the skill's page. It is a machine reading code. Nobody ran the skill, and nothing here says it is any good.</p>
 </div>
 
-<p class="article-intro">Installing a skill isn't like installing a browser extension where the worst case is an annoying ad. An MCP skill runs as a subprocess with access to your AI's context — and potentially your files, APIs, and data. So yes, verification matters. Here's what each badge actually means.</p>
+<p class="article-intro">Most skill directories tell you how many people installed something. That is a popularity number, not a safety signal. The question you actually have before you let a skill run inside your agent is narrower: does this thing read my keys, and does it phone somewhere I didn't agree to? Those two questions can be answered by a machine, on every skill, every day — so we do that, and we publish the working.</p>
 
-<h2>Why This Matters: The Supply Chain Risk</h2>
-<p>A <em>supply chain attack</em> is when someone publishes a malicious package that looks legitimate. You install it thinking it's a weather tool; it exfiltrates your API keys in the background. It happens. It's not hypothetical.</p>
-<p>TrustedSkills' verification system exists to give you signal about how much a skill has been examined before you run it.</p>
+<h2>Why the old badges meant nothing</h2>
+<p>Until this pass shipped, 92% of the catalogue carried a "Community" badge. That was not a review. It was the fallback value in the crawler — the label a skill got when nothing was known about it. Any directory can generate a badge like that, which is exactly why a badge like that is worthless.</p>
+<p>The rule now: a tier states something a reader could check for themselves, and the page shows what it is based on.</p>
 
-<div class="experience-callout">
-  <div class="experience-label">🔬 From the field</div>
-  <p>We rejected a skill submission during manual review that had a hidden network call sending tool invocation logs to an external server. The skill's stated functionality was legitimate — it was a code formatter. But it was also silently phoning home with everything the AI asked it to do. This is exactly the kind of thing automated checks miss and human review catches.</p>
-</div>
-
-<h2>The Four Verification Levels</h2>
-
-<h3>🔲 Unverified</h3>
-<p>Listed in the registry. Automated metadata checks passed. That's all. Nobody has looked at the code.</p>
-<p><strong>Install if:</strong> You personally know the author, or you've reviewed the source code yourself on GitHub.</p>
-<p><strong>Don't install if:</strong> You're on a shared machine, it has access to sensitive data, or the author is unknown to you.</p>
-
-<h3>👥 Community</h3>
-<p>Multiple community members have reviewed the source code and vouched for it. No obvious malicious behaviour, no excessive permissions, no suspicious patterns.</p>
-<p><strong>Install if:</strong> Personal use. The community review catches the obvious problems.</p>
-<p><strong>Limitation:</strong> Reviewers are volunteers. They may miss subtle or sophisticated vulnerabilities.</p>
-
-<h3>✅ Verified</h3>
-<p>The TrustedSkills team — or a trusted security partner — has done a formal audit. That means:</p>
-<ul>
-  <li>Full source code review</li>
-  <li>Dependency audit (known CVEs, suspicious packages)</li>
-  <li>Permission audit — does it only access what it claims to?</li>
-  <li>Network audit — what external services does it call, and why?</li>
-  <li>Ongoing monitoring when new versions are published</li>
-</ul>
-<p><strong>Install for:</strong> Professional environments, team setups, anything touching sensitive data.</p>
-
-<h3>⭐ Featured</h3>
-<p>All of Verified, plus: the team selected it for being genuinely excellent. Useful, well-documented, actively maintained, exemplary implementation.</p>
-<p><strong>These are the ones we recommend first.</strong> If you don't know where to start, browse Featured skills.</p>
-
-<h2>Verification Levels at a Glance</h2>
+<h2>The tiers</h2>
 <div class="table-container">
   <table>
     <thead>
-      <tr><th>Badge</th><th>Reviewed by</th><th>Code audit</th><th>Best for</th><th>Risk</th></tr>
+      <tr><th>Tier</th><th>What it asserts</th><th>Who decides</th></tr>
     </thead>
     <tbody>
-      <tr><td>🔲 Unverified</td><td>Nobody</td><td>No</td><td>Personal testing with source review</td><td>Higher</td></tr>
-      <tr><td>👥 Community</td><td>Volunteer devs</td><td>Informal</td><td>Personal use</td><td>Lower</td></tr>
-      <tr><td>✅ Verified</td><td>TrustedSkills team</td><td>Yes, formal</td><td>Professional & team use</td><td>Low</td></tr>
-      <tr><td>⭐ Featured</td><td>TrustedSkills team</td><td>Yes, formal</td><td>Everyone — highest quality</td><td>Very low</td></tr>
+      <tr><td>Listed</td><td>The skill exists, we resolved where it comes from, and we recorded how to install it. Nobody looked at the code.</td><td>Automatic</td></tr>
+      <tr><td>Checked</td><td>Passed all six automated checks below, at a named commit.</td><td>Automatic, re-run as the upstream repository moves</td></tr>
+      <tr><td>Pinned</td><td>Installs resolve to one recorded commit rather than whatever the repository holds today.</td><td>Automatic, where we hold a snapshot</td></tr>
+      <tr><td>Official</td><td>Published by the GitHub organisation that builds the underlying product. A statement about the publisher, not the code.</td><td>Organisation matching</td></tr>
+      <tr><td>Featured</td><td>An editorial pick — a good place to start. Not a security claim.</td><td>Us, by hand</td></tr>
     </tbody>
   </table>
 </div>
+<p>A skill carrying Official or Featured still gets scanned, and its check results still appear on its page. Who published a skill and what its code does are different questions.</p>
 
-<h2>Getting Your Skill Verified</h2>
-<ol>
-  <li>Submit to registry — starts as Unverified</li>
-  <li>Open source the code — verification requires it</li>
-  <li>Get community reviews — encourage other developers to look at it</li>
-  <li>Apply for formal verification — open a GitHub issue in the registry</li>
-  <li>Respond to the review process — answer questions, make requested changes</li>
-  <li>Maintain it — unresponsive maintainers lose Verified status</li>
-</ol>
+<h2>The six checks</h2>
 
-<h2>Security Practices for Skill Users</h2>
+<h3>1. Declares what it does</h3>
+<p><code>SKILL.md</code> exists, its YAML frontmatter parses, and it carries a name and a description with a real body behind it.</p>
+<p><strong>Fails when:</strong> there is no manifest, the frontmatter is malformed, or the entry is a stub with nothing to review. A skill that cannot say what it does cannot be checked against what it does.</p>
+
+<h3>2. No undeclared network calls</h3>
+<p>Every host the skill dials must be either well-known infrastructure — package registries, GitHub, first-party model APIs — or declared in its own frontmatter (<code>allowed-domains</code>).</p>
+<p><strong>Fails when:</strong> a script, a config endpoint, or a command the manifest tells the agent to run contacts a host outside that set. The skill page lists the hosts and the exact lines.</p>
+<p><strong>Does not fail on:</strong> links in documentation. A README that links to <code>react.dev</code> is not contacting <code>react.dev</code>. Counting links as calls is the difference between a check and a noise generator.</p>
+
+<h3>3. No obfuscated payloads</h3>
+<p>Looks for the shapes used to hide code from a reader: base64 or hex blobs that get decoded and executed, <code>eval(atob(…))</code>, <code>exec(compile(…))</code>, PowerShell <code>-EncodedCommand</code>, strings assembled from character codes, long encoded literals.</p>
+<p><strong>Passes:</strong> ordinary encoding. <code>base64.b64encode(data)</code> on its way into a request body is normal work; decoding a blob and running it is not.</p>
+
+<h3>4. No credential access</h3>
+<p>Flags reads of SSH private keys, <code>~/.aws/credentials</code>, gcloud and Kubernetes config, <code>~/.npmrc</code> tokens, <code>.netrc</code>, stored git credentials, the GitHub CLI token store, OS keychains and credential managers, GnuPG keyrings, password-manager vaults, browser cookie and login databases, crypto wallet files, and environment files outside the project.</p>
+<p>It also flags the exfiltration shape directly: the environment being dumped into an outbound request on one line.</p>
+<p><strong>And it reads the instructions, not just the code.</strong> For an agent skill the prose <em>is</em> the payload — a manifest that tells the agent to read <code>~/.ssh/id_rsa</code> and post it somewhere is dangerous even though it ships no code at all. So <code>SKILL.md</code> prose is scanned for credential paths next to imperative verbs. A README that warns you never to commit your <code>.env</code> is documentation and does not fail.</p>
+
+<h3>5. No pipe-to-shell installers</h3>
+<p><code>curl … | sh</code>, <code>bash &lt;(curl …)</code>, <code>iwr … | iex</code>, <code>pip install</code> straight from a URL: anything that fetches code at run time and executes it unseen. Checked in the code and in the manifest's instructions.</p>
+<p><strong>Passes:</strong> <code>npm install</code>, <code>pip install ruff</code>, and other installs that resolve through a package registry.</p>
+
+<h3>6. Pinned to a commit</h3>
+<p>The result records the repository and the exact commit SHA that was read, and the skill page links to it. Without that, "we scanned it" refers to nothing in particular — the repository may have changed an hour later.</p>
+
+<h2>What the scan cannot tell you</h2>
+<p>This is the part most badge systems leave out.</p>
 <ul>
-  <li>Default to Verified or Featured when they exist for what you need</li>
-  <li>For Unverified skills: check the GitHub repo, look at the actual code</li>
-  <li>Keep skills updated — new versions get reviewed too</li>
-  <li>In enterprise environments, maintain an approved-skills allowlist</li>
+  <li><strong>It does not run the skill.</strong> Behaviour that only appears at run time is invisible to it.</li>
+  <li><strong>It does not read dependencies.</strong> A clean skill that installs a compromised npm package is still a problem.</li>
+  <li><strong>It cannot judge intent.</strong> A skill can pass every check and still be useless, wrong, or subtly bad advice to an agent.</li>
+  <li><strong>It can be evaded.</strong> Static analysis catches known shapes. A novel encoding, or a payload pulled from a host that looks like infrastructure, can get through — which is why Checked is a floor, not an endorsement.</li>
+  <li><strong>A failure is not an accusation.</strong> Plenty of flagged skills are honest tools that talk to their own API without declaring it. Read the finding; it names the file and the line.</li>
 </ul>
 
-<div class="tip-box">
-  <strong>💡 Quick check for Unverified skills:</strong> Open the GitHub repo linked in the skill's TrustedSkills page. Look at <code>index.js</code> (or <code>src/</code>). Red flags: obfuscated code, <code>fetch()</code> calls to unknown domains, anything reading files outside what the skill claims to do, <code>eval()</code> or <code>Function()</code> calls.
-</div>
+<h2>When a skill cannot be scanned</h2>
+<p>Some skills show no check results at all. The usual reasons: the upstream repository was deleted or made private, the skill's directory was renamed or removed after the registry indexed it, or the repository has no <code>SKILL.md</code>. Those skills stay Listed. We would rather show nothing than imply a check that never ran.</p>
+
+<h2>How often it runs</h2>
+<p>The scan runs daily and is incremental: a repository whose head commit hasn't moved keeps its stored result, and one that has moved is re-read and re-scanned. Because the tier is recomputed from the stored results on every build, a skill that stops passing loses the Checked label rather than keeping a badge it earned six months ago.</p>
+
+<h2>If you think a result is wrong</h2>
+<p>Both directions are worth reporting. A false pass is a defect in the checks; a false failure means an honest skill is being misrepresented. Open an issue on the registry with the skill slug and the commit shown on its page.</p>
+<p>Skill authors: the cheapest way to pass the network check is to declare your own hosts in your frontmatter. <code>allowed-domains</code> is read as a declaration, and a declared host is not a finding.</p>
 
 <hr/>
 
 <h2>Frequently Asked Questions</h2>
 
-<h3>What does Verified mean on TrustedSkills?</h3>
-<p>A formal security audit by the TrustedSkills team or a trusted partner. Source code, dependencies, permissions, and network activity have all been reviewed. The skill does what it claims and nothing more.</p>
+<h3>Does "Checked" mean a skill is safe?</h3>
+<p>No. It means six specific dangerous patterns were not found in the code as published at a named commit. It is a floor. Nobody ran the skill, and no human reviewed it.</p>
 
-<h3>Is it safe to install Unverified skills?</h3>
-<p>It carries more risk. Review the GitHub repo before installing — especially check for network calls to unknown servers and file access beyond what the skill claims to do. If you can't verify it yourself, wait for Community or Verified status.</p>
+<h3>Why did a skill I trust get flagged?</h3>
+<p>Most often because it calls its own API and does not declare that host in its frontmatter. The finding on the skill page names the file, the line and the host, so you can judge it yourself in about ten seconds.</p>
 
-<h3>How do I report a malicious skill?</h3>
-<p>Open an issue in the TrustedSkills registry on GitHub and mark it as a security report. We investigate and remove confirmed malicious skills. You can also report the npm package directly to npm's security team at security@npmjs.com.</p>
+<h3>Do Official and Featured skills get scanned?</h3>
+<p>Yes. Every skill we can resolve to a repository is scanned, whatever its tier, and the results are shown on its page.</p>
 
-<h3>Does Verified status last forever?</h3>
-<p>No — it applies to specific versions. New versions get reviewed again. Maintainers who don't respond to security reports or stop updating their skills can lose Verified status.</p>
+<h3>Is the scanner open to inspection?</h3>
+<p>The checks are described above in the same terms the scanner implements them, including what each one deliberately ignores. If a description here and the result on a skill page disagree, that is a bug worth reporting.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What does Verified mean on TrustedSkills?","acceptedAnswer":{"@type":"Answer","text":"A formal audit by the TrustedSkills team. Source code, dependencies, permissions, and network activity reviewed."}},{"@type":"Question","name":"Is it safe to install Unverified skills?","acceptedAnswer":{"@type":"Answer","text":"Higher risk. Review the GitHub repo first — check for network calls to unknown servers and unexpected file access."}},{"@type":"Question","name":"How do I report a malicious skill?","acceptedAnswer":{"@type":"Answer","text":"Open a GitHub issue in the TrustedSkills registry marked as a security report."}},{"@type":"Question","name":"Does Verified status last forever?","acceptedAnswer":{"@type":"Answer","text":"No — applies to specific versions. New versions get reviewed again."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does Checked mean a skill is safe?","acceptedAnswer":{"@type":"Answer","text":"No. It means six specific dangerous patterns were not found in the code as published at a named commit. Nobody ran the skill and no human reviewed it."}},{"@type":"Question","name":"Why did a skill I trust get flagged?","acceptedAnswer":{"@type":"Answer","text":"Usually because it calls its own API without declaring that host in its frontmatter. The finding names the file, line and host."}},{"@type":"Question","name":"Do Official and Featured skills get scanned?","acceptedAnswer":{"@type":"Answer","text":"Yes. Every skill that resolves to a repository is scanned whatever its tier, and the results appear on its page."}}]}
 </script>
     `,
   },

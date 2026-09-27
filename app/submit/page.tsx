@@ -1,9 +1,14 @@
 import type { Metadata } from "next";
-import { CopyButton } from "../../components/CopyButton";
+import Link from "next/link";
+import { InstallBlock } from "../../components/InstallBlock";
+import { TIER_CONFIG, TIER_ORDER } from "../../lib/skill-config";
+import { Check, Info, platformIcon } from "../../components/icons";
+import { Eyebrow, Note, Panel, cx } from "../../components/ui";
 
 export const metadata: Metadata = {
   title: "Submit a Skill",
-  description: "Share your AI agent skill with the community. Learn how to submit to the TrustedSkills registry — compatible with OpenClaw, MCP, Claude, OpenAI, and more.",
+  description:
+    "Add your AI agent skill to the TrustedSkills index — compatible with OpenClaw, MCP, Claude, OpenAI, Cursor and more.",
 };
 
 const SKILL_TEMPLATE = `---
@@ -29,298 +34,270 @@ What this tool does.
 
 **Returns:** What the tool returns`;
 
+const PLATFORMS = [
+  { key: "openclaw", label: "OpenClaw" },
+  { key: "mcp", label: "MCP" },
+  { key: "claude", label: "Claude Desktop" },
+  { key: "openai", label: "OpenAI" },
+  { key: "cursor", label: "Cursor / VS Code" },
+];
+
+const REQUIREMENTS = [
+  "SKILL.md with all required fields: name, description, version",
+  "Slug format: lowercase letters, numbers and hyphens only (e.g. my-skill-name)",
+  "Valid semantic version (e.g. 1.0.0)",
+  "No hardcoded API keys or secrets in any file",
+  "All tool files referenced in SKILL.md must exist",
+  "A public GitHub repository holding the skill code",
+  "A licence file (MIT, Apache-2.0 or a similar OSS licence)",
+  "A platforms field naming at least one supported platform",
+];
+
+const FAQ = [
+  {
+    q: "How long until my skill appears?",
+    a: "If your repository carries the openclaw-skill GitHub topic, auto-discovery picks it up on the next scraper run — usually within six hours. A manual pull request lands whenever a maintainer merges it; there is no service-level commitment on that.",
+  },
+  {
+    q: "Can I submit skills for Claude Desktop, Cursor or OpenAI?",
+    a: "Yes. Set the platforms field in your SKILL.md to include mcp, claude, cursor, openai or huggingface. The detail page then shows the install snippet for each platform you declare.",
+  },
+  {
+    q: "Will anyone review my code?",
+    a: "No. TrustedSkills indexes skills and records where they came from — nobody reads the code as part of listing it. Badges describe provenance and machine checks, never a human audit.",
+  },
+  {
+    q: "How do I get a stronger badge?",
+    a: "Official is assigned automatically when the publishing account matches a vendor's own GitHub organisation. Featured is an editorial pick. Pinned means we've recorded a commit and stored a snapshot of it. None of them can be requested.",
+  },
+  {
+    q: "Can I update my skill?",
+    a: "Yes. Cut a new GitHub release with a higher version number and the scraper picks it up. If your skill is pinned, the pinned commit is updated on the next sync, not instantly.",
+  },
+  {
+    q: "Does my skill need to support every platform?",
+    a: "No — one is enough. Most start with OpenClaw or MCP and expand later.",
+  },
+];
+
+function Step({ n, title, children }: { n: number; title: string; children: React.ReactNode }) {
+  return (
+    <li className="flex gap-4">
+      <span className="tabular flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-ink-700 bg-ink-850 text-xs font-semibold text-ink-300">
+        {n}
+      </span>
+      <div className="min-w-0 flex-1 pb-2">
+        <h3 className="text-sm font-semibold text-ink-50">{title}</h3>
+        <div className="mt-2.5 space-y-3">{children}</div>
+      </div>
+    </li>
+  );
+}
+
+function Code({ children }: { children: React.ReactNode }) {
+  return (
+    <code className="rounded-xs border border-ink-750 bg-ink-850 px-1 py-px font-mono text-2xs text-ink-200">
+      {children}
+    </code>
+  );
+}
+
 export default function SubmitPage() {
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-10">
-        <h1 className="text-3xl font-bold text-white mb-3">Submit a Skill</h1>
-        <p className="text-gray-400 text-lg">
-          Share your AI agent skill with developers across the entire ecosystem.
+    <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
+      <header className="border-b border-ink-800 pb-6">
+        <h1 className="text-3xl font-semibold text-ink-50">Submit a skill</h1>
+        <p className="mt-2 max-w-2xl text-base text-ink-400">
+          Add your skill to the index so it turns up when someone searches for what it does.
         </p>
-        <div className="flex flex-wrap gap-2 mt-3">
-          {[
-            { emoji: "🦀", label: "OpenClaw" },
-            { emoji: "🔌", label: "MCP" },
-            { emoji: "💬", label: "Claude Desktop" },
-            { emoji: "🤖", label: "OpenAI" },
-            { emoji: "🖱️", label: "Cursor / VS Code" },
-          ].map((p) => (
-            <span
-              key={p.label}
-              className="inline-flex items-center gap-1 text-xs bg-gray-900 border border-gray-700 text-gray-400 px-2.5 py-1 rounded-full"
-            >
-              {p.emoji} {p.label}
-            </span>
-          ))}
+        <div className="mt-4 flex flex-wrap gap-1.5">
+          {PLATFORMS.map((p) => {
+            const Icon = platformIcon(p.key);
+            return (
+              <span
+                key={p.key}
+                className="inline-flex items-center gap-1.5 rounded-sm border border-ink-750 bg-ink-900 px-2 py-1 text-2xs text-ink-400"
+              >
+                <Icon className="h-3 w-3" />
+                {p.label}
+              </span>
+            );
+          })}
         </div>
-      </div>
+      </header>
 
-      {/* Trust tiers overview */}
-      <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6 mb-10">
-        <h2 className="font-semibold text-white mb-4">Verification Tiers</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {[
-            {
-              icon: "🔓",
-              tier: "Unverified",
-              color: "text-gray-400",
-              bg: "bg-gray-800",
-              desc: "Submitted but not yet scanned or reviewed.",
-            },
-            {
-              icon: "🌐",
-              tier: "Community",
-              color: "text-blue-400",
-              bg: "bg-blue-900/30",
-              desc: "Passed all 6 automated security scans. Auto-assigned on merge.",
-            },
-            {
-              icon: "✅",
-              tier: "Verified",
-              color: "text-emerald-400",
-              bg: "bg-emerald-900/30",
-              desc: "Human code review by the TrustedSkills team.",
-            },
-            {
-              icon: "⭐",
-              tier: "Featured",
-              color: "text-yellow-400",
-              bg: "bg-yellow-900/30",
-              desc: "Editorially selected — recommended across all platforms.",
-            },
-          ].map((item) => (
-            <div
-              key={item.tier}
-              className={`flex items-start gap-3 p-3 rounded-lg ${item.bg}`}
-            >
-              <span className="text-xl mt-0.5">{item.icon}</span>
-              <div>
-                <div className={`font-medium text-sm ${item.color}`}>{item.tier}</div>
-                <div className="text-xs text-gray-400 mt-0.5">{item.desc}</div>
-              </div>
+      {/* Badges — read from the same config the listings use, so this page
+          can't drift back into describing checks nobody runs. */}
+      <section className="mt-10">
+        <h2 className="text-lg font-semibold text-ink-50">What the badges mean</h2>
+        <p className="mt-1.5 text-sm text-ink-450">
+          Badges are assigned by the registry. None of them can be applied for.
+        </p>
+
+        <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          {TIER_ORDER.map((tier) => {
+            const config = TIER_CONFIG[tier];
+            const Icon = config.icon;
+            return (
+              <Link
+                key={tier}
+                href={`/tier/${tier}/`}
+                className="flex items-start gap-3 rounded-lg border border-ink-750 bg-ink-900 p-3.5 transition duration-fast ease-out hover:border-ink-650 hover:bg-ink-850"
+              >
+                <Icon
+                  className={cx(
+                    "mt-0.5 h-4 w-4 shrink-0",
+                    config.tone === "accent"
+                      ? "text-accent-400"
+                      : config.tone === "ok"
+                      ? "text-ok-400"
+                      : config.tone === "warn"
+                      ? "text-warn-400"
+                      : "text-ink-500"
+                  )}
+                />
+                <div className="min-w-0">
+                  <div className="text-sm font-medium text-ink-100">{config.label}</div>
+                  <p className="mt-0.5 text-xs leading-relaxed text-ink-450">
+                    {config.description}
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+
+        <div className="mt-3">
+          <Note icon={Info}>
+            No badge on this site means a person has read your code. We record provenance and run
+            machine checks; we don&apos;t audit skills.
+          </Note>
+        </div>
+      </section>
+
+      {/* Steps */}
+      <section className="mt-12">
+        <h2 className="text-lg font-semibold text-ink-50">How to submit</h2>
+
+        <ol className="mt-6 space-y-8">
+          <Step n={1} title="Create your skill directory">
+            <p className="text-sm leading-relaxed text-ink-400">
+              Every skill is a directory with a <Code>SKILL.md</Code> at its root. That one file is
+              readable by OpenClaw and exportable to the MCP, Claude and OpenAI formats.
+            </p>
+            <InstallBlock label="my-skill/SKILL.md" code={SKILL_TEMPLATE} />
+          </Step>
+
+          <Step n={2} title="Declare platform support">
+            <p className="text-sm leading-relaxed text-ink-400">
+              The <Code>platforms</Code> field decides which install snippets your detail page
+              offers.
+            </p>
+            <InstallBlock
+              label="SKILL.md — frontmatter metadata"
+              code={`"platforms": ["openclaw", "mcp", "claude", "openai", "cursor"]`}
+            />
+            <p className="text-xs text-ink-500">
+              Accepted values: <Code>openclaw</Code> <Code>mcp</Code> <Code>claude</Code>{" "}
+              <Code>claudecode</Code> <Code>openai</Code> <Code>cursor</Code>{" "}
+              <Code>huggingface</Code>
+            </p>
+          </Step>
+
+          <Step n={3} title="Add tool implementations (optional)">
+            <p className="text-sm leading-relaxed text-ink-400">
+              If your skill ships custom tools, put the handlers in a <Code>tools/</Code> directory
+              next to the manifest.
+            </p>
+            <div className="rounded-lg border border-ink-750 bg-ink-1000 p-3 font-mono text-2xs leading-relaxed">
+              <div className="text-ink-400">my-skill/</div>
+              <div className="pl-3 text-ink-500">├── SKILL.md</div>
+              <div className="pl-3 text-ink-300">├── tools/</div>
+              <div className="pl-7 text-ink-500">└── my_tool.js</div>
+              <div className="pl-3 text-ink-500">└── README.md</div>
             </div>
-          ))}
-        </div>
-      </div>
+          </Step>
 
-      {/* Step-by-step guide */}
-      <div className="space-y-8">
-        <h2 className="text-xl font-bold text-white">How to Submit</h2>
-
-        {[
-          {
-            step: "1",
-            title: "Create your skill directory",
-            content: (
-              <div>
-                <p className="text-gray-400 text-sm mb-4">
-                  Create a directory for your skill with a{" "}
-                  <code className="bg-gray-800 px-1.5 py-0.5 rounded text-purple-300 text-xs">SKILL.md</code> file.
-                  This is the core of every TrustedSkills skill — readable by OpenClaw, and exportable to MCP, Claude, and OpenAI formats.
-                </p>
-                <div className="bg-gray-950 rounded-xl border border-gray-700 overflow-hidden">
-                  <div className="flex items-center justify-between px-4 py-2 border-b border-gray-700">
-                    <span className="text-xs text-gray-500 font-mono">my-skill/SKILL.md</span>
-                    <CopyButton text={SKILL_TEMPLATE} label="Copy" />
-                  </div>
-                  <pre className="p-4 text-sm text-gray-300 font-mono overflow-x-auto whitespace-pre-wrap">
-{SKILL_TEMPLATE}
-                  </pre>
-                </div>
-              </div>
-            ),
-          },
-          {
-            step: "2",
-            title: "Declare platform support",
-            content: (
-              <div>
-                <p className="text-gray-400 text-sm mb-3">
-                  Set the <code className="bg-gray-800 px-1.5 py-0.5 rounded text-purple-300 text-xs">platforms</code> field
-                  to list which AI platforms your skill supports. Skills that support multiple platforms get wider exposure.
-                </p>
-                <div className="bg-gray-950 rounded-xl border border-gray-700 p-4 font-mono text-sm">
-                  <div className="text-blue-400">{"// In SKILL.md frontmatter metadata:"}</div>
-                  <div className="text-gray-300 mt-2">
-                    {`"platforms": ["openclaw", "mcp", "claude", "openai", "cursor"]`}
-                  </div>
-                </div>
-                <p className="text-xs text-gray-500 mt-2">
-                  Supported values: <code className="bg-gray-800 px-1 py-0.5 rounded text-xs">openclaw</code>{" "}
-                  <code className="bg-gray-800 px-1 py-0.5 rounded text-xs">mcp</code>{" "}
-                  <code className="bg-gray-800 px-1 py-0.5 rounded text-xs">claude</code>{" "}
-                  <code className="bg-gray-800 px-1 py-0.5 rounded text-xs">openai</code>{" "}
-                  <code className="bg-gray-800 px-1 py-0.5 rounded text-xs">cursor</code>{" "}
-                  <code className="bg-gray-800 px-1 py-0.5 rounded text-xs">huggingface</code>
-                </p>
-              </div>
-            ),
-          },
-          {
-            step: "3",
-            title: "Add tool implementations (optional)",
-            content: (
-              <div>
-                <p className="text-gray-400 text-sm mb-3">
-                  If your skill uses custom tools, add handler files in a{" "}
-                  <code className="bg-gray-800 px-1.5 py-0.5 rounded text-purple-300 text-xs">tools/</code> directory.
-                </p>
-                <div className="bg-gray-950 rounded-xl border border-gray-700 p-4 font-mono text-sm">
-                  <div className="text-gray-500">my-skill/</div>
-                  <div className="text-gray-400 pl-4">├── SKILL.md</div>
-                  <div className="text-purple-300 pl-4">├── tools/</div>
-                  <div className="text-gray-400 pl-8">└── my_tool.js</div>
-                  <div className="text-gray-400 pl-4">└── README.md</div>
-                </div>
-              </div>
-            ),
-          },
-          {
-            step: "4",
-            title: "Publish to GitHub",
-            content: (
-              <div>
-                <p className="text-gray-400 text-sm mb-3">
-                  Push your skill to a public GitHub repository and add the{" "}
-                  <code className="bg-gray-800 px-1.5 py-0.5 rounded text-purple-300 text-xs">openclaw-skill</code> topic tag
-                  so it&apos;s auto-discoverable.
-                </p>
-                <div className="bg-gray-950 rounded-xl border border-gray-700 overflow-hidden">
-                  <div className="flex items-center justify-between px-4 py-2 border-b border-gray-700">
-                    <span className="text-xs text-gray-500 font-mono">terminal</span>
-                  </div>
-                  <pre className="p-4 text-sm text-emerald-400 font-mono overflow-x-auto">
-{`git init my-skill && cd my-skill
+          <Step n={4} title="Publish to GitHub">
+            <p className="text-sm leading-relaxed text-ink-400">
+              Push to a public repository and add the <Code>openclaw-skill</Code> topic so the
+              scraper can find it.
+            </p>
+            <InstallBlock
+              label="terminal"
+              code={`git init my-skill && cd my-skill
 git add .
 git commit -m "Initial skill"
 gh repo create my-skill --public --push
 gh repo edit --add-topic openclaw-skill`}
-                  </pre>
-                </div>
-              </div>
-            ),
-          },
-          {
-            step: "5",
-            title: "Create a GitHub Release",
-            content: (
-              <div>
-                <p className="text-gray-400 text-sm mb-3">
-                  Create a tagged release with your skill as a zip artifact. The scraper uses release metadata for versioning.
-                </p>
-                <div className="bg-gray-950 rounded-xl border border-gray-700 overflow-hidden">
-                  <div className="flex items-center justify-between px-4 py-2 border-b border-gray-700">
-                    <span className="text-xs text-gray-500 font-mono">terminal</span>
-                  </div>
-                  <pre className="p-4 text-sm text-emerald-400 font-mono overflow-x-auto">
-{`git tag v1.0.0
+            />
+          </Step>
+
+          <Step n={5} title="Create a GitHub release">
+            <p className="text-sm leading-relaxed text-ink-400">
+              Tag a release with your skill as a zip artifact — the scraper reads release metadata
+              for versioning.
+            </p>
+            <InstallBlock
+              label="terminal"
+              code={`git tag v1.0.0
 git push origin v1.0.0
 gh release create v1.0.0 \\
   --title "v1.0.0" \\
   --notes "Initial release" \\
   my-skill.zip`}
-                  </pre>
-                </div>
-              </div>
-            ),
-          },
-          {
-            step: "6",
-            title: "Submit a PR to the registry",
-            content: (
-              <div>
-                <p className="text-gray-400 text-sm mb-3">
-                  Open a pull request to add your skill to the{" "}
-                  <code className="bg-gray-800 px-1.5 py-0.5 rounded text-purple-300 text-xs">sources.json</code>{" "}
-                  file in the TrustedSkills registry repository.
-                </p>
-                <div className="bg-gray-900 border border-gray-700 rounded-xl p-4">
-                  <div className="text-sm text-gray-300 mb-3">Add to <span className="font-mono text-purple-300">sources.json</span>:</div>
-                  <pre className="text-xs font-mono text-gray-300 overflow-x-auto">
-{`{
+            />
+          </Step>
+
+          <Step n={6} title="Open a pull request against the registry">
+            <p className="text-sm leading-relaxed text-ink-400">
+              Add an entry to <Code>sources.json</Code> in the registry repository.
+            </p>
+            <InstallBlock
+              label="sources.json"
+              code={`{
   "type": "github_repo",
   "repo": "yourusername/my-skill",
   "skills_path": ".",
   "official": false
 }`}
-                  </pre>
-                </div>
-                <p className="text-xs text-gray-500 mt-3">
-                  Or wait up to 6 hours — if your repo has the{" "}
-                  <code className="bg-gray-800 px-1 py-0.5 rounded">openclaw-skill</code> topic,
-                  it will be auto-discovered by the scraper.
-                </p>
-              </div>
-            ),
-          },
-        ].map((item) => (
-          <div key={item.step} className="flex gap-4">
-            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-900/50 border border-purple-800 flex items-center justify-center text-purple-300 font-bold text-sm">
-              {item.step}
-            </div>
-            <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-white mb-3">{item.title}</h3>
-              {item.content}
-            </div>
-          </div>
-        ))}
-      </div>
+            />
+            <p className="text-xs leading-relaxed text-ink-500">
+              Or skip the pull request — a repository carrying the <Code>openclaw-skill</Code> topic
+              is picked up automatically on the next scraper run.
+            </p>
+          </Step>
+        </ol>
+      </section>
 
       {/* Requirements */}
-      <div className="mt-12 bg-gray-900 border border-gray-800 rounded-2xl p-6">
-        <h2 className="font-semibold text-white mb-4">Submission Requirements</h2>
-        <ul className="space-y-2 text-sm text-gray-400">
-          {[
-            "SKILL.md with all required fields: name, description, version",
-            "Slug format: lowercase letters, numbers, hyphens only (e.g. my-skill-name)",
-            "Valid semantic version (e.g. 1.0.0)",
-            "No hardcoded API keys or secrets in any file",
-            "All tool files referenced in SKILL.md must exist",
-            "Public GitHub repository with the skill code",
-            "License file (MIT, Apache-2.0, or similar OSS license)",
-            "platforms field set to at least one supported platform value",
-          ].map((req) => (
-            <li key={req} className="flex items-start gap-2">
-              <span className="text-emerald-400 mt-0.5 flex-shrink-0">✓</span>
-              {req}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <section className="mt-12">
+        <Panel>
+          <h2 className="text-sm font-semibold text-ink-50">Submission requirements</h2>
+          <ul className="mt-stack-lg space-y-2">
+            {REQUIREMENTS.map((req) => (
+              <li key={req} className="flex items-start gap-2.5 text-sm text-ink-400">
+                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-ok-400" />
+                {req}
+              </li>
+            ))}
+          </ul>
+        </Panel>
+      </section>
 
       {/* FAQ */}
-      <div className="mt-8">
-        <h2 className="font-semibold text-white mb-4">FAQ</h2>
-        <div className="space-y-4">
-          {[
-            {
-              q: "How long until my skill appears?",
-              a: "If you add the openclaw-skill GitHub topic, auto-discovery runs every 6 hours. Manual PR submissions are reviewed within 5 business days.",
-            },
-            {
-              q: "Can I submit skills for Claude Desktop, Cursor, or OpenAI?",
-              a: "Yes! Set the platforms field in your SKILL.md to include mcp, claude, cursor, openai, or huggingface. Multi-platform skills get wider exposure and show platform-specific install instructions on their detail page.",
-            },
-            {
-              q: "How do I reach Verified status?",
-              a: "After your skill passes automated scans and merges (Community tier), request a human review by commenting on the PR or opening a review request issue.",
-            },
-            {
-              q: "Can I update my skill?",
-              a: "Yes. Create a new GitHub Release with a higher version number. The scraper will pick it up automatically.",
-            },
-            {
-              q: "Does my skill need to support all platforms?",
-              a: "No — you can support just one. Most skills start with OpenClaw or MCP and expand. The registry will show the right install instructions based on what you declare in the platforms field.",
-            },
-          ].map((item) => (
-            <div key={item.q} className="border border-gray-800 rounded-xl p-5">
-              <h3 className="font-medium text-gray-200 mb-1.5">{item.q}</h3>
-              <p className="text-sm text-gray-400">{item.a}</p>
+      <section className="mt-12">
+        <Eyebrow>Questions</Eyebrow>
+        <h2 className="mt-1 text-lg font-semibold text-ink-50">Before you submit</h2>
+        <div className="mt-4 divide-y divide-ink-800 overflow-hidden rounded-xl border border-ink-750 bg-ink-900">
+          {FAQ.map((item) => (
+            <div key={item.q} className="p-gutter">
+              <h3 className="text-sm font-medium text-ink-100">{item.q}</h3>
+              <p className="mt-1.5 text-sm leading-relaxed text-ink-450">{item.a}</p>
             </div>
           ))}
         </div>
-      </div>
+      </section>
     </div>
   );
 }

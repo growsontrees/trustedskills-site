@@ -1,13 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import { Check, Copy } from "./icons";
+import { cx } from "./ui";
 
 interface CopyButtonProps {
   text: string;
   label?: string;
+  /** `bare` drops the border — for use inside a code block's header row. */
+  variant?: "bare" | "outline";
 }
 
-export function CopyButton({ text, label = "Copy" }: CopyButtonProps) {
+export function CopyButton({ text, label = "Copy", variant = "bare" }: CopyButtonProps) {
   const [copied, setCopied] = useState(false);
 
   function handleCopy() {
@@ -18,24 +22,23 @@ export function CopyButton({ text, label = "Copy" }: CopyButtonProps) {
 
   return (
     <button
+      type="button"
       onClick={handleCopy}
-      className="flex items-center gap-2 text-sm bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded-lg transition-colors"
-    >
-      {copied ? (
-        <>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-          Copied!
-        </>
-      ) : (
-        <>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-          </svg>
-          {label}
-        </>
+      aria-live="polite"
+      className={cx(
+        "inline-flex h-7 items-center gap-1.5 rounded-sm px-2 text-2xs font-medium",
+        "transition duration-fast ease-out",
+        variant === "outline" && "border",
+        copied
+          ? cx("text-ok-300", variant === "outline" && "border-ok-800 bg-ok-950")
+          : cx(
+              "text-ink-450 hover:bg-ink-800 hover:text-ink-100",
+              variant === "outline" && "border-ink-700 bg-ink-850 hover:border-ink-650"
+            )
       )}
+    >
+      {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+      {copied ? "Copied" : label}
     </button>
   );
 }

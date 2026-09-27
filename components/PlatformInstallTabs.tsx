@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PlatformKey } from "../hooks/usePlatform";
-import { CopyButton } from "./CopyButton";
-import { usePlatform } from "../hooks/usePlatform";
+import { PlatformKey, usePlatform } from "../hooks/usePlatform";
+import { InstallBlock } from "./InstallBlock";
+import { AlertTriangle, Clock, ExternalLink, Github, platformIcon } from "./icons";
+import { Note, cx } from "./ui";
 
 type InstallOverride = {
   supported?: boolean;
@@ -73,48 +74,80 @@ function inferBestPlatform(
   return "openclaw";
 }
 
-const ALL_TABS: { key: PlatformKey; emoji: string; label: string }[] = [
-  { key: "openclaw", emoji: "🦀", label: "OpenClaw" },
-  { key: "claude", emoji: "💬", label: "Claude Desktop" },
-  { key: "claudecode", emoji: "⌨️", label: "Claude Code" },
-  { key: "cursor", emoji: "🖱️", label: "Cursor / VS Code" },
-  { key: "codex", emoji: "🐙", label: "GitHub Copilot / Codex" },
-  { key: "opencode", emoji: "🔓", label: "OpenCode" },
-  { key: "mcp", emoji: "🔌", label: "MCP (generic)" },
-  { key: "openai", emoji: "🤖", label: "OpenAI" },
+const ALL_TABS: { key: PlatformKey; label: string }[] = [
+  { key: "openclaw", label: "OpenClaw" },
+  { key: "claude", label: "Claude Desktop" },
+  { key: "claudecode", label: "Claude Code" },
+  { key: "cursor", label: "Cursor / VS Code" },
+  { key: "codex", label: "Copilot / Codex" },
+  { key: "opencode", label: "OpenCode" },
+  { key: "mcp", label: "MCP (generic)" },
+  { key: "openai", label: "OpenAI" },
 ];
 
-function StepNumber({ n }: { n: number }) {
+/** A numbered step in an install guide. */
+function Step({ n, title, children }: { n: number; title?: string; children: React.ReactNode }) {
   return (
-    <span className="flex-shrink-0 w-5 h-5 rounded-full bg-purple-900/50 border border-purple-800 text-purple-300 text-xs flex items-center justify-center font-bold mt-0.5">
-      {n}
-    </span>
+    <li className="flex gap-3">
+      <span className="tabular mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-ink-700 bg-ink-850 text-2xs font-semibold text-ink-400">
+        {n}
+      </span>
+      <div className="min-w-0 flex-1 text-sm text-ink-400">
+        {title ? <p className="mb-2 font-medium text-ink-200">{title}</p> : null}
+        {children}
+      </div>
+    </li>
   );
 }
 
-function CodeBlock({ label, code }: { label: string; code: string }) {
+function Steps({ children }: { children: React.ReactNode }) {
+  return <ol className="space-y-stack-lg">{children}</ol>;
+}
+
+/** A file path the reader has to go and find. */
+function PathList({ rows }: { rows: { os: string; path: string; note?: string }[] }) {
   return (
-    <div className="bg-gray-950 border border-gray-700 rounded-xl overflow-hidden">
-      <div className="flex items-center justify-between px-4 py-2 border-b border-gray-700">
-        <span className="text-xs text-gray-500 font-mono">{label}</span>
-        <CopyButton text={code} label="Copy" />
-      </div>
-      <pre className="p-4 text-sm font-mono text-emerald-400 whitespace-pre-wrap leading-relaxed overflow-x-auto">
-        {code}
-      </pre>
+    <div className="space-y-1 rounded-lg border border-ink-750 bg-ink-1000 p-3 font-mono text-2xs">
+      {rows.map((row) => (
+        <div key={row.os} className="flex flex-wrap gap-x-2">
+          <span className="text-ink-500">{row.os}</span>
+          <span className="select-all text-ink-200">{row.path}</span>
+          {row.note ? <span className="text-ink-600">{row.note}</span> : null}
+        </div>
+      ))}
     </div>
+  );
+}
+
+function Requirement({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="border-l-2 border-ink-750 pl-3 text-xs leading-relaxed text-ink-500">{children}</p>
+  );
+}
+
+function RepoLink({ repoUrl }: { repoUrl: string }) {
+  if (!repoUrl) return null;
+  return (
+    <a
+      href={repoUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-1.5 text-sm text-accent-400 transition-colors hover:text-accent-300"
+    >
+      <Github className="h-3.5 w-3.5" />
+      Repository install instructions
+      <ExternalLink className="h-3 w-3" />
+    </a>
   );
 }
 
 function OpenClawGuide({ installCmd }: { installCmd: string }) {
   return (
-    <div className="space-y-4">
-      <div className="flex items-start gap-3 text-sm text-gray-400">
-        <StepNumber n={1} />
-        <span>Run this command in your terminal. The skill is immediately available.</span>
-      </div>
-      <CodeBlock label="terminal" code={installCmd} />
-    </div>
+    <Steps>
+      <Step n={1} title="Run this in your terminal">
+        <InstallBlock label="terminal" code={installCmd} prompt />
+      </Step>
+    </Steps>
   );
 }
 
@@ -124,35 +157,27 @@ function ClaudeDesktopGuide({ slug }: { slug: string }) {
     null, 2
   );
   return (
-    <div className="space-y-5">
-      <div className="flex items-start gap-3 text-sm text-gray-400">
-        <StepNumber n={1} />
-        <div>
-          <p className="mb-2 font-medium text-gray-300">Find your config file</p>
-          <div className="text-xs font-mono bg-gray-950 rounded-lg p-3 border border-gray-700 space-y-1">
-            <div><span className="text-blue-400">Mac:</span> <span className="text-gray-300 select-all">~/Library/Application Support/Claude/claude_desktop_config.json</span></div>
-            <div><span className="text-cyan-400">Windows:</span> <span className="text-gray-300 select-all">%APPDATA%\Claude\claude_desktop_config.json</span></div>
-            <div><span className="text-green-400">Linux:</span> <span className="text-gray-300 select-all">~/.config/Claude/claude_desktop_config.json</span></div>
-          </div>
-        </div>
-      </div>
-      <div className="flex items-start gap-3 text-sm text-gray-400">
-        <StepNumber n={2} />
-        <div className="flex-1 min-w-0">
-          <p className="mb-2 font-medium text-gray-300">
-            Add this to the <code className="text-purple-300 bg-gray-800 px-1 rounded">mcpServers</code> section
-          </p>
-          <CodeBlock label="claude_desktop_config.json" code={configJson} />
-        </div>
-      </div>
-      <div className="flex items-start gap-3 text-sm text-gray-400">
-        <StepNumber n={3} />
-        <span>Save the file and <strong className="text-gray-200">restart Claude Desktop</strong>. The skill will appear in the tools menu.</span>
-      </div>
-      <p className="text-xs text-gray-500 border-l-2 border-gray-700 pl-3">
-        Requires Claude Desktop ≥ v0.10 with Developer mode enabled.
-      </p>
-    </div>
+    <Steps>
+      <Step n={1} title="Find your config file">
+        <PathList
+          rows={[
+            { os: "macOS", path: "~/Library/Application Support/Claude/claude_desktop_config.json" },
+            { os: "Windows", path: "%APPDATA%\\Claude\\claude_desktop_config.json" },
+            { os: "Linux", path: "~/.config/Claude/claude_desktop_config.json" },
+          ]}
+        />
+      </Step>
+      <Step n={2} title="Add this to the mcpServers section">
+        <InstallBlock label="claude_desktop_config.json" code={configJson} />
+      </Step>
+      <Step n={3}>
+        Save the file and <strong className="font-medium text-ink-200">restart Claude Desktop</strong>.
+        The skill appears in the tools menu.
+      </Step>
+      <li>
+        <Requirement>Requires Claude Desktop v0.10 or later with Developer mode enabled.</Requirement>
+      </li>
+    </Steps>
   );
 }
 
@@ -165,84 +190,57 @@ function ClaudeCodeGuide({ slug, installCmd, repoUrl, supported, override }: { s
 
   if (override?.supported && override.mode === "custom") {
     return (
-      <div className="space-y-5">
-        <div className="bg-amber-900/20 border border-amber-800/50 rounded-xl p-5 space-y-3">
-          <p className="text-sm text-amber-300 font-medium">⌨️ Claude Code uses a custom install flow for this skill</p>
-          <p className="text-sm text-gray-300">
-            {override.note || "This skill works with Claude Code, but not through a generated one-command TrustedSkills installer."}
-          </p>
-        </div>
-        <div className="flex items-start gap-3 text-sm text-gray-400">
-          <StepNumber n={1} />
-          <div className="flex-1 min-w-0">
-            <p className="mb-2 font-medium text-gray-300">Use the upstream / recorded install command</p>
-            <CodeBlock label="terminal" code={override.command || installCmd} />
-          </div>
-        </div>
-        {repoUrl && (
-          <a
-            href={repoUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 transition-colors"
-          >
-            📥 View repository install instructions →
-          </a>
-        )}
+      <div className="space-y-stack-lg">
+        <Note tone="warn" icon={AlertTriangle}>
+          <span className="font-medium">Claude Code uses a custom install flow for this skill.</span>{" "}
+          {override.note ||
+            "It works with Claude Code, but not through a generated one-command TrustedSkills installer."}
+        </Note>
+        <Steps>
+          <Step n={1} title="Use the upstream install command">
+            <InstallBlock label="terminal" code={override.command || installCmd} prompt />
+          </Step>
+        </Steps>
+        <RepoLink repoUrl={repoUrl} />
       </div>
     );
   }
 
   if (!supported) {
     return (
-      <div className="bg-amber-900/20 border border-amber-800/50 rounded-xl p-5 space-y-3">
-        <p className="text-sm text-amber-300 font-medium">⚠️ No verified one-command Claude Code install recorded for this skill</p>
-        <p className="text-sm text-gray-300">
-          TrustedSkills should not invent a <code className="text-purple-300 bg-gray-800 px-1 rounded">claude mcp add</code> command here.
-          This skill uses a custom or upstream install flow instead.
-        </p>
-        <div className="space-y-3">
-          <div>
-            <p className="text-xs text-gray-500 mb-2">Use the upstream / recorded install command</p>
-            <CodeBlock label="terminal" code={installCmd} />
-          </div>
-          {repoUrl && (
-            <a
-              href={repoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 transition-colors"
-            >
-              📥 View repository install instructions →
-            </a>
-          )}
-        </div>
+      <div className="space-y-stack-lg">
+        <Note tone="warn" icon={AlertTriangle}>
+          <span className="font-medium">
+            No one-command Claude Code install is recorded for this skill.
+          </span>{" "}
+          We won&apos;t invent a <code className="rounded-xs bg-ink-800 px-1 font-mono">claude mcp add</code>{" "}
+          line that we haven&apos;t seen work — use the upstream flow below.
+        </Note>
+        <Steps>
+          <Step n={1} title="Use the upstream install command">
+            <InstallBlock label="terminal" code={installCmd} prompt />
+          </Step>
+        </Steps>
+        <RepoLink repoUrl={repoUrl} />
       </div>
     );
   }
 
   return (
-    <div className="space-y-5">
-      <div className="flex items-start gap-3 text-sm text-gray-400">
-        <StepNumber n={1} />
-        <div className="flex-1 min-w-0">
-          <p className="mb-2 font-medium text-gray-300">Run in terminal (recommended)</p>
-          <CodeBlock label="terminal" code={cliCmd} />
-        </div>
-      </div>
-      <div className="flex items-start gap-3 text-sm text-gray-400">
-        <StepNumber n={2} />
-        <div className="flex-1 min-w-0">
-          <p className="mb-2 text-gray-400">
-            Or manually add to <code className="text-purple-300 bg-gray-800 px-1 rounded">~/.claude/settings.json</code>
-          </p>
-          <CodeBlock label="~/.claude/settings.json" code={configJson} />
-        </div>
-      </div>
-      <p className="text-xs text-gray-500 border-l-2 border-gray-700 pl-3">
-        Requires Claude Code (claude CLI). Run <code className="text-gray-400">claude --version</code> to verify your install.
-      </p>
-    </div>
+    <Steps>
+      <Step n={1} title="Run in your terminal (recommended)">
+        <InstallBlock label="terminal" code={cliCmd} prompt />
+      </Step>
+      <Step n={2} title="Or add it to ~/.claude/settings.json by hand">
+        <InstallBlock label="~/.claude/settings.json" code={configJson} />
+      </Step>
+      <li>
+        <Requirement>
+          Requires the <code className="font-mono text-ink-400">claude</code> CLI. Check yours with{" "}
+          <code className="font-mono text-ink-400">claude --version</code>.
+        </Requirement>
+      </li>
+    </Steps>
   );
 }
 
@@ -252,29 +250,23 @@ function CursorGuide({ slug }: { slug: string }) {
     null, 2
   );
   return (
-    <div className="space-y-5">
-      <div className="flex items-start gap-3 text-sm text-gray-400">
-        <StepNumber n={1} />
-        <div>
-          <p className="font-medium text-gray-300">Open (or create) your MCP config file</p>
-          <div className="mt-2 text-xs font-mono bg-gray-950 rounded-lg p-3 border border-gray-700 space-y-1">
-            <div><span className="text-cyan-400">Cursor:</span> <span className="text-gray-300 select-all">~/.cursor/mcp.json</span> <span className="text-gray-500">(create if missing)</span></div>
-            <div><span className="text-blue-400">VS Code:</span> <span className="text-gray-300 select-all">~/.vscode/settings.json</span> <span className="text-gray-500">(under mcp.servers)</span></div>
-          </div>
-        </div>
-      </div>
-      <div className="flex items-start gap-3 text-sm text-gray-400">
-        <StepNumber n={2} />
-        <div className="flex-1 min-w-0">
-          <p className="mb-2 font-medium text-gray-300">Paste this into the file</p>
-          <CodeBlock label="~/.cursor/mcp.json" code={configJson} />
-        </div>
-      </div>
-      <div className="flex items-start gap-3 text-sm text-gray-400">
-        <StepNumber n={3} />
-        <span>Save and <strong className="text-gray-200">restart Cursor</strong> (or reload VS Code window). The skill tools appear in the AI pane.</span>
-      </div>
-    </div>
+    <Steps>
+      <Step n={1} title="Open (or create) your MCP config file">
+        <PathList
+          rows={[
+            { os: "Cursor", path: "~/.cursor/mcp.json", note: "(create if missing)" },
+            { os: "VS Code", path: "~/.vscode/settings.json", note: "(under mcp.servers)" },
+          ]}
+        />
+      </Step>
+      <Step n={2} title="Paste this into the file">
+        <InstallBlock label="~/.cursor/mcp.json" code={configJson} />
+      </Step>
+      <Step n={3}>
+        Save, then <strong className="font-medium text-ink-200">restart Cursor</strong> (or reload
+        the VS Code window). The skill&apos;s tools appear in the AI pane.
+      </Step>
+    </Steps>
   );
 }
 
@@ -284,130 +276,102 @@ function McpGuide({ slug }: { slug: string }) {
     null, 2
   );
   return (
-    <div className="space-y-5">
-      <div className="flex items-start gap-3 text-sm text-gray-400">
-        <StepNumber n={1} />
-        <span>Locate your MCP host config file (e.g. <code className="text-gray-300 bg-gray-800 px-1 rounded">mcp.json</code> or your client settings).</span>
-      </div>
-      <div className="flex items-start gap-3 text-sm text-gray-400">
-        <StepNumber n={2} />
-        <div className="flex-1 min-w-0">
-          <p className="mb-2">Add this to the <code className="text-purple-300 bg-gray-800 px-1 rounded">mcpServers</code> section</p>
-          <CodeBlock label="mcp config" code={configJson} />
-        </div>
-      </div>
-      <div className="flex items-start gap-3 text-sm text-gray-400">
-        <StepNumber n={3} />
-        <span>Restart your MCP host to pick up the new skill.</span>
-      </div>
-      <div className="text-xs text-gray-500 border-l-2 border-gray-700 pl-3">
-        Works with: <span className="text-gray-400">Claude Desktop, Cursor, VS Code, Zed, Continue,</span> and any MCP-compatible client. Requires Node.js 18+.
-      </div>
-    </div>
+    <Steps>
+      <Step n={1}>
+        Locate your MCP host&apos;s config file — usually{" "}
+        <code className="rounded-xs bg-ink-800 px-1 font-mono text-ink-300">mcp.json</code> or your
+        client&apos;s settings.
+      </Step>
+      <Step n={2} title="Add this to the mcpServers section">
+        <InstallBlock label="mcp config" code={configJson} />
+      </Step>
+      <Step n={3}>Restart your MCP host so it picks up the new server.</Step>
+      <li>
+        <Requirement>
+          Works with Claude Desktop, Cursor, VS Code, Zed, Continue and any other MCP-compatible
+          client. Requires Node.js 18 or later.
+        </Requirement>
+      </li>
+    </Steps>
   );
 }
 
 function CodexGuide({ slug, repoUrl }: { slug: string; repoUrl: string }) {
   const configJson = JSON.stringify(
     {
-      "name": slug,
-      "description": `Agent skill for ${slug}`,
-      "type": "git",
-      "git": {
-        "url": repoUrl,
-        "branch": "main"
-      },
-      "install": {
-        "command": "npm install",
-        "workingDirectory": "."
-      },
-      "tools": ["*"]
+      name: slug,
+      description: `Agent skill for ${slug}`,
+      type: "git",
+      git: { url: repoUrl, branch: "main" },
+      install: { command: "npm install", workingDirectory: "." },
+      tools: ["*"],
     },
     null, 2
   );
   return (
-    <div className="space-y-5">
-      <div className="flex items-start gap-3 text-sm text-gray-400">
-        <StepNumber n={1} />
-        <div>
-          <p className="font-medium text-gray-300">Open GitHub Copilot Chat in VS Code</p>
-          <p className="mt-1 text-xs text-gray-500">Click the Copilot icon or press <kbd className="bg-gray-800 px-1 rounded">Ctrl</kbd>+<kbd className="bg-gray-800 px-1 rounded">Alt</kbd>+<kbd className="bg-gray-800 px-1 rounded">I</kbd></p>
-        </div>
-      </div>
-      <div className="flex items-start gap-3 text-sm text-gray-400">
-        <StepNumber n={2} />
-        <div className="flex-1 min-w-0">
-          <p className="mb-2 font-medium text-gray-300">Add this skill configuration to your workspace</p>
-          <p className="mb-2 text-xs text-gray-500">Create or edit <code className="text-gray-300 bg-gray-800 px-1 rounded">.github/copilot/skills.json</code></p>
-          <CodeBlock label="skills.json" code={configJson} />
-        </div>
-      </div>
-      <div className="flex items-start gap-3 text-sm text-gray-400">
-        <StepNumber n={3} />
-        <span>Copilot will automatically install and register the skill. You can now invoke it with <code className="text-purple-300 bg-gray-800 px-1 rounded">@{slug}</code> in chat.</span>
-      </div>
-      <div className="text-xs text-gray-500 border-l-2 border-gray-700 pl-3">
-        Requires: <span className="text-gray-400">GitHub Copilot Workspace (preview) or VS Code Insiders with Copilot Chat.</span>
-      </div>
-    </div>
+    <Steps>
+      <Step n={1} title="Open GitHub Copilot Chat in VS Code">
+        Click the Copilot icon, or press{" "}
+        <kbd className="rounded-xs border border-ink-700 bg-ink-850 px-1 font-mono text-2xs">Ctrl</kbd>
+        {" + "}
+        <kbd className="rounded-xs border border-ink-700 bg-ink-850 px-1 font-mono text-2xs">Alt</kbd>
+        {" + "}
+        <kbd className="rounded-xs border border-ink-700 bg-ink-850 px-1 font-mono text-2xs">I</kbd>.
+      </Step>
+      <Step n={2} title="Add the skill to your workspace">
+        <p className="mb-2 text-xs text-ink-500">
+          Create or edit{" "}
+          <code className="rounded-xs bg-ink-800 px-1 font-mono text-ink-300">
+            .github/copilot/skills.json
+          </code>
+        </p>
+        <InstallBlock label="skills.json" code={configJson} />
+      </Step>
+      <Step n={3}>
+        Copilot registers the skill, and you can invoke it with{" "}
+        <code className="rounded-xs bg-ink-800 px-1 font-mono text-ink-300">@{slug}</code> in chat.
+      </Step>
+      <li>
+        <Requirement>
+          Requires GitHub Copilot Workspace (preview) or VS Code Insiders with Copilot Chat.
+        </Requirement>
+      </li>
+    </Steps>
   );
 }
 
 function OpenCodeGuide({ slug }: { slug: string }) {
-  const installCmd = `opencode skill install ${slug}`;
-  const configYaml = `skills:
-  - name: ${slug}
-    enabled: true`;
+  const configYaml = `skills:\n  - name: ${slug}\n    enabled: true`;
   return (
-    <div className="space-y-5">
-      <div className="flex items-start gap-3 text-sm text-gray-400">
-        <StepNumber n={1} />
-        <div>
-          <p className="font-medium text-gray-300">Install OpenCode CLI</p>
-          <CodeBlock label="terminal" code={"npm install -g @opencode/agent"} />
-        </div>
-      </div>
-      <div className="flex items-start gap-3 text-sm text-gray-400">
-        <StepNumber n={2} />
-        <div className="flex-1 min-w-0">
-          <p className="mb-2 font-medium text-gray-300">Install this skill</p>
-          <CodeBlock label="terminal" code={installCmd} />
-        </div>
-      </div>
-      <div className="flex items-start gap-3 text-sm text-gray-400">
-        <StepNumber n={3} />
-        <div className="flex-1 min-w-0">
-          <p className="mb-2 font-medium text-gray-300">Or add to your project config</p>
-          <p className="mb-2 text-xs text-gray-500">Create or edit <code className="text-gray-300 bg-gray-800 px-1 rounded">opencode.yaml</code> in your project root</p>
-          <CodeBlock label="opencode.yaml" code={configYaml} />
-        </div>
-      </div>
-      <div className="text-xs text-gray-500 border-l-2 border-gray-700 pl-3">
-        Requires: <span className="text-gray-400">OpenCode Agent CLI or Codium IDE with OpenCode extension.</span>
-      </div>
-    </div>
+    <Steps>
+      <Step n={1} title="Install the OpenCode CLI">
+        <InstallBlock label="terminal" code="npm install -g @opencode/agent" prompt />
+      </Step>
+      <Step n={2} title="Install this skill">
+        <InstallBlock label="terminal" code={`opencode skill install ${slug}`} prompt />
+      </Step>
+      <Step n={3} title="Or add it to your project config">
+        <p className="mb-2 text-xs text-ink-500">
+          Create or edit{" "}
+          <code className="rounded-xs bg-ink-800 px-1 font-mono text-ink-300">opencode.yaml</code> in
+          your project root.
+        </p>
+        <InstallBlock label="opencode.yaml" code={configYaml} />
+      </Step>
+    </Steps>
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function OpenAIGuide({ repoUrl, slug }: { repoUrl: string; slug: string }) {
+function OpenAIGuide({ repoUrl }: { repoUrl: string }) {
   return (
-    <div className="bg-yellow-900/20 border border-yellow-800/50 rounded-xl p-5 space-y-3">
-      <p className="text-sm text-yellow-400/90 font-medium">⏳ OpenAI direct integration coming soon</p>
-      <p className="text-sm text-gray-400">
-        OpenAI does not yet have a universal skill install flow. Meanwhile, use this skill via the{" "}
-        <strong className="text-gray-300">MCP (generic) tab</strong> — it works with Claude Desktop, Cursor, VS Code, and any MCP-compatible client.
-      </p>
-      {repoUrl && (
-        <a
-          href={repoUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 transition-colors"
-        >
-          📥 View repository / download spec →
-        </a>
-      )}
+    <div className="space-y-stack-lg">
+      <Note icon={Clock}>
+        <span className="font-medium text-ink-200">No direct OpenAI install yet.</span> OpenAI has no
+        universal skill install flow. In the meantime the{" "}
+        <strong className="font-medium text-ink-200">MCP (generic)</strong> tab works with any
+        MCP-compatible client.
+      </Note>
+      <RepoLink repoUrl={repoUrl} />
     </div>
   );
 }
@@ -436,25 +400,23 @@ export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms, pref
       case "codex":      return <CodexGuide slug={slug} repoUrl={repoUrl} />;
       case "opencode":   return <OpenCodeGuide slug={slug} />;
       case "mcp":        return <McpGuide slug={slug} />;
-      case "openai":     return <OpenAIGuide repoUrl={repoUrl} slug={slug} />;
+      case "openai":     return <OpenAIGuide repoUrl={repoUrl} />;
       default:           return <OpenClawGuide installCmd={installCmd} />;
     }
   }
 
-  return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
-      <div className="px-5 pt-5 pb-0">
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <div>
-            <h2 className="font-semibold text-white">Install on your platform</h2>
-            <p className="text-sm text-gray-400 mt-1">
-              We auto-selected <span className="text-gray-200 font-medium">{ALL_TABS.find((t) => t.key === activeTab)?.label ?? "OpenClaw"}</span> based on this skill’s supported platforms.
-            </p>
-          </div>
-        </div>
+  const activeLabel = ALL_TABS.find((t) => t.key === activeTab)?.label ?? "OpenClaw";
 
-        {/* Tabs */}
-        <div className="flex flex-wrap gap-1 border-b border-gray-800 -mx-5 px-5 pb-0">
+  return (
+    <div className="overflow-hidden rounded-xl border border-ink-750 bg-ink-900 shadow-e1">
+      <div className="border-b border-ink-800 px-gutter-lg pt-gutter-lg">
+        <h2 className="text-sm font-semibold text-ink-50">Install on your platform</h2>
+        <p className="mt-1 text-sm text-ink-450">
+          Showing <span className="font-medium text-ink-200">{activeLabel}</span>, picked from this
+          skill&apos;s recorded platforms.
+        </p>
+
+        <div role="tablist" aria-label="Install platform" className="-mb-px mt-4 flex flex-wrap gap-0.5">
           {ALL_TABS.map((tab) => {
             const isActive = activeTab === tab.key;
             const isSupported =
@@ -462,27 +424,34 @@ export function PlatformInstallTabs({ slug, installCmd, repoUrl, platforms, pref
               tab.key === "openclaw" ||
               tab.key === "mcp" ||
               (tab.key === "claudecode" && hasClaudeCode);
+            const Icon = platformIcon(tab.key);
             return (
               <button
                 key={tab.key}
+                type="button"
+                role="tab"
+                aria-selected={isActive}
                 onClick={() => setActiveTab(tab.key)}
-                className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium border-b-2 transition-colors -mb-px ${
+                className={cx(
+                  "-mb-px inline-flex items-center gap-1.5 border-b-2 px-2.5 py-2 text-xs font-medium",
+                  "transition duration-fast ease-out",
                   isActive
-                    ? "border-purple-500 text-purple-300"
-                    : "border-transparent text-gray-500 hover:text-gray-300 hover:border-gray-600"
-                } ${!isSupported ? "opacity-60" : ""}`}
-                title={!isSupported ? "Not listed as supported — may still work" : undefined}
+                    ? "border-accent-500 text-ink-50"
+                    : "border-transparent text-ink-500 hover:border-ink-700 hover:text-ink-200",
+                  !isSupported && !isActive && "opacity-60"
+                )}
+                title={isSupported ? undefined : "Not listed as supported by this skill — the snippet may still work"}
               >
-                <span>{tab.emoji}</span>
-                <span>{tab.label}</span>
-                {!isSupported && <span className="text-gray-700 text-[10px]">?</span>}
+                <Icon className="h-3.5 w-3.5" />
+                {tab.label}
+                {!isSupported ? <span className="text-ink-600">?</span> : null}
               </button>
             );
           })}
         </div>
       </div>
 
-      <div className="p-5">{renderGuide()}</div>
+      <div className="p-gutter-lg">{renderGuide()}</div>
     </div>
   );
 }

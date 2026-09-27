@@ -1,5 +1,6 @@
 import { readFileSync } from "fs";
 import { join } from "path";
+import { TIER_ORDER } from "./skill-config";
 import type { Category, Skill, SkillsIndex, VerificationTier } from "./skill-config";
 
 // Server-only. The index is read from disk on first use instead of being
@@ -50,6 +51,9 @@ const TRUSTED_AUTHOR_BONUS: Record<string, number> = {
 const TIER_BONUS: Record<VerificationTier, number> = {
   official: 30,
   featured:   15,
+  // Ranked above `verified` (pinned only): a checked skill is pinned *and*
+  // has passed the automated scans, so it carries strictly more signal.
+  checked:    12,
   verified:   10,
   community:   5,
   unverified:  0,
@@ -175,4 +179,42 @@ export function getCategoryBySlug(slug: string): Category | undefined {
 
 export function getStats() {
   return loadIndex().stats;
+}
+
+/**
+ * How many skills sit in each verification tier.
+ *
+ * The homepage leads on these numbers rather than on a claim, so they are
+ * counted from the index instead of being written into copy. Entries with no
+ * `verified` field are counted as `community` — the same fallback `tierOf()`
+ * applies when rendering them.
+ */
+let _tierCounts: Record<VerificationTier, number> | null = null;
+
+export function getTierCounts(): Record<VerificationTier, number> {
+  if (!_tierCounts) {
+    // Seeded from TIER_ORDER rather than a literal, so adding a tier to
+    // skill-config.ts cannot silently leave it uncounted here.
+    const counts = Object.fromEntries(
+      TIER_ORDER.map((tier) => [tier, 0])
+    ) as Record<VerificationTier, number>;
+    for (const skill of loadIndex().skills) {
+      const tier = (skill.verified as VerificationTier) in counts
+        ? (skill.verified as VerificationTier)
+        : "community";
+      counts[tier] += 1;
+    }
+    _tierCounts = counts;
+  }
+  return _tierCounts;
+}
+
+/** Skills whose install is pinned to a recorded commit and stored snapshot. */
+let _pinnedCount: number | null = null;
+
+export function getPinnedCount(): number {
+  if (_pinnedCount === null) {
+    _pinnedCount = loadIndex().skills.filter((s) => !!s.verifiedCommit).length;
+  }
+  return _pinnedCount;
 }

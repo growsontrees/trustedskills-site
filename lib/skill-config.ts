@@ -2,7 +2,17 @@
 // nothing here touches the skills index, so it never pulls registry data into
 // the browser bundle. Server code that needs the data uses lib/skills.ts.
 
-export type VerificationTier = "unverified" | "community" | "verified" | "featured" | "official";
+import {
+  Award,
+  Building,
+  Circle,
+  GitCommit,
+  Package,
+  Shield,
+  type IconComponent,
+} from "../components/icons";
+
+export type VerificationTier = "unverified" | "community" | "checked" | "verified" | "featured" | "official";
 
 // Official orgs from skills.sh/official
 export const OFFICIAL_ORGS = new Set([
@@ -43,6 +53,10 @@ export interface Skill {
   published_at: string;
   updated_at: string;
   installs: number;
+  /** Upstream repository stars. Present for ~1% of the index. */
+  stars?: number;
+  /** Primary language of the upstream repository, when known. */
+  language?: string;
   verified: VerificationTier;
   verifiedCommit?: string;
   verifiedAt?: string;
@@ -75,64 +89,165 @@ export interface SkillsIndex {
   };
 }
 
+/**
+ * Verification tiers.
+ *
+ * Every string here has to be defensible against what the index actually
+ * holds. As of this writing that is: 26,001 listings, 1,149 matched to a
+ * vendor's own GitHub org, 127 pinned to a commit with a stored snapshot, and
+ * zero code reviews. The labels and descriptions say exactly that and no more
+ * — the previous copy ("passed automated security scans", "manually reviewed
+ * by the TrustedSkills team") described work nobody has done.
+ *
+ * `tone` selects the chip styling; keys are frozen because they appear in
+ * URLs (`/tier/<key>/`) and in the registry payload.
+ */
+export type TierTone = "neutral" | "muted" | "accent" | "ok" | "warn";
+
 export const TIER_CONFIG: Record<VerificationTier, {
   label: string;
-  icon: string;
+  icon: IconComponent;
+  tone: TierTone;
+  /** One line, shown in chips as a tooltip and on tier listing pages. */
+  description: string;
+  /** Longer form for the skill detail page. */
+  detail: string;
+  // Retained so existing call sites keep compiling; prefer `tone`.
   color: string;
   bg: string;
   border: string;
-  description: string;
 }> = {
-  unverified: {
-    label: "Unverified",
-    icon: "🔓",
-    color: "text-gray-400",
-    bg: "bg-gray-800/50",
-    border: "border-gray-700",
-    description: "Not yet reviewed. Use with caution.",
-  },
-  community: {
-    label: "Community",
-    icon: "🌐",
-    color: "text-blue-400",
-    bg: "bg-blue-900/30",
-    border: "border-blue-800",
-    description: "Passed automated security scans.",
-  },
-  verified: {
-    label: "Verified",
-    icon: "✅",
-    color: "text-emerald-400",
-    bg: "bg-emerald-900/30",
-    border: "border-emerald-800",
-    description: "Manually reviewed by the TrustedSkills team.",
+  official: {
+    label: "Official",
+    icon: Building,
+    tone: "accent",
+    description: "Published by the vendor's own GitHub organisation.",
+    detail:
+      "This skill comes from a GitHub organisation we match to the company that builds the underlying product. That tells you who published it — it is not a review of the code.",
+    color: "text-accent-300",
+    bg: "bg-accent-950",
+    border: "border-accent-800",
   },
   featured: {
     label: "Featured",
-    icon: "⭐",
-    color: "text-yellow-400",
-    bg: "bg-yellow-900/30",
-    border: "border-yellow-800",
-    description: "Editorially selected — recommended for any platform.",
+    icon: Award,
+    tone: "warn",
+    description: "Hand-picked by us as a good place to start.",
+    detail:
+      "An editorial pick — we think this is a good first skill to try on a new setup. It is a recommendation, not a security review.",
+    color: "text-warn-300",
+    bg: "bg-warn-950",
+    border: "border-warn-800",
   },
-  official: {
-    label: "Official",
-    icon: "🏢",
-    color: "text-sky-400",
-    bg: "bg-sky-900/30",
-    border: "border-sky-700",
-    description: "Published by the company or team that built the technology.",
+  verified: {
+    label: "Pinned",
+    icon: GitCommit,
+    tone: "ok",
+    description: "Install is pinned to one commit and served from a stored snapshot.",
+    detail:
+      "We recorded a specific commit for this skill and serve a stored copy of it. What you install today is that exact snapshot rather than whatever the repository happens to contain now. We have not audited the code in it.",
+    color: "text-ok-300",
+    bg: "bg-ok-950",
+    border: "border-ok-800",
+  },
+  checked: {
+    label: "Checked",
+    icon: Shield,
+    tone: "ok",
+    description: "Passed every automated safety check at a pinned commit.",
+    // Rendered both in the skill sidebar and as the /tier/checked intro, so it
+    // avoids "this skill" / "this page".
+    detail:
+      "A Checked skill was pulled at a named commit and statically scanned: the manifest parses, nothing reads credential stores, nothing contacts a host outside a published allowlist, nothing decodes and runs an encoded payload, and there is no curl-pipe-to-shell installer. Each skill's page lists its individual check results and the lines behind them. It is a machine reading the code as published, not a judgement that the skill is any good.",
+    color: "text-ok-300",
+    bg: "bg-ok-950",
+    border: "border-ok-800",
+  },
+  community: {
+    label: "Listed",
+    icon: Package,
+    tone: "neutral",
+    description: "Indexed from a public source. Not reviewed.",
+    detail:
+      "We found this skill on a public source and recorded where it came from, who publishes it and how to install it. Nobody has reviewed the code — read the repository before you run it.",
+    color: "text-ink-300",
+    bg: "bg-ink-850",
+    border: "border-ink-700",
+  },
+  unverified: {
+    label: "Unverified",
+    icon: Circle,
+    tone: "muted",
+    description: "Listed with no additional signal recorded.",
+    detail:
+      "This entry is in the index but we hold nothing beyond the basic listing — no matched publisher, no pinned commit. Treat it as an unknown and read the source first.",
+    color: "text-ink-450",
+    bg: "bg-ink-900",
+    border: "border-ink-750",
   },
 };
 
-export const PLATFORM_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
-  openclaw:    { label: "OpenClaw",              color: "text-purple-400", bg: "bg-purple-900/30" },
-  mcp:         { label: "MCP",                   color: "text-blue-400",   bg: "bg-blue-900/30" },
-  openai:      { label: "OpenAI / ChatGPT",      color: "text-green-400",  bg: "bg-green-900/30" },
-  claude:      { label: "Claude Desktop",        color: "text-orange-400", bg: "bg-orange-900/30" },
-  claudecode:  { label: "Claude Code",           color: "text-amber-300",  bg: "bg-amber-900/30" },
-  cursor:      { label: "Cursor / VS Code",      color: "text-cyan-400",   bg: "bg-cyan-900/30" },
-  codex:       { label: "GitHub Copilot / Codex",color: "text-sky-400",    bg: "bg-sky-900/30" },
-  opencode:    { label: "OpenCode",              color: "text-emerald-400",bg: "bg-emerald-900/30" },
-  huggingface: { label: "HuggingFace",           color: "text-yellow-400", bg: "bg-yellow-900/30" },
+/** Display order, strongest signal first. Used by filters and legends. */
+export const TIER_ORDER: VerificationTier[] = [
+  "official",
+  "featured",
+  "verified",
+  "checked",
+  "community",
+  "unverified",
+];
+
+export function tierOf(skill: Pick<Skill, "verified">) {
+  return TIER_CONFIG[skill.verified as VerificationTier] ?? TIER_CONFIG.community;
+}
+
+/**
+ * Platforms. Deliberately uncoloured: a card can carry five of these at once,
+ * and giving each its own hue turned every listing into a swatch chart.
+ * Colour in this system means verification state, nothing else.
+ */
+export const PLATFORM_CONFIG: Record<string, { label: string; short: string; color: string; bg: string }> = {
+  openclaw:    { label: "OpenClaw",               short: "OpenClaw", color: "text-ink-300", bg: "bg-ink-850" },
+  mcp:         { label: "MCP",                    short: "MCP",      color: "text-ink-300", bg: "bg-ink-850" },
+  openai:      { label: "OpenAI / ChatGPT",       short: "OpenAI",   color: "text-ink-300", bg: "bg-ink-850" },
+  claude:      { label: "Claude Desktop",         short: "Claude",   color: "text-ink-300", bg: "bg-ink-850" },
+  claudecode:  { label: "Claude Code",            short: "Claude Code", color: "text-ink-300", bg: "bg-ink-850" },
+  cursor:      { label: "Cursor / VS Code",       short: "Cursor",   color: "text-ink-300", bg: "bg-ink-850" },
+  codex:       { label: "GitHub Copilot / Codex", short: "Copilot",  color: "text-ink-300", bg: "bg-ink-850" },
+  opencode:    { label: "OpenCode",               short: "OpenCode", color: "text-ink-300", bg: "bg-ink-850" },
+  huggingface: { label: "HuggingFace",            short: "HF",       color: "text-ink-300", bg: "bg-ink-850" },
 };
+
+/* ── Formatting helpers ───────────────────────────────────────────────────
+   The index is uneven: 101 of 26,001 skills carry a usable `updated_at`, 350
+   carry a licence, 336 carry a star count. These helpers all return null for
+   missing data so callers can omit the row rather than render "undefined". */
+
+export function formatCount(n: number | undefined | null): string | null {
+  if (typeof n !== "number" || !Number.isFinite(n) || n <= 0) return null;
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, "")}k`;
+  return String(n);
+}
+
+export function formatDate(value: string | undefined | null): string | null {
+  if (!value) return null;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+  return date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+}
+
+/** ISO date for a <time datetime="…"> attribute, or null when unusable. */
+export function isoDate(value: string | undefined | null): string | null {
+  if (!value) return null;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date.toISOString();
+}
+
+/** Most of the index has no licence field; a few carry prose instead of an SPDX id. */
+export function formatLicense(value: string | undefined | null): string | null {
+  if (!value) return null;
+  const trimmed = value.trim();
+  if (!trimmed || trimmed.toLowerCase() === "noassertion" || trimmed.length > 40) return null;
+  return trimmed;
+}

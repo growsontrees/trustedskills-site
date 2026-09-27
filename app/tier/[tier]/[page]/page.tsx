@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Pagination } from "../../../../components/Pagination";
-import { SkillCard } from "../../../../components/SkillCard";
-import { getAllSkills, TIER_CONFIG, VerificationTier, sortByScore } from "../../../../lib/skills";
+import { ListingPage } from "../../../../components/ListingPage";
+import { getAllSkills, TIER_CONFIG, TIER_ORDER, VerificationTier, sortByScore } from "../../../../lib/skills";
 
 const DEFAULT_SKILLS_PER_PAGE = 25;
 const SITE_URL = "https://trustedskills.dev";
 
-const VALID_TIERS: VerificationTier[] = ["official", "featured", "verified", "community", "unverified"];
+// Derived from the tier config so a new tier gets a route without a second edit.
+const VALID_TIERS: VerificationTier[] = TIER_ORDER;
 
 interface PageProps {
   params: Promise<{
@@ -101,49 +101,16 @@ export default async function TierPagePaginated({ params }: PageProps) {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-6">
-        <Link
-          href="/skills"
-          className="text-sm text-gray-500 hover:text-gray-300 transition-colors flex items-center gap-1"
-        >
-          ← Back to Skills
-        </Link>
-      </div>
-
-      <header className="mb-10">
-        <div className="flex items-center gap-3 mb-3">
-          <span className="text-4xl">{data.tierConfig.icon}</span>
-          <div>
-            <h1 className="text-3xl font-bold text-white">{data.tierConfig.label} Skills</h1>
-            <p className="text-gray-400">
-              {data.skills.length} {data.tierConfig.label.toLowerCase()} skills · Page {data.currentPage} of {data.totalPages}
-            </p>
-          </div>
-        </div>
-        <p className={`max-w-3xl ${data.tierConfig.color}`}>
-          {data.tierConfig.description}
-        </p>
-      </header>
-
-      <nav aria-label={`${data.tierConfig.label} skills index`} className="sr-only">
-        <ul>
-          {data.paginatedSkills.map((skill) => (
-            <li key={skill.slug}>
-              <Link href={`/skills/${skill.slug}/`}>
-                {skill.name} — {skill.description}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-        {data.paginatedSkills.map((skill) => (
-          <SkillCard key={skill.slug} skill={skill} />
-        ))}
-      </div>
-
+    <ListingPage
+      icon={data.tierConfig.icon}
+      tone={data.tierConfig.tone}
+      title={`${data.tierConfig.label} skills`}
+      count={data.totalSkills}
+      page={data.currentPage}
+      totalPages={data.totalPages}
+      description={data.tierConfig.detail}
+      skills={data.paginatedSkills}
+    >
       <Pagination
         currentPage={data.currentPage}
         totalPages={data.totalPages}
@@ -152,6 +119,6 @@ export default async function TierPagePaginated({ params }: PageProps) {
         totalItems={data.totalSkills}
         pageSizeOptions={[25, 50, 100, { value: Infinity, label: "All" }]}
       />
-    </div>
+    </ListingPage>
   );
 }

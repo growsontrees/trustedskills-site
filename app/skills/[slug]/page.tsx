@@ -1,10 +1,51 @@
-import { getAllSkills, getSkillBySlug, TIER_CONFIG } from "../../../lib/skills";
+import {
+  getAllSkills,
+  getSkillBySlug,
+  TIER_CONFIG,
+  formatCount,
+  formatDate,
+  formatLicense,
+  isoDate,
+  tierOf,
+  PLATFORM_CONFIG,
+} from "../../../lib/skills";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { PlatformInstallTabs } from "../../../components/PlatformInstallTabs";
+import { SafetyPanel } from "../../../components/SafetyPanel";
+import { getSafetyCheckList, getSafetyReport } from "../../../lib/safety";
+import type { PlatformKey } from "../../../hooks/usePlatform";
 import type { Metadata } from "next";
+import {
+  AlertTriangle,
+  ArrowLeft,
+  Clock,
+  Code,
+  Download,
+  ExternalLink,
+  GitCommit,
+  Github,
+  Info,
+  Package,
+  Scale,
+  Star,
+  Tag as TagIcon,
+  User,
+  categoryIcon,
+} from "../../../components/icons";
+import {
+  ButtonLink,
+  Chip,
+  Eyebrow,
+  Field,
+  FieldList,
+  Note,
+  Panel,
+  TierChip,
+  cx,
+} from "../../../components/ui";
 
 /** Returns a short human-readable label for any source URL, e.g. "skills.sh", "github.com", "npm" */
 function sourceLabel(url: string): string {
@@ -64,11 +105,28 @@ export default async function SkillDetailPage({ params }: Props) {
   const skill = getSkillBySlug(slug);
   if (!skill) notFound();
 
-  const tier = TIER_CONFIG[skill.verified as keyof typeof TIER_CONFIG] ?? TIER_CONFIG['unverified'];
+  const tier = tierOf(skill);
+  const TierIcon = tier.icon;
+  const Glyph = categoryIcon(skill.category);
+
+  // The automated safety pass. Absent until a scan has reached this skill.
+  const safety = getSafetyReport(skill.slug);
+  const safetyChecks = getSafetyCheckList(safety);
+
   const hasRepoLink = !!skill.repoUrl;
-  const hasSourceLink = !!skill.sourceUrl && !skill.sourceUrl.includes('trustedskills.dev') && skill.sourceUrl !== skill.repoUrl;
-  // Optimized: Don't load all skills for ISR fallback (too large)
-  // Related skills disabled to avoid body-too-large ISR errors
+  const hasSourceLink =
+    !!skill.sourceUrl &&
+    !skill.sourceUrl.includes("trustedskills.dev") &&
+    skill.sourceUrl !== skill.repoUrl;
+
+  // Facts we actually hold. Each is null when the index has nothing, so the
+  // row is omitted rather than rendered as "undefined" — which is what the
+  // previous sidebar did for the ~98% of listings with no licence.
+  const license = formatLicense(skill.license);
+  const installs = formatCount(skill.installs);
+  const stars = formatCount(skill.stars);
+  const updated = formatDate(skill.updated_at);
+  const published = formatDate(skill.published_at);
 
   // Pre-compute commit info for JSX rendering
   let commitUrl = "";
@@ -78,433 +136,367 @@ export default async function SkillDetailPage({ params }: Props) {
     commitUrl = "https://github.com/" + repoParts[0] + "/" + repoParts[1] + "/commit/" + skill.verifiedCommit;
     shortSha = skill.verifiedCommit.slice(0, 8);
   }
+  const isPinned = !!skill.verifiedCommit;
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": skill.name,
-    "description": skill.description,
-    "applicationCategory": "DeveloperApplication",
-    "operatingSystem": "Any",
-    "url": "https://trustedskills.dev/skills/" + skill.slug + "/",
-    "author": {
-      "@type": "Person",
-      "name": skill.author
-    },
-    "softwareVersion": skill.version,
-    "license": skill.license,
+    name: skill.name,
+    description: skill.description,
+    applicationCategory: "DeveloperApplication",
+    operatingSystem: "Any",
+    url: "https://trustedskills.dev/skills/" + skill.slug + "/",
+    author: { "@type": "Person", name: skill.author },
+    softwareVersion: skill.version,
+    ...(license ? { license } : {}),
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-6">
-        <Link
-          href="/skills"
-          className="text-sm text-gray-500 hover:text-gray-300 transition-colors flex items-center gap-1"
-        >
-          ← Back to Skills
-        </Link>
-      </div>
+    <div className="mx-auto max-w-page px-4 py-10 sm:px-6 lg:px-8">
+      <Link
+        href="/skills"
+        className="group inline-flex items-center gap-1.5 text-sm text-ink-500 transition-colors hover:text-ink-200"
+      >
+        <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-fast ease-out group-hover:-translate-x-0.5" />
+        Back to all skills
+      </Link>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main content */}
-        <div className="lg:col-span-2 space-y-8">
-          {/* Header */}
-          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-6">
-            <div className="flex items-start gap-4 mb-4">
-              <span className="text-5xl">{skill.emoji}</span>
-              <div className="flex-1 min-w-0">
-                <div className="flex flex-wrap items-center gap-3 mb-1">
-                  <h1 className="text-2xl font-bold text-white">{skill.name}</h1>
-                  <div
-                    className={`inline-flex items-center gap-1.5 text-sm px-3 py-1 rounded-full border ${tier.bg} ${tier.border} ${tier.color}`}
-                  >
-                    <span>{tier.icon}</span>
-                    <span>{tier.label}</span>
-                  </div>
+      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {/* ── Main column ─────────────────────────────────────────────── */}
+        <div className="space-y-6 lg:col-span-2">
+          <Panel>
+            <div className="flex items-start gap-4">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-ink-750 bg-ink-850 text-ink-400">
+                <Glyph className="h-5 w-5" />
+              </span>
+
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+                  <h1 className="text-2xl font-semibold text-ink-50">{skill.name}</h1>
+                  <TierChip tier={skill.verified} size="md" />
                 </div>
-                <div className="text-sm text-gray-500 flex flex-wrap items-center gap-x-1 gap-y-1">
-                  <span>by{" "}</span>
-                  <span className="text-gray-300 font-medium">{skill.author}</span>
-                  <span>{" · "}v{skill.version}{" · "}{skill.license}</span>
-                  {hasRepoLink && (
-                    <a
-                      href={skill.repoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="ml-1 inline-flex items-center gap-1 text-xs text-purple-400 hover:text-purple-300 transition-colors border border-purple-800 rounded px-1.5 py-0.5"
-                    >
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                      Repository
-                    </a>
-                  )}
-                  {hasSourceLink && (
-                    <a
-                      href={skill.sourceUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-xs text-sky-500 hover:text-sky-400 transition-colors border border-sky-800 rounded px-1.5 py-0.5"
-                    >
-                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                      </svg>
-                      {sourceLabel(skill.sourceUrl)}
-                    </a>
-                  )}
+
+                <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-ink-500">
+                  <span className="inline-flex items-center gap-1.5">
+                    <User className="h-3.5 w-3.5" />
+                    <span className="font-medium text-ink-300">{skill.author}</span>
+                  </span>
+                  <span className="text-ink-700">·</span>
+                  <span className="font-mono text-xs">v{skill.version}</span>
+                  <span className="text-ink-700">·</span>
+                  <Link
+                    href={`/skills/category/${skill.category}/`}
+                    className="transition-colors hover:text-ink-200"
+                  >
+                    {skill.category}
+                  </Link>
+                  {license ? (
+                    <>
+                      <span className="text-ink-700">·</span>
+                      <span>{license}</span>
+                    </>
+                  ) : null}
                 </div>
               </div>
             </div>
 
-            <p className="text-gray-300 leading-relaxed">{skill.description}</p>
-          </div>
+            {skill.description ? (
+              <p className="mt-stack-lg text-base leading-relaxed text-ink-300">
+                {skill.description}
+              </p>
+            ) : null}
 
-          {/* Platform Install Tabs */}
+            {(hasRepoLink || hasSourceLink) && (
+              <div className="mt-stack-lg flex flex-wrap gap-2">
+                {hasRepoLink && (
+                  <ButtonLink href={skill.repoUrl} external variant="secondary" size="sm">
+                    <Github className="h-3.5 w-3.5" />
+                    Repository
+                    <ExternalLink className="h-3 w-3 text-ink-500" />
+                  </ButtonLink>
+                )}
+                {hasSourceLink && (
+                  <ButtonLink href={skill.sourceUrl!} external variant="ghost" size="sm">
+                    {sourceLabel(skill.sourceUrl!)}
+                    <ExternalLink className="h-3 w-3 text-ink-500" />
+                  </ButtonLink>
+                )}
+              </div>
+            )}
+          </Panel>
+
           <PlatformInstallTabs
             slug={skill.slug}
             installCmd={skill.installCmd || ""}
             repoUrl={skill.repoUrl || ""}
             platforms={skill.platforms || []}
-            preferredPlatform={skill.preferredPlatform}
+            preferredPlatform={skill.preferredPlatform as PlatformKey | undefined}
             installOverrides={skill.installOverrides}
           />
 
-          {/* About This Skill */}
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-            <h2 className="font-semibold text-white mb-3">About This Skill</h2>
-            {skill.longDescription ? (
-              <div className="doc-content text-sm mb-4">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>{skill.longDescription}</ReactMarkdown>
+          {/* ── Provenance ──────────────────────────────────────────────
+              Replaces the old "Security Audits" panel, which printed a
+              hard-coded "Pass" from three scanners against every one of the
+              26,001 listings regardless of whether any scan had run. Nothing
+              here is asserted that the index cannot back. */}
+          <Panel>
+            <div className="flex items-center gap-2">
+              <Info className="h-4 w-4 text-ink-450" />
+              <h2 className="text-sm font-semibold text-ink-50">What we know about this skill</h2>
+            </div>
+
+            <div className="mt-stack-lg grid gap-3 sm:grid-cols-2">
+              <div className="rounded-lg border border-ink-750 bg-ink-950 p-3.5">
+                <Eyebrow>Publisher</Eyebrow>
+                <p className="mt-1.5 text-sm text-ink-200">{skill.author}</p>
+                <p className="mt-1 text-xs leading-relaxed text-ink-500">
+                  {skill.verified === "official"
+                    ? "Matched to the vendor's own GitHub organisation."
+                    : "Taken from the source listing. We haven't verified who controls this account."}
+                </p>
               </div>
-            ) : (
-              <p className="text-gray-400 text-sm leading-relaxed mb-4">{skill.description}</p>
+
+              <div
+                className={cx(
+                  "rounded-lg border p-3.5",
+                  isPinned ? "border-ok-800/60 bg-ok-950/40" : "border-ink-750 bg-ink-950"
+                )}
+              >
+                <Eyebrow>Install target</Eyebrow>
+                {isPinned ? (
+                  <>
+                    <p className="mt-1.5 inline-flex items-center gap-1.5 text-sm text-ok-300">
+                      <GitCommit className="h-3.5 w-3.5" />
+                      Pinned to{" "}
+                      {commitUrl ? (
+                        <a
+                          href={commitUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-mono underline decoration-ok-800 underline-offset-2 hover:decoration-ok-500"
+                        >
+                          {shortSha}
+                        </a>
+                      ) : (
+                        <span className="font-mono">{shortSha || "a recorded commit"}</span>
+                      )}
+                    </p>
+                    <p className="mt-1 text-xs leading-relaxed text-ink-500">
+                      {skill.installArchiveUrl
+                        ? "Installs fetch a stored snapshot of that commit, so the code can't change after the fact."
+                        : "We recorded this commit, but the install still resolves against the live repository."}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="mt-1.5 text-sm text-ink-300">Live repository</p>
+                    <p className="mt-1 text-xs leading-relaxed text-ink-500">
+                      Not pinned. Installing fetches whatever the repository holds at the time you
+                      run the command.
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
+
+            <div className="mt-3">
+              {safety && safety.verdict !== "unscannable" ? (
+                <Note tone="warn" icon={AlertTriangle}>
+                  <span className="font-medium">No human has reviewed this code.</span> The checks
+                  below are a static scan of the files at one commit — nobody has run this skill or
+                  judged whether it works. A skill runs with whatever access you give your agent, so
+                  read the source before you install it.
+                </Note>
+              ) : (
+                <Note tone="warn" icon={AlertTriangle}>
+                  <span className="font-medium">Nobody has reviewed this code.</span> TrustedSkills
+                  indexes and links skills; it does not audit, run or scan them. A skill runs with
+                  whatever access you give your agent — read the source before you install it.
+                </Note>
+              )}
+            </div>
+          </Panel>
+
+          {/* ── Automated safety pass ────────────────────────────────────
+              Renders nothing until the scan has reached this skill, so the
+              page never implies a check that has not run. */}
+          <SafetyPanel report={safety} checks={safetyChecks} />
+
+          {/* ── About ────────────────────────────────────────────────── */}
+          {(skill.longDescription || skill.description) && (
+            <Panel>
+              <h2 className="text-sm font-semibold text-ink-50">About this skill</h2>
+              <div className="mt-stack-lg">
+                {skill.longDescription ? (
+                  <div className="doc-content">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {skill.longDescription}
+                    </ReactMarkdown>
+                  </div>
+                ) : (
+                  <p className="text-sm leading-relaxed text-ink-400">{skill.description}</p>
+                )}
+              </div>
+            </Panel>
+          )}
+
+          {/* ── Requirements ─────────────────────────────────────────── */}
+          {skill.requires &&
+            (skill.requires.bins.length > 0 ||
+              skill.requires.env.length > 0 ||
+              skill.requires.config.length > 0) && (
+              <Panel>
+                <h2 className="text-sm font-semibold text-ink-50">Requirements</h2>
+                <div className="mt-stack-lg space-y-stack-lg">
+                  {skill.requires.bins.length > 0 && (
+                    <div>
+                      <Eyebrow>Required binaries</Eyebrow>
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {skill.requires.bins.map((bin) => (
+                          <Chip key={bin} mono className="text-ink-300">
+                            {bin}
+                          </Chip>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {skill.requires.env.length > 0 && (
+                    <div>
+                      <Eyebrow>Environment variables</Eyebrow>
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {skill.requires.env.map((env) => (
+                          <Chip key={env} mono className="border-warn-800 bg-warn-950 text-warn-300">
+                            {env}
+                          </Chip>
+                        ))}
+                      </div>
+                      <p className="mt-2 text-xs text-ink-500">
+                        This skill expects these to be set in its environment — it will have
+                        access to their values.
+                      </p>
+                    </div>
+                  )}
+                  {skill.requires.config.length > 0 && (
+                    <div>
+                      <Eyebrow>Config keys</Eyebrow>
+                      <div className="mt-2 flex flex-wrap gap-1.5">
+                        {skill.requires.config.map((cfg) => (
+                          <Chip key={cfg} mono className="text-ink-300">
+                            {cfg}
+                          </Chip>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </Panel>
             )}
-            <div className="flex flex-wrap gap-3">
-              {hasRepoLink && (
-                <a
-                  href={skill.repoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-sm text-purple-400 hover:text-purple-300 transition-colors font-medium"
-                >
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                  </svg>
-                  View Repository →
-                </a>
-              )}
-              {hasSourceLink && (
-                <a
-                  href={skill.sourceUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-sm text-sky-400 hover:text-sky-300 transition-colors"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                  View on {sourceLabel(skill.sourceUrl!)} →
-                </a>
-              )}
-            </div>
-          </div>
 
-          {/* Tags */}
-          <div>
-            <h2 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">Tags</h2>
-            <div className="flex flex-wrap gap-2">
-              {skill.tags.map((tag) => (
-                <Link
-                  key={tag}
-                  href={`/skills?q=${tag}`}
-                  className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition-colors font-mono"
-                >
-                  #{tag}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Requirements */}
-          {skill.requires && (skill.requires.bins.length > 0 ||
-            skill.requires.env.length > 0 ||
-            skill.requires.config.length > 0) && (
-            <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-              <h2 className="font-semibold text-white mb-4">Requirements</h2>
-              <div className="space-y-4">
-                {skill.requires.bins.length > 0 && (
-                  <div>
-                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-2">
-                      Required Binaries
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {skill.requires.bins.map((bin) => (
-                        <span
-                          key={bin}
-                          className="text-xs font-mono bg-gray-800 text-gray-300 px-2.5 py-1 rounded-md"
-                        >
-                          {bin}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {skill.requires.env.length > 0 && (
-                  <div>
-                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-2">
-                      Environment Variables
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {skill.requires.env.map((env) => (
-                        <span
-                          key={env}
-                          className="text-xs font-mono bg-orange-900/30 border border-orange-800 text-orange-300 px-2.5 py-1 rounded-md"
-                        >
-                          {env}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {skill.requires.config.length > 0 && (
-                  <div>
-                    <div className="text-xs text-gray-500 uppercase tracking-wider mb-2">
-                      Config Keys
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {skill.requires.config.map((cfg) => (
-                        <span
-                          key={cfg}
-                          className="text-xs font-mono bg-blue-900/30 border border-blue-800 text-blue-300 px-2.5 py-1 rounded-md"
-                        >
-                          {cfg}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
+          {/* ── Tags ─────────────────────────────────────────────────── */}
+          {skill.tags?.length > 0 && (
+            <div>
+              <Eyebrow className="flex items-center gap-1.5">
+                <TagIcon className="h-3 w-3" />
+                Tags
+              </Eyebrow>
+              <div className="mt-2.5 flex flex-wrap gap-1.5">
+                {skill.tags.map((tag) => (
+                  <Link
+                    key={tag}
+                    href={`/skills?q=${encodeURIComponent(tag)}`}
+                    className="inline-flex items-center rounded-sm border border-ink-750 bg-ink-900 px-2 py-1 font-mono text-2xs text-ink-400 transition duration-fast ease-out hover:border-ink-650 hover:bg-ink-850 hover:text-ink-100"
+                  >
+                    {tag}
+                  </Link>
+                ))}
               </div>
             </div>
           )}
-
-          {/* Related skills disabled — causes ISR body-too-large errors */}
-
-          {/* TrustedSkills Differentiator */}
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-emerald-400">🛡️</span>
-              <h2 className="font-semibold text-white">TrustedSkills Verification</h2>
-            </div>
-            <p className="text-sm text-gray-400 leading-relaxed mb-4">
-              Unlike other registries that point to live repositories, TrustedSkills pins every skill 
-              to a verified commit hash. This protects you from malicious updates — what you install 
-              today is exactly what was reviewed and verified.
-            </p>
-            {skill.verifiedCommit && skill.repoUrl && (
-                <div className="bg-gray-950 border border-gray-800 rounded-lg p-3">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-gray-500 uppercase tracking-wider">Verified Commit</span>
-                    <a
-                      href={commitUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-mono text-xs text-purple-400 hover:text-purple-300 transition-colors"
-                    >
-                      {shortSha} →
-                    </a>
-                  </div>
-                  <p className="text-xs text-gray-600 leading-relaxed">
-                    Installing this skill downloads the exact code at commit {shortSha}, 
-                    not the current state of the repository. This prevents supply-chain attacks 
-                    from unauthorized updates.
-                  </p>
-                </div>
-            )}
-          </div>
-
-          {/* Security Audits */}
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-            <h2 className="font-semibold text-white mb-4">Security Audits</h2>
-            <div className="overflow-hidden rounded-lg border border-gray-800">
-              <table className="w-full text-sm">
-                <tbody className="divide-y divide-gray-800">
-                  <tr className="bg-gray-950">
-                    <td className="px-4 py-3 text-gray-400">Gen Agent Trust Hub</td>
-                    <td className="px-4 py-3 text-right">
-                      <span className="inline-flex items-center gap-1.5 text-emerald-400">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        Pass
-                      </span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3 text-gray-400">Socket</td>
-                    <td className="px-4 py-3 text-right">
-                      <span className="inline-flex items-center gap-1.5 text-emerald-400">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        Pass
-                      </span>
-                    </td>
-                  </tr>
-                  <tr className="bg-gray-950">
-                    <td className="px-4 py-3 text-gray-400">Snyk</td>
-                    <td className="px-4 py-3 text-right">
-                      <span className="inline-flex items-center gap-1.5 text-emerald-400">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        Pass
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
         </div>
 
-        {/* Sidebar */}
-        <div className="space-y-6">
-          {/* Metadata card */}
-          <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
-            <h2 className="font-semibold text-white mb-4">Details</h2>
-            <dl className="space-y-3 text-sm">
-              <div className="flex justify-between gap-2">
-                <dt className="text-gray-500">Version</dt>
-                <dd className="text-gray-300 font-mono">v{skill.version}</dd>
-              </div>
-              <div className="flex justify-between gap-2">
-                <dt className="text-gray-500">License</dt>
-                <dd className="text-gray-300">{skill.license}</dd>
-              </div>
-              <div className="flex justify-between gap-2">
-                <dt className="text-gray-500">Author</dt>
-                <dd className="text-gray-300">{skill.author}</dd>
-              </div>
-              <div className="flex justify-between gap-2">
-                <dt className="text-gray-500">Installs</dt>
-                <dd className="text-gray-300">
-                  {skill.installs >= 1000
-                    ? `${(skill.installs / 1000).toFixed(1)}k`
-                    : skill.installs}
-                </dd>
-              </div>
-              {skill.updated_at && !isNaN(new Date(skill.updated_at).getTime()) && (
-                <div className="flex justify-between gap-2">
-                  <dt className="text-gray-500">Updated</dt>
-                  <dd className="text-gray-300">
-                    {new Date(skill.updated_at).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </dd>
-                </div>
-              )}
-              {skill.published_at && !isNaN(new Date(skill.published_at).getTime()) && (
-                <div className="flex justify-between gap-2">
-                  <dt className="text-gray-500">Published</dt>
-                  <dd className="text-gray-300">
-                    {new Date(skill.published_at).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </dd>
-                </div>
-              )}
-            </dl>
+        {/* ── Sidebar ─────────────────────────────────────────────────── */}
+        <aside className="space-y-6">
+          <Panel>
+            <h2 className="text-sm font-semibold text-ink-50">Details</h2>
+            <div className="mt-2">
+              <FieldList>
+                <Field label="Version" value={<span className="font-mono">v{skill.version}</span>} icon={Package} />
+                <Field label="Publisher" value={skill.author} icon={User} />
+                <Field label="Licence" value={license} icon={Scale} />
+                <Field label="Language" value={skill.language} icon={Code} />
+                <Field label="Stars" value={stars} icon={Star} />
+                <Field label="Installs" value={installs} icon={Download} />
+                <Field
+                  label="Updated"
+                  icon={Clock}
+                  value={
+                    updated ? <time dateTime={isoDate(skill.updated_at) ?? undefined}>{updated}</time> : null
+                  }
+                />
+                <Field
+                  label="Published"
+                  icon={Clock}
+                  value={
+                    published ? (
+                      <time dateTime={isoDate(skill.published_at) ?? undefined}>{published}</time>
+                    ) : null
+                  }
+                />
+              </FieldList>
+            </div>
 
-            {(hasRepoLink || hasSourceLink) && (
-              <div className="mt-4 pt-4 border-t border-gray-800 space-y-2">
-                {hasRepoLink && (
-                  <a
-                    href={skill.repoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm text-purple-400 hover:text-purple-300 transition-colors font-medium"
-                  >
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                    </svg>
-                    Repository (canonical source) →
-                  </a>
+            {!updated && !published ? (
+              <p className="mt-3 border-t border-ink-800 pt-3 text-xs leading-relaxed text-ink-600">
+                The source listing carries no date for this skill, so we don&apos;t show one.
+              </p>
+            ) : null}
+          </Panel>
+
+          {skill.platforms?.length > 0 && (
+            <Panel>
+              <Eyebrow>Install snippets available for</Eyebrow>
+              <div className="mt-2.5 flex flex-wrap gap-1.5">
+                {skill.platforms.map((key) => (
+                  <Link key={key} href={`/platform/${key}/`}>
+                    <Chip className="transition-colors hover:border-ink-650 hover:text-ink-100">
+                      {PLATFORM_CONFIG[key]?.label ?? key}
+                    </Chip>
+                  </Link>
+                ))}
+              </div>
+            </Panel>
+          )}
+
+          {/* Tier explainer. The text comes from TIER_CONFIG so a change to
+              what a badge means can only be made in one place. */}
+          <Panel>
+            <div className="flex items-center gap-2">
+              <TierIcon
+                className={cx(
+                  "h-4 w-4",
+                  tier.tone === "accent"
+                    ? "text-accent-400"
+                    : tier.tone === "ok"
+                    ? "text-ok-400"
+                    : tier.tone === "warn"
+                    ? "text-warn-400"
+                    : "text-ink-450"
                 )}
-                {hasSourceLink && (
-                  <a
-                    href={skill.sourceUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm text-sky-400 hover:text-sky-300 transition-colors"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                    </svg>
-                    Also on {sourceLabel(skill.sourceUrl!)} →
-                  </a>
-                )}
-              </div>
-            )}
-          </div>
-
-
-
-          {/* Verification */}
-          <div
-            className={`border rounded-xl p-5 ${tier.bg} ${tier.border}`}
-          >
-            <h2 className="font-semibold text-white mb-2 flex items-center gap-2">
-              {tier.icon} {tier.label}
-            </h2>
-            <p className={`text-sm ${tier.color} mb-3`}>{tier.description}</p>
-
-            {skill.verified === "verified" && skill.verifiedAt && (
-              <div className="text-xs text-emerald-400/80 mb-2">
-                Pinned on {skill.verifiedAt}
-              </div>
-            )}
-
-            {skill.verified === "community" && skill.verifiedChangedAt && (
-              <div className="text-xs text-amber-400 mb-2">
-                ⚠️ Update available · re-review needed since {skill.verifiedChangedAt}
-              </div>
-            )}
-
-            {skill.verifiedCommit && skill.repoUrl && (
-                <div className="mt-2 space-y-2">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-gray-500">Pinned commit</span>
-                    <a
-                      href={commitUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-mono text-purple-400 hover:text-purple-300 transition-colors"
-                    >
-                      {shortSha}
-                    </a>
-                  </div>
-                  {skill.installArchiveUrl && (
-                    <p className="text-xs text-gray-600 leading-relaxed">
-                      Install command fetches the verified snapshot, not the live repository.
-                    </p>
-                  )}
-                </div>
-            )}
-          </div>
-
-        </div>
+              />
+              <h2 className="text-sm font-semibold text-ink-50">{tier.label}</h2>
+            </div>
+            <p className="mt-2.5 text-sm leading-relaxed text-ink-400">{tier.detail}</p>
+            <Link
+              href={`/tier/${skill.verified in TIER_CONFIG ? skill.verified : "community"}/`}
+              className="mt-3 inline-block text-xs text-accent-400 transition-colors hover:text-accent-300"
+            >
+              See all {tier.label.toLowerCase()} skills →
+            </Link>
+          </Panel>
+        </aside>
       </div>
 
-      {/* JSON-LD Structured Data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
     </div>
   );
 }

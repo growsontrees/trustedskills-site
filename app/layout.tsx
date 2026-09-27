@@ -3,6 +3,9 @@ import "./globals.css";
 import Link from "next/link";
 import GoogleAnalytics from "../components/GoogleAnalytics";
 import { MobileNav } from "./components/MobileNav";
+import { sans, mono } from "./fonts";
+import { Github, Shield } from "../components/icons";
+import { ButtonLink } from "../components/ui";
 
 export const metadata: Metadata = {
   title: {
@@ -10,15 +13,15 @@ export const metadata: Metadata = {
     template: "%s | TrustedSkills",
   },
   description:
-    "Find, verify, and install skills for any AI agent platform. Compatible with OpenClaw, MCP, Claude Desktop, OpenAI, Cursor, and VS Code.",
+    "An index of AI agent skills. Search the catalogue, see who publishes each skill, and get the install command for your platform — OpenClaw, MCP, Claude, OpenAI, Cursor or VS Code.",
   metadataBase: new URL("https://trustedskills.dev"),
   alternates: {
-    canonical: 'https://trustedskills.dev',
+    canonical: "https://trustedskills.dev",
   },
   openGraph: {
-    title: "TrustedSkills — AI Agent Skills Registry",
+    title: "TrustedSkills — AI Agent Skills Index",
     description:
-      "The trusted registry for AI agent skills. Works with OpenClaw, MCP, Claude, OpenAI, Cursor, and more.",
+      "Search the agent skill ecosystem in one place. See the publisher, the source and the install command for every skill.",
     url: "https://trustedskills.dev",
     siteName: "TrustedSkills",
     type: "website",
@@ -27,88 +30,175 @@ export const metadata: Metadata = {
         url: "https://trustedskills.dev/og-image.svg",
         width: 1200,
         height: 630,
-        alt: "TrustedSkills — AI Agent Skills Registry",
+        alt: "TrustedSkills — AI Agent Skills Index",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "TrustedSkills — AI Agent Skills Registry",
-    description: "Find and install verified AI agent skills for any platform.",
+    title: "TrustedSkills — AI Agent Skills Index",
+    description: "Search the agent skill ecosystem in one place.",
     images: ["https://trustedskills.dev/og-image.svg"],
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  let buildId = "";
-  try {
-    buildId = readFileSync(join(process.cwd(), ".next", "BUILD_ID"), "utf8").trim();
-  } catch {
-    buildId = "";
-  }
+const NAV_LINKS = [
+  { href: "/skills", label: "Browse" },
+  { href: "/collections", label: "Collections" },
+  { href: "/reviews", label: "Reviews" },
+  { href: "/docs", label: "Docs" },
+];
 
+function Wordmark({ className = "" }: { className?: string }) {
   return (
-    <html lang="en">
-      <body className="bg-gray-950 text-gray-100 min-h-screen font-sans antialiased">
+    <span className={`flex items-center gap-2 ${className}`}>
+      <span className="flex h-7 w-7 items-center justify-center rounded-md border border-ink-700 bg-ink-850 text-accent-400 shadow-e1">
+        <Shield className="h-4 w-4" />
+      </span>
+      <span className="text-[0.9375rem] font-semibold tracking-[-0.015em] text-ink-50">
+        TrustedSkills
+      </span>
+    </span>
+  );
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
+      <body className="min-h-screen bg-ink-1000 font-sans text-ink-300 antialiased">
         <GoogleAnalytics />
-        <nav className="border-b border-gray-800 bg-gray-950/80 backdrop-blur-md sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-16">
-              <Link href="/" className="flex items-center gap-2 font-semibold text-lg hover:text-white transition-colors">
-                <span className="text-2xl">🛡️</span>
-                <span className="text-white">TrustedSkills</span>
-                <span className="text-xs text-gray-500 font-mono bg-gray-800 px-1.5 py-0.5 rounded ml-1">beta</span>
-              </Link>
-              {/* Desktop Navigation */}
-              <div className="hidden md:flex items-center gap-6 text-sm text-gray-400">
-                <Link href="/skills" className="hover:text-white transition-colors">Browse</Link>
-                <Link href="/reviews" className="hover:text-white transition-colors">Reviews</Link>
-                <Link href="/submit" className="hover:text-white transition-colors">Submit</Link>
-                <Link href="/docs" className="hover:text-white transition-colors">Docs</Link>
-              </div>
-              {/* Mobile Navigation */}
-              <MobileNav />
-            </div>
+
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:rounded-md focus:bg-ink-850 focus:px-4 focus:py-2 focus:text-sm focus:text-ink-50"
+        >
+          Skip to content
+        </a>
+
+        <header className="sticky top-0 z-50 border-b border-ink-800 bg-ink-1000/80 backdrop-blur-md">
+          <div className="mx-auto flex h-14 max-w-page items-center justify-between gap-6 px-4 sm:px-6 lg:px-8">
+            <Link href="/" className="group flex items-center gap-2">
+              <Wordmark />
+              <span className="rounded-xs border border-ink-750 px-1 py-px font-mono text-2xs text-ink-500">
+                beta
+              </span>
+            </Link>
+
+            <nav aria-label="Main" className="hidden items-center gap-1 md:flex">
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="rounded-md px-3 py-1.5 text-sm text-ink-400 transition duration-fast ease-out hover:bg-ink-900 hover:text-ink-50"
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <span className="mx-2 h-4 w-px bg-ink-800" />
+              <ButtonLink href="/submit" variant="secondary" size="sm">
+                Submit a skill
+              </ButtonLink>
+            </nav>
+
+            <MobileNav />
           </div>
-        </nav>
-        <main>{children}</main>
-        <footer className="border-t border-gray-800 mt-24 py-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-              <div>
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-xl">🛡️</span>
-                  <span className="font-semibold text-white">TrustedSkills</span>
-                </div>
-                <p className="text-sm text-gray-500">
-                  The platform-agnostic registry for AI agent skills.
+        </header>
+
+        <main id="main">{children}</main>
+
+        <footer className="mt-section-lg border-t border-ink-800 bg-ink-950">
+          <div className="mx-auto max-w-page px-4 py-12 sm:px-6 lg:px-8">
+            <div className="flex flex-col justify-between gap-10 md:flex-row">
+              <div className="max-w-sm">
+                <Wordmark />
+                <p className="mt-3 text-sm leading-relaxed text-ink-450">
+                  A platform-agnostic index of AI agent skills. We record where each skill
+                  comes from and how to install it — we don&apos;t review the code.
                 </p>
-                <p className="text-xs text-gray-600 mt-1">
-                  Works with OpenClaw · MCP · Claude · OpenAI · Cursor · VS Code
-                </p>
+                <a
+                  href="https://github.com/growsontrees/trustedskills-registry"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex items-center gap-2 text-sm text-ink-450 transition-colors hover:text-ink-100"
+                >
+                  <Github className="h-4 w-4" />
+                  Registry on GitHub
+                </a>
               </div>
-              <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm text-gray-500">
-                <Link href="/skills" className="hover:text-gray-300 transition-colors">Browse Skills</Link>
-                <Link href="/reviews" className="hover:text-gray-300 transition-colors">Reviews</Link>
-                <Link href="/submit" className="hover:text-gray-300 transition-colors">Submit a Skill</Link>
-                <Link href="/docs" className="hover:text-gray-300 transition-colors">Docs</Link>
+
+              <div className="grid grid-cols-2 gap-x-12 gap-y-8 sm:grid-cols-3">
+                <FooterColumn
+                  title="Browse"
+                  links={[
+                    { href: "/skills", label: "All skills" },
+                    { href: "/tier/official/", label: "Official" },
+                    { href: "/tier/featured/", label: "Featured" },
+                    { href: "/tier/verified/", label: "Pinned" },
+                  ]}
+                />
+                <FooterColumn
+                  title="Platforms"
+                  links={[
+                    { href: "/platform/claudecode/", label: "Claude Code" },
+                    { href: "/platform/claude/", label: "Claude Desktop" },
+                    { href: "/platform/mcp/", label: "MCP" },
+                    { href: "/platform/cursor/", label: "Cursor" },
+                  ]}
+                />
+                <FooterColumn
+                  title="About"
+                  links={[
+                    { href: "/docs", label: "Docs" },
+                    { href: "/reviews", label: "Reviews" },
+                    { href: "/collections", label: "Collections" },
+                    { href: "/submit", label: "Submit a skill" },
+                  ]}
+                />
               </div>
             </div>
-            <div className="mt-8 pt-8 border-t border-gray-800/50 text-xs text-gray-600 text-center">
-              Built for the AI agent ecosystem ·{" "}
-              <a href="https://agentskills.io" className="hover:text-gray-400 transition-colors">
-                AgentSkills Spec
-              </a>
-              {" · "}
-              <span className="text-gray-700">Platform-agnostic · Works with 5+ platforms</span>
+
+            <div className="mt-10 flex flex-col gap-2 border-t border-ink-850 pt-6 text-2xs text-ink-600 sm:flex-row sm:items-center sm:justify-between">
+              <span>
+                Built on the{" "}
+                <a
+                  href="https://agentskills.io"
+                  className="text-ink-500 transition-colors hover:text-ink-300"
+                >
+                  AgentSkills spec
+                </a>
+                .
+              </span>
+              <span>Works with OpenClaw · MCP · Claude · OpenAI · Cursor · VS Code</span>
             </div>
           </div>
         </footer>
       </body>
     </html>
+  );
+}
+
+function FooterColumn({
+  title,
+  links,
+}: {
+  title: string;
+  links: { href: string; label: string }[];
+}) {
+  return (
+    <div>
+      <p className="text-2xs font-semibold uppercase tracking-[0.08em] text-ink-500">{title}</p>
+      <ul className="mt-3 space-y-2">
+        {links.map((link) => (
+          <li key={link.href}>
+            <Link
+              href={link.href}
+              className="text-sm text-ink-400 transition-colors hover:text-ink-100"
+            >
+              {link.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

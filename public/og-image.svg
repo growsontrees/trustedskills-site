@@ -1,13 +1,43 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="1200" height="630" fill="#030712"/>
-  <rect x="0" y="0" width="1200" height="630" fill="url(#bg)" opacity="0.4"/>
+  <!-- Canvas: ink-1000. No radial colour glow — the page texture is the same
+       1px grid the site uses, faded out toward the bottom. -->
+  <rect width="1200" height="630" fill="#060709"/>
+
   <defs>
-    <radialGradient id="bg" cx="50%" cy="50%" r="70%">
-      <stop offset="0%" stop-color="#4c1d95"/>
-      <stop offset="100%" stop-color="#030712"/>
-    </radialGradient>
+    <pattern id="grid" width="56" height="56" patternUnits="userSpaceOnUse">
+      <path d="M56 0H0V56" fill="none" stroke="#20242c" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <mask id="gridmask">
+      <rect width="1200" height="630" fill="url(#fade)"/>
+    </mask>
   </defs>
-  <text x="600" y="260" text-anchor="middle" font-family="system-ui, sans-serif" font-size="80" font-weight="700" fill="white">🛡️ TrustedSkills</text>
-  <text x="600" y="360" text-anchor="middle" font-family="system-ui, sans-serif" font-size="36" fill="#9ca3af">The trusted registry for AI agent skills</text>
-  <text x="600" y="430" text-anchor="middle" font-family="system-ui, sans-serif" font-size="24" fill="#6b7280">OpenClaw · MCP · Claude · OpenAI · Cursor</text>
+  <rect width="1200" height="630" fill="url(#grid)" mask="url(#gridmask)"/>
+
+  <!-- Wordmark: the shield glyph in a bordered tile, matching the site header -->
+  <g transform="translate(96, 150)">
+    <rect x="0" y="0" width="52" height="52" rx="12" fill="#14161b" stroke="#282d36" stroke-width="1"/>
+    <g transform="translate(14, 14) scale(1)" stroke="#4ea6f5" stroke-width="1.75" fill="none"
+       stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+    </g>
+    <text x="70" y="35" font-family="Inter, system-ui, sans-serif" font-size="28"
+          font-weight="600" letter-spacing="-0.4" fill="#f5f7f9">TrustedSkills</text>
+  </g>
+
+  <text x="96" y="310" font-family="Inter, system-ui, sans-serif" font-size="66"
+        font-weight="600" letter-spacing="-2.2" fill="#f5f7f9">Every agent skill,</text>
+  <text x="96" y="386" font-family="Inter, system-ui, sans-serif" font-size="66"
+        font-weight="600" letter-spacing="-2.2" fill="#f5f7f9">in one place.</text>
+
+  <text x="96" y="446" font-family="Inter, system-ui, sans-serif" font-size="26"
+        fill="#8d96a4">Search the index, see who publishes each skill, copy the install command.</text>
+
+  <!-- Footer rule + platform line -->
+  <rect x="96" y="504" width="1008" height="1" fill="#20242c"/>
+  <text x="96" y="546" font-family="ui-monospace, SFMono-Regular, monospace" font-size="20"
+        fill="#5f6775">OpenClaw · MCP · Claude · OpenAI · Cursor</text>
 </svg>
