@@ -33,6 +33,12 @@ const expectedRoutes = getCanonicalRoutes();
 const expectedSet = new Set(expectedRoutes);
 assert.equal(expectedSet.size, expectedRoutes.length, "Canonical route inventory contains duplicates.");
 
+// next-sitemap writes public/sitemap*.xml after `npm run build`. The committed
+// copies fall behind whenever routes change, so on a fresh clone this check
+// fails until a build has regenerated them.
+const BUILD_FIRST =
+  "\nThe sitemaps in public/ are written by `npm run build`. If you have not built since pulling, run it and try again.";
+
 const sitemapIndex = read("public/sitemap.xml");
 const partitionUrls = extractLocations(sitemapIndex);
 assert.ok(partitionUrls.length > 0, "public/sitemap.xml does not reference any sitemap partitions.");
@@ -43,7 +49,7 @@ for (const partitionUrl of partitionUrls) {
   const partitionPath = routeFromUrl(partitionUrl);
   const filename = path.basename(partitionPath);
   const absolutePath = path.join(PUBLIC_DIR, filename);
-  assert.ok(fs.existsSync(absolutePath), `Sitemap partition is missing locally: ${filename}`);
+  assert.ok(fs.existsSync(absolutePath), `Sitemap partition is missing locally: ${filename}${BUILD_FIRST}`);
 
   const partition = fs.readFileSync(absolutePath, "utf8");
   assert.match(partition, /<urlset\b/, `${filename} is not a sitemap URL set.`);
@@ -56,8 +62,8 @@ assert.equal(actualSet.size, actualRoutes.length, "Generated sitemap contains du
 
 const missing = expectedRoutes.filter((route) => !actualSet.has(route));
 const unexpected = actualRoutes.filter((route) => !expectedSet.has(route));
-assert.deepEqual(missing, [], `Sitemap is missing canonical routes:\n${missing.slice(0, 20).join("\n")}`);
-assert.deepEqual(unexpected, [], `Sitemap contains non-canonical routes:\n${unexpected.slice(0, 20).join("\n")}`);
+assert.deepEqual(missing, [], `Sitemap is missing canonical routes:\n${missing.slice(0, 20).join("\n")}${BUILD_FIRST}`);
+assert.deepEqual(unexpected, [], `Sitemap contains non-canonical routes:\n${unexpected.slice(0, 20).join("\n")}${BUILD_FIRST}`);
 
 const robots = read("public/robots.txt");
 const robotsSitemaps = [...robots.matchAll(/^Sitemap:\s*(\S+)\s*$/gim)].map((match) => match[1]);
