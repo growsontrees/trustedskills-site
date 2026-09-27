@@ -81,10 +81,26 @@ jobs:
           # Record what actually shipped, so drift is visible on the run itself
           # rather than only by diffing the live site against the registry.
           node -e '
-            const { skills, stats } = require("./data/skills-index.json");
+            const { skills, stats, safety } = require("./data/skills-index.json");
             console.log(`Index now carries ${skills.length} skills.`);
-            require("fs").appendFileSync(process.env.GITHUB_STEP_SUMMARY,
-              `### Registry sync\n\n- **${skills.length}** skills\n- **${stats.total_authors}** authors\n- registry generated \`${stats.last_updated}\`\n`);
+            const lines = [
+              `### Registry sync`, ``,
+              `- **${skills.length}** skills`,
+              `- **${stats.total_authors}** authors`,
+              `- registry generated \`${stats.last_updated}\``,
+            ];
+            // How much of the catalogue the Checked claim actually covers. A
+            // deploy that silently stops applying the safety scan should be
+            // visible here rather than discovered on the live site.
+            if (safety) {
+              lines.push(
+                `- safety scan: **${safety.checked}** checked, ${safety.flagged} flagged, ` +
+                `${safety.unscannable} unscannable, ${safety.unscanned} not yet scanned ` +
+                `(scan generated \`${safety.report_generated_at ?? "unknown"}\`)`);
+            } else {
+              lines.push(`- :warning: no safety scan applied - every skill will show as Listed`);
+            }
+            require("fs").appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join("\n") + "\n");
           '
 
       - uses: docker/setup-buildx-action@v3

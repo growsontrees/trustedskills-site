@@ -126,3 +126,13 @@ final.stats = {
 };
 writeFileSync(SITE_INDEX, JSON.stringify(final, null, 2));
 console.log(`Wrote ${final.stats.total_skills} skills (${final.stats.total_authors} authors).`);
+
+// The passes above run with their stdout suppressed, so the safety coverage
+// would otherwise be invisible in a deploy log — and "how much of the catalogue
+// is actually Checked" is the number worth seeing on every build.
+if (final.safety) {
+  const { checked, flagged, unscannable, unscanned } = final.safety;
+  console.log(
+    `Safety: ${checked} checked, ${flagged} flagged, ${unscannable} unscannable, ${unscanned} not yet scanned.`
+  );
+}
