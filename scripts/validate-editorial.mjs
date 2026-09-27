@@ -15,6 +15,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { installStatusWarning } from "./lib/editorial-checks.mjs";
+
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const REVIEWS_DIR = path.join(ROOT, "content", "reviews");
 const COLLECTIONS_DIR = path.join(ROOT, "content", "collections");
@@ -78,17 +80,18 @@ function isIsoDate(value) {
   return nonEmptyString(value) && !Number.isNaN(Date.parse(value));
 }
 
-function loadRegistrySlugs() {
+function loadRegistryIndex() {
   const file = path.join(ROOT, "data", "skills-index.json");
   if (!fs.existsSync(file)) {
     warnings.push("data/skills-index.json is missing — skipping registry slug checks.");
-    return null;
+    return { slugs: null, bySlug: null };
   }
   const index = JSON.parse(fs.readFileSync(file, "utf8"));
-  return new Set(index.skills.map((skill) => skill.slug));
+  const bySlug = new Map(index.skills.map((skill) => [skill.slug, skill]));
+  return { slugs: new Set(bySlug.keys()), bySlug };
 }
 
-const registrySlugs = loadRegistrySlugs();
+const { slugs: registrySlugs, bySlug: registryBySlug } = loadRegistryIndex();
 
 // ---------------------------------------------------------------------------
 // Reviews
@@ -319,6 +322,9 @@ for (const { name, data } of collections) {
         `entries[${i}].skillSlug "${entry.skillSlug}" is not in the registry index — the page would ` +
           "silently drop it"
       );
+    } else if (registryBySlug) {
+      const message = installStatusWarning(entry, registryBySlug.get(entry.skillSlug));
+      if (message) warn(name, `entries[${i}].skillSlug ${message}`);
     }
   });
 
