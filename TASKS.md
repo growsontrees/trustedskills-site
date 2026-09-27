@@ -39,6 +39,7 @@
 - [x] **Fixed About This Skill block** (2026-03-20) — removed generic placeholder text; uses `longDescription` if present, falls back to `description`
 - [x] **Composite ranking site-wide** (2026-03-20) — homepage, category, platform, tier pages all use scored ranking (installs + official bonus + tier bonus); no more weather/web-search on homepage
 - [x] **14-category taxonomy** (2026-03-20) — reclassified 26k skills from `dev` monoculture into frontend/backend/cloud/ai-ml/agents/etc.
+- [x] **Editorial pipeline — reviews + collections** (2026-09-27) — reviews moved from a 692-line hand-written TS/HTML blob to structured JSON under `content/reviews/`, rendered by a shared template; new `/collections` + `/collections/[slug]` routes with entries resolved live against the registry; `draft`/`published` approval gate (drafts never served or indexed in production); `evidenceBasis` distinguishes hands-on tests from source reviews; `npm run check:editorial` runs as `prebuild` and fails the deploy on invented or malformed content. See `docs/EDITORIAL.md`
 - [x] **Gemma 3 12B bulk description re-enrichment** (2026-03-22) — 10k+ weak descriptions refreshed in `data/skills-index.json`; site rebuilt, PM2 restarted, and Cloudflare cache purged
 
 ---
@@ -172,7 +173,9 @@ const PLATFORMS = ["openclaw", "mcp", "openai", "claude", "cursor", "huggingface
 
 ### 12. Collections view improvements
 **Why:** Schema supports `type: "collection"` but UI doesn't do much with it yet.
-**Needed:** Better collection display, curated collection pages.
+**Needed:** Better collection display for registry-native collections. Editorial
+collections (hand-curated themed lists) now live at `/collections` — see
+`docs/EDITORIAL.md`. This item is the remaining registry-side work.
 
 ### 13. Platform adapters
 **Why:** Convert skills between platforms (OpenClaw ↔ MCP ↔ Claude etc.). Credit original author.

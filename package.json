@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "echo 'Using bundled skills index'",
+    "prebuild": "node scripts/validate-editorial.mjs",
     "build": "next build",
     "postbuild": "next-sitemap && node scripts/write-build-meta.mjs",
     "start": "next start",
@@ -12,7 +12,8 @@
     "fetch-index": "node scripts/fetch-index.mjs",
     "sync-index": "node scripts/sync-index.mjs",
     "verify-deploy": "node scripts/verify-deploy.mjs",
-    "check:discovery": "node scripts/check-discovery.mjs"
+    "check:discovery": "node scripts/check-discovery.mjs",
+    "check:editorial": "node scripts/validate-editorial.mjs"
   },
   "dependencies": {
     "next": "^16.1.6",

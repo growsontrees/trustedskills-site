@@ -22,6 +22,8 @@ const CANONICAL_ROUTE_FAMILIES = Object.freeze([
   "/docs/:section/:article",
   "/reviews",
   "/reviews/:slug",
+  "/collections",
+  "/collections/:slug",
   "/submit",
 ]);
 
@@ -33,7 +35,14 @@ const INTENTIONAL_EXCLUSIONS = Object.freeze({
 });
 
 const TIER_SLUGS = Object.freeze(["official", "featured", "verified", "community", "unverified"]);
-const STATIC_ROUTES = Object.freeze(["/", "/skills", "/docs", "/reviews", "/submit"]);
+const STATIC_ROUTES = Object.freeze([
+  "/",
+  "/skills",
+  "/docs",
+  "/reviews",
+  "/collections",
+  "/submit",
+]);
 
 function readText(relativePath) {
   return fs.readFileSync(path.join(ROOT_DIR, relativePath), "utf8");
@@ -63,20 +72,34 @@ function extractDocRoutes() {
   return routes;
 }
 
-function extractReviewRoutes() {
-  const source = readText("lib/reviews-content.ts");
-  const reviewsBlock = source.match(/export const reviews:[\s\S]*?=\s*\[([\s\S]*?)\n\];/);
-  if (!reviewsBlock) {
-    throw new Error("Discovery contract could not find the reviews array.");
-  }
+/**
+ * Editorial content lives as one JSON file per item under content/. Only
+ * published items are canonical: a draft is not served in production, so
+ * putting it in the sitemap would advertise a 404.
+ */
+function extractEditorialRoutes(dirName, basePath) {
+  const dir = path.join(ROOT_DIR, "content", dirName);
+  if (!fs.existsSync(dir)) return [];
 
   const routes = [];
-  const slugPattern = /slug:\s*["']([^"']+)["']/g;
-  for (const match of reviewsBlock[1].matchAll(slugPattern)) {
-    routes.push(`/reviews/${routeSegment(match[1])}`);
+  for (const file of fs.readdirSync(dir)) {
+    if (!file.endsWith(".json")) continue;
+    const item = JSON.parse(fs.readFileSync(path.join(dir, file), "utf8"));
+    if (item.status !== "published") continue;
+    if (!item.slug) {
+      throw new Error(`Editorial content ${dirName}/${file} has no slug.`);
+    }
+    routes.push(`${basePath}/${routeSegment(item.slug)}`);
   }
-
   return routes;
+}
+
+function extractReviewRoutes() {
+  return extractEditorialRoutes("reviews", "/reviews");
+}
+
+function extractCollectionRoutes() {
+  return extractEditorialRoutes("collections", "/collections");
 }
 
 // Mirrors the route's own VALID_PLATFORMS rather than the richer platform
@@ -137,6 +160,7 @@ function getCanonicalRoutes() {
 
   for (const route of extractDocRoutes()) routes.add(route);
   for (const route of extractReviewRoutes()) routes.add(route);
+  for (const route of extractCollectionRoutes()) routes.add(route);
 
   return [...routes].sort((a, b) => a.localeCompare(b));
 }

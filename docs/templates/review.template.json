@@ -1,0 +1,70 @@
+{
+  "_instructions": "Copy to content/reviews/<slug>.json, delete this key, and read docs/EDITORIAL.md first. Fill runs[] from the actual session before writing any analysis. If you did not run the skill, set evidenceBasis to source-review, empty runs[], and write a basisNote — do not describe what the skill 'would' do as though you saw it.",
+  "slug": "skill-slug-matching-the-filename",
+  "status": "draft",
+  "title": "Skill Name Review: the one-line angle",
+  "description": "Two sentences for search results and the listing card. What it is, and the single most useful thing a reader learns here.",
+  "skillSlug": "registry-slug-must-exist-in-the-index",
+  "verdict": "Recommended",
+  "overallScore": 3.6,
+  "scores": {
+    "installation": 4,
+    "documentation": 3,
+    "depth": 4,
+    "maintenance": 3,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-01-01",
+  "lastUpdated": "2026-01-01",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "skill-name review",
+  "evidenceBasis": "hands-on",
+  "runs": [
+    {
+      "testedAt": "2026-01-01",
+      "platform": "claudecode",
+      "skillVersion": "1.2.0",
+      "task": "The real job you pointed it at. Be specific — 'audited the category pages on trustedskills.dev for missing structured data', not 'tested SEO features'.",
+      "outcome": "What actually came back. Include what it got right, what it missed, and anything that surprised you. Past tense, indicative mood. If you find yourself writing 'would', stop — you're predicting, not reporting.",
+      "environment": "Anything about the setup that shaped the result — Playwright installed, MCP servers connected, OS."
+    }
+  ],
+  "summary": "The quick verdict. Markdown. Three or four sentences: what it is, who it's for, and the one caveat that matters most.",
+  "strengths": [
+    {
+      "title": "🎯 A specific, concrete strength",
+      "body": "Why it matters, grounded in what you saw during the run. Avoid restating the README."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "🔒 A specific, concrete limitation",
+      "body": "Where it stops, and who that hurts. Every skill has some — a review with nothing critical to say isn't a review."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "👨‍💻 A reader type",
+      "body": "Why this skill fits their work specifically."
+    }
+  ],
+  "notFor": "Who should skip it, and why. One short paragraph, markdown.",
+  "sections": [
+    {
+      "heading": "Optional extra section",
+      "body": "Free-form markdown, rendered after the runs and before the strengths. Use for 'what's included', comparison tables (GFM tables work), or installation notes. Delete if unused."
+    }
+  ],
+  "faq": [
+    {
+      "question": "A question a reader would actually type into Google.",
+      "answer": "A direct answer in two or three sentences. These become FAQPage structured data, so they need to be genuinely useful standalone."
+    }
+  ],
+  "links": [
+    { "label": "GitHub repository", "href": "https://github.com/owner/repo" }
+  ]
+}

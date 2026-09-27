@@ -1,0 +1,25 @@
+{
+  "_instructions": "Copy to content/collections/<slug>.json, delete this key, and read docs/EDITORIAL.md first. Order entries by the stage of the job, not by install count — the ordering is the expertise. Every skillSlug must exist in data/skills-index.json; never copy install counts or tiers into the notes, they're resolved live.",
+  "slug": "collection-slug-matching-the-filename",
+  "status": "draft",
+  "title": "The N Skills Worth Installing for <theme>",
+  "description": "One line under the H1. Say what the list is organised by, so it's clearly not a popularity ranking.",
+  "emoji": "🔍",
+  "publishedAt": "2026-01-01",
+  "lastUpdated": "2026-01-01",
+  "targetKeyword": "best skills for <theme>",
+  "curator": {
+    "name": "TrustedSkills Editorial",
+    "bio": "Where the judgement comes from — the domain experience that makes this list worth more than a sort by downloads."
+  },
+  "intro": "Markdown. Set up the theme and who the list is for. The strongest opening is the one that explains why a naive list of the most-installed skills in this area is useless, then states the organising principle you used instead — usually the stages of the actual job, in order.",
+  "criteria": "Markdown. How the list was built: the inclusion tests each pick had to pass, and the tiebreak when two competed for a slot.\n\nThen **what you deliberately left off, and why**. This is often the most useful section on the page and the hardest to fake — it's where real judgement shows.",
+  "evidenceNote": "Markdown. Which entries have been run hands-on and which are shortlisted from registry signals (source, publisher, install base). Be plain about it. A curated list is allowed to be curated; it is not allowed to imply testing that didn't happen. Note that entries carrying a 🧪 Reviewed badge link to a hands-on review.",
+  "entries": [
+    {
+      "skillSlug": "registry-slug",
+      "role": "Stage 1 — what job this pick does in the set",
+      "note": "Markdown. Why this skill earned this slot, and what to watch out for when you use it. Ground it in what's verifiable: the source, the publisher, the install base. If our own registry summary for it is weak or auto-generated, say so — that's a gap in our data, not a criticism of the author."
+    }
+  ]
+}
