@@ -12,6 +12,7 @@ import {
   type VerificationTier,
 } from "../../lib/skills";
 import { SkillCard } from "../../components/SkillCard";
+import { REQUEST_SKILL_URL } from "../../lib/github-links";
 import { ChevronLeft, ChevronRight, Search, categoryIcon } from "../../components/icons";
 import { Eyebrow, cx } from "../../components/ui";
 
@@ -326,7 +327,7 @@ export default async function SkillsPage({ searchParams }: { searchParams: Promi
             <p className="text-sm text-ink-400">Can&apos;t find what you need?</p>
             <div className="mt-4 flex flex-col items-center justify-center gap-2 sm:flex-row">
               <a
-                href="https://github.com/growsontrees/trustedskills-registry/issues/new?template=skill-request.md&title=Skill+Request:+&labels=skill-request"
+                href={REQUEST_SKILL_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex h-9 items-center rounded-md border border-ink-700 bg-ink-850 px-4 text-sm font-medium text-ink-200 transition duration-fast ease-out hover:border-ink-650 hover:bg-ink-800 hover:text-ink-50"

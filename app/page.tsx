@@ -302,7 +302,8 @@ export default function HomePage() {
             <h2 className="text-xl font-semibold text-ink-50">Published a skill?</h2>
             <p className="mt-2 text-sm leading-relaxed text-ink-450">
               Add it to the index so it turns up when someone searches for what it does.
-              Submissions go through the public registry repository.
+              A public repository carrying the <code className="font-mono text-2xs text-ink-300">openclaw-skill</code>{" "}
+              topic is picked up on the next crawl — no pull request needed.
             </p>
           </div>
           <ButtonLink href="/submit" variant="primary" size="md" className="shrink-0">

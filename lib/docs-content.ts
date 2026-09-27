@@ -1,3 +1,5 @@
+import { REPORT_SKILL_URL, REPORT_PROMISE } from './github-links';
+
 export interface DocArticle {
   slug: string[];
   title: string;
@@ -312,8 +314,8 @@ export const DOC_ARTICLES: DocArticle[] = [
 
   {
     slug: ['concepts', 'how-skills-and-mcp-work-together'],
-    title: 'How MCP Skills Work Together with AI Agents: Full Guide',
-    description: 'How MCP skills work together with AI agents — full lifecycle from finding a skill in the registry to your AI agent calling its tools, with architecture diagrams and real-world examples.',
+    title: 'How Skills and MCP Servers Work Together in AI Agents',
+    description: 'How skills and MCP servers work together in AI agents — the full lifecycle from finding an MCP server to your AI agent calling its tools, with architecture diagrams and real-world examples.',
     category: 'Foundational Concepts',
     categorySlug: 'concepts',
     persona: 'developer',
@@ -321,7 +323,7 @@ export const DOC_ARTICLES: DocArticle[] = [
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"How MCP Skills Work Together with AI Agents: Full Guide","description":"How MCP skills work together with AI agents — full lifecycle from skill discovery to tool calling.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"How Skills and MCP Servers Work Together in AI Agents","description":"How skills and MCP servers work together in AI agents — the full lifecycle from finding an MCP server to tool calling.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
@@ -465,17 +467,17 @@ export const DOC_ARTICLES: DocArticle[] = [
 <h3>How does Claude know when to use an MCP tool?</h3>
 <p>The tool definitions include a name and description. Claude reads those and decides whether a tool is relevant to what you're asking. The better the tool description, the more reliably Claude uses it at the right moment.</p>
 
-<h3>Can MCP skills access my local files?</h3>
-<p>Only if they're designed to. A filesystem skill can access files; a weather skill can't. Each skill only does what its tools define. This is why checking a skill's verification status matters before installing it.</p>
+<h3>Can an MCP server access my local files?</h3>
+<p>Only if it's designed to. A filesystem server can read files; a weather server can't. Each server only does what its tools define. This is why reading a server's README before you add it matters.</p>
 
 <h3>What happens when an MCP server crashes?</h3>
-<p>Claude will stop offering that skill's tools and may show an error. Restart your AI client to relaunch the server. Claude Desktop writes crash details to its log files: <code>~/Library/Logs/Claude</code> on Mac, <code>%APPDATA%\\Claude\\logs</code> on Windows.</p>
+<p>Claude will stop offering that server's tools and may show an error. Restart your AI client to relaunch the server. Claude Desktop writes crash details to its log files: <code>~/Library/Logs/Claude</code> on Mac, <code>%APPDATA%\\Claude\\logs</code> on Windows.</p>
 
-<h3>Can I run many MCP skills simultaneously?</h3>
-<p>Yes. Each skill runs as a separate subprocess. You can have dozens running at once — Claude picks whichever tools are most relevant for each query.</p>
+<h3>Can I run many MCP servers simultaneously?</h3>
+<p>Yes. Each server runs as a separate subprocess. You can have dozens running at once — Claude picks whichever tools are most relevant for each query.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does Claude know when to use an MCP tool?","acceptedAnswer":{"@type":"Answer","text":"Tool definitions include a name and description. Claude reads those and decides when a tool is relevant. Better descriptions = more reliable tool usage."}},{"@type":"Question","name":"Can MCP skills access my local files?","acceptedAnswer":{"@type":"Answer","text":"Only if designed to. Each skill only does what its tools define. Check verification status before installing."}},{"@type":"Question","name":"What happens when an MCP server crashes?","acceptedAnswer":{"@type":"Answer","text":"Claude stops offering that skill's tools. Restart your AI client to relaunch. Check the Claude Desktop log files for details."}},{"@type":"Question","name":"Can I run many MCP skills simultaneously?","acceptedAnswer":{"@type":"Answer","text":"Yes. Each skill is a separate subprocess. Claude picks the most relevant tools for each query."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does Claude know when to use an MCP tool?","acceptedAnswer":{"@type":"Answer","text":"Tool definitions include a name and description. Claude reads those and decides when a tool is relevant. Better descriptions = more reliable tool usage."}},{"@type":"Question","name":"Can an MCP server access my local files?","acceptedAnswer":{"@type":"Answer","text":"Only if designed to. Each server only does what its tools define. Read the server's README before you add it."}},{"@type":"Question","name":"What happens when an MCP server crashes?","acceptedAnswer":{"@type":"Answer","text":"Claude stops offering that server's tools. Restart your AI client to relaunch. Check the Claude Desktop log files for details."}},{"@type":"Question","name":"Can I run many MCP servers simultaneously?","acceptedAnswer":{"@type":"Answer","text":"Yes. Each server is a separate subprocess. Claude picks the most relevant tools for each query."}}]}
 </script>
     `,
   },
@@ -483,8 +485,8 @@ export const DOC_ARTICLES: DocArticle[] = [
   // ─── CLAUDE DESKTOP ─────────────────────────────────────────────────────────
   {
     slug: ['claude-desktop', 'mac'],
-    title: 'Install MCP Skills Claude Desktop Mac: Step-by-Step',
-    description: 'Install MCP skills on Claude Desktop Mac with this complete step-by-step guide. Covers config file location, Node.js setup, adding skills, and troubleshooting — no coding experience needed.',
+    title: 'Install an MCP Server in Claude Desktop on Mac: Step-by-Step',
+    description: 'Install an MCP server on Claude Desktop Mac with this complete step-by-step guide. Covers config file location, Node.js setup, adding a server, and troubleshooting — no coding experience needed.',
     category: 'Claude Desktop',
     categorySlug: 'claude-desktop',
     persona: 'beginner',
@@ -492,7 +494,7 @@ export const DOC_ARTICLES: DocArticle[] = [
     author: TRUSTEDSKILLS_AUTHOR,
     content: `
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Article","headline":"Install MCP Skills Claude Desktop Mac: Step-by-Step","description":"Install MCP skills on Claude Desktop Mac — config file location, Node.js setup, and troubleshooting.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
+{"@context":"https://schema.org","@type":"Article","headline":"Install an MCP Server in Claude Desktop on Mac: Step-by-Step","description":"Install an MCP server on Claude Desktop Mac — config file location, Node.js setup, and troubleshooting.","dateModified":"2026-09-27","publisher":{"@type":"Organization","name":"TrustedSkills","url":"https://trustedskills.dev"}}
 </script>
 
 <div class="tldr-box">
@@ -2231,7 +2233,7 @@ npm publish --access public   # --access public for scoped packages</code></pre>
 </div>
 
 <h2>Reporting a problem</h2>
-<p>If you find a skill in this index doing something it shouldn't, open an issue in the <a href="https://github.com/growsontrees/trustedskills-registry">TrustedSkills registry repository</a>. We can delist it. If it also ships as an npm package, report that separately to npm at <code>security@npmjs.com</code> - delisting here does not remove it from npm.</p>
+<p>If you find a skill in this index doing something it shouldn't, <a href="${REPORT_SKILL_URL}">open a report on GitHub</a>. ${REPORT_PROMISE} If it also ships as an npm package, report that separately to npm at <code>security@npmjs.com</code> - delisting here does not remove it from npm.</p>
 
 <hr/>
 
@@ -2345,7 +2347,7 @@ npm publish --access public   # --access public for scoped packages</code></pre>
 <p>The scan runs daily and is incremental: a repository whose head commit hasn't moved keeps its stored result, and one that has moved is re-read and re-scanned. Because the tier is recomputed from the stored results on every build, a skill that stops passing loses the Checked label rather than keeping a badge it earned six months ago.</p>
 
 <h2>If you think a result is wrong</h2>
-<p>Both directions are worth reporting. A false pass is a defect in the checks; a false failure means an honest skill is being misrepresented. Open an issue on the registry with the skill slug and the commit shown on its page.</p>
+<p>Both directions are worth reporting. A false pass is a defect in the checks; a false failure means an honest skill is being misrepresented. <a href="${REPORT_SKILL_URL}">Open a report on GitHub</a> with the skill slug and the commit shown on its page.</p>
 <p>Skill authors: the cheapest way to pass the network check is to declare your own hosts in your frontmatter. <code>allowed-domains</code> is read as a declaration, and a declared host is not a finding.</p>
 
 <hr/>

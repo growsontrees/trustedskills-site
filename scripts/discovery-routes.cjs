@@ -25,6 +25,7 @@ const CANONICAL_ROUTE_FAMILIES = Object.freeze([
   "/collections",
   "/collections/:slug",
   "/submit",
+  "/contact",
 ]);
 
 const INTENTIONAL_EXCLUSIONS = Object.freeze({
@@ -57,6 +58,7 @@ const STATIC_ROUTES = Object.freeze([
   "/reviews",
   "/collections",
   "/submit",
+  "/contact",
 ]);
 
 function readText(relativePath) {

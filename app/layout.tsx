@@ -6,6 +6,7 @@ import { MobileNav } from "./components/MobileNav";
 import { sans, mono } from "./fonts";
 import { Github, Shield } from "../components/icons";
 import { ButtonLink } from "../components/ui";
+import { GITHUB_ISSUES_URL } from "../lib/github-links";
 
 export const metadata: Metadata = {
   title: {
@@ -112,13 +113,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   comes from and how to install it — we don&apos;t review the code.
                 </p>
                 <a
-                  href="https://github.com/growsontrees/trustedskills-registry"
+                  href={GITHUB_ISSUES_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-4 inline-flex items-center gap-2 text-sm text-ink-450 transition-colors hover:text-ink-100"
                 >
                   <Github className="h-4 w-4" />
-                  Registry on GitHub
+                  Report a problem on GitHub
                 </a>
               </div>
 
@@ -148,6 +149,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     { href: "/reviews", label: "Reviews" },
                     { href: "/collections", label: "Collections" },
                     { href: "/submit", label: "Submit a skill" },
+                    { href: "/contact", label: "Contact" },
                   ]}
                 />
               </div>

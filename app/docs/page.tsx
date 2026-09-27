@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { DOC_ARTICLES, DOC_CATEGORIES, getArticlesByCategory } from '../../lib/docs-content';
 import { BookOpen, Compass, Globe, Terminal as TerminalIcon, docCategoryIcon, platformIcon } from '../../components/icons';
 import { canonicalUrl } from '../../lib/site-url';
+import { GITHUB_ISSUES_URL, REPORT_PROMISE } from '../../lib/github-links';
 
 export const metadata: Metadata = {
   title: 'Documentation',
@@ -258,20 +259,27 @@ export default function DocsPage() {
       {/* Help */}
       <div className="mt-8 text-center py-10 border border-ink-800 rounded-xl">
         <h2 className="font-semibold text-ink-50 mb-2">Need help?</h2>
-        <p className="text-ink-400 text-sm mb-4">Check GitHub issues or open a discussion in the community.</p>
+        <p className="text-ink-400 text-sm mb-4">
+          Open an issue on GitHub — a wrong command in these docs, a bad listing, or a skill
+          behaving badly. {REPORT_PROMISE}
+        </p>
         <div className="flex items-center justify-center gap-4 flex-wrap">
           <Link href="/submit" className="text-sm text-accent-400 hover:text-accent-300 transition-colors">
             Submit a skill →
           </Link>
           <span className="text-ink-600">·</span>
           <a
-            href="https://github.com/growsontrees/trustedskills-registry/discussions"
+            href={GITHUB_ISSUES_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-accent-400 hover:text-accent-300 transition-colors"
           >
-            Community discussions →
+            Report a problem →
           </a>
+          <span className="text-ink-600">·</span>
+          <Link href="/contact" className="text-sm text-accent-400 hover:text-accent-300 transition-colors">
+            Contact →
+          </Link>
         </div>
       </div>
     </div>

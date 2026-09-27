@@ -5,6 +5,7 @@ import { TIER_CONFIG, TIER_ORDER } from "../../lib/skill-config";
 import { Check, Info, platformIcon } from "../../components/icons";
 import { Eyebrow, Note, Panel, cx } from "../../components/ui";
 import { canonicalUrl } from "../../lib/site-url";
+import { REQUEST_SKILL_URL } from "../../lib/github-links";
 
 export const metadata: Metadata = {
   title: "Submit a Skill",
@@ -58,7 +59,7 @@ const REQUIREMENTS = [
 const FAQ = [
   {
     q: "How long until my skill appears?",
-    a: "If your repository carries the openclaw-skill GitHub topic, auto-discovery picks it up on the next scraper run — usually within six hours. A manual pull request lands whenever a maintainer merges it; there is no service-level commitment on that.",
+    a: "If your repository carries the openclaw-skill GitHub topic, auto-discovery picks it up on the next crawl — usually within six hours. If it hasn't appeared after a day or two, open a listing request on GitHub with the repository URL. There is no service-level commitment on either path.",
   },
   {
     q: "Can I submit skills for Claude Desktop, Cursor or OpenAI?",
@@ -251,22 +252,24 @@ gh release create v1.0.0 \\
             />
           </Step>
 
-          <Step n={6} title="Open a pull request against the registry">
+          <Step n={6} title="Nothing — the crawler takes it from here">
             <p className="text-sm leading-relaxed text-ink-400">
-              Add an entry to <Code>sources.json</Code> in the registry repository.
+              There is no pull request to open. A public repository carrying the{" "}
+              <Code>openclaw-skill</Code> topic is picked up on the next crawl, usually within
+              six hours. The repository holding the crawl sources is private, so the topic is the
+              submission.
             </p>
-            <InstallBlock
-              label="sources.json"
-              code={`{
-  "type": "github_repo",
-  "repo": "yourusername/my-skill",
-  "skills_path": ".",
-  "official": false
-}`}
-            />
             <p className="text-xs leading-relaxed text-ink-500">
-              Or skip the pull request — a repository carrying the <Code>openclaw-skill</Code> topic
-              is picked up automatically on the next scraper run.
+              Still not listed a day or two later?{" "}
+              <a
+                href={REQUEST_SKILL_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent-400 underline decoration-ink-700 underline-offset-2 transition-colors hover:text-accent-300"
+              >
+                Open a listing request
+              </a>{" "}
+              with the repository URL. We read every one; we don&apos;t promise a turnaround.
             </p>
           </Step>
         </ol>
