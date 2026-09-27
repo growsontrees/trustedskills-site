@@ -72,7 +72,7 @@ Four further over-claims were found and removed in the same pass:
 
 The homepage badge ledger counts each tier from the index and hides any with none, so it picked up ONE-99 landing (2,365 skills into **Checked**) with no copy change. Its counterweight card carries the limits that remain: no person has read any listing, and the Checked scan is static — a skill is never executed.
 
-**Remaining:** `/reviews` and `/collections` are the last surfaces on the old `gray-*`/`purple-*` palette. They were being rewritten under ONE-94 while this pass ran and were deliberately left alone to avoid clobbering that work; they need a token sweep once it settles.
+`/reviews` and `/collections` were swept last, once ONE-94 had committed its rewrite of them. Nothing is left on the old palette: `grep -rE "purple-|text-gray-[0-9]|bg-gray-[0-9]|border-gray-[0-9]" app components lib` returns nothing, and the only emoji remaining in UI code is inside the literal `SKILL.md` sample on `/submit`. That sweep also caught `ok-200` and `warn-200` being used by the Reviewed link and `SafetyPanel` while the semantic ramps stopped at 300 — Tailwind was emitting nothing for them. The ramps now run 950→200 like `accent`, and a check that every `ink`/`accent`/`ok`/`warn`/`risk` class in the source resolves against the config passes.
 
 **Checked safety pass — done (2026-09-27, ONE-99).** The tier now has a scan behind it.
 
