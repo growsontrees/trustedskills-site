@@ -444,7 +444,10 @@ const OBFUSCATION_PATTERNS = [
   { id: "buffer-base64-eval", label: "eval of a base64 Buffer", pattern: /\b(?:eval|Function)\s*\(\s*Buffer\.from\s*\([^)]*['"]base64['"]/i },
   { id: "python-b64-exec", label: "exec of a base64-decoded payload", pattern: /\b(?:exec|eval)\s*\(\s*(?:base64|codecs|binascii)\.[a-z0-9_]*decode/i },
   { id: "python-exec-compile", label: "exec(compile(...)) of assembled source", pattern: /\bexec\s*\(\s*compile\s*\(/i },
-  { id: "python-marshal", label: "marshal/pickle payload executed", pattern: /\b(?:marshal|pickle)\.loads?\s*\(/i },
+  // Deliberately not here: pickle/marshal deserialization. It is a real risk
+  // class (unsafe deserialization) but it is not obfuscation, and flagging it
+  // under this heading punished skills for documenting it — including a
+  // security-review skill whose whole job is to show the pattern.
   { id: "zlib-exec", label: "compressed payload decompressed and executed", pattern: /\b(?:exec|eval)\s*\(\s*(?:zlib|gzip|lzma|bz2)\.decompress/i },
   { id: "powershell-encoded", label: "PowerShell -EncodedCommand", pattern: /powershell(?:\.exe)?[^\n]*\s-(?:e|ec|enc|encodedcommand)\b/i },
   { id: "powershell-frombase64", label: "PowerShell FromBase64String executed", pattern: /FromBase64String\s*\([^)]*\)[^\n]*\|\s*(?:iex|Invoke-Expression)/i },
@@ -457,6 +460,13 @@ const OBFUSCATION_PATTERNS = [
 
 /** A standalone base64 literal long enough to hide a payload. */
 const LONG_BASE64_PATTERN = /(?:^|[^A-Za-z0-9+/=])([A-Za-z0-9+/]{220,}={0,2})(?:[^A-Za-z0-9+/=]|$)/;
+
+/**
+ * Base64 prefixes that identify an embedded asset. An inline 139 KB JPEG is a
+ * large file, not a hidden payload, and calling it obfuscation is the kind of
+ * finding that teaches people to ignore findings.
+ */
+const BASE64_ASSET_MAGIC = /^(?:\/9j\/|iVBORw0KGgo|R0lGOD|UklGR|d09GRg|AAABAA|JVBERi|PK\u0003\u0004|Qk0)/;
 
 const CREDENTIAL_PATTERNS = [
   { id: "ssh-keys", label: "SSH private keys or config", pattern: /(?:~|\$HOME|\$\{HOME\}|%USERPROFILE%|\bHOME\b\s*[+,)]?\s*['"]?)[\/\\]\.ssh\b|\bid_(?:rsa|dsa|ecdsa|ed25519)\b(?!\.pub)|\/\.ssh\/(?:config|known_hosts|authorized_keys)\b/i },
@@ -473,13 +483,23 @@ const CREDENTIAL_PATTERNS = [
   { id: "gcloud-credentials", label: "Google Cloud credentials", pattern: /[\/\\]\.config[\/\\]gcloud\b|application_default_credentials\.json/i },
   { id: "kube-config", label: "Kubernetes credentials", pattern: /[\/\\]\.kube[\/\\]config\b/i },
   { id: "docker-config", label: "Docker registry credentials", pattern: /[\/\\]\.docker[\/\\]config\.json\b/i },
-  { id: "npm-credentials", label: "npm auth token", pattern: /(?:~|\$HOME|\$\{HOME\}|%USERPROFILE%)[\/\\]\.npmrc\b|_authToken\s*=/i },
+  // The user's own .npmrc only. A bare `_authToken=` also matches an npmrc
+  // example in documentation, and even a Vue store field called `_authToken`.
+  { id: "npm-credentials", label: "npm auth token", pattern: /(?:~|\$HOME|\$\{HOME\}|%USERPROFILE%)[\/\\]\.npmrc\b/i },
   { id: "netrc", label: ".netrc credentials", pattern: /[\/\\]\.netrc\b|_netrc\b/i },
   { id: "git-credentials", label: "stored git credentials", pattern: /[\/\\]\.git-credentials\b|credential\.helper\s+store/i },
   { id: "gh-hosts", label: "GitHub CLI token store", pattern: /[\/\\]\.config[\/\\]gh[\/\\]hosts\.ya?ml\b/i },
   { id: "keychain", label: "OS keychain / credential manager", pattern: /\bsecurity\s+(?:find-(?:generic|internet)-password|dump-keychain)\b|\blogin\.keychain\b|\bcmdkey\s+\/list\b|\bsecret-tool\s+(?:lookup|search)\b|\bkeyring\.get_password\b/i },
   { id: "gnupg", label: "GnuPG private keyring", pattern: /[\/\\]\.gnupg\b/i },
-  { id: "browser-secrets", label: "browser cookie or password store", pattern: /\b(?:Cookies|Login\s?Data|Web\s?Data)\b[^\n]*\b(?:Chrome|Chromium|Edge|Brave|Firefox|Safari)\b|\b(?:Chrome|Chromium|Edge|Brave|Firefox)\b[^\n]*\b(?:Cookies|Login\s?Data)\b|cookies\.sqlite|logins\.json/i },
+  // A browser profile path or one of the actual store filenames. Matching the
+  // words "Chrome" and "cookies" on one line flagged every browser-automation
+  // skill that logs "session cookies not observed yet".
+  {
+    id: "browser-secrets",
+    label: "browser cookie or password store",
+    pattern:
+      /(?:Chrome|Chromium|Edge|Brave|Firefox|Safari)[\/\\][^\n"']{0,80}(?:Cookies|Login\s?Data|Web\s?Data|cookies\.sqlite|logins\.json|key4\.db)\b|\bcookies\.sqlite\b|\blogins\.json\b|["'`][^\n"'`]*[\/\\]Login Data["'`]/i,
+  },
   { id: "password-manager", label: "password manager store", pattern: /[\/\\]\.config[\/\\]op\b|\b1password\b[^\n]*\b(?:vault|export)\b|\bbw\s+(?:list|get)\s+items?\b|\bpass\s+show\b/i },
   { id: "wallet", label: "crypto wallet store", pattern: /\bwallet\.dat\b|[\/\\]\.electrum\b|[\/\\]Exodus[\/\\]exodus\.wallet\b|[\/\\]\.ethereum[\/\\]keystore\b/i },
   { id: "home-dotenv", label: "environment file outside the project", pattern: /(?:~|\$HOME|\$\{HOME\}|%USERPROFILE%)[\/\\][^\s"'`]*\.env\b|(?:\.\.[\/\\]){2,}[^\s"'`]*\.env\b/i },
@@ -495,9 +515,20 @@ const INSTALLER_PATTERNS = [
   { id: "shell-command-substitution", label: "remote script run via command substitution", pattern: /\b(?:sh|bash|eval)\s+(?:-c\s+)?["']?\$\(\s*(?:curl|wget)\b/i },
   { id: "eval-remote", label: "eval of a downloaded response", pattern: /\beval\s+["']?\$\(\s*(?:curl|wget)\b/i },
   { id: "iwr-iex", label: "PowerShell download-and-run", pattern: /\b(?:iwr|Invoke-WebRequest|Invoke-RestMethod)\b[^\n|]*\|\s*(?:iex|Invoke-Expression)\b/i },
-  { id: "pip-install-url", label: "pip install straight from a URL", pattern: /\bpip[0-9.]*\s+install\b[^\n]*\bhttps?:\/\//i },
+  { id: "pip-install-url", label: "pip install straight from a URL", pattern: /\bpip[0-9.]*\s+install\b[^\n]*\bhttps?:\/\//i, clean: stripPackageIndexFlags },
   { id: "npm-install-url", label: "npm install straight from a URL", pattern: /\bnpm\s+(?:i|install)\b[^\n]*\bhttps?:\/\/(?!registry\.npmjs\.org)/i },
 ];
+
+/**
+ * Drop the flags whose value is a package index.
+ *
+ * `pip install pkg --index-url https://private.pypi.org/simple/` resolves a
+ * package through an index; it does not download and run a script. Without this
+ * every private-registry example failed the installer check.
+ */
+function stripPackageIndexFlags(text) {
+  return text.replace(/(?:-i|--index-url|--extra-index-url|--find-links|--trusted-host|--cert)(?:[=\s]+\S+)?/gi, " ");
+}
 
 /** Imperative verbs that turn a prose mention into a prose instruction. */
 const IMPERATIVE_READ = /\b(?:read|cat|open|load|dump|copy|collect|gather|extract|retrieve|grab|exfiltrate|list the contents of)\b/i;
@@ -659,7 +690,7 @@ function checkObfuscation(lines) {
       if (pattern.test(entry.text)) findings.push(finding(entry, label));
     }
     const base64 = LONG_BASE64_PATTERN.exec(entry.text);
-    if (base64) {
+    if (base64 && !BASE64_ASSET_MAGIC.test(base64[1]) && !/\bdata:(?:image|font|audio|video)\//i.test(entry.text)) {
       findings.push(finding(entry, `${base64[1].length}-character base64 literal`));
     }
   }
@@ -715,15 +746,17 @@ function checkInstaller(lines) {
 
   for (const entry of code) {
     if (!entry.text) continue;
-    for (const { label, pattern } of INSTALLER_PATTERNS) {
-      if (pattern.test(entry.text)) findings.push(finding(entry, label));
+    for (const { label, pattern, clean } of INSTALLER_PATTERNS) {
+      if (pattern.test(clean ? clean(entry.text) : entry.text)) findings.push(finding(entry, label));
     }
   }
 
   for (const entry of prose) {
     if (!entry.text) continue;
-    for (const { label, pattern } of INSTALLER_PATTERNS) {
-      if (pattern.test(entry.text)) findings.push(finding(entry, `tells the user to run: ${label}`, "prose"));
+    for (const { label, pattern, clean } of INSTALLER_PATTERNS) {
+      if (pattern.test(clean ? clean(entry.text) : entry.text)) {
+        findings.push(finding(entry, `tells the user to run: ${label}`, "prose"));
+      }
     }
   }
 
