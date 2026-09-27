@@ -21,6 +21,7 @@ import { getCollectionsForSkill } from "../../../lib/collections";
 import { installIsBroken } from "../../../lib/skill-config";
 import type { PlatformKey } from "../../../hooks/usePlatform";
 import type { Metadata } from "next";
+import { canonicalUrl } from "../../../lib/site-url";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -91,6 +92,11 @@ export async function generateStaticParams() {
   return top5000.map((skill) => ({ slug: skill.slug }));
 }
 
+// Same encoding as the sitemap, so canonical, JSON-LD and sitemap agree.
+function skillUrl(slug: string) {
+  return canonicalUrl(`/skills/${encodeURIComponent(slug)}`);
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const skill = getSkillBySlug(slug);
@@ -99,9 +105,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${skill.name} Agent Skill`,
     description: skill.description,
+    alternates: { canonical: skillUrl(skill.slug) },
     openGraph: {
       title: `${skill.name} Agent Skill | ${categoryName} | TrustedSkills`,
       description: skill.description,
+      url: skillUrl(skill.slug),
     },
   };
 }
@@ -157,7 +165,7 @@ export default async function SkillDetailPage({ params }: Props) {
     description: skill.description,
     applicationCategory: "DeveloperApplication",
     operatingSystem: "Any",
-    url: "https://trustedskills.dev/skills/" + skill.slug + "/",
+    url: skillUrl(skill.slug),
     author: { "@type": "Person", name: skill.author },
     softwareVersion: skill.version,
     ...(license ? { license } : {}),

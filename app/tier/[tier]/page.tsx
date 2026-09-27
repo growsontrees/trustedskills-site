@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
+import { canonicalUrl } from "../../../lib/site-url";
 import { notFound } from "next/navigation";
 import { Pagination } from "../../../components/Pagination";
 import { ListingPage } from "../../../components/ListingPage";
 import { getAllSkills, TIER_CONFIG, TIER_ORDER, VerificationTier, sortByScore } from "../../../lib/skills";
 
 const DEFAULT_SKILLS_PER_PAGE = 25;
-const SITE_URL = "https://trustedskills.dev";
 
 // Derived from the tier config so a new tier gets a route without a second edit.
 const VALID_TIERS: VerificationTier[] = TIER_ORDER;
@@ -53,12 +53,12 @@ export async function generateMetadata({ params }: { params: Promise<{ tier: str
     title: `${data.tierConfig.label} Skills`,
     description: `Browse ${data.totalSkills} ${data.tierConfig.label.toLowerCase()} agent skills on TrustedSkills. ${data.tierConfig.description}`,
     alternates: {
-      canonical: `${SITE_URL}${data.basePath}/`,
+      canonical: canonicalUrl(data.basePath),
     },
     openGraph: {
       title: `${data.tierConfig.label} Agent Skills | TrustedSkills`,
       description: `Browse ${data.totalSkills} ${data.tierConfig.label.toLowerCase()} agent skills on TrustedSkills.`,
-      url: `${SITE_URL}${data.basePath}/`,
+      url: canonicalUrl(data.basePath),
     },
   };
 }

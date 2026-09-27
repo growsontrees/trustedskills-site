@@ -9,6 +9,7 @@ import {
   getArticlesByCategory,
   getPrevNext,
 } from '../../../lib/docs-content';
+import { canonicalUrl } from '../../../lib/site-url';
 
 interface Props {
   params: Promise<{ slug: string[] }>;
@@ -25,7 +26,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: article.title,
     description: article.description,
+    alternates: { canonical: canonicalUrl(docPath(article.slug)) },
   };
+}
+
+// Same encoding as the sitemap, so canonical, JSON-LD and sitemap agree.
+function docPath(slug: string[]) {
+  return `/docs/${slug.map(encodeURIComponent).join('/')}`;
 }
 
 const PERSONA_BADGE: Record<string, { label: string; color: string }> = {
@@ -218,7 +225,7 @@ export default async function DocArticlePage({ params }: Props) {
     "@type": "Article",
     "headline": article.title,
     "description": article.description,
-    "url": `https://trustedskills.dev/docs/${article.slug.join('/')}/`,
+    "url": canonicalUrl(docPath(article.slug)),
     "publisher": {
       "@type": "Organization",
       "name": "TrustedSkills",
@@ -226,7 +233,7 @@ export default async function DocArticlePage({ params }: Props) {
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": `https://trustedskills.dev/docs/${article.slug.join('/')}/`
+      "@id": canonicalUrl(docPath(article.slug))
     }
   };
 

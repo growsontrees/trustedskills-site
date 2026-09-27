@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { canonicalUrl } from "../../../lib/site-url";
 import { notFound } from "next/navigation";
 import { Pagination } from "../../../components/Pagination";
 import { ListingPage } from "../../../components/ListingPage";
@@ -6,7 +7,6 @@ import { platformIcon } from "../../../components/icons";
 import { getAllSkills, PLATFORM_CONFIG, sortByScore } from "../../../lib/skills";
 
 const DEFAULT_SKILLS_PER_PAGE = 25;
-const SITE_URL = "https://trustedskills.dev";
 
 const VALID_PLATFORMS = ["claudecode", "openclaw", "claude", "mcp", "cursor", "openai"] as const;
 type PlatformSlug = typeof VALID_PLATFORMS[number];
@@ -54,12 +54,12 @@ export async function generateMetadata({ params }: { params: Promise<{ platform:
     title: `${data.platformConfig.label} Compatible Skills`,
     description: `Browse ${data.totalSkills} agent skills compatible with ${data.platformConfig.label} on TrustedSkills.`,
     alternates: {
-      canonical: `${SITE_URL}${data.basePath}/`,
+      canonical: canonicalUrl(data.basePath),
     },
     openGraph: {
       title: `${data.platformConfig.label} Agent Skills | TrustedSkills`,
       description: `Browse ${data.totalSkills} agent skills compatible with ${data.platformConfig.label} on TrustedSkills.`,
-      url: `${SITE_URL}${data.basePath}/`,
+      url: canonicalUrl(data.basePath),
     },
   };
 }

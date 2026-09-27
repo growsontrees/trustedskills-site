@@ -4,11 +4,13 @@ import { InstallBlock } from "../../components/InstallBlock";
 import { TIER_CONFIG, TIER_ORDER } from "../../lib/skill-config";
 import { Check, Info, platformIcon } from "../../components/icons";
 import { Eyebrow, Note, Panel, cx } from "../../components/ui";
+import { canonicalUrl } from "../../lib/site-url";
 
 export const metadata: Metadata = {
   title: "Submit a Skill",
   description:
     "Add your AI agent skill to the TrustedSkills index — compatible with OpenClaw, MCP, Claude, OpenAI, Cursor and more.",
+  alternates: { canonical: canonicalUrl("/submit") },
 };
 
 const SKILL_TEMPLATE = `---

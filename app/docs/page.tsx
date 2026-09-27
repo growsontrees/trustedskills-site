@@ -2,11 +2,13 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { DOC_ARTICLES, DOC_CATEGORIES, getArticlesByCategory } from '../../lib/docs-content';
 import { BookOpen, Compass, Globe, Terminal as TerminalIcon, docCategoryIcon, platformIcon } from '../../components/icons';
+import { canonicalUrl } from '../../lib/site-url';
 
 export const metadata: Metadata = {
   title: 'Documentation',
   description:
     'TrustedSkills documentation — learn how to install, use, and build AI agent skills for OpenClaw, MCP, Claude Desktop, Cursor, and more.',
+  alternates: { canonical: canonicalUrl('/docs') },
 };
 
 const PLATFORM_CARDS = [

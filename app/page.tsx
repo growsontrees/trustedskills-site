@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   getCategories,
@@ -24,6 +25,11 @@ import {
   categoryIcon,
 } from "../components/icons";
 import { ButtonLink, Eyebrow, Panel, SectionHeading, Stat, cx } from "../components/ui";
+import { canonicalUrl } from "../lib/site-url";
+
+export const metadata: Metadata = {
+  alternates: { canonical: canonicalUrl("/") },
+};
 
 export default function HomePage() {
   const featured = getTopRankedSkills(6);
@@ -48,7 +54,7 @@ export default function HomePage() {
           "@type": "SearchAction",
           target: {
             "@type": "EntryPoint",
-            urlTemplate: "https://trustedskills.dev/skills/?q={search_term_string}",
+            urlTemplate: "https://trustedskills.dev/skills?q={search_term_string}",
           },
           "query-input": "required name=search_term_string",
         },

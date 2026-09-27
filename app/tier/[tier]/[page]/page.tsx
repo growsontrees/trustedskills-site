@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
+import { canonicalUrl } from "../../../../lib/site-url";
 import { notFound } from "next/navigation";
 import { Pagination } from "../../../../components/Pagination";
 import { ListingPage } from "../../../../components/ListingPage";
 import { getAllSkills, TIER_CONFIG, TIER_ORDER, VerificationTier, sortByScore } from "../../../../lib/skills";
 
 const DEFAULT_SKILLS_PER_PAGE = 25;
-const SITE_URL = "https://trustedskills.dev";
 
 // Derived from the tier config so a new tier gets a route without a second edit.
 const VALID_TIERS: VerificationTier[] = TIER_ORDER;
@@ -78,12 +78,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `${data.tierConfig.label} Skills - Page ${pageNum}`,
     description: `Browse ${data.tierConfig.label.toLowerCase()} agent skills on TrustedSkills. Page ${pageNum} of ${data.totalPages}.`,
     alternates: {
-      canonical: `${SITE_URL}${data.basePath}/page/${pageNum}/`,
+      canonical: canonicalUrl(pageNum > 1 ? `${data.basePath}/${pageNum}` : data.basePath),
     },
     openGraph: {
       title: `${data.tierConfig.label} Agent Skills - Page ${pageNum} | TrustedSkills`,
       description: `Browse ${data.totalSkills} ${data.tierConfig.label.toLowerCase()} agent skills on TrustedSkills.`,
-      url: `${SITE_URL}${data.basePath}/page/${pageNum}/`,
+      url: canonicalUrl(pageNum > 1 ? `${data.basePath}/${pageNum}` : data.basePath),
     },
   };
 }

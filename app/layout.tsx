@@ -15,14 +15,10 @@ export const metadata: Metadata = {
   description:
     "An index of AI agent skills. Search the catalogue, see who publishes each skill, and get the install command for your platform — OpenClaw, MCP, Claude, OpenAI, Cursor or VS Code.",
   metadataBase: new URL("https://trustedskills.dev"),
-  alternates: {
-    canonical: "https://trustedskills.dev",
-  },
   openGraph: {
     title: "TrustedSkills — AI Agent Skills Index",
     description:
       "Search the agent skill ecosystem in one place. See the publisher, the source and the install command for every skill.",
-    url: "https://trustedskills.dev",
     siteName: "TrustedSkills",
     type: "website",
     images: [

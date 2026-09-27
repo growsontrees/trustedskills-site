@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { canonicalUrl } from "../../../../lib/site-url";
 import { notFound } from "next/navigation";
 import { Pagination } from "../../../../components/Pagination";
 import { ListingPage } from "../../../../components/ListingPage";
@@ -6,7 +7,6 @@ import { categoryIcon } from "../../../../components/icons";
 import { getAllSkills, getCategories, getCategoryBySlug, sortByScore } from "../../../../lib/skills";
 
 const DEFAULT_SKILLS_PER_PAGE = 25;
-const SITE_URL = "https://trustedskills.dev";
 
 interface PageProps {
   params: Promise<{
@@ -72,12 +72,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `${data.category.name} Agent Skills - Page ${pageNum}`,
     description: `Browse ${data.category.name.toLowerCase()} agent skills on TrustedSkills. Page ${pageNum} of ${data.totalPages}.`,
     alternates: {
-      canonical: `${SITE_URL}${data.basePath}/page/${pageNum}/`,
+      canonical: canonicalUrl(`/skills/category/${data.category.slug}${pageNum > 1 ? `/${pageNum}` : ""}`),
     },
     openGraph: {
       title: `${data.category.name} Agent Skills - Page ${pageNum} | TrustedSkills`,
       description: `Browse ${data.category.name.toLowerCase()} agent skills on TrustedSkills.`,
-      url: `${SITE_URL}${data.basePath}/page/${pageNum}/`,
+      url: canonicalUrl(`/skills/category/${data.category.slug}${pageNum > 1 ? `/${pageNum}` : ""}`),
     },
   };
 }
