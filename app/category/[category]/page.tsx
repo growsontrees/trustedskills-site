@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: { params: Promise<{ category:
   }
 
   return {
-    title: `${data.category.name} Agent Skills | TrustedSkills`,
+    title: `${data.category.name} Agent Skills`,
     description: `Browse ${data.category.count} ${data.category.name.toLowerCase()} agent skills on TrustedSkills. Page 1 of ${data.totalPages}.`,
     alternates: {
       canonical: canonicalUrl(`/skills/category/${data.category.slug}`),
