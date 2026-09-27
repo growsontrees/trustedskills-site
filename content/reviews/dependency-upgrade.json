@@ -1,0 +1,82 @@
+{
+  "slug": "dependency-upgrade",
+  "status": "draft",
+  "title": "dependency-upgrade Review: A Reference Card, Not a Method",
+  "description": "We used wshobson's dependency-upgrade skill to plan our own upgrades and apply the safe ones. The minor updates went through cleanly and the build passed. The skill is mostly generic commands and config, and it never tells you to record a baseline, which led the run to blame the upgrade for a problem that was already there.",
+  "skillSlug": "dependency-upgrade",
+  "verdict": "Use With Caution",
+  "overallScore": 3.4,
+  "scores": {
+    "installation": 5,
+    "documentation": 3,
+    "depth": 3,
+    "maintenance": 2,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "dependency upgrade skill claude code",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve developer-workflow skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "wshobson/agents@9b15b34",
+      "task": "Our repo has minor updates available (Next.js 16.1 to 16.3 and three build tools) and six major ones (React 19, Tailwind 4, ESLint 10, TypeScript 7 and two type packages). Write the upgrade plan, apply only the minor and patch updates, and verify with a type check, the editorial check and a production build. Plan the majors; don't attempt them.",
+      "outcome": "`npx skills add wshobson/agents --skill dependency-upgrade` installed it first time. The run took about nine minutes.\n\nThe agent confirmed the outdated list and wrote an upgrade plan that orders the majors (TypeScript, then ESLint, then React, then Tailwind). The ordering and risk notes came from reading our repo. The skill has no guidance on either.\n\nIt applied the minor updates: `next` and `eslint-config-next` 16.1.6 to 16.3.6, `postcss` 8.5.8 to 8.5.28 and `autoprefixer` 10.4.27 to 10.6.1. The type check passed, the editorial check passed, and the production build finished in 2 minutes 39 seconds with all 5,241 pages generated.\n\nThe run reported that the update created a peer-dependency conflict: `eslint-config-next` wants ESLint 9, and the repo has ESLint 8. We checked, and that is wrong. The old version, 16.1.6, has the same requirement, and `npm ls` on the untouched repo already flags it. The conflict was there before the upgrade. The skill never says to capture `npm ls` before you change anything, so nothing in the process caught the mistake.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit eca93fb. npm 11, Node 24."
+    }
+  ],
+  "summary": "dependency-upgrade is a reference card: semver rules, `npm outdated` and `npm audit` commands, codemod names, sample Renovate and Dependabot config, and a rollback script. It is fine as a reminder. It is not a method. It has nothing on ordering majors for your stack, and nothing on recording a baseline before you change anything. On our run the safe updates went through cleanly, but a problem that existed before the upgrade was reported as caused by it.",
+  "strengths": [
+    {
+      "title": "Right first step",
+      "body": "Stage the work: patch and minor updates first, with a type check and build after, majors one at a time later. The agent followed that, and the build stayed green."
+    },
+    {
+      "title": "Handy command list",
+      "body": "npm, yarn and npm-check-updates commands for finding, explaining and auditing dependencies, all in one place."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "No baseline step",
+      "body": "It never says to record `npm ls`, `npm audit` or test results before upgrading. Without that, the run blamed the upgrade for a peer conflict that was already there."
+    },
+    {
+      "title": "Generic about majors",
+      "body": "The worked example installs one major and tests, then the next. It says nothing about what a major changes in your config. Tailwind 4, for example, moves config into CSS."
+    },
+    {
+      "title": "Weak on peer dependencies",
+      "body": "Its sample test for peer-dependency warnings is an empty stub, and its \"resolution\" section only shows how to bypass the check with `--legacy-peer-deps` or `--force`. Neither helps you find out what actually conflicts."
+    },
+    {
+      "title": "Mostly boilerplate",
+      "body": "Large parts are sample Renovate, Dependabot and rollback config. That is useful once, not on every upgrade."
+    },
+    {
+      "title": "Not recently maintained",
+      "body": "The skill's folder was last changed in March 2026."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Setting up automated updates",
+      "body": "The Renovate and Dependabot samples are a quick start."
+    },
+    {
+      "title": "A checklist beside your own process",
+      "body": "Use it as a reminder, not as the process."
+    }
+  ],
+  "notFor": "Planning a hard major upgrade, like React 18 to 19 or Tailwind 3 to 4. Read the vendor's migration guide instead.",
+  "links": [
+    { "label": "wshobson/agents repository", "href": "https://github.com/wshobson/agents" }
+  ]
+}

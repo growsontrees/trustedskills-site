@@ -1,0 +1,82 @@
+{
+  "slug": "differential-review",
+  "status": "draft",
+  "title": "differential-review Review: Rigorous Security Review, Built for Smart Contracts",
+  "description": "We used Trail of Bits' differential-review skill to security-review the code that downloads and scans untrusted repositories for our site. It found a real resource-exhaustion gap. Its method is strong, but its examples and patterns are written for Solidity audits.",
+  "skillSlug": "differential-review",
+  "verdict": "Recommended",
+  "overallScore": 4.2,
+  "scores": {
+    "installation": 5,
+    "documentation": 3,
+    "depth": 4,
+    "maintenance": 5,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "security code review skill trail of bits",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve developer-workflow skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "trailofbits/skills@0cc1c73",
+      "task": "Security-review the commits that introduced the site's automated safety scanner: the code that downloads third-party GitHub repositories (untrusted input) and scans them in GitHub Actions. Review only; no code changes, no network runs.",
+      "outcome": "`npx skills add trailofbits/skills --skill differential-review` installed it first time. The run took about seven minutes.\n\nThe agent found the four commits that added the scanner, about 2,100 new lines, and worked through the skill's method, adversarial and reporting guides. It wrote a report in the skill's format with three findings.\n\nThe top finding is real, and we confirmed it in the code. The scanner caps the size of the compressed download at 60 MB, then decompresses it with no limit on the output size. A small archive that expands hugely could exhaust memory and crash the daily scan job. The agent also noted this file has no tests.\n\nThe second finding is a design weakness, not a bug: a skill can list a host in its own metadata, and the network check then treats calls to that host as declared. The third was low risk: the pre-download size check trusts a header that a server could leave out, though the full download is still checked afterwards.\n\nThe skill's own \"When NOT to use\" list includes greenfield code with no baseline, and this was new code. The agent noted the conflict and followed the task.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit eca93fb. No network scans run."
+    }
+  ],
+  "summary": "differential-review brings an auditor's method to a diff: size the change, trace what an attacker controls, and report findings with evidence. On our scanner it found the gap that matters most for code that handles untrusted archives, an uncapped decompression. The method carries over to any language. The worked examples, file-sizing commands and vulnerability patterns do not: they are written for Solidity and DeFi, so web and tooling code gets less help from them.",
+  "strengths": [
+    {
+      "title": "Found a real gap",
+      "body": "The uncapped decompression is exactly the kind of issue that code handling untrusted input must not have. It was stated with file, line and a clear attack path."
+    },
+    {
+      "title": "Thinks like an attacker",
+      "body": "The bundled adversarial guide makes the agent ask what an attacker controls and how, instead of checking style."
+    },
+    {
+      "title": "A report you can act on",
+      "body": "Severity, evidence and recommendation per finding, and it separated a confirmed code fact from an exploit it could not prove live."
+    },
+    {
+      "title": "Actively maintained",
+      "body": "The skill's folder was last changed eleven days before our run."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Written for smart contracts",
+      "body": "The worked adversarial example is a reentrancy bug in a Solidity `withdraw()` function, and the patterns file has nothing on archives, CI pipelines or supply chain. Our findings came from the method, not from the patterns."
+    },
+    {
+      "title": "Excludes new code",
+      "body": "Its own \"When NOT to use\" list names greenfield code. Plenty of risky code arrives as a new file, as ours did."
+    },
+    {
+      "title": "Heavy",
+      "body": "Five documents to read before it starts. For a small diff the process is more than the change."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Smart-contract and DeFi changes",
+      "body": "That is what its patterns and examples are written for."
+    },
+    {
+      "title": "Any diff that handles untrusted input",
+      "body": "The attacker-first method works in any language, as it did on our scanner."
+    }
+  ],
+  "notFor": "Routine code review of low-risk changes. Use a general reviewer for those.",
+  "links": [
+    { "label": "trailofbits/skills repository", "href": "https://github.com/trailofbits/skills" }
+  ]
+}

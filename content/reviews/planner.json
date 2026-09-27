@@ -1,0 +1,82 @@
+{
+  "slug": "planner",
+  "status": "draft",
+  "title": "planner Review: A Solid Plan Template That Wants a Human in the Loop",
+  "description": "We used am-will's planner skill to plan a real feature for our own site. The plan found existing code to reuse and a risk we had not spotted. The skill is built around asking you questions first, and it leans on a separate docs skill.",
+  "skillSlug": "planner",
+  "verdict": "Recommended",
+  "overallScore": 3.6,
+  "scores": {
+    "installation": 5,
+    "documentation": 4,
+    "depth": 4,
+    "maintenance": 2,
+    "platformSupport": 3
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "planner skill claude code review",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve developer-workflow skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "am-will/codex-skills@9f954c3",
+      "task": "Plan a \"Reviewed\" filter for the site's skill browser, so a reader can list only skills with a hands-on review. Plan only; no code.",
+      "outcome": "`npx skills add am-will/codex-skills --skill planner` installed it first time. The run took about six minutes.\n\nThe skill starts with research, then asks the user 5 to 10 clarifying questions before it writes anything. Nobody was there to answer, so the agent answered its own questions and recorded them. It then wrote a 278-line plan in the skill's template: three sprints, file-level tasks, acceptance criteria, a testing strategy, risks and a rollback plan. It saved it under the file name rule the skill gives.\n\nWe checked the plan's two key claims. The site already has a function that returns the set of reviewed skills, and the plan reuses it instead of adding new data code. And today that set is empty in a production build, because every hands-on review on disk is still a draft. The plan makes that its main risk and hides the new filter while the set is empty, so the site never shows a control that does nothing. Both are correct.\n\nThe skill's documentation step uses a separate Context7 skill. This feature needed no outside library docs, so that step was skipped, as the skill allows.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit eca93fb. No Context7 skill installed."
+    }
+  ],
+  "summary": "planner turns a feature request into a plan you could hand to someone: sprints that each end in something demoable, atomic tasks with file paths, and a rollback plan. On our repo the research step paid off: it found code to reuse and a real risk. Its weak points are the parts outside the template. It expects a person to answer questions, it relies on a separate docs skill, and it hasn't changed in eight months.",
+  "strengths": [
+    {
+      "title": "A template that forces the useful parts",
+      "body": "Every sprint needs a demo and a check, and every task needs a file path, a dependency and a way to validate it. Plans written to it are hard to leave vague."
+    },
+    {
+      "title": "Research before writing",
+      "body": "Phase 0 sends the agent into the codebase first. That is how it found the existing reviewed-skills function and the empty-set risk."
+    },
+    {
+      "title": "A second look after saving",
+      "body": "The gotchas step, after the plan is saved, is a good habit. Here it turned up the difference between what development and production builds show."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Built for a live conversation",
+      "body": "It stops to ask 5 to 10 questions before planning, and up to 3 more afterwards. That is right with a person present. Run unattended, the agent has to answer itself."
+    },
+    {
+      "title": "Depends on another skill",
+      "body": "Phase 2 tells you to use the Context7 skill for library docs. It is not installed with planner, and the skill says nothing about what to do without it."
+    },
+    {
+      "title": "Small editing slips",
+      "body": "Two different sections are both headed \"Phase 3\". It mentions a `request_user_input` tool that is not a Claude Code tool."
+    },
+    {
+      "title": "Not recently maintained",
+      "body": "The skill's folder was last changed in January 2026."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Planning a feature with a person on hand",
+      "body": "Answer its questions, and the template does the rest."
+    },
+    {
+      "title": "Handing work to other agents",
+      "body": "Atomic tasks with dependencies are easy to split across parallel workers."
+    }
+  ],
+  "notFor": "Small fixes. A three-sprint template around a one-line change is overhead.",
+  "links": [
+    { "label": "am-will/codex-skills repository", "href": "https://github.com/am-will/codex-skills" }
+  ]
+}

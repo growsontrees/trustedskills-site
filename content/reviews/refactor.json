@@ -1,0 +1,78 @@
+{
+  "slug": "refactor",
+  "status": "draft",
+  "title": "refactor Review: Sound Rules, Generic Examples",
+  "description": "We used GitHub's refactor skill on an 818-line file in our own repo. It pointed the agent at the right smell, and the tests passed before and after. Its examples are all class-based TypeScript, and the file we gave it had no classes.",
+  "skillSlug": "refactor",
+  "verdict": "Recommended",
+  "overallScore": 3.6,
+  "scores": {
+    "installation": 5,
+    "documentation": 4,
+    "depth": 3,
+    "maintenance": 2,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "refactor skill claude code review",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve developer-workflow skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "github/awesome-copilot@6c4d33b",
+      "task": "Refactor `scripts/lib/safety-checks.mjs` (818 lines) for readability without changing behaviour. The project's safety-check tests must pass before and after with the same count. Keep the diff reviewable.",
+      "outcome": "`npx skills add github/awesome-copilot --skill refactor` installed it first time. The run took about five minutes.\n\nThe skill's golden rules are small steps and tests first, and the agent ran the test suite before touching anything: 42 tests passed. Of the skill's ten code smells, duplicated code was the match. Three checks each had the same line filter and the same pattern-matching loop, five copies in all. The agent pulled them into three shared helpers and rewired the checks.\n\nIt deliberately left two longer, riskier functions alone. The diff is one file, 56 lines added and 33 removed. The file grew from 818 to 841 lines, because the helpers are documented.\n\nWe re-ran the tests on the refactored file and on the original: 42 passed both times.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit eca93fb. Node 24."
+    }
+  ],
+  "summary": "refactor is a well-organised catalogue of code smells with before-and-after fixes, plus the rules that matter: small steps, and no refactoring without tests. On our file it steered the agent to the real problem, duplicated scanning loops, and the change kept all 42 tests green. It stops at general advice. Every example is class-based TypeScript, and turning that into a fix for a plain-functions file was left to the agent.",
+  "strengths": [
+    {
+      "title": "The right rules first",
+      "body": "\"Without tests, you're not refactoring, you're editing\" sets up the whole run. The agent recorded a green baseline before any change."
+    },
+    {
+      "title": "A clear smell catalogue",
+      "body": "Ten common smells, each with a bad and a good example. Duplicated code was easy to recognise from it."
+    },
+    {
+      "title": "Encourages restraint",
+      "body": "Small steps meant a 56-line diff someone can review, not a rewrite."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Examples don't fit every codebase",
+      "body": "Extract Class, Strategy and Chain of Responsibility assume classes. Our file is plain functions, so none of the worked examples applied directly."
+    },
+    {
+      "title": "Long for what it gives",
+      "body": "About 645 lines, most of them textbook examples. None of it is about finding the smells in your code or measuring the result."
+    },
+    {
+      "title": "Not recently maintained",
+      "body": "The skill's folder was last changed in February 2026."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Class-heavy TypeScript or Java code",
+      "body": "That is where its examples map straight onto your code."
+    },
+    {
+      "title": "Code that already has tests",
+      "body": "Its rules assume a suite you can run after each small step."
+    }
+  ],
+  "notFor": "Untested code. The skill itself says to add tests first, and gives no help writing them.",
+  "links": [
+    { "label": "github/awesome-copilot repository", "href": "https://github.com/github/awesome-copilot" }
+  ]
+}

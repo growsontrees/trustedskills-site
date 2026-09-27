@@ -1,0 +1,74 @@
+{
+  "slug": "changelog-generator",
+  "status": "draft",
+  "title": "changelog-generator Review: A Product Pitch With One Example",
+  "description": "We used ComposioHQ's changelog-generator skill to write release notes for two days of work on our own site. The notes were readable and mostly accurate. The skill has almost no instructions, its example format clashed with our site, and one line in the draft claimed more than our evidence showed.",
+  "skillSlug": "changelog-generator",
+  "verdict": "Use With Caution",
+  "overallScore": 3,
+  "scores": {
+    "installation": 5,
+    "documentation": 2,
+    "depth": 2,
+    "maintenance": 2,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "changelog generator skill claude",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve developer-workflow skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "composiohq/awesome-claude-skills@be2a406",
+      "task": "Write user-facing release notes for everything on main since 2026-09-26, for site visitors and skill authors, not the dev team. Then trace the three most specific claims in the notes to the commit and code behind them.",
+      "outcome": "`npx skills add composiohq/awesome-claude-skills --skill changelog-generator` installed it first time. The run took about six minutes.\n\nThe skill describes what it does (scan history, group changes, translate them for users, filter out internal work) and shows one example. It has no steps or rules for doing it. The agent read the 29 commits in the window, left out 9 as internal, and grouped the other 20 under New, Improved and Fixed.\n\nThe skill's example uses emoji section headings. One of the commits in this window removed emoji from our site's interface, so the agent used plain headings instead.\n\nWe checked the numbers. The \"Other\" category share (10.7%, 2,792 of 26,001 skills) and the install-status counts match the data. The agent also left out a catalogue size it could not verify from the repo.\n\nOne line went further than the evidence. It says most visitors were seeing plain Arial before the font fix. The old font list fell back to Helvetica Neue first, then Arial, and we have no data on what visitors saw. The skill's advice to translate commits into customer language gives no warning about adding claims like this.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit eca93fb."
+    }
+  ],
+  "summary": "changelog-generator reads like a product description: what it does, when to use it, and one sample changelog. There is no method in it: no rules for what counts as user-facing, no rule to check claims against the code, and an emoji-heavy example format. Our run produced readable, mostly accurate notes because the agent was careful, not because of the skill. One line still stated something we can't back up.",
+  "strengths": [
+    {
+      "title": "The right goal",
+      "body": "Write for users, not developers, and filter out internal commits. The agent's notes did read as product news rather than a commit log."
+    },
+    {
+      "title": "Works on any repo",
+      "body": "It needs nothing but git history, so it runs anywhere."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "No method",
+      "body": "It lists what it does but not how. There is nothing on deciding what is user-facing, merging related commits, or dating a release."
+    },
+    {
+      "title": "Nothing stops embellishment",
+      "body": "\"Translate technical to user-friendly\" with no rule to stay within the evidence. One line in our draft made a claim about visitors that no data supports."
+    },
+    {
+      "title": "Example format may not fit",
+      "body": "Its sample uses emoji headings, which clashed with our site's style. You have to override it."
+    },
+    {
+      "title": "Old",
+      "body": "The skill's folder was last changed in October 2025, nearly a year before our run."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "A first draft of weekly product notes",
+      "body": "Fine as a starting point, if someone checks every claim before it goes out."
+    }
+  ],
+  "notFor": "Release notes that go out unchecked. Nothing in the skill makes the agent verify what it writes.",
+  "links": [
+    { "label": "ComposioHQ/awesome-claude-skills repository", "href": "https://github.com/ComposioHQ/awesome-claude-skills" }
+  ]
+}

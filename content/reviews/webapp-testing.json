@@ -1,0 +1,82 @@
+{
+  "slug": "webapp-testing",
+  "status": "draft",
+  "title": "webapp-testing Review: Short, Practical Browser Testing With Playwright",
+  "description": "We used Anthropic's webapp-testing skill to write and run browser tests against our live site. Its look-first, then-act method worked, and the tests caught a real problem. It has no path for when you can't start a local server, and its examples use Unix paths.",
+  "skillSlug": "webapp-testing",
+  "verdict": "Recommended",
+  "overallScore": 3.8,
+  "scores": {
+    "installation": 5,
+    "documentation": 4,
+    "depth": 4,
+    "maintenance": 3,
+    "platformSupport": 3
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "webapp testing skill playwright claude",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve developer-workflow skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. This run tested the live site, trustedskills.dev. One run is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "anthropics/skills@3337550",
+      "task": "Write and run browser tests against the live trustedskills.dev: the homepage loads with no console errors; a search for \"git\" returns results; a skill page shows an install command and its copy button works; the official-tier page lists skills; and Tab reaches the search box. No more than about 60 page loads.",
+      "outcome": "`npx skills add anthropics/skills --skill webapp-testing` installed it first time. The run took about seven minutes.\n\nThe skill tells you to write Python Playwright scripts, and to use its bundled `with_server.py` to start your app. Our copy of the repo had no installed packages, so there was no local server to start. The skill's decision tree has no branch for that, so the agent tested the live site with the skill's look-first, then-act method.\n\nIt wrote five scripts and took screenshots for each. All five passed in 9 page loads: no console errors on the homepage, 24 result cards on the first page for \"git\", a working copy button, 50 skills on the official-tier page, and the search box reached on the 13th Tab press.\n\nThe copy test also found a real problem. The command it copied pointed at an npm package under `@trustedskills` that has never existed. Our repo had already fixed this, but the live site was still running older code. We confirmed the live page still shows that command.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions. Python 3.13 with Playwright and headless Chromium, on Windows, against the live site."
+    }
+  ],
+  "summary": "webapp-testing is short and to the point: write plain Python Playwright scripts, wait for the page to settle, look at what rendered, then act. That method worked well on our site, and the tests found a real problem we then confirmed. It fits a local app better than a live one, it gives you nothing if you can't start a server, and its examples assume a Linux sandbox.",
+  "strengths": [
+    {
+      "title": "The right order of work",
+      "body": "Wait for the network to go quiet, take a screenshot or read the page, then pick selectors from what actually rendered. It avoids the usual flaky-selector mistakes."
+    },
+    {
+      "title": "Tests you keep",
+      "body": "The output is ordinary Playwright scripts plus screenshots. You can re-run them without the skill."
+    },
+    {
+      "title": "Found a real defect",
+      "body": "Checking what the copy button copied, not just that it clicked, exposed a dead install command on our live site."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "No path without a local server",
+      "body": "The decision tree covers static HTML, a server that is running, and one it can start. It says nothing about testing a deployed site, or what to do when the app can't run locally."
+    },
+    {
+      "title": "Unix-only examples",
+      "body": "The bundled examples write to paths like `/mnt/user-data/outputs/` and `/tmp/`, which don't exist on Windows."
+    },
+    {
+      "title": "Needs Python Playwright",
+      "body": "You need Python, the Playwright package and a browser download. The skill doesn't mention installing them."
+    },
+    {
+      "title": "Not recently changed",
+      "body": "The skill's folder was last changed in April 2026."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Checking a front-end change before you ship",
+      "body": "Start the dev server with the helper, run a short script, read the screenshot."
+    },
+    {
+      "title": "Smoke tests for key user paths",
+      "body": "Search, copy, navigation and keyboard reach are quick to script with it."
+    }
+  ],
+  "notFor": "Teams that already run a JavaScript Playwright suite. This skill writes Python.",
+  "links": [
+    { "label": "anthropics/skills repository", "href": "https://github.com/anthropics/skills" }
+  ]
+}

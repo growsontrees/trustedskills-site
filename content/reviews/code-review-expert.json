@@ -1,0 +1,82 @@
+{
+  "slug": "code-review-expert",
+  "status": "draft",
+  "title": "code-review-expert Review: Found Two Real Bugs in Our Own Recent Fixes",
+  "description": "We pointed sanyuan0704's code-review-expert at our last five commits. It found two real bugs that those commits had missed, and we confirmed both on the live site. It is built for reviewing uncommitted changes and has little to say about a commit range.",
+  "skillSlug": "code-review-expert",
+  "verdict": "Recommended",
+  "overallScore": 4,
+  "scores": {
+    "installation": 5,
+    "documentation": 4,
+    "depth": 5,
+    "maintenance": 2,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "code review skill claude code",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve developer-workflow skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "sanyuan0704/code-review-expert@08b6572",
+      "task": "Review the last five commits on main (25 files, about 220 lines added and 135 removed), in the skill's output format. Review only; no code changes.",
+      "outcome": "`npx skills add sanyuan0704/code-review-expert --skill code-review-expert` installed it first time. The run took about seven minutes.\n\nThe skill's workflow starts from `git diff` of your working tree. Ours was clean, and the skill only says to ask the user about a commit range, so the agent used the range diff as its input.\n\nIt worked through the skill's checklists (SOLID, removal candidates, security, code quality) and ranked findings P0 to P3. Its two top findings were both real bugs that the reviewed commits had set out to fix but missed in one place.\n\nFirst, the pagination links still end in a slash, while the site is set to no trailing slash. Every page-two click costs a redirect. We confirmed this on the live site: a page-two URL returns a 308 redirect.\n\nSecond, one category page still puts the site name in its title twice. One commit fixed this in three other files. We confirmed the live title reads \"DevOps & CI/CD Agent Skills | TrustedSkills | TrustedSkills\".\n\nThe agent also proved a new check in the diff works, by breaking the content on purpose, running the check, and restoring it.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit eca93fb."
+    }
+  ],
+  "summary": "code-review-expert gives a review real structure: severity levels with clear merge rules, and separate passes for design, dead code, security and quality, each backed by a checklist file. On our repo it did the most valuable thing a reviewer can do. It found two places where our own recent fixes were incomplete, and both were live on the site. It assumes you are reviewing uncommitted changes, and it hasn't changed in seven months.",
+  "strengths": [
+    {
+      "title": "Found what the author missed",
+      "body": "Both top findings were the same bug class that the commits under review had fixed elsewhere. That is exactly what a second reader is for."
+    },
+    {
+      "title": "Clear severity rules",
+      "body": "P0 blocks a merge, P1 should be fixed before merge, P2 can be a follow-up, P3 is optional. Findings arrive already sorted by what to do."
+    },
+    {
+      "title": "Checklists, not vibes",
+      "body": "Separate reference files for SOLID, removal planning, security and code quality keep each pass focused."
+    },
+    {
+      "title": "Review-only by default",
+      "body": "It doesn't change code unless you ask, which is the right default for a reviewer."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Built for uncommitted changes",
+      "body": "The workflow runs on `git diff` of your working tree. For a closed commit range it only says to ask the user, so the agent had to decide how to scope the review."
+    },
+    {
+      "title": "Heavy on design theory",
+      "body": "The SOLID pass suits class-based code. Much of our diff was config and page metadata, where it had little to say."
+    },
+    {
+      "title": "Not recently maintained",
+      "body": "The skill's folder was last changed in March 2026."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Reviewing your changes before a commit or PR",
+      "body": "That is the case its workflow is built around."
+    },
+    {
+      "title": "Checking a fix was applied everywhere",
+      "body": "Its search-related-code step is how it found the missed places."
+    }
+  ],
+  "notFor": "Security audits of risky code. It has a security pass, but a dedicated security review goes deeper.",
+  "links": [
+    { "label": "sanyuan0704/code-review-expert repository", "href": "https://github.com/sanyuan0704/code-review-expert" }
+  ]
+}

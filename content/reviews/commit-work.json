@@ -1,0 +1,82 @@
+{
+  "slug": "commit-work",
+  "status": "draft",
+  "title": "commit-work Review: A Short Checklist That Splits Commits Properly",
+  "description": "We handed softaworks' commit-work skill a working tree with two unrelated changes and no explanation. It found the boundary, made two clean commits, and ran the right test before each. It is short and does one job well.",
+  "skillSlug": "commit-work",
+  "verdict": "Recommended",
+  "overallScore": 3.8,
+  "scores": {
+    "installation": 5,
+    "documentation": 4,
+    "depth": 4,
+    "maintenance": 2,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "git commit skill claude code",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve developer-workflow skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "softaworks/agent-toolkit@3027f20",
+      "task": "Commit the uncommitted work in the repo, following the skill, with the smallest relevant check before each commit. The work came from two earlier sessions and was not described to the agent. Commit locally only.",
+      "outcome": "`npx skills add softaworks/agent-toolkit --skill commit-work` installed it first time. The run took about three minutes.\n\nThe working tree held two unrelated changes from other runs in this batch: a behaviour-preserving refactor of our safety checks, and a new validator warning with its tests. The agent was not told this.\n\nFollowing the skill's checklist, it read the status and diffs, decided the two were separate, and staged them by file. They touched different files, so the patch staging the skill suggests was not needed. Before each commit it wrote a one-line description of the change, as the skill asks, then ran the matching check: the 42 safety tests for the refactor, and the 7 new tests plus the validator for the feature.\n\nIt made two Conventional Commits with a body explaining what and why. The working tree ended clean. We checked the log: two commits, one file in the first and three in the second, with accurate messages.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo. Push disabled."
+    }
+  ],
+  "summary": "commit-work is a 55-line checklist, and every line earns its place. Inspect before staging, split unrelated work, review what is staged, describe the change in a sentence before writing the message, and run the smallest real check before moving on. Given a mixed working tree with no explanation, it made the right split and two clean, verified commits. It covers the commit and nothing after it.",
+  "strengths": [
+    {
+      "title": "Splits unrelated work",
+      "body": "It lists what to split by (feature vs refactor, tests vs code, dependency bumps vs behaviour). The agent separated two changes it had not been told about."
+    },
+    {
+      "title": "Describe before you write",
+      "body": "\"If you cannot describe it cleanly, the commit is probably too big.\" A simple test, and it is what confirmed the two changes were independent."
+    },
+    {
+      "title": "Verification per commit",
+      "body": "It asks for the smallest real check before moving on, so each commit is known-good on its own."
+    },
+    {
+      "title": "Safety checks on staged code",
+      "body": "Review the staged diff for secrets, debug logging and unrelated formatting changes before committing."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Stops at the commit",
+      "body": "Nothing on branches, pushing, pull requests or history clean-up."
+    },
+    {
+      "title": "Conventional Commits only",
+      "body": "It says Conventional Commits are required. If your repo uses another style, you have to override it."
+    },
+    {
+      "title": "Not recently maintained",
+      "body": "The skill's folder was last changed in January 2026. A checklist this simple ages well, but that is still eight months."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Ending an agent session",
+      "body": "Turn a messy working tree into commits someone can review."
+    },
+    {
+      "title": "Repos that use Conventional Commits",
+      "body": "It follows them without being asked."
+    }
+  ],
+  "notFor": "Pull request work. Pair it with a PR or review skill.",
+  "links": [
+    { "label": "softaworks/agent-toolkit repository", "href": "https://github.com/softaworks/agent-toolkit" }
+  ]
+}

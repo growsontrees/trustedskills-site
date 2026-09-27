@@ -1,0 +1,79 @@
+{
+  "slug": "claude-code-dev-workflow-skills",
+  "status": "draft",
+  "title": "The 12 Skills for a Claude Code Development Workflow, Tested",
+  "description": "One skill for each stage of a code change, from plan to release notes. We ran every one against a real task in our own codebase.",
+  "emoji": "🛠️",
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "targetKeyword": "best Claude Code skills for developers",
+  "curator": {
+    "name": "TrustedSkills Editorial",
+    "bio": "Picked and tested by the team that builds this site, on the code that runs it."
+  },
+  "intro": "Most lists of \"best Claude Code skills\" are ranked by install count. That tells you what is popular, not what helps. A code change goes through stages, and a skill that is excellent at one stage does nothing for the others.\n\nSo this list is a workflow: one skill per stage, in the order you reach for them. **Plan → isolate → test first → test in a browser → debug → refactor → review → security review → upgrade dependencies → commit → write release notes → document.**\n\nWe ran every pick against a real task on the codebase behind this site, a Next.js app with a 71 MB data file. Some did very well. Some are thin, and we say so in each entry. The verdict and score on each card come from that run.",
+  "criteria": "**How the twelve were chosen.** Each pick had to (1) be in this registry with an install command that worked on the day, (2) do one clearly defined job, and (3) cover a stage no other pick covers. Inside a stage we started from install count, then spread the picks across publishers: twelve skills from ten publishers.\n\n**The list was fixed before testing.** We did not drop a skill because it tested badly, or swap in a better one afterwards. That is why a few entries carry a \"Use With Caution\" verdict. If a stage has a better skill, a later update will say so and link the new review.\n\n**What we left out.**\n\n- **Language- and framework-specific skills** (Django TDD, Laravel, Spring Boot, .NET). Many are good. This list is for any stack.\n- **All-in-one suites.** Several collections bundle planning, testing and review. We picked one skill per stage so you can see which part does the work.\n- **Two skills for the same job.** There are dozens of code-review and TDD skills. One each is enough for a workflow.",
+  "evidenceNote": "**All twelve were hands-on tested by us, once each, on the same day and the same codebase.** Each skill was installed with the registry's own command. An agent then ran it on a real task in a private copy of this site's repository: planning a feature, fixing a broken lint command, reviewing recent commits, and so on. We checked each run's main claims ourselves, and each entry links to its full review.\n\nOne run on one codebase is one data point, not a benchmark. A skill that struggled here can do well on a different stack, and the reverse.",
+  "entries": [
+    {
+      "skillSlug": "planner",
+      "role": "Stage 1 — Plan",
+      "note": "Turns a request into sprints and atomic tasks, each with file paths and a way to check it. In our run its research step found existing code to reuse and a real risk. It expects a person to answer 5 to 10 questions before it starts, so it is best used interactively."
+    },
+    {
+      "skillSlug": "using-git-worktrees",
+      "role": "Stage 2 — Isolate the work",
+      "note": "Gives the agent its own worktree and branch, and runs the tests before any change. It won't create a worktree folder git might commit. Watch for one trap: its ignore check says \"not ignored\" until the folder exists."
+    },
+    {
+      "skillSlug": "test-driven-development",
+      "role": "Stage 3 — Write the test first",
+      "note": "The strongest skill in this list. It made the agent watch the test fail before writing code, and the resulting check found six real problems in our own content. Its short guide on writing good tests is worth reading on its own."
+    },
+    {
+      "skillSlug": "webapp-testing",
+      "role": "Stage 4 — Test in a real browser",
+      "note": "Plain Python Playwright scripts with a look-first, then-act method. Our tests caught a live install command that pointed at a package that doesn't exist. You need Python and Playwright installed, and its helper assumes it can start your app locally."
+    },
+    {
+      "skillSlug": "systematic-debugging",
+      "role": "Stage 5 — Debug",
+      "note": "No fix before a root cause. On our broken lint command it found the cause (a command removed in Next.js 16), then a second, hidden one behind it, and fixed both. It is the pick to reach for when the error message makes no sense."
+    },
+    {
+      "skillSlug": "refactor",
+      "role": "Stage 6 — Refactor",
+      "note": "A catalogue of code smells with the right rules: small steps, tests before and after. It steered the agent to real duplication, and all 42 tests stayed green. Its examples assume class-based code."
+    },
+    {
+      "skillSlug": "code-review-expert",
+      "role": "Stage 7 — Review",
+      "note": "Structured review with P0 to P3 severity and a checklist per pass. On our last five commits it found two places our own fixes had missed, and both were live on the site. It is built for reviewing uncommitted changes."
+    },
+    {
+      "skillSlug": "differential-review",
+      "role": "Stage 8 — Security review",
+      "note": "Trail of Bits' attacker-first method for reviewing a diff. On the code that downloads untrusted repositories for us, it found an uncapped decompression that could crash the job. Its patterns and examples are written for smart contracts, so the method does more of the work than the patterns do."
+    },
+    {
+      "skillSlug": "dependency-upgrade",
+      "role": "Stage 9 — Upgrade dependencies",
+      "note": "The weakest fit for its stage. The safe updates went through and the build passed, but the skill is a reference card of commands and config, not a method. With no baseline step, our run blamed the upgrade for a problem that was already there. Use it as a checklist next to the vendor's migration guide."
+    },
+    {
+      "skillSlug": "commit-work",
+      "role": "Stage 10 — Commit",
+      "note": "A short checklist that works. Given two unrelated changes and no explanation, it split them into two clean Conventional Commits and ran the right test before each."
+    },
+    {
+      "skillSlug": "changelog-generator",
+      "role": "Stage 11 — Release notes",
+      "note": "Readable notes, but the skill is mostly a description with one example. Nothing in it makes the agent check claims, and one line in our draft said more than the evidence showed. Always check the draft before it goes out."
+    },
+    {
+      "skillSlug": "create-readme",
+      "role": "Stage 12 — Document",
+      "note": "A 21-line prompt that still beat our near-empty README. It has no step to check the README against the code, and our draft recommended a command that fails. Run every command in the result before you commit it."
+    }
+  ]
+}

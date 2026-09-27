@@ -1,0 +1,78 @@
+{
+  "slug": "test-driven-development",
+  "status": "draft",
+  "title": "test-driven-development Review: Red First, Then Green, No Shortcuts",
+  "description": "We used obra's test-driven-development skill to add a real rule to our own build checks. It made the agent watch the test fail before writing code, and its short guide on good tests shaped the design. Its examples assume `npm test`, which our repo doesn't have.",
+  "skillSlug": "test-driven-development",
+  "verdict": "Highly Recommended",
+  "overallScore": 4.8,
+  "scores": {
+    "installation": 5,
+    "documentation": 5,
+    "depth": 5,
+    "maintenance": 5,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "test driven development skill claude code",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve developer-workflow skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "obra/superpowers@8ca22db",
+      "task": "Add a rule to the site's editorial validator, test first: a collection entry whose skill no longer installs cleanly must produce a warning (not an error) naming the skill and its install status. Node's built-in test runner only, no new dependencies, and the validator must still pass on the current content.",
+      "outcome": "`npx skills add obra/superpowers --skill test-driven-development` installed it first time. The run took about six minutes.\n\nThe agent wrote seven `node --test` cases against a module that did not exist yet, ran them, and saw them fail with a module-not-found error. That is the skill's required red step. It then wrote a small `installStatusWarning()` function, and all seven passed. Last, it wired the function into the validator as a warning.\n\nWe re-ran both checks ourselves. The tests pass 7 of 7. The validator still exits cleanly, and it now warns about six picks in our published SEO collection whose install commands no longer work. Those six were silent before.\n\nThe skill's bundled guide to good tests said to avoid mocks unless something is slow or external. Because of that, the new function takes a plain object and does not read the 71 MB skills index itself, which makes it cheap to test.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit eca93fb. Node 24, no network needed."
+    }
+  ],
+  "summary": "test-driven-development is the best-behaved skill in this batch. It won't let the agent skip the failing test, it tells it to run the whole suite before claiming done, and its bundled guide on writing good tests changed the design for the better. On our repo it produced a small, tested change that found six real problems in our own content. The one friction: its examples assume `npm test` exists.",
+  "strengths": [
+    {
+      "title": "The red step is enforced",
+      "body": "The agent wrote the tests, ran them, and recorded the failure before any implementation existed. The skill treats skipping that step as a failure, not a shortcut."
+    },
+    {
+      "title": "A useful companion guide",
+      "body": "The bundled `writing-good-tests.md` was the most practical part. Its advice on mocks led to a pure function that is easy to test, instead of one that reads a 71 MB file."
+    },
+    {
+      "title": "Honest about scope",
+      "body": "It says a green run of your own test file is not a green suite, and that any failure you see goes in your report by name, even one you did not cause."
+    },
+    {
+      "title": "Kept current",
+      "body": "The skill's folder was last changed eight days before our run."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Assumes a test script",
+      "body": "Its worked examples run `npm test`. Our repo has no `test` script, so the agent had to find the right command itself. The skill does say to use whatever the repo uses, but it gives no hint on how to find that."
+    },
+    {
+      "title": "Stops at the unit",
+      "body": "Checking that the validator itself behaved differently on real content came from our task, not from the skill."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Any change with a clear, checkable rule",
+      "body": "Validators, parsers and small pure functions are where test-first pays back fastest, and where this skill is strictest."
+    },
+    {
+      "title": "Teams that want the agent to prove its work",
+      "body": "The red-then-green record is evidence you can read afterwards, not a claim."
+    }
+  ],
+  "notFor": "Throwaway spikes, or changes where the only real test is a person looking at a screen.",
+  "links": [
+    { "label": "obra/superpowers repository", "href": "https://github.com/obra/superpowers" }
+  ]
+}

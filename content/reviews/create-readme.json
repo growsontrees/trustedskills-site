@@ -1,0 +1,74 @@
+{
+  "slug": "create-readme",
+  "status": "draft",
+  "title": "create-readme Review: A Better README Than We Had, With Two Slips",
+  "description": "We used GitHub's create-readme skill to write a README for our own repo from scratch. The result beat our near-empty README easily. The skill is 21 lines with no step that checks the README against the code, and the draft recommended a command that fails.",
+  "skillSlug": "create-readme",
+  "verdict": "Use With Caution",
+  "overallScore": 3.2,
+  "scores": {
+    "installation": 5,
+    "documentation": 2,
+    "depth": 3,
+    "maintenance": 2,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "create readme skill claude code",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve developer-workflow skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "github/awesome-copilot@6c4d33b",
+      "task": "Write a README for the repo as if none existed, without reading the existing README or CLAUDE.md first. Then compare the draft with them, and check every command and path in the draft against package.json and the file tree.",
+      "outcome": "`npx skills add github/awesome-copilot --skill create-readme` installed it first time. The run took about five minutes.\n\nThe skill is 21 lines: review the whole project, take inspiration from four linked READMEs, keep emoji low, skip licence and contributing sections, and use GitHub callout syntax. The agent explored the repo and wrote a 93-line README with setup steps, a scripts table, the build and deploy flow, and environment variables.\n\nThe existing README is three lines and an old rebuild timestamp, so the new one is a large improvement. The comparison also found a real error in our own agent notes: they say ESLint is ignored during builds, and the config has no such setting.\n\nThe skill has no verification step. The agent checked commands because our task told it to, and two slips still got through. The scripts table recommends `npm run lint`, which fails in this repo. It also leaves out `npm run check:safety`, the command that runs the project's safety-check tests. We confirmed both.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit eca93fb."
+    }
+  ],
+  "summary": "create-readme is a short prompt, not a process. It gives sensible style rules (be concise, skip licence and contributing sections, use callouts) and four example READMEs for inspiration. On our repo that was enough to replace a three-line README with a useful one. But nothing in the skill makes the agent check its claims against the code, and the draft still recommended a broken command and missed a test script. Check the result before you commit it.",
+  "strengths": [
+    {
+      "title": "Good style rules",
+      "body": "Concise, low emoji, no sections that belong in their own files, and GitHub callouts for warnings. The draft followed all of them."
+    },
+    {
+      "title": "A real improvement on a thin README",
+      "body": "Setup, scripts, build and deploy flow, environment variables and project structure, from a repo whose README had none of that."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "No verification step",
+      "body": "It says to review the project, not to check the README against it. Even with our task asking for checks, a failing command and a missing script got through."
+    },
+    {
+      "title": "Very thin",
+      "body": "21 lines. The structure comes from four external READMEs about Azure samples and small CLIs, which the agent has to fetch and adapt."
+    },
+    {
+      "title": "No guidance on a missing logo",
+      "body": "It says to use a logo if you find one. Our repo has only a social card image and an inline icon, and the skill says nothing about that case."
+    },
+    {
+      "title": "Not recently maintained",
+      "body": "The skill's folder was last changed in February 2026."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "A first README for a repo that has none",
+      "body": "It gets you a solid draft quickly. Then check every command in it yourself."
+    }
+  ],
+  "notFor": "Keeping an existing README accurate. It writes from scratch and doesn't check.",
+  "links": [
+    { "label": "github/awesome-copilot repository", "href": "https://github.com/github/awesome-copilot" }
+  ]
+}

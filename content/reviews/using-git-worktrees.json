@@ -1,0 +1,82 @@
+{
+  "slug": "using-git-worktrees",
+  "status": "draft",
+  "title": "using-git-worktrees Review: Careful Setup, With One Git Trap It Misses",
+  "description": "We used obra's using-git-worktrees skill to set up an isolated branch in our own repo. It checked for existing isolation, protected the repo from committing the worktree, and ran a baseline. Its ignore check gives a false result in one common case, and it has no clean-up step.",
+  "skillSlug": "using-git-worktrees",
+  "verdict": "Recommended",
+  "overallScore": 4,
+  "scores": {
+    "installation": 5,
+    "documentation": 4,
+    "depth": 3,
+    "maintenance": 4,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "git worktrees skill claude code",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve developer-workflow skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "obra/superpowers@8ca22db",
+      "task": "Set up an isolated workspace for a new branch `feat/reviewed-filter`, with the project setup and baseline checks the skill prescribes. The worktree had to stay inside the repo folder.",
+      "outcome": "`npx skills add obra/superpowers --skill using-git-worktrees` installed it first time. The run took about four minutes.\n\nThe skill first checks whether you are already in a worktree, and the check worked as written. It then says to prefer your agent's own worktree tool. Claude Code has one, but it places worktrees in a fixed folder, and our task needed them inside the repo, so we told the agent to use plain `git worktree add` instead. The skill has no guidance for that conflict.\n\nThe skill requires checking that `.worktrees/` is ignored by git before creating it. The agent added the rule and committed it, as the skill says. The skill's check command then reported \"not ignored\" anyway. We reproduced this in an empty repo: `git check-ignore -q .worktrees` returns \"not ignored\" while the folder does not exist yet, and \"ignored\" once it does. The agent worked around it.\n\nThe worktree was created on the new branch, `npm install` ran cleanly, and the project's own checks passed: the editorial validator, the 42 safety-check tests and a TypeScript check.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit eca93fb. Git for Windows."
+    }
+  ],
+  "summary": "using-git-worktrees does a narrow job carefully. It detects existing isolation, won't create a worktree folder git might commit, and insists on a green baseline before work starts. Two gaps showed on our repo: its own ignore check gives a false alarm before the folder exists, and it stops at \"ready\" with nothing on clean-up. It also tells you to prefer your agent's built-in worktree tool, even when that tool puts the worktree somewhere you didn't ask for.",
+  "strengths": [
+    {
+      "title": "Checks before it creates",
+      "body": "Step 0 detects an existing worktree, and even guards against the submodule case that looks like one."
+    },
+    {
+      "title": "Protects the repo",
+      "body": "It will not create a project-local worktree folder until git ignores it. That prevents committing a whole second copy of your repo by accident."
+    },
+    {
+      "title": "Green baseline first",
+      "body": "It makes the agent run the tests before any change, so a later failure can't be blamed on the new work by mistake."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "The ignore check can be wrong",
+      "body": "With a `.worktrees/` rule, `git check-ignore -q .worktrees` says \"not ignored\" until the folder exists. Following the skill literally leads to re-adding a rule that is already there."
+    },
+    {
+      "title": "No clean-up",
+      "body": "The skill ends at \"worktree ready\". Removing the worktree and branch afterwards is left to you, or to a separate skill in the same collection."
+    },
+    {
+      "title": "Built-in tool always wins",
+      "body": "It says to use your agent's own worktree tool if one exists, and skip its folder rules. It doesn't say what to do when that tool's location is wrong for the task."
+    },
+    {
+      "title": "Generic test command",
+      "body": "The baseline step lists `npm test` and similar. Our repo has none, so the agent had to find its real checks in package.json."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Agents starting feature work",
+      "body": "Use it before an agent touches code, so its changes can't disturb your working branch."
+    },
+    {
+      "title": "Running several agents in parallel",
+      "body": "One worktree each, each with its own green baseline."
+    }
+  ],
+  "notFor": "Quick one-file edits, where a branch is enough.",
+  "links": [
+    { "label": "obra/superpowers repository", "href": "https://github.com/obra/superpowers" }
+  ]
+}

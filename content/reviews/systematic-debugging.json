@@ -1,0 +1,78 @@
+{
+  "slug": "systematic-debugging",
+  "status": "draft",
+  "title": "systematic-debugging Review: Root Cause First, and It Found Two",
+  "description": "We gave obra's systematic-debugging skill a real broken command in our own repo. It found the cause, then found a second, hidden cause behind it, and fixed both without guessing. One of its phases doesn't fit a bug that comes from a vendor's breaking change.",
+  "skillSlug": "systematic-debugging",
+  "verdict": "Highly Recommended",
+  "overallScore": 4.6,
+  "scores": {
+    "installation": 5,
+    "documentation": 5,
+    "depth": 4,
+    "maintenance": 5,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-27",
+  "lastUpdated": "2026-09-27",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "systematic debugging skill claude code",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Part of a batch of twelve developer-workflow skills run on the same day against the same codebase: the TrustedSkills website repo, a Next.js 16 app. Each run worked in its own private copy of the repo. One run on one codebase is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-27",
+      "platform": "claudecode",
+      "skillVersion": "obra/superpowers@8ca22db",
+      "task": "Bug report: `npm run lint` fails with \"Invalid project directory provided, no such directory: <repo>\\lint\". Find the root cause and fix it. Done when `npm run lint` runs ESLint over the project and exits with a real lint result.",
+      "outcome": "`npx skills add obra/superpowers --skill systematic-debugging` installed it first time. The run took about eleven minutes.\n\nThe skill forbids fixes before the root cause is known, and the agent followed that. It traced the error into the Next.js command-line code. Next.js 16 removed the `next lint` command. The word `lint` no longer matches a command, so it falls through to the default `dev` command, which reads `lint` as a folder name. That explains the odd error message exactly.\n\nRemoving `next lint` was not enough. The installed `eslint-config-next` needs ESLint 9 or later, and the repo was still on ESLint 8 with an old-style config. The agent ran Next's own migration codemod, which changed the script to `eslint .`, moved to ESLint 9 and wrote a new flat config.\n\nWe re-ran `npm run lint` in the fixed copy. It now runs ESLint and reports 15 problems (6 errors, 9 warnings), exit code 1. That is a real lint result, which was the goal. Fixing those 15 was out of scope.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions, in a private clone of the TrustedSkills website repo at commit eca93fb. `npm ci` run inside the clone."
+    }
+  ],
+  "summary": "systematic-debugging is a discipline, not a bag of tips. It makes the agent reproduce, trace and explain a failure before touching code. On our broken lint command that paid off twice: the obvious cause (Next.js 16 dropped `next lint`) hid a second one (a version mismatch between ESLint and Next's lint config). Its one gap is that it looks for answers inside your codebase, and this bug came from outside it.",
+  "strengths": [
+    {
+      "title": "No guessing allowed",
+      "body": "The skill's first rule is no fixes without a root cause. The agent explained the strange \"no such directory\" message exactly before it changed anything."
+    },
+    {
+      "title": "Finds the second problem",
+      "body": "Because it verifies each step, the agent caught that the first fix alone would have failed on an ESLint version mismatch."
+    },
+    {
+      "title": "Useful bundled material",
+      "body": "Root-cause tracing, defence in depth and a script to find which test pollutes another come with it. They are worked techniques, not slogans."
+    },
+    {
+      "title": "Kept current",
+      "body": "The skill's folder was last changed eight days before our run."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Looks for answers in your code",
+      "body": "Its pattern phase starts with finding working examples in the same codebase. When a vendor removed a command in a major release, there is nothing in your code to compare against. The release notes are the evidence."
+    },
+    {
+      "title": "Light on package versions",
+      "body": "It lists new dependencies as a recent change to check, but says nothing about version requirements between packages. A peer-version mismatch explained the second failure here, and the agent found it by reading the error."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Bugs with a confusing symptom",
+      "body": "When the error message points somewhere odd, the reproduce-and-trace rule stops the agent patching the symptom."
+    },
+    {
+      "title": "Flaky tests",
+      "body": "The bundled test-polluter script and condition-based waiting guide are built for exactly that."
+    }
+  ],
+  "notFor": "Typos and one-line errors where the cause is on screen. The process is heavier than the fix.",
+  "links": [
+    { "label": "obra/superpowers repository", "href": "https://github.com/obra/superpowers" }
+  ]
+}
