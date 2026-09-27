@@ -217,7 +217,7 @@ export const DOC_ARTICLES: DocArticle[] = [
 <p>npx = vending machine. You get exactly what you need, right now, fresh. Nothing left behind.</p>
 
 <h2>What npx Actually Does (Step by Step)</h2>
-<p>When Claude Desktop runs <code>npx @trustedskills/weather-mcp</code>:</p>
+<p>When Claude Desktop runs <code>npx @modelcontextprotocol/server-memory</code>:</p>
 <ol>
   <li>Checks the local cache — is this package already downloaded?</li>
   <li>If not: fetches the latest version from npm</li>
@@ -228,12 +228,12 @@ export const DOC_ARTICLES: DocArticle[] = [
 
 <h2>Why <code>-y</code>? That One Flag Explained</h2>
 <p>Without <code>-y</code>, npx asks you to confirm before downloading a new package:</p>
-<pre><code class="language-bash">npx @trustedskills/weather-mcp
+<pre><code class="language-bash">npx @modelcontextprotocol/server-memory
 # Need to install the following packages:
-#   @trustedskills/weather-mcp
+#   @modelcontextprotocol/server-memory
 # Ok to proceed? (y)</code></pre>
 <p>That's fine when you're sitting at a terminal. But MCP servers launch automatically in the background — there's no human there to type "y". So you add <code>-y</code> and it skips the prompt entirely:</p>
-<pre><code class="language-bash">npx -y @trustedskills/weather-mcp
+<pre><code class="language-bash">npx -y @modelcontextprotocol/server-memory
 # Runs immediately. No questions asked.</code></pre>
 
 <div class="experience-callout">
@@ -244,16 +244,16 @@ export const DOC_ARTICLES: DocArticle[] = [
 <h2>A Real MCP Config, Dissected</h2>
 <pre><code class="language-json">{
   "mcpServers": {
-    "weather": {
+    "memory": {
       "command": "npx",
-      "args": ["-y", "@trustedskills/weather-mcp"]
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     }
   }
 }</code></pre>
 <ul>
   <li><code>"command": "npx"</code> — run npx</li>
   <li><code>"-y"</code> — auto-confirm any install prompt</li>
-  <li><code>"@trustedskills/weather-mcp"</code> — the package to run</li>
+  <li><code>"@modelcontextprotocol/server-memory"</code> — the package to run</li>
 </ul>
 <p>That's the whole thing. Three fields, one working MCP skill.</p>
 
@@ -314,13 +314,13 @@ export const DOC_ARTICLES: DocArticle[] = [
 <p>The <code>-y</code> flag auto-answers "yes" to any install confirmation prompts. Without it, npx waits for user input before downloading a new package — which breaks automated launches from Claude Desktop or Claude Code.</p>
 
 <h3>Can I pin a specific version with npx?</h3>
-<p>Yes. Use the <code>@version</code> syntax: <code>npx -y @trustedskills/weather-mcp@1.2.0</code>. Good for production setups where you want reproducible behaviour and don't want surprise updates.</p>
+<p>Yes. Use the <code>@version</code> syntax: <code>npx -y @modelcontextprotocol/server-memory@2026.8.31</code>. Good for production setups where you want reproducible behaviour and don't want surprise updates.</p>
 
 <h3>What if npx isn't found on my system?</h3>
 <p>Install or reinstall Node.js from nodejs.org. npx has been bundled with Node since v5.2.0. On Windows, make sure you checked "Add to PATH" during installation.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does npx download the package every single time?","acceptedAnswer":{"@type":"Answer","text":"No — it caches packages locally. Subsequent runs are fast. The cache expires periodically so you get updates automatically."}},{"@type":"Question","name":"What does npx -y do in an MCP config?","acceptedAnswer":{"@type":"Answer","text":"The -y flag auto-answers yes to install prompts. Without it, npx waits for user input, which breaks automated launches."}},{"@type":"Question","name":"Can I pin a specific version with npx?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use npx -y @trustedskills/weather-mcp@1.2.0 to pin to a specific version."}},{"@type":"Question","name":"What if npx isn't found on my system?","acceptedAnswer":{"@type":"Answer","text":"Install Node.js from nodejs.org. npx is bundled with Node since v5.2.0."}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does npx download the package every single time?","acceptedAnswer":{"@type":"Answer","text":"No — it caches packages locally. Subsequent runs are fast. The cache expires periodically so you get updates automatically."}},{"@type":"Question","name":"What does npx -y do in an MCP config?","acceptedAnswer":{"@type":"Answer","text":"The -y flag auto-answers yes to install prompts. Without it, npx waits for user input, which breaks automated launches."}},{"@type":"Question","name":"Can I pin a specific version with npx?","acceptedAnswer":{"@type":"Answer","text":"Yes. Use npx -y @modelcontextprotocol/server-memory@2026.8.31 to pin to a specific version."}},{"@type":"Question","name":"What if npx isn't found on my system?","acceptedAnswer":{"@type":"Answer","text":"Install Node.js from nodejs.org. npx is bundled with Node since v5.2.0."}}]}
 </script>
     `,
   },
@@ -348,22 +348,22 @@ export const DOC_ARTICLES: DocArticle[] = [
 
 <h2>The Architecture in One Diagram</h2>
 <pre><code class="language-bash">┌─────────────────────────────────────────────────────────┐
-│                    TrustedSkills Registry                │
-│  skill: weather · npm: @trustedskills/weather-mcp       │
+│                     An MCP server                       │
+│  e.g. a weather server (made-up example)                │
 └───────────────────────┬─────────────────────────────────┘
-                        │ (1) You discover the skill
+                        │ (1) You find a server
                         ▼
 ┌─────────────────────────────────────────────────────────┐
 │                  AI Client Config                        │
 │  { "mcpServers": { "weather": {                         │
 │      "command": "npx",                                  │
-│      "args": ["-y", "@trustedskills/weather-mcp"] } } } │
+│      "args": ["-y", "&lt;weather-server&gt;"] } } }           │
 └───────────────────────┬─────────────────────────────────┘
                         │ (2) Client starts MCP server as subprocess
                         ▼
 ┌─────────────────────────────────────────────────────────┐
 │                  MCP Server Process                      │
-│  npx @trustedskills/weather-mcp                         │
+│  npx -y &lt;weather-server&gt;                                │
 │  Listens on stdio · Exposes:                            │
 │    get_weather(location, units)                          │
 │    get_forecast(location, days)                          │
@@ -375,6 +375,7 @@ export const DOC_ARTICLES: DocArticle[] = [
 │  "What's the weather in Sydney?"                        │
 │  → calls get_weather({ location: "Sydney" })            │
 └─────────────────────────────────────────────────────────┘</code></pre>
+<p>The weather server here is a made-up example to show the flow. It is not a package you can install.</p>
 
 <div class="experience-callout">
   <div class="experience-label">🔬 From the field</div>
@@ -384,7 +385,7 @@ export const DOC_ARTICLES: DocArticle[] = [
 <h2>The Full Lifecycle, Step by Step</h2>
 
 <h3>Step 1: Discovery</h3>
-<p>You browse TrustedSkills, find a skill that does what you need. Each listing shows you the tools it exposes and the exact config JSON to copy.</p>
+<p>You find an MCP server that does what you need. Its README gives the config JSON to copy. (Most listings on TrustedSkills are SKILL.md skills, not MCP servers. Those install with the skills CLI command on the skill page and need no MCP config.)</p>
 
 <h3>Step 2: Configuration</h3>
 <p>Paste that JSON into your AI client's config file. For Claude Desktop it's <code>claude_desktop_config.json</code>. The config just tells the client: "when you start up, run this command."</p>
@@ -555,26 +556,26 @@ export const DOC_ARTICLES: DocArticle[] = [
 <p>Here's what the config looks like with one skill added:</p>
 <pre><code class="language-json">{
   "mcpServers": {
-    "weather": {
+    "memory": {
       "command": "npx",
-      "args": ["-y", "@trustedskills/weather-mcp"]
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     }
   }
 }</code></pre>
 <p>Adding more skills? Just add them inside <code>mcpServers</code>, separated by commas:</p>
 <pre><code class="language-json">{
   "mcpServers": {
-    "weather": {
+    "memory": {
       "command": "npx",
-      "args": ["-y", "@trustedskills/weather-mcp"]
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     },
-    "calculator": {
+    "sequential-thinking": {
       "command": "npx",
-      "args": ["-y", "@trustedskills/calculator-mcp"]
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
     }
   }
 }</code></pre>
-<p>Every skill's page on TrustedSkills has a "MCP Config" tab with the exact snippet to paste. You don't have to type it manually.</p>
+<p>Copy the config block from the MCP server's own README. Skills listed on TrustedSkills are mostly SKILL.md skills, not MCP servers. They install with the skills CLI command shown on the skill page, not with this file.</p>
 
 <h2>Step 4: Save and Restart</h2>
 <ol>
@@ -697,9 +698,9 @@ export const DOC_ARTICLES: DocArticle[] = [
 <h2>Step 3: Add Your Skill</h2>
 <pre><code class="language-json">{
   "mcpServers": {
-    "weather": {
+    "memory": {
       "command": "npx",
-      "args": ["-y", "@trustedskills/weather-mcp"]
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     }
   }
 }</code></pre>
@@ -713,9 +714,9 @@ export const DOC_ARTICLES: DocArticle[] = [
 # C:\Program Files\nodejs\npx.cmd  ← use this full path</code></pre>
 <pre><code class="language-json">{
   "mcpServers": {
-    "weather": {
+    "memory": {
       "command": "C:\\\\Program Files\\\\nodejs\\\\npx.cmd",
-      "args": ["-y", "@trustedskills/weather-mcp"]
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     }
   }
 }</code></pre>
@@ -814,9 +815,9 @@ nano ~/.config/Claude/claude_desktop_config.json</code></pre>
 
 <pre><code class="language-json">{
   "mcpServers": {
-    "weather": {
+    "memory": {
       "command": "npx",
-      "args": ["-y", "@trustedskills/weather-mcp"]
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     }
   }
 }</code></pre>
@@ -848,9 +849,9 @@ nano ~/.config/Claude/claude_desktop_config.json</code></pre>
 # /home/yourname/.nvm/versions/node/v20.11.0/bin/npx</code></pre>
 <pre><code class="language-json">{
   "mcpServers": {
-    "weather": {
+    "memory": {
       "command": "/home/yourname/.nvm/versions/node/v20.11.0/bin/npx",
-      "args": ["-y", "@trustedskills/weather-mcp"]
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     }
   }
 }</code></pre>
@@ -904,7 +905,7 @@ nano ~/.config/Claude/claude_desktop_config.json</code></pre>
 
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
-  <p>Install the Claude Code extension from VS Code marketplace, then add skills to <code>~/.claude/settings.json</code> (global) or <code>.claude/settings.json</code> in your project. Use <code>claude mcp add weather -- npx -y @trustedskills/weather-mcp</code> to skip manual JSON editing. Run <code>/tools</code> inside Claude to verify.</p>
+  <p>Install the Claude Code extension from VS Code marketplace, then add skills to <code>~/.claude/settings.json</code> (global) or <code>.claude/settings.json</code> in your project. Use <code>claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory</code> to skip manual JSON editing. Run <code>/tools</code> inside Claude to verify.</p>
 </div>
 
 <p class="article-intro">When I switched from using Claude Desktop to Claude Code for development work, the biggest surprise was how much better the MCP integration is for coding workflows. Files, terminals, and tools — all in one place. Setting it up took me about five minutes once I understood where the config lives.</p>
@@ -963,10 +964,10 @@ nano ~/.config/Claude/claude_desktop_config.json</code></pre>
 npm install -g @anthropic-ai/claude-code
 
 # Add a skill globally
-claude mcp add weather -- npx -y @trustedskills/weather-mcp
+claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory
 
 # Add to current project only
-claude mcp add weather --project -- npx -y @trustedskills/weather-mcp
+claude mcp add --scope project memory -- npx -y @modelcontextprotocol/server-memory
 
 # See what's installed
 claude mcp list</code></pre>
@@ -974,9 +975,9 @@ claude mcp list</code></pre>
 <h3>Method B: Edit the JSON directly</h3>
 <pre><code class="language-json">{
   "mcpServers": {
-    "weather": {
+    "memory": {
       "command": "npx",
-      "args": ["-y", "@trustedskills/weather-mcp"]
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     }
   }
 }</code></pre>
@@ -1071,14 +1072,14 @@ claude                # start a session
 
 <pre><code class="language-json">{
   "mcpServers": {
-    "weather": {
+    "memory": {
       "command": "npx",
-      "args": ["-y", "@trustedskills/weather-mcp"]
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     },
-    "web-search": {
+    "brave-search": {
       "command": "npx",
-      "args": ["-y", "@trustedskills/web-search-mcp"],
-      "env": { "SEARCH_API_KEY": "your-personal-key" }
+      "args": ["-y", "@brave/brave-search-mcp-server"],
+      "env": { "BRAVE_API_KEY": "your-personal-key" }
     }
   }
 }</code></pre>
@@ -1100,15 +1101,15 @@ claude                # start a session
 <h3>Project config example</h3>
 <pre><code class="language-json">{
   "mcpServers": {
-    "postgres": {
+    "brave-search": {
       "command": "npx",
-      "args": ["-y", "@trustedskills/postgres-mcp"],
-      "env": { "DATABASE_URL": "$&#123;DATABASE_URL&#125;" }
+      "args": ["-y", "@brave/brave-search-mcp-server"],
+      "env": { "BRAVE_API_KEY": "$&#123;BRAVE_API_KEY&#125;" }
     }
   }
 }</code></pre>
 
-<p>Each developer sets their own <code>DATABASE_URL</code> in their shell or a gitignored <code>.env</code> file. The config commits safely — no actual credentials in the repo.</p>
+<p>Each developer sets their own <code>BRAVE_API_KEY</code> in their shell or a gitignored <code>.env</code> file. The config commits safely — no actual credentials in the repo.</p>
 
 <div class="warning-box">
   <strong>⚠️ Don't commit secrets:</strong> Once a key is in git history, it's compromised — even if you delete it later. Always use <code>$&#123;VAR_NAME&#125;</code> references and set the actual values locally. Add <code>.env</code> to your <code>.gitignore</code>.
@@ -1152,10 +1153,10 @@ claude                # start a session
 <p>Yes — use <code>$&#123;VAR_NAME&#125;</code> references and keep actual values in your local shell environment or a gitignored <code>.env</code> file. The config file itself contains no secrets.</p>
 
 <h3>How do I add a project-scoped skill via the CLI?</h3>
-<p>Use the <code>--project</code> flag: <code>claude mcp add my-tool --project -- npx -y @package/name</code>. This writes to <code>.claude/settings.json</code> in your current directory.</p>
+<p>Use <code>--scope project</code>: <code>claude mcp add --scope project my-tool -- npx -y @package/name</code>. This writes to <code>.mcp.json</code> in your project root, which you can commit.</p>
 
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What happens if the same skill is in both global and project config?","acceptedAnswer":{"@type":"Answer","text":"Project config takes precedence when you're in that project."}},{"@type":"Question","name":"Can I commit project config without exposing secrets?","acceptedAnswer":{"@type":"Answer","text":"Yes — use $&#123;VAR_NAME&#125; references. Set actual values in your local shell or a gitignored .env file."}},{"@type":"Question","name":"How do I add a project-scoped skill via CLI?","acceptedAnswer":{"@type":"Answer","text":"claude mcp add my-tool --project -- npx -y @package/name"}}]}
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What happens if the same skill is in both global and project config?","acceptedAnswer":{"@type":"Answer","text":"Project config takes precedence when you're in that project."}},{"@type":"Question","name":"Can I commit project config without exposing secrets?","acceptedAnswer":{"@type":"Answer","text":"Yes — use $&#123;VAR_NAME&#125; references. Set actual values in your local shell or a gitignored .env file."}},{"@type":"Question","name":"How do I add a project-scoped skill via CLI?","acceptedAnswer":{"@type":"Answer","text":"claude mcp add --scope project my-tool -- npx -y @package/name"}}]}
 </script>
     `,
   },
@@ -1176,7 +1177,7 @@ claude                # start a session
 
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
-  <p>Run <code>claude mcp add weather -- npx -y @trustedskills/weather-mcp</code> — done. Or edit <code>~/.claude/settings.json</code> manually. If you're using nvm and Claude can't find npx, use the full path from <code>which npx</code>.</p>
+  <p>Run <code>claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory</code> — done. Or edit <code>~/.claude/settings.json</code> manually. If you're using nvm and Claude can't find npx, use the full path from <code>which npx</code>.</p>
 </div>
 
 <p class="article-intro">When I set this up on my Mac, I used the CLI method and had a working skill in about 45 seconds. The manual method is also fine — good to know for when you want to add environment variables or tweak things the CLI doesn't expose easily.</p>
@@ -1189,19 +1190,19 @@ claude                # start a session
 
 <h2>Method 1: CLI (Recommended)</h2>
 <pre><code class="language-bash"># Global — available in every project
-claude mcp add weather -- npx -y @trustedskills/weather-mcp
+claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory
 
 # Project-scoped — current directory only
-claude mcp add weather --project -- npx -y @trustedskills/weather-mcp
+claude mcp add --scope project memory -- npx -y @modelcontextprotocol/server-memory
 
 # With an env variable (API key, etc.)
-claude mcp add my-api -e API_KEY=yourkey -- npx -y @trustedskills/my-api-mcp
+claude mcp add --scope user brave-search -e BRAVE_API_KEY=yourkey -- npx -y @brave/brave-search-mcp-server
 
 # See what's installed
 claude mcp list
 
 # Remove something
-claude mcp remove weather</code></pre>
+claude mcp remove memory</code></pre>
 
 <h2>Method 2: Manual Config Edit</h2>
 <pre><code class="language-bash">mkdir -p ~/.claude
@@ -1211,9 +1212,9 @@ open -e ~/.claude/settings.json  # TextEdit (use Format → Plain Text first)</c
 
 <pre><code class="language-json">{
   "mcpServers": {
-    "weather": {
+    "memory": {
       "command": "npx",
-      "args": ["-y", "@trustedskills/weather-mcp"]
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     }
   }
 }</code></pre>
@@ -1226,9 +1227,9 @@ which npx
 
 <pre><code class="language-json">{
   "mcpServers": {
-    "weather": {
+    "memory": {
       "command": "/Users/yourname/.nvm/versions/node/v20.11.0/bin/npx",
-      "args": ["-y", "@trustedskills/weather-mcp"]
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     }
   }
 }</code></pre>
@@ -1278,7 +1279,7 @@ claude            # start a session
 
 <div class="tldr-box">
   <div class="tldr-label">⚡ Quick Answer</div>
-  <p>Open PowerShell and run <code>claude mcp add weather -- npx -y @trustedskills/weather-mcp</code>. Or edit <code>%USERPROFILE%\\.claude\\settings.json</code> manually. If npx isn't found, get the full path with <code>where npx</code> and use that.</p>
+  <p>Open PowerShell and run <code>claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory</code>. Or edit <code>%USERPROFILE%\\.claude\\settings.json</code> manually. If npx isn't found, get the full path with <code>where npx</code> and use that.</p>
 </div>
 
 <p class="article-intro">Setting this up on Windows is straightforward once you know where the config lives and how to handle the occasional "npx not found" situation. Here's exactly what to do.</p>
@@ -1291,13 +1292,13 @@ claude            # start a session
 
 <h2>Method 1: CLI</h2>
 <pre><code class="language-bash"># Add a skill globally
-claude mcp add weather -- npx -y @trustedskills/weather-mcp
+claude mcp add --scope user memory -- npx -y @modelcontextprotocol/server-memory
 
 # List installed skills
 claude mcp list
 
 # Remove
-claude mcp remove weather</code></pre>
+claude mcp remove memory</code></pre>
 
 <h2>Method 2: Manual Config</h2>
 <p>Config location on Windows:</p>
@@ -1308,9 +1309,9 @@ code $env:USERPROFILE\.claude\settings.json</code></pre>
 
 <pre><code class="language-json">{
   "mcpServers": {
-    "weather": {
+    "memory": {
       "command": "npx",
-      "args": ["-y", "@trustedskills/weather-mcp"]
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     }
   }
 }</code></pre>
@@ -1322,9 +1323,9 @@ Get-Command npx | Select-Object -ExpandProperty Source
 
 <pre><code class="language-json">{
   "mcpServers": {
-    "weather": {
+    "memory": {
       "command": "C:\\\\Program Files\\\\nodejs\\\\npx.cmd",
-      "args": ["-y", "@trustedskills/weather-mcp"]
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     }
   }
 }</code></pre>
@@ -1397,9 +1398,9 @@ code ~/.cursor/mcp.json</code></pre>
 
 <pre><code class="language-json">{
   "mcpServers": {
-    "weather": {
+    "memory": {
       "command": "npx",
-      "args": ["-y", "@trustedskills/weather-mcp"]
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     }
   }
 }</code></pre>
@@ -1407,14 +1408,14 @@ code ~/.cursor/mcp.json</code></pre>
 <h3>Multiple skills</h3>
 <pre><code class="language-json">{
   "mcpServers": {
-    "weather": {
+    "memory": {
       "command": "npx",
-      "args": ["-y", "@trustedskills/weather-mcp"]
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     },
-    "github": {
+    "brave-search": {
       "command": "npx",
-      "args": ["-y", "@trustedskills/github-mcp"],
-      "env": { "GITHUB_TOKEN": "your-token" }
+      "args": ["-y", "@brave/brave-search-mcp-server"],
+      "env": { "BRAVE_API_KEY": "your-key" }
     }
   }
 }</code></pre>
@@ -1503,9 +1504,9 @@ code "$env:USERPROFILE\.cursor\mcp.json"</code></pre>
 
 <pre><code class="language-json">{
   "mcpServers": {
-    "weather": {
+    "memory": {
       "command": "npx",
-      "args": ["-y", "@trustedskills/weather-mcp"]
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     }
   }
 }</code></pre>
@@ -1517,9 +1518,9 @@ Get-Command npx | Select-Object -ExpandProperty Source
 
 <pre><code class="language-json">{
   "mcpServers": {
-    "weather": {
+    "memory": {
       "command": "C:\\\\Program Files\\\\nodejs\\\\npx.cmd",
-      "args": ["-y", "@trustedskills/weather-mcp"]
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
     }
   }
 }</code></pre>
@@ -1537,9 +1538,8 @@ Get-Command npx | Select-Object -ExpandProperty Source
 <h2>Verifying It Works</h2>
 <p>Open Cursor Chat (Ctrl+L) and ask: <em>"What tools do you have?"</em></p>
 
-<div class="experience-callout">
-  <div class="experience-label">🔬 From the field</div>
-  <p>On a Windows machine managed by corporate IT, npx was installed but blocked from running in certain execution contexts. We worked around it by installing the skill globally first (<code>npm install -g @trustedskills/weather-mcp</code>) and then using the installed binary name directly as the command instead of npx. Not pretty, but it worked.</p>
+<div class="tip-box">
+  <strong>💡 If IT policy blocks npx:</strong> install the server globally first (<code>npm install -g @modelcontextprotocol/server-memory</code>), then use its command name (<code>mcp-server-memory</code>) as the <code>"command"</code> instead of npx.
 </div>
 
 <div class="tip-box">
@@ -1614,7 +1614,7 @@ Get-Command npx | Select-Object -ExpandProperty Source
     <tbody>
       <tr><td><strong>OpenClaw</strong></td><td><code>openclaw skills install weather</code></td><td>No — automatic</td><td>No</td></tr>
       <tr><td>Claude Desktop</td><td>Edit claude_desktop_config.json</td><td>Yes — manual JSON</td><td>Yes — full restart</td></tr>
-      <tr><td>Claude Code</td><td><code>claude mcp add weather -- npx -y ...</code></td><td>No — CLI handles it</td><td>No — auto-reload</td></tr>
+      <tr><td>Claude Code</td><td><code>claude mcp add memory -- npx -y ...</code></td><td>No — CLI handles it</td><td>No — auto-reload</td></tr>
       <tr><td>Cursor</td><td>Edit ~/.cursor/mcp.json</td><td>Yes — manual JSON</td><td>Yes — reload</td></tr>
     </tbody>
   </table>
@@ -1928,16 +1928,16 @@ openclaw skills install weather --project</code></pre>
 <h3>Project config (safe to commit):</h3>
 <pre><code class="language-json">{
   "mcpServers": {
-    "postgres": {
+    "brave-search": {
       "command": "npx",
-      "args": ["-y", "@trustedskills/postgres-mcp"],
-      "env": { "DATABASE_URL": "$&#123;DATABASE_URL&#125;" }
+      "args": ["-y", "@brave/brave-search-mcp-server"],
+      "env": { "BRAVE_API_KEY": "$&#123;BRAVE_API_KEY&#125;" }
     }
   }
 }</code></pre>
 
 <h3>Each developer's local .env (NOT committed):</h3>
-<pre><code class="language-bash">DATABASE_URL=postgresql://localhost:5432/myapp_dev</code></pre>
+<pre><code class="language-bash">BRAVE_API_KEY=your-own-key</code></pre>
 
 <div class="warning-box">
   <strong>⚠️ Add .env to .gitignore right now:</strong> If you're starting a new project, add <code>.env</code> to your <code>.gitignore</code> before you create the file. It's much easier than trying to scrub it from history later.

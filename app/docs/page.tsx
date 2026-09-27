@@ -16,7 +16,7 @@ const PLATFORM_CARDS = [
     id: 'claude-desktop',
     icon: platformIcon('claude'),
     title: 'Claude Desktop',
-    desc: 'The chat app — install skills via claude_desktop_config.json',
+    desc: 'The chat app — add MCP servers via claude_desktop_config.json',
     links: [
       { label: 'Mac', href: '/docs/claude-desktop/mac' },
       { label: 'Windows', href: '/docs/claude-desktop/windows' },
@@ -59,10 +59,10 @@ const PLATFORM_CARDS = [
 ];
 
 const QUICK_REFERENCE = [
-  { platform: 'OpenClaw',     cmd: 'openclaw skills install <slug>',                                          desc: 'Install a skill' },
-  { platform: 'OpenClaw',     cmd: 'openclaw skills list',                                                    desc: 'List installed skills' },
-  { platform: 'Claude Code',  cmd: 'claude mcp add <name> -- npx -y @trustedskills/<slug>-mcp',              desc: 'Add via Claude Code CLI' },
-  { platform: 'MCP / Cursor', cmd: '# Paste JSON config block from skill\'s MCP tab',                        desc: 'Use JSON config tab on skill page' },
+  { platform: 'Any agent',   cmd: 'npx skills add <owner>/<repo> --skill <name>',                  desc: 'Install a SKILL.md skill' },
+  { platform: 'One agent',   cmd: 'npx skills add <owner>/<repo> --skill <name> -a claude-code',   desc: 'Install for one agent only' },
+  { platform: 'Global',      cmd: 'npx skills add <owner>/<repo> --skill <name> -g',               desc: 'Install for your user, not this project' },
+  { platform: 'Installed',   cmd: 'npx skills list',                                               desc: 'List installed skills' },
 ];
 
 export default function DocsPage() {
@@ -109,16 +109,19 @@ export default function DocsPage() {
       {/* MCP / Claude Desktop Info Box */}
       <div className="bg-blue-950/40 border border-accent-800/60 rounded-xl p-6 mb-10">
         <h2 className="font-semibold text-blue-200 mb-3 flex items-center gap-2">
-          <BookOpen className="h-4 w-4" /> Claude Desktop / MCP Integration
+          <BookOpen className="h-4 w-4" /> Skills vs MCP servers
         </h2>
         <div className="space-y-3 text-sm text-blue-200/80">
           <p>
-            To install a TrustedSkills skill in Claude Desktop, use the{' '}
-            <strong className="text-blue-200">MCP tab</strong> on any skill&apos;s detail page — it shows the exact JSON config block to paste into your{' '}
-            <code className="bg-accent-950/40 px-1.5 py-0.5 rounded font-mono">claude_desktop_config.json</code>.
+            Most skills on TrustedSkills are SKILL.md skills. Install one with the{' '}
+            <code className="bg-accent-950/40 px-1.5 py-0.5 rounded font-mono">npx skills add</code> command on its page. It needs no JSON config.
           </p>
-          <div className="bg-blue-950/60 border border-accent-800/40 rounded-xl p-4 font-mono text-xs text-blue-300">
-            {`// claude_desktop_config.json — example\n{\n  "mcpServers": {\n    "weather": {\n      "command": "npx",\n      "args": ["-y", "@trustedskills/weather-mcp"]\n    }\n  }\n}`}
+          <p>
+            An MCP server is different. You add it to your client&apos;s config file, such as{' '}
+            <code className="bg-accent-950/40 px-1.5 py-0.5 rounded font-mono">claude_desktop_config.json</code>. Copy the block from the server&apos;s own README. For example:
+          </p>
+          <div className="bg-blue-950/60 border border-accent-800/40 rounded-xl p-4 font-mono text-xs text-blue-300 whitespace-pre overflow-x-auto">
+            {`// claude_desktop_config.json\n{\n  "mcpServers": {\n    "memory": {\n      "command": "npx",\n      "args": ["-y", "@modelcontextprotocol/server-memory"]\n    }\n  }\n}`}
           </div>
         </div>
       </div>

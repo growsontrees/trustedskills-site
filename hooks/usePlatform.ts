@@ -85,7 +85,7 @@ export function supportsInstallPlatform(platforms: string[] = [], platform: Plat
  *
  * Only commands that exist are returned. SKILL.md skills get the skills CLI,
  * aimed at the reader's agent. Anything else gets the command the registry
- * recorded. This used to generate `@trustedskills/<slug>` npm packages and
+ * recorded. This used to generate npm package names under a TrustedSkills scope and
  * `claude mcp add` lines for every skill; no such package has ever been
  * published, so every one of those commands failed.
  */
