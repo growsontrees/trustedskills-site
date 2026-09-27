@@ -18,6 +18,7 @@ import { SafetyPanel } from "../../../components/SafetyPanel";
 import { getSafetyCheckList, getSafetyReport } from "../../../lib/safety";
 import { getReviewForSkill } from "../../../lib/reviews";
 import { getCollectionsForSkill } from "../../../lib/collections";
+import { installIsBroken } from "../../../lib/skill-config";
 import type { PlatformKey } from "../../../hooks/usePlatform";
 import type { Metadata } from "next";
 import {
@@ -252,6 +253,10 @@ export default async function SkillDetailPage({ params }: Props) {
             platforms={skill.platforms || []}
             preferredPlatform={skill.preferredPlatform as PlatformKey | undefined}
             installOverrides={skill.installOverrides}
+            installStatus={skill.install_status}
+            installName={skill.install_name}
+            installReason={skill.install_reason}
+            installCheckedAt={skill.install_checked_at}
           />
 
           {/* ── Provenance ──────────────────────────────────────────────
@@ -532,7 +537,7 @@ export default async function SkillDetailPage({ params }: Props) {
             ) : null}
           </Panel>
 
-          {skill.platforms?.length > 0 && (
+          {skill.platforms?.length > 0 && !installIsBroken(skill) && (
             <Panel>
               <Eyebrow>Install snippets available for</Eyebrow>
               <div className="mt-2.5 flex flex-wrap gap-1.5">

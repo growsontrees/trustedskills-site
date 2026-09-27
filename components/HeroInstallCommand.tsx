@@ -5,22 +5,19 @@ import { usePlatform, getPlatformInstall } from "../hooks/usePlatform";
 import { Check, Copy } from "./icons";
 import { cx } from "./ui";
 
-const EXAMPLE_SLUG = "weather";
-const EXAMPLE_REPO = "https://github.com/trustedskills/weather";
-const FALLBACK_CMD = `openclaw skills install ${EXAMPLE_SLUG}`;
+// A real listing whose command was installed end to end on 2026-09-27.
+const EXAMPLE_CMD = "npx skills add coreyhaines31/marketingskills --skill seo-audit";
 
 /**
  * A worked example of the install command, following the reader's chosen
- * platform. Server-renders the OpenClaw form so there's something concrete
+ * platform. Server-renders the plain form so there's something concrete
  * above the fold before hydration.
  */
 export function HeroInstallCommand() {
   const { platform, mounted } = usePlatform();
   const [copied, setCopied] = useState(false);
 
-  const install = getPlatformInstall(EXAMPLE_SLUG, FALLBACK_CMD, EXAMPLE_REPO, platform, ["openclaw"]);
-  const isConfig = install.isJson || install.isComingSoon;
-  const display = mounted && !isConfig ? install.cmd : FALLBACK_CMD;
+  const display = mounted ? getPlatformInstall(EXAMPLE_CMD, platform).cmd : EXAMPLE_CMD;
 
   function handleCopy() {
     navigator.clipboard.writeText(display);

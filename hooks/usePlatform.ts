@@ -51,141 +51,55 @@ export function usePlatform() {
   return { platform, setPlatform, mounted };
 }
 
-/** Returns the install command/config for a skill on a given platform. */
+/**
+ * Agent ids the `skills` CLI accepts after `-a`, for the platforms it installs
+ * into. The CLI copies a SKILL.md into that agent's skills folder.
+ */
+export const SKILLS_CLI_AGENTS: Partial<Record<PlatformKey, string>> = {
+  claudecode: "claude-code",
+  cursor: "cursor",
+  codex: "codex",
+  opencode: "opencode",
+  openclaw: "openclaw",
+};
+
+/** `npx skills add owner/repo --skill name`: a SKILL.md skill, installed by the skills CLI. */
+export function isSkillsCliCommand(installCmd: string): boolean {
+  return /^npx skills add \S+/.test(installCmd.trim());
+}
+
+/** The skills CLI command, aimed at one agent when the platform is one it supports. */
+export function skillsCliCommand(installCmd: string, platform: PlatformKey | null): string {
+  const agent = platform ? SKILLS_CLI_AGENTS[platform] : undefined;
+  return agent ? `${installCmd} -a ${agent}` : installCmd;
+}
+
 export function supportsInstallPlatform(platforms: string[] = [], platform: PlatformKey | null): boolean {
   if (!platform) return true;
   if (platform === "openclaw") return true;
   return platforms.includes(platform);
 }
 
+/**
+ * The one-line install command to copy for a skill on the reader's platform.
+ *
+ * Only commands that exist are returned. SKILL.md skills get the skills CLI,
+ * aimed at the reader's agent. Anything else gets the command the registry
+ * recorded. This used to generate `@trustedskills/<slug>` npm packages and
+ * `claude mcp add` lines for every skill; no such package has ever been
+ * published, so every one of those commands failed.
+ */
 export function getPlatformInstall(
-  slug: string,
   installCmd: string,
-  repoUrl: string,
-  platform: PlatformKey | null,
-  platforms: string[] = []
-): { label: string; cmd: string; isJson: boolean; lang: string; isComingSoon?: boolean; isFallback?: boolean } {
-  if (!supportsInstallPlatform(platforms, platform)) {
+  platform: PlatformKey | null
+): { label: string; cmd: string; isFallback: boolean } {
+  if (isSkillsCliCommand(installCmd)) {
+    const agent = platform ? SKILLS_CLI_AGENTS[platform] : undefined;
     return {
-      label: "OpenClaw",
-      cmd: installCmd,
-      isJson: false,
-      lang: "bash",
-      isFallback: true,
+      label: agent && platform ? PLATFORM_LABELS[platform] : "skills CLI",
+      cmd: skillsCliCommand(installCmd, platform),
+      isFallback: Boolean(platform) && !agent,
     };
   }
-
-  switch (platform) {
-    case "mcp":
-      return {
-        label: "MCP (generic)",
-        cmd: JSON.stringify(
-          {
-            mcpServers: {
-              [slug]: {
-                command: "npx",
-                args: ["-y", `@trustedskills/${slug}`],
-              },
-            },
-          },
-          null,
-          2
-        ),
-        isJson: true,
-        lang: "json",
-      };
-    case "cursor":
-      return {
-        label: "Cursor / VS Code",
-        cmd: JSON.stringify(
-          {
-            mcp: {
-              servers: {
-                [slug]: {
-                  command: "npx",
-                  args: ["-y", `@trustedskills/${slug}`],
-                },
-              },
-            },
-          },
-          null,
-          2
-        ),
-        isJson: true,
-        lang: "json",
-      };
-    case "claude":
-      return {
-        label: "Claude Desktop",
-        cmd: JSON.stringify(
-          {
-            mcpServers: {
-              [slug]: {
-                command: "npx",
-                args: ["-y", `@trustedskills/${slug}`],
-              },
-            },
-          },
-          null,
-          2
-        ),
-        isJson: true,
-        lang: "json",
-      };
-    case "claudecode":
-      return {
-        label: "Claude Code",
-        cmd: `claude mcp add ${slug} npx -- -y @trustedskills/${slug}`,
-        isJson: false,
-        lang: "bash",
-      };
-    case "openai":
-      return {
-        label: "OpenAI / ChatGPT",
-        cmd: `Coming soon — OpenAI plugin support is on our roadmap.\nIn the meantime, download the skill spec to use manually:\n${repoUrl || `https://github.com/trustedskills/${slug}`}`,
-        isJson: false,
-        lang: "text",
-        isComingSoon: true,
-      };
-    case "codex":
-      return {
-        label: "GitHub Copilot / Codex",
-        cmd: JSON.stringify(
-          {
-            skills: [
-              {
-                name: slug,
-                enabled: true,
-              },
-            ],
-          },
-          null,
-          2
-        ),
-        isJson: true,
-        lang: "json",
-      };
-    case "opencode":
-      return {
-        label: "OpenCode",
-        cmd: `npm install -g @opencode/agent\n\n# Add to your opencode.yaml:\nskills:\n  - name: ${slug}\n    enabled: true`,
-        isJson: false,
-        lang: "bash",
-      };
-    case "other":
-      return {
-        label: "Generic",
-        cmd: `# Download directly from GitHub:\ncurl -sL ${repoUrl || `https://github.com/trustedskills/${slug}`}/archive/refs/heads/main.zip -o ${slug}.zip`,
-        isJson: false,
-        lang: "bash",
-      };
-    case "openclaw":
-    default:
-      return {
-        label: "OpenClaw",
-        cmd: installCmd,
-        isJson: false,
-        lang: "bash",
-      };
-  }
+  return { label: "OpenClaw", cmd: installCmd, isFallback: platform !== null && platform !== "openclaw" };
 }

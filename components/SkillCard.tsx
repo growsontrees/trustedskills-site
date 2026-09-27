@@ -5,6 +5,7 @@ import { useState } from "react";
 import {
   PLATFORM_CONFIG,
   formatCount,
+  installIsBroken,
   tierOf,
   type Skill,
 } from "../lib/skill-config";
@@ -23,13 +24,9 @@ export function SkillCard({ skill, compact = false }: SkillCardProps) {
   const tier = tierOf(skill);
   const Glyph = categoryIcon(skill.category);
 
-  const install = getPlatformInstall(
-    skill.slug,
-    skill.installCmd,
-    skill.repoUrl,
-    platform,
-    skill.platforms || []
-  );
+  const install = getPlatformInstall(skill.installCmd || "", platform);
+  // No copy button for a command the registry has checked and found dead.
+  const canInstall = Boolean(skill.installCmd) && !installIsBroken(skill);
 
   function handleCopy() {
     navigator.clipboard.writeText(install.cmd);
@@ -97,21 +94,27 @@ export function SkillCard({ skill, compact = false }: SkillCardProps) {
           ) : null}
         </div>
 
-        <button
-          type="button"
-          onClick={handleCopy}
-          className={cx(
-            "relative z-10 inline-flex h-7 shrink-0 items-center gap-1.5 rounded-sm border px-2 text-2xs font-medium",
-            "transition duration-fast ease-out",
-            copied
-              ? "border-ok-800 bg-ok-950 text-ok-300"
-              : "border-ink-700 bg-ink-850 text-ink-400 hover:border-ink-650 hover:bg-ink-800 hover:text-ink-100"
-          )}
-          title={`Copy the ${platformLabel ?? "OpenClaw"} install command`}
-        >
-          {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-          {copied ? "Copied" : "Install"}
-        </button>
+        {canInstall ? (
+          <button
+            type="button"
+            onClick={handleCopy}
+            className={cx(
+              "relative z-10 inline-flex h-7 shrink-0 items-center gap-1.5 rounded-sm border px-2 text-2xs font-medium",
+              "transition duration-fast ease-out",
+              copied
+                ? "border-ok-800 bg-ok-950 text-ok-300"
+                : "border-ink-700 bg-ink-850 text-ink-400 hover:border-ink-650 hover:bg-ink-800 hover:text-ink-100"
+            )}
+            title={`Copy the ${platformLabel && !install.isFallback ? platformLabel : install.label} install command`}
+          >
+            {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+            {copied ? "Copied" : "Install"}
+          </button>
+        ) : skill.installCmd ? (
+          <span className="shrink-0 text-2xs text-warn-400" title={skill.install_reason}>
+            Doesn&apos;t install
+          </span>
+        ) : null}
       </div>
 
       <span className="sr-only">{tier.label}</span>

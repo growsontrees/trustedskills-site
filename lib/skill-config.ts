@@ -49,6 +49,17 @@ export interface Skill {
     config: string[];
   };
   installCmd: string;
+  /**
+   * Result of the registry's install check (check-installs.mjs): does
+   * `installCmd` still find this skill's SKILL.md under the listed name?
+   * Absent means the registry could not check it, so make no claim.
+   */
+  install_status?: InstallStatus;
+  /** renamed only: the name upstream now gives this skill. */
+  install_name?: string;
+  /** Why the skill does not install, in one line. */
+  install_reason?: string;
+  install_checked_at?: string;
   repoUrl: string;
   published_at: string;
   updated_at: string;
@@ -69,6 +80,17 @@ export interface Skill {
     command?: string;
     note?: string;
   }>;
+}
+
+export type InstallStatus = "ok" | "renamed" | "invalid" | "missing" | "repo_gone";
+
+/** The registry checked this skill and its install command cannot work. */
+export function installIsBroken(skill: Pick<Skill, "install_status">): boolean {
+  return (
+    skill.install_status === "invalid" ||
+    skill.install_status === "missing" ||
+    skill.install_status === "repo_gone"
+  );
 }
 
 export interface Category {
