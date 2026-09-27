@@ -34,15 +34,20 @@ jobs:
       # it does not gain an 80 MB commit every day.
       #
       # On main this step is FATAL. It used to warn and carry on, which meant a
-      # dead REGISTRY_TOKEN shipped a silently stale catalogue: the site served
+      # dead credential shipped a silently stale catalogue: the site served
       # 26,001 skills against a registry of 44,854 for weeks while every build
       # reported success. A publish that quietly drops 42% of the catalogue is
       # worse than no publish, so the deploy stops instead. Off main the same
       # failure is only a warning, so branch build tests still work without the
       # secret.
+      #
+      # Access is a read-only deploy key on the registry rather than a personal
+      # access token. The previous PAT expired silently and is scoped to a human
+      # account; the deploy key is read-only, valid for exactly one repository,
+      # does not expire, and survives people leaving.
       - name: Sync skills index from registry
         env:
-          REGISTRY_TOKEN: ${{ secrets.REGISTRY_TOKEN }}
+          REGISTRY_SSH_KEY: ${{ secrets.REGISTRY_SSH_KEY }}
           IS_MAIN: ${{ github.ref == 'refs/heads/main' }}
         run: |
           set -uo pipefail
@@ -57,16 +62,20 @@ jobs:
             exit 0
           }
 
-          [ -n "$REGISTRY_TOKEN" ] || fail "REGISTRY_TOKEN is not set."
+          [ -n "$REGISTRY_SSH_KEY" ] || fail "REGISTRY_SSH_KEY is not set."
 
-          curl -fsSL --retry 3 --max-time 300 \
-            -H "Authorization: Bearer $REGISTRY_TOKEN" \
-            -H "Accept: application/vnd.github.raw" \
-            -o /tmp/registry-index.json \
-            "https://api.github.com/repos/growsontrees/trustedskills-registry/contents/skills-index.json" \
-            || fail "Could not download the registry index. REGISTRY_TOKEN is most likely expired or lacks Contents:Read on growsontrees/trustedskills-registry."
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$REGISTRY_SSH_KEY" > ~/.ssh/registry_key
+          chmod 600 ~/.ssh/registry_key
+          ssh-keyscan -t ed25519 github.com >> ~/.ssh/known_hosts 2>/dev/null
 
-          node scripts/sync-index.mjs /tmp/registry-index.json \
+          # Shallow clone: only the current index is needed, never the history.
+          GIT_SSH_COMMAND="ssh -i ~/.ssh/registry_key -o IdentitiesOnly=yes" \
+            git clone --depth 1 --quiet \
+              git@github.com:growsontrees/trustedskills-registry.git /tmp/registry \
+            || fail "Could not clone the registry. The REGISTRY_SSH_KEY deploy key is most likely revoked or missing from growsontrees/trustedskills-registry."
+
+          node scripts/sync-index.mjs /tmp/registry/skills-index.json \
             || fail "Registry merge refused - see the reason above."
 
           # Record what actually shipped, so drift is visible on the run itself
