@@ -6,7 +6,10 @@ import { ListingPage } from "../../../../../components/ListingPage";
 import { categoryIcon } from "../../../../../components/icons";
 import { getAllSkills, getCategories, getCategoryBySlug, sortByScore } from "../../../../../lib/skills";
 
-const SKILLS_PER_PAGE = 24;
+// Must match page 1 (/skills/category/[category]) and the sitemap (PAGE_SIZE in
+// scripts/discovery-routes.cjs). At 24 the boundary skill repeated on each page
+// and the last pages of every category were never linked.
+const SKILLS_PER_PAGE = 25;
 
 interface PageProps {
   params: Promise<{ category: string; page: string }>;
