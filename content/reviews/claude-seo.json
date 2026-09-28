@@ -1,6 +1,6 @@
 {
   "slug": "claude-seo",
-  "status": "draft",
+  "status": "published",
   "title": "claude-seo Review: We Ran Two Full Audits on Our Own Site",
   "description": "We ran claude-seo v2.4.0 twice against trustedskills.dev, once with a headless browser and once without. It found every real bug we know about. It also gave two different health scores on the same day, and one run put a made-up star rating into copy-paste schema.",
   "skillSlug": "claude-seo",
@@ -13,7 +13,7 @@
     "maintenance": 5,
     "platformSupport": 3
   },
-  "publishedAt": "2026-03-04",
+  "publishedAt": "2026-09-28",
   "lastUpdated": "2026-09-27",
   "author": {
     "name": "TrustedSkills Team",
