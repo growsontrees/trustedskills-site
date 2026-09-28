@@ -65,6 +65,16 @@ export interface Skill {
   /** Why the skill does not install, in one line. */
   install_reason?: string;
   install_checked_at?: string;
+  /** The repo commit the install check read. */
+  install_checked_sha?: string;
+  /**
+   * Result of the registry's tree check (enrich-metadata.mjs): does the repo's
+   * complete tree at its current commit still hold a SKILL.md for this skill?
+   * "unknown" covers a missing, private, truncated or stale tree.
+   */
+  skill_path_status?: "found" | "not_found" | "unknown";
+  /** The repo commit the skill_path_status verdict describes. */
+  skill_path_checked_sha?: string;
   repoUrl: string;
   published_at: string;
   updated_at: string;
@@ -230,6 +240,41 @@ export const TIER_CONFIG: Record<VerificationTier, {
     bg: "bg-ink-900",
     border: "border-ink-750",
   },
+};
+
+/**
+ * Skills we could not find in their repository.
+ *
+ * Both registry checks have to say so, about the same commit: the tree check
+ * found no SKILL.md for it and the install check found no skill by that name.
+ * Either check alone misses real skills, and "unknown" (repo gone, private or
+ * truncated) is not evidence of anything. Nothing here is stored: when a later
+ * crawl finds the skill again it is listed again on the next build.
+ *
+ * An unlisted skill is left out of listings, search, counts and the sitemap.
+ * Its page still loads, is marked noindex, and shows UNLISTED_NOTICE.
+ * scripts/discovery-routes.cjs mirrors this rule for the sitemap.
+ */
+export function isUnlisted(
+  skill: Pick<Skill, "skill_path_status" | "skill_path_checked_sha" | "install_status" | "install_checked_sha">
+): boolean {
+  return (
+    skill.skill_path_status === "not_found" &&
+    skill.install_status === "missing" &&
+    !!skill.install_checked_sha &&
+    skill.install_checked_sha === skill.skill_path_checked_sha
+  );
+}
+
+/**
+ * The notice on an unlisted skill's page. It says what we checked and nothing
+ * more: we do not know why the skill is gone, so it does not guess.
+ */
+export const UNLISTED_NOTICE = {
+  title: "Not found in its repository",
+  body: (shortSha: string, date: string | null) =>
+    `We could not find this skill in its repository when we last checked (${shortSha}${date ? `, ${date}` : ""}). ` +
+    "It is left out of listings and search until a later check finds it again.",
 };
 
 /** Display order, strongest signal first. Used by filters and legends. */

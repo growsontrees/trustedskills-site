@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 import { join } from "path";
-import { TIER_ORDER } from "./skill-config";
+import { TIER_ORDER, isUnlisted } from "./skill-config";
 import type { Category, Skill, SkillsIndex, VerificationTier } from "./skill-config";
 
 // Server-only. The index is read from disk on first use instead of being
@@ -69,7 +69,7 @@ const DESCRIPTION_SCORE = (desc: string): number => {
 let _maxInstalls: number | null = null;
 function getMaxInstalls(): number {
   if (_maxInstalls === null) {
-    _maxInstalls = loadIndex().skills.reduce((max, s) => Math.max(max, s.installs || 0), 1);
+    _maxInstalls = getAllSkills().reduce((max, s) => Math.max(max, s.installs || 0), 1);
   }
   return _maxInstalls;
 }
@@ -128,7 +128,7 @@ export function getTopRankedSkills(
   limit = 6,
   maxPerAuthor = 2
 ): Skill[] {
-  const all = sortByScore(loadIndex().skills);
+  const all = sortByScore(getAllSkills());
   const result: Skill[] = [];
   const authorCount: Record<string, number> = {};
 
@@ -150,18 +150,25 @@ export function getTopRankedSkills(
 }
 
 let _bySlug: Map<string, Skill> | null = null;
+let _listed: Skill[] | null = null;
 
+/**
+ * Every listed skill: the set behind listings, search, counts and the sitemap.
+ * Skills we could not find in their repository (isUnlisted) are left out.
+ */
 export function getAllSkills(): Skill[] {
-  return loadIndex().skills;
+  if (!_listed) _listed = loadIndex().skills.filter((s) => !isUnlisted(s));
+  return _listed;
 }
 
+/** Any skill in the index, listed or not, so an unlisted page still loads. */
 export function getSkillBySlug(slug: string): Skill | undefined {
   if (!_bySlug) _bySlug = new Map(loadIndex().skills.map((s) => [s.slug, s]));
   return _bySlug.get(slug);
 }
 
 export function getFeaturedSkills(): Skill[] {
-  return loadIndex().skills.filter((s) => s.verified === "featured").slice(0, 6);
+  return getAllSkills().filter((s) => s.verified === "featured").slice(0, 6);
 }
 
 /** @deprecated Use getTopRankedSkills() for the homepage instead. */
@@ -169,16 +176,38 @@ export function getFeaturedSkillsLegacy(): Skill[] {
   return getFeaturedSkills();
 }
 
+let _categories: Category[] | null = null;
+
+/** Categories with their listed-skill counts. The index's own counts include unlisted skills. */
 export function getCategories(): Category[] {
-  return loadIndex().categories;
+  if (!_categories) {
+    const counts = new Map<string, number>();
+    for (const skill of getAllSkills()) counts.set(skill.category, (counts.get(skill.category) ?? 0) + 1);
+    _categories = loadIndex()
+      .categories.map((category) => ({ ...category, count: counts.get(category.slug) ?? 0 }))
+      .filter((category) => category.count > 0);
+  }
+  return _categories;
 }
 
 export function getCategoryBySlug(slug: string): Category | undefined {
   return loadIndex().categories.find((category) => category.slug === slug);
 }
 
-export function getStats() {
-  return loadIndex().stats;
+let _stats: SkillsIndex["stats"] | null = null;
+
+/** Index stats, counted over listed skills only, so every total matches what is listed. */
+export function getStats(): SkillsIndex["stats"] {
+  if (!_stats) {
+    const listed = getAllSkills();
+    _stats = {
+      ...loadIndex().stats,
+      total_skills: listed.length,
+      total_installs: listed.reduce((sum, s) => sum + (s.installs || 0), 0),
+      total_authors: new Set(listed.map((s) => s.author)).size,
+    };
+  }
+  return _stats;
 }
 
 let _tierCounts: Record<VerificationTier, number> | null = null;
@@ -198,7 +227,7 @@ export function getTierCounts(): Record<VerificationTier, number> {
     const counts = Object.fromEntries(
       TIER_ORDER.map((tier) => [tier, 0])
     ) as Record<VerificationTier, number>;
-    for (const skill of loadIndex().skills) {
+    for (const skill of getAllSkills()) {
       const tier = (skill.verified as VerificationTier) in counts
         ? (skill.verified as VerificationTier)
         : "community";
@@ -214,7 +243,7 @@ let _pinnedCount: number | null = null;
 /** Skills whose install is pinned to a recorded commit and stored snapshot. */
 export function getPinnedCount(): number {
   if (_pinnedCount === null) {
-    _pinnedCount = loadIndex().skills.filter((s) => !!s.verifiedCommit).length;
+    _pinnedCount = getAllSkills().filter((s) => !!s.verifiedCommit).length;
   }
   return _pinnedCount;
 }

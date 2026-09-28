@@ -18,7 +18,13 @@ import { SafetyPanel } from "../../../components/SafetyPanel";
 import { getSafetyCheckList, getSafetyReport } from "../../../lib/safety";
 import { getReviewForSkill } from "../../../lib/reviews";
 import { getCollectionsForSkill } from "../../../lib/collections";
-import { PUBLISHER_DESCRIPTIONS_ONLY, installIsBroken, shownDescription } from "../../../lib/skill-config";
+import {
+  PUBLISHER_DESCRIPTIONS_ONLY,
+  UNLISTED_NOTICE,
+  installIsBroken,
+  isUnlisted,
+  shownDescription,
+} from "../../../lib/skill-config";
 import type { PlatformKey } from "../../../hooks/usePlatform";
 import type { Metadata } from "next";
 import { canonicalUrl, skillPath } from "../../../lib/site-url";
@@ -124,6 +130,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${skill.name} Agent Skill`,
     description,
     alternates: { canonical: skillUrl(skill.slug) },
+    // Not found in its repository: the page still loads, but stays out of search engines.
+    ...(isUnlisted(skill) ? { robots: { index: false } } : {}),
     openGraph: {
       title: `${skill.name} Agent Skill | ${categoryName} | TrustedSkills`,
       description,
@@ -139,6 +147,7 @@ export default async function SkillDetailPage({ params }: Props) {
 
   const tier = tierOf(skill);
   const description = shownDescription(skill);
+  const unlisted = isUnlisted(skill);
   const TierIcon = tier.icon;
 
   // The automated safety pass. Absent until a scan has reached this skill.
@@ -198,6 +207,15 @@ export default async function SkillDetailPage({ params }: Props) {
         <ArrowLeft className="h-3.5 w-3.5 transition-transform duration-fast ease-out group-hover:-translate-x-0.5" />
         Back to all skills
       </Link>
+
+      {unlisted ? (
+        <div className="mt-6">
+          <Note tone="warn" icon={AlertTriangle}>
+            <span className="font-medium text-warn-200">{UNLISTED_NOTICE.title}.</span>{" "}
+            {UNLISTED_NOTICE.body(skill.install_checked_sha!.slice(0, 7), formatDate(skill.install_checked_at))}
+          </Note>
+        </div>
+      ) : null}
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* ── Main column ─────────────────────────────────────────────── */}

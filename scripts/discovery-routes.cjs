@@ -150,8 +150,21 @@ function addPaginatedRoutes(routes, basePath, itemCount) {
   }
 }
 
+// Mirrors isUnlisted() in lib/skill-config.ts: both registry checks could not
+// find the skill in its repository, at the same commit. Those pages are
+// noindex, so the sitemap must not list them.
+function isUnlisted(skill) {
+  return (
+    skill.skill_path_status === "not_found" &&
+    skill.install_status === "missing" &&
+    !!skill.install_checked_sha &&
+    skill.install_checked_sha === skill.skill_path_checked_sha
+  );
+}
+
 function getCanonicalRoutes() {
-  const index = readSkillsIndex();
+  const full = readSkillsIndex();
+  const index = { ...full, skills: full.skills.filter((skill) => !isUnlisted(skill)) };
   const routes = new Set(STATIC_ROUTES);
 
   for (const skill of index.skills) {
@@ -160,6 +173,7 @@ function getCanonicalRoutes() {
 
   for (const category of index.categories) {
     const count = index.skills.filter((skill) => skill.category === category.slug).length;
+    if (count === 0) continue;
     addPaginatedRoutes(routes, `/skills/category/${routeSegment(category.slug)}`, count);
   }
 
