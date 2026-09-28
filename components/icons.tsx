@@ -1,4 +1,4 @@
-import type { SVGProps } from "react";
+import { createElement, type SVGProps } from "react";
 
 /**
  * The icon set. Geometry follows Lucide (ISC) on a 24px grid with a 1.75
@@ -482,6 +482,15 @@ export const CATEGORY_ICONS: Record<string, IconComponent> = {
 
 export function categoryIcon(slug: string): IconComponent {
   return CATEGORY_ICONS[slug] ?? Boxes;
+}
+
+/**
+ * The category glyph as an element. Use this inside a component body: holding
+ * `categoryIcon()` in a local and rendering it as `<Glyph />` trips the React
+ * Compiler's "component created during render" check.
+ */
+export function CategoryGlyph({ slug, ...props }: IconProps & { slug: string }) {
+  return createElement(categoryIcon(slug), props);
 }
 
 /** Platform key → glyph. Falls back to `Plug` (the generic MCP host). */

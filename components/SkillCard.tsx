@@ -12,7 +12,7 @@ import {
 } from "../lib/skill-config";
 import { usePlatform, getPlatformInstall, PLATFORM_LABELS } from "../hooks/usePlatform";
 import { skillPath } from "../lib/site-url";
-import { categoryIcon, Check, Copy, Download } from "./icons";
+import { CategoryGlyph, Check, Copy, Download } from "./icons";
 import { Chip, TierChip, cx } from "./ui";
 
 interface SkillCardProps {
@@ -24,7 +24,6 @@ export function SkillCard({ skill, compact = false }: SkillCardProps) {
   const [copied, setCopied] = useState(false);
   const { platform, mounted } = usePlatform();
   const tier = tierOf(skill);
-  const Glyph = categoryIcon(skill.category);
 
   const install = getPlatformInstall(skill.installCmd || "", platform);
   // No copy button for a command the registry has checked and found dead.
@@ -54,7 +53,7 @@ export function SkillCard({ skill, compact = false }: SkillCardProps) {
     >
       <div className="flex items-start gap-3">
         <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-ink-750 bg-ink-850 text-ink-450 transition-colors duration-fast group-hover:border-ink-700 group-hover:text-ink-300">
-          <Glyph className="h-4 w-4" />
+          <CategoryGlyph slug={skill.category} className="h-4 w-4" />
         </span>
 
         <div className="min-w-0 flex-1">

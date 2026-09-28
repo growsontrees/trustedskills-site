@@ -23,6 +23,9 @@ export function usePlatform() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // Deliberate: the first client render must match the server HTML, so the
+    // saved platform is only read after mount.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     try {
       const stored = localStorage.getItem(STORAGE_KEY) as PlatformKey | null;

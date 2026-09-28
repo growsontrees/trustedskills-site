@@ -40,7 +40,7 @@ import {
   Star,
   Tag as TagIcon,
   User,
-  categoryIcon,
+  CategoryGlyph,
 } from "../../../components/icons";
 import {
   ButtonLink,
@@ -140,7 +140,6 @@ export default async function SkillDetailPage({ params }: Props) {
   const tier = tierOf(skill);
   const description = shownDescription(skill);
   const TierIcon = tier.icon;
-  const Glyph = categoryIcon(skill.category);
 
   // The automated safety pass. Absent until a scan has reached this skill.
   const safety = getSafetyReport(skill.slug);
@@ -206,7 +205,7 @@ export default async function SkillDetailPage({ params }: Props) {
           <Panel>
             <div className="flex items-start gap-4">
               <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-ink-750 bg-ink-850 text-ink-400">
-                <Glyph className="h-5 w-5" />
+                <CategoryGlyph slug={skill.category} className="h-5 w-5" />
               </span>
 
               <div className="min-w-0 flex-1">
