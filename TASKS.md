@@ -1,7 +1,20 @@
 # TrustedSkills — Task Tracker
 
-*Last updated: 2026-09-27*
+*Last updated: 2026-09-28*
 *Canonical location: `TASKS.md` in this repo. The old `/opt/trustedskills` path is dead — that host was retired in August.*
+
+---
+
+## 🚀 Next deploy — one consolidated release, in this order
+
+Nothing below "Recently Completed" is live. `main` is dozens of commits ahead of `origin/main`, and **pushing `main` is the deploy** (`deploy.yml` triggers on push to `main`; runs on any other branch are a build test only). ONE-115 proposed shipping the canonical fix on its own and was declined on 2026-09-27 — the decision was to carry it into one verified release with the rest, so this is that checklist.
+
+1. **Merge registry PR #156** (`one-110-install-commands` → `main` in `growsontrees/trustedskills-registry`). **Not optional, and it goes first.** Every build clones the registry over the read-only deploy key and merges its `skills-index.json` into the committed one, so pushing the site first builds the new install-command UI against an index that doesn't carry `install_status`. PR #156 was 3 ahead / 0 behind and merged cleanly when last checked (2026-09-27).
+2. **`git push origin main`** in this repo. That is the release.
+3. **`npm run verify-deploy`** once CI finishes. It must print all ✓. Before this release it fails on live with `claude-seo page canonical is ["https://trustedskills.dev"]` — that failure *is* the ONE-111 bug, so a passing run is the proof the canonical fix landed.
+4. **Resubmit `https://trustedskills.dev/sitemap.xml`** in Google Search Console, so the ~26,000 pages that currently name the homepage as canonical get recrawled sooner. **Needs Peter** — no Search Console credential or connector is reachable from any agent workspace (see ONE-123).
+
+Also waiting on Peter, unrelated to the push order: enable private vulnerability reporting on `trustedskills-site` (Settings → Security), and make a GSC credential readable so ranking decisions stop being made blind.
 
 ---
 
