@@ -9,10 +9,24 @@
 
 Nothing below "Recently Completed" is live. `main` is dozens of commits ahead of `origin/main`, and **pushing `main` is the deploy** (`deploy.yml` triggers on push to `main`; runs on any other branch are a build test only). ONE-115 proposed shipping the canonical fix on its own and was declined on 2026-09-27 — the decision was to carry it into one verified release with the rest, so this is that checklist.
 
-1. **Merge registry PR #156** (`one-110-install-commands` → `main` in `growsontrees/trustedskills-registry`). **Not optional, and it goes first.** Every build clones the registry over the read-only deploy key and merges its `skills-index.json` into the committed one, so pushing the site first builds the new install-command UI against an index that doesn't carry `install_status`. PR #156 was 3 ahead / 0 behind and merged cleanly when last checked (2026-09-27).
-2. **`git push origin main`** in this repo. That is the release.
-3. **`npm run verify-deploy`** once CI finishes. It must print all ✓. Before this release it fails on live with `claude-seo page canonical is ["https://trustedskills.dev"]` — that failure *is* the ONE-111 bug, so a passing run is the proof the canonical fix landed.
-4. **Resubmit `https://trustedskills.dev/sitemap.xml`** in Google Search Console, so the ~26,000 pages that currently name the homepage as canonical get recrawled sooner. **Needs Peter** — no Search Console credential or connector is reachable from any agent workspace (see ONE-123).
+1. **Merge registry PR #156** (`one-110-install-commands` → `main` in `growsontrees/trustedskills-registry`). **Not optional, and it goes first.** On 2026-09-28 it was 3 ahead / 5 behind, `MERGEABLE`, `CLEAN`, with no file overlap (the 5 are bot index commits).
+2. **Run the registry's `enrich-metadata.yml` on `main`** (`workflow_dispatch`) and wait for it to commit. **Merging alone is not enough.** The PR adds the install check; it does not carry its results. On 2026-09-28 the registry `skills-index.json` on `main` *and* on the PR branch had `install_status` on 0 of 44,854 skills, and 44,441 install commands were still the dead `skills.sh/` URL form. `sync-index.mjs` takes `installCmd` and `install_status` from the registry (they are not site fields), so a site build before this step replaces the committed install results with nothing and every skill page shows the dead command. The workflow's own sanity step refuses to commit while any `skills.sh/` command remains. Check before step 3: in the registry's `skills-index.json` on `main`, `install_status` is set on (nearly) every skill and no `installCmd` contains `skills.sh/`.
+3. **`git push origin main`** in this repo, at the exact head named on the release card. That is the release.
+4. **`npm run verify-deploy`** once CI finishes. It must print all ✓. Before this release it fails on live with `claude-seo page canonical is ["https://trustedskills.dev"]` — that failure *is* the ONE-111 bug, so a passing run is the proof the canonical fix landed. Also open `/skills/systematic-debugging` and confirm the install box shows `npx skills add obra/superpowers --skill systematic-debugging`, not a `skills.sh/` URL or `@trustedskills/`.
+5. **Resubmit `https://trustedskills.dev/sitemap.xml`** in Google Search Console, so the ~26,000 pages that currently name the homepage as canonical get recrawled sooner. **Needs Peter** — no Search Console credential or connector is reachable from any agent workspace (see ONE-123).
+
+**Rollback** (no force-push). The live site before this release is `0293177`. Put the old tree back as a new commit and push it; the push redeploys:
+
+```bash
+git switch main && git pull
+git restore --source=0293177 --staged --worktree -- .
+git commit -m "revert: roll the site back to 0293177"
+git push origin main
+```
+
+The registry merge does not need undoing for a site rollback: the old site ignores `install_status`. Faster stopgap while that build runs: in Coolify, redeploy the image tagged `0293177efef67dd3d46d6f63416c38734617c455`. The next push or the daily scheduled build replaces it, so the git revert is still required.
+
+**Not in this release — decided elsewhere, no action here:** the 49 draft reviews and 3 draft collections stay `draft` and are not served in production; publishing each is Peter's call. Enabling private vulnerability reporting on `trustedskills-site` is a GitHub setting, not part of the push.
 
 Also waiting on Peter, unrelated to the push order: enable private vulnerability reporting on `trustedskills-site` (Settings → Security), and make a GSC credential readable so ranking decisions stop being made blind.
 
