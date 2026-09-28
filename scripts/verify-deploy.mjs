@@ -65,13 +65,31 @@ try {
   if (!claudeSeo.res.ok) throw new Error(`/skills/claude-seo returned ${claudeSeo.res.status}`);
   requireIncludes(claudeSeo.text, "Claude SEO Suite", "claude-seo page title");
   requireIncludes(claudeSeo.text, "Install on your platform", "claude-seo install section");
-  requireIncludes(claudeSeo.text, "View repository install instructions", "claude-seo repo-first install link");
+  // The design-system pass renamed this link from "View repository install instructions".
+  requireIncludes(claudeSeo.text, "Repository install instructions", "claude-seo repo-first install link");
   requireCanonical(claudeSeo.text, "/skills/claude-seo", "claude-seo page");
   ok("claude-seo page", `HTTP ${claudeSeo.res.status}`);
 
+  // Install commands come from the registry's install check. A site built
+  // before that check ran shows the dead skills.sh URL form or an invented
+  // @trustedskills npm package.
+  const debugging = await fetchText(baseUrl + "/skills/systematic-debugging");
+  if (!debugging.res.ok) throw new Error(`/skills/systematic-debugging returned ${debugging.res.status}`);
+  requireIncludes(
+    debugging.text,
+    "npx skills add obra/superpowers --skill systematic-debugging",
+    "systematic-debugging owner/repo install command",
+  );
+  for (const dead of ["npx skills add https://skills.sh/", "@trustedskills/"]) {
+    if (debugging.text.includes(dead)) throw new Error(`systematic-debugging page still shows ${dead}`);
+  }
+  ok("systematic-debugging install command", `HTTP ${debugging.res.status}`);
+
   const findSkills = await fetchText(baseUrl + "/skills/find-skills");
   if (!findSkills.res.ok) throw new Error(`/skills/find-skills returned ${findSkills.res.status}`);
-  requireIncludes(findSkills.text, "Repository (canonical source)", "find-skills canonical repo link");
+  // Match the link target, not its label: the design-system pass relabelled
+  // "Repository (canonical source)" to "Repository".
+  requireIncludes(findSkills.text, 'href="https://github.com/vercel-labs/skills"', "find-skills canonical repo link");
   ok("find-skills page", `HTTP ${findSkills.res.status}`);
 
   const searchPage = await fetchText(baseUrl + "/skills?q=seo");
