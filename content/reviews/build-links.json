@@ -1,0 +1,86 @@
+{
+  "slug": "build-links",
+  "status": "draft",
+  "title": "build-links Review: A Sound Link Plan, Scored With Data You May Not Have",
+  "description": "We asked the build-links skill to design a link building campaign for our site with no paid SEO data. Its diagnosis and strategy worked from free searches. Its link-scoring formula needed data we couldn't get for three of its six factors.",
+  "skillSlug": "build-links",
+  "verdict": "Recommended",
+  "overallScore": 3.6,
+  "scores": {
+    "installation": 5,
+    "documentation": 3,
+    "depth": 4,
+    "maintenance": 2,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-29",
+  "lastUpdated": "2026-09-29",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "build-links skill review",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Run on the same site (trustedskills.dev) and with the same setup as our first batch of twelve SEO skills: no paid SEO data connected. One run on one site is one data point, not a benchmark. No outreach was sent: the run designed the campaign and drafted messages only.",
+  "runs": [
+    {
+      "testedAt": "2026-09-29",
+      "platform": "claudecode",
+      "skillVersion": "calm-north/seojuice-skills@c1f633b (build-links 1.0.0)",
+      "task": "Design a link building campaign for trustedskills.dev. Free, no-account sources only; no outreach to be sent.",
+      "outcome": "`npx skills add calm-north/seojuice-skills --skill build-links` installed it first time. It is a single SKILL.md.\n\nThe skill's first step asks for the current referring-domain count and domain rating. With no paid tool, the run left those blank rather than estimate them. It checked for mentions of the site with web search instead, and found no editorial links: the only outside mentions were two bot-filed GitHub issues. That matched the skill's \"Citation weakness\" row, which points to resource-page and list outreach, and that is the strategy it chose.\n\nThe skill's own free Domain Authority Checker at seojuice.com returned HTTP 403 with a Cloudflare challenge when the run requested a score. We repeated the request and got the same 403. The run did not try it in a normal browser.\n\nThe run found six real prospects (Claude Code and MCP \"awesome\" lists and marketplace comparison pages) and opened each one to confirm it lists comparable resources. We re-checked the largest, hesreallyhim/awesome-claude-code: 54,787 stars on GitHub. It then found that this list only accepts entries through a GitHub issue form, and that the MCP list accepts no pull requests at all. The skill does not ask about submission rules like these.\n\nThe skill's Link Quality Score weighs six factors. The run could measure topical relevance and link position. Traffic, follow status and anchor text could not be measured without paid data, and domain authority only through GitHub stars as a stand-in. So it gave no blended score for any prospect. The outreach draft followed the skill's framework and its \"What NOT to do\" list.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions. Tools: WebFetch, WebSearch, Bash (curl). No Ahrefs, Semrush, Moz or SEOJuice account, no API keys, no Search Console."
+    }
+  ],
+  "summary": "build-links designs a link building campaign: diagnose which kind of authority a site lacks, pick a strategy for that, find prospects, and write outreach that isn't spam. With no paid data its diagnosis and strategy still worked, and the campaign it shaped for us (get listed on the lists that already compare skill registries) is the one we would pick. Its Link Quality Score needs traffic, follow status and authority figures that you only get from a paid tool, and the free checker it recommends blocked our agent. It plans link building; it doesn't do it.",
+  "strengths": [
+    {
+      "title": "Diagnose before prescribing",
+      "body": "Its four-way authority diagnosis (citation, identity, trust, eminence) maps each weakness to a strategy. Ours was a clear citation weakness, and the strategy followed from that."
+    },
+    {
+      "title": "Outreach rules that avoid spam",
+      "body": "Personalise every message, don't lead with \"I'd like a backlink\", never pay for links, and no more than two follow-ups. The draft it produced followed all of them."
+    },
+    {
+      "title": "Works without a link database to start",
+      "body": "Diagnosis, strategy and prospecting all ran on free web search. That is the half of the job our test of a backlink analyser showed you can't do without paid data."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "The scoring formula needs paid data",
+      "body": "Three of the six Link Quality Score factors (traffic, follow status, anchor text) could not be measured, and domain authority only by proxy. The skill has no fallback for a user without a backlink tool."
+    },
+    {
+      "title": "Its free checker blocked our agent",
+      "body": "The Domain Authority Checker it recommends returned a Cloudflare challenge (HTTP 403) to our agent's requests. A person in a browser may get through; an agent working alone did not."
+    },
+    {
+      "title": "No step for submission rules",
+      "body": "The two biggest prospects we found take entries only through an issue form, or not at all. The skill's outreach framework assumes email."
+    },
+    {
+      "title": "Not updated since February 2026",
+      "body": "The source repository's last commit was 27 February 2026. It ends with a pointer to the publisher's own SEOJuice checker and MCP server."
+    },
+    {
+      "title": "Our own listing summary is wrong",
+      "body": "The registry summary says it generates internal and external links in content. It doesn't. It designs an outreach campaign, and its own description sends internal linking to a different skill."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "A new site with no links yet",
+      "body": "It turns \"we need backlinks\" into a strategy, a prospect list and outreach you can send yourself."
+    },
+    {
+      "title": "Teams with a backlink tool",
+      "body": "With authority and traffic data connected, its Link Quality Score becomes a usable way to rank prospects."
+    }
+  ],
+  "notFor": "Anyone expecting links to appear. It plans the campaign; a person still has to build the assets and send the messages.",
+  "links": [
+    { "label": "calm-north/seojuice-skills repository", "href": "https://github.com/calm-north/seojuice-skills" }
+  ]
+}

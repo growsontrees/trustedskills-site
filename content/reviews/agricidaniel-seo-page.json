@@ -1,0 +1,87 @@
+{
+  "slug": "agricidaniel-seo-page",
+  "status": "draft",
+  "title": "seo-page Review: A Current Checklist That Needs Its Suite",
+  "description": "We installed the single-page module of claude-seo on its own and ran it on our homepage. Its checklist is current and found real issues, but its first scripted check fails outside the suite and its score card has no formula.",
+  "skillSlug": "agricidaniel-seo-page",
+  "verdict": "Use With Caution",
+  "overallScore": 3.2,
+  "scores": {
+    "installation": 3,
+    "documentation": 3,
+    "depth": 3,
+    "maintenance": 5,
+    "platformSupport": 2
+  },
+  "publishedAt": "2026-09-29",
+  "lastUpdated": "2026-09-29",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "seo-page skill review",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Run on the same site (trustedskills.dev) and with the same setup as our first batch of twelve SEO skills: no paid SEO data connected. One run on one site is one data point, not a benchmark. We tested this module installed on its own, which is what the registry command gives you. Our separate review of the full claude-seo suite covers the complete install.",
+  "runs": [
+    {
+      "testedAt": "2026-09-29",
+      "platform": "claudecode",
+      "skillVersion": "agricidaniel/claude-seo@ff87fce (seo-page 2.4.1)",
+      "task": "Analyse the on-page SEO of the trustedskills.dev homepage for the keyword \"AI agent skills\", and say what to fix.",
+      "outcome": "`npx skills add agricidaniel/claude-seo --skill seo-page` installed it first time. It installs two files: SKILL.md and a licence.\n\nThe skill's first scripted check (does the meta description just repeat the title?) calls `${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo`. Outside the claude-seo plugin that variable is empty, and the command failed with exit code 127. The run did the check by hand. The word-count check points to `quality-gates.md`, which is also not installed, so the page's word count had no minimum to be judged against.\n\nWorking from the checklist and the raw HTML, the run found: a 70-character title and a 178-character meta description, both over the skill's ranges; an H1 (\"Every agent skill, in one place.\") without the target phrase; no `og:url` tag; and no structured data for the visible \"Top skills\" list. We re-checked all five on the live page and they are correct. Its suggested ItemList JSON-LD used only the names and links shown on the page.\n\nIt also reported the homepage canonical (`https://trustedskills.dev` without a trailing slash) as a mismatch. For a root URL those are the same address, so that finding is not a real issue. It rated the missing `og:url` as High priority, which overstates it.\n\nThe score card said 81/100. The skill gives no formula for any of its five scores, so the run had to invent one and document it.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions. Tools: WebFetch, WebSearch, Bash (curl, node). No claude-seo plugin scripts, no DataForSEO, no API keys, no Search Console."
+    }
+  ],
+  "summary": "seo-page is the single-page module of the claude-seo suite. Installed on its own, it is a well-kept checklist: title, meta, headings, Open Graph, schema and images, with current rules such as not recommending FAQ or HowTo rich results. On our homepage its checklist found five real issues. But its first scripted check fails outside the suite, a file it points to is missing, and it asks for a score card without saying how to score. If you want this, install the whole claude-seo suite.",
+  "strengths": [
+    {
+      "title": "Current schema rules",
+      "body": "It says never to recommend HowTo, or FAQ for rich results, and gives the May 2026 retirement. Google's own documentation confirms FAQ rich results stopped showing on 7 May 2026."
+    },
+    {
+      "title": "A checklist specific enough to act on",
+      "body": "It names the four Open Graph tags it expects, the H1 rules and the image checks. Following that list alone found the missing `og:url` and the missing ItemList on our page."
+    },
+    {
+      "title": "Actively maintained",
+      "body": "The source was updated on the day we tested it, and its lazy-loading check knows about JavaScript lazy-loaders, so it won't flag images they handle."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Its first script fails when installed alone",
+      "body": "The title-versus-description check calls a helper through `CLAUDE_PLUGIN_ROOT`, which only exists inside the claude-seo plugin. Installed with the registry command, the call fails with exit code 127."
+    },
+    {
+      "title": "Points to a file it doesn't ship",
+      "body": "Word-count minimums are in `quality-gates.md`, which lives in the suite's main skill. Without it you can count words but can't judge them."
+    },
+    {
+      "title": "A score card with no formula",
+      "body": "It asks for five scores out of 100 with bar charts, but gives no weights or method. Our run had to make one up, so the 81/100 it gave says more about that method than about the page."
+    },
+    {
+      "title": "No rule against invented schema",
+      "body": "It asks the agent to find missing schema opportunities, but never says to mark up only what the page shows. Our run stayed on the page because our brief told it to."
+    },
+    {
+      "title": "Our own listing summary is wrong",
+      "body": "The registry summary for this skill says it optimises agricultural content. It doesn't. It is a general single-page SEO check."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "People who already run claude-seo",
+      "body": "Inside the full suite its scripts and reference files are present, and it is a quick way to check one URL."
+    },
+    {
+      "title": "A structured page checklist",
+      "body": "Even alone, the checklist is current and covers the on-page basics in one pass."
+    }
+  ],
+  "notFor": "Anyone installing it on its own for a scored audit. The score has no method behind it, and one of its checks can't run. Install the full claude-seo suite instead.",
+  "links": [
+    { "label": "agricidaniel/claude-seo repository", "href": "https://github.com/agricidaniel/claude-seo" },
+    { "label": "Google: FAQ rich results retired", "href": "https://developers.google.com/search/docs/appearance/structured-data/faqpage" }
+  ]
+}

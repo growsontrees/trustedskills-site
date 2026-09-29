@@ -1,0 +1,83 @@
+{
+  "slug": "seo",
+  "status": "draft",
+  "title": "seo Review: Lighthouse First, and No Ranking Promises",
+  "description": "We ran Addy Osmani's seo skill on our homepage and a skill page. It used Lighthouse as evidence, treated title length as a guide rather than a rule, and wrote fixes against our source. Its schema reference still shows an FAQ example with no warning.",
+  "skillSlug": "seo",
+  "verdict": "Recommended",
+  "overallScore": 4.2,
+  "scores": {
+    "installation": 5,
+    "documentation": 4,
+    "depth": 4,
+    "maintenance": 4,
+    "platformSupport": 4
+  },
+  "publishedAt": "2026-09-29",
+  "lastUpdated": "2026-09-29",
+  "author": {
+    "name": "TrustedSkills Team",
+    "bio": "We assess AI agent skills by installing them, running them against real work, and reading the source. We don't accept payment for reviews."
+  },
+  "targetKeyword": "seo skill review",
+  "evidenceBasis": "hands-on",
+  "basisNote": "Run on the same site (trustedskills.dev) and with the same setup as our first batch of twelve SEO skills: no paid SEO data connected. One run on one site is one data point, not a benchmark.",
+  "runs": [
+    {
+      "testedAt": "2026-09-29",
+      "platform": "claudecode",
+      "skillVersion": "addyosmani/web-quality-skills@afa8da9 (seo 2.0)",
+      "task": "Improve the SEO of the trustedskills.dev homepage and one skill detail page: audit titles, meta descriptions, headings and anything else the audit turns up, then write the fixes. The site source could be read but not changed.",
+      "outcome": "`npx skills add addyosmani/web-quality-skills --skill seo` installed it first time, with one bundled reference file. The run took about ten minutes.\n\nChrome DevTools MCP was not available, so the run used the skill's stated fallback, the Lighthouse CLI (13.5.0). Both pages scored 100 on SEO and 67 on Agentic Browsing, a newer Lighthouse category the skill names. The only failing audit was `llms-txt`: our llms.txt lists its key pages as bare URLs, not Markdown links. We opened both reports and the file, and all three are as described.\n\nBecause Lighthouse only checks that tags exist, the skill's second step (inspect what Lighthouse can't) found the real issues in the raw HTML: a 70-character homepage title and a 178-character description, a 37-character skill-page title, and a skill-page description that reads badly (\"Helps with SEO, auditing as part of marketing, SEO, and growth tasks workflows.\"). We re-measured the lengths on the live pages and they match. The run said that description is the publisher's own text. It is not: our index marks it as text our own template generated. It traced each tag to the file that sets it and wrote the replacements as a patch. It proposed no heading changes, because both pages already met its heading rules.\n\nThe skill's schema reference shows an FAQPage example with no note that Google stopped showing FAQ rich results on 7 May 2026. Its References section links to two sibling skills (`core-web-vitals`, `web-quality-audit`) that the registry command does not install.",
+      "environment": "Claude Code subagent (Sonnet 5) with the installed SKILL.md loaded as its instructions. Tools: WebFetch, WebSearch, Bash (curl, node, npx lighthouse). No Chrome DevTools MCP, no API keys, no Search Console."
+    }
+  ],
+  "summary": "seo is a technical and on-page SEO skill from Addy Osmani's web-quality-skills, the same publisher as the core-web-vitals skill we rate highly. It starts from Lighthouse, then checks the things Lighthouse can't see, and it tells the agent not to promise ranking changes. On our site Lighthouse scored 100 and the real work was in the raw HTML: titles and descriptions it fixed with source-level patches. Two gaps: its FAQ schema example is out of date, and it links to sibling skills it doesn't install.",
+  "strengths": [
+    {
+      "title": "Evidence before advice",
+      "body": "Lighthouse first, then headers, robots.txt, canonicals and the raw HTML. On our site that second step found everything worth fixing, because Lighthouse passed both pages."
+    },
+    {
+      "title": "Length is a guide, not a rule",
+      "body": "It calls 50–60 characters for titles \"only a rough linting proxy, not a pass/fail limit\", and says Google may pick page text over the meta description."
+    },
+    {
+      "title": "No ranking promises",
+      "body": "\"Do not invent ranking-factor weights or promise ranking changes.\" The run's fixes were framed as better snippets, not better rankings."
+    },
+    {
+      "title": "Current on AI discoverability",
+      "body": "It knows Lighthouse's Agentic Browsing checks, which our Lighthouse 13.5.0 had, and calls llms.txt optional rather than a ranking factor."
+    }
+  ],
+  "limitations": [
+    {
+      "title": "Out-of-date FAQ example",
+      "body": "Its structured-data reference shows FAQPage markup with no warning. Google stopped showing FAQ rich results on 7 May 2026, so that example no longer earns a rich result."
+    },
+    {
+      "title": "Links to skills it doesn't install",
+      "body": "Its References section points to `../core-web-vitals/` and `../web-quality-audit/`. Install `seo` alone and both links go nowhere."
+    },
+    {
+      "title": "Schema examples don't cover every site",
+      "body": "The reference covers Organization, Article, Product, FAQ and Breadcrumb. Our pages use WebSite and SoftwareApplication, which it doesn't show."
+    }
+  ],
+  "bestFor": [
+    {
+      "title": "Fixing titles, descriptions and headings in code",
+      "body": "It worked from the live page back to the source file and produced a patch you can review."
+    },
+    {
+      "title": "Teams that can run Lighthouse",
+      "body": "With Lighthouse or Chrome DevTools MCP, every finding starts from a measured check."
+    }
+  ],
+  "notFor": "Keyword research, content strategy or link building. It is a technical and on-page skill, and says outright that a Lighthouse score is not a ranking prediction.",
+  "links": [
+    { "label": "addyosmani/web-quality-skills repository", "href": "https://github.com/addyosmani/web-quality-skills" },
+    { "label": "Google: FAQ rich results retired", "href": "https://developers.google.com/search/docs/appearance/structured-data/faqpage" }
+  ]
+}
