@@ -1,6 +1,6 @@
 {
   "slug": "schema-markup",
-  "status": "draft",
+  "status": "published",
   "title": "schema (marketingskills) Review: Valid JSON-LD, and It Didn't Invent Ratings",
   "description": "We ran coreyhaines31's schema skill (listed here as schema-markup) on two real pages. It produced valid, accurate JSON-LD and caught a redirect bug in our existing markup. It was renamed upstream, and it lists FAQ and HowTo with no caveat.",
   "skillSlug": "schema-markup",

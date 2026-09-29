@@ -1,6 +1,6 @@
 {
   "slug": "analytics-tracking",
-  "status": "draft",
+  "status": "published",
   "title": "analytics Review: A Solid Tracking Plan, Once You Find It",
   "description": "We ran coreyhaines31's analytics skill (listed here as analytics-tracking) on a real site. It produced a usable GA4 tracking plan and exposed two untracked key actions, but it has no method for auditing a site you can't log in to.",
   "skillSlug": "analytics-tracking",

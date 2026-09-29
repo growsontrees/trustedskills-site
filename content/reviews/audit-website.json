@@ -1,6 +1,6 @@
 {
   "slug": "audit-website",
-  "status": "draft",
+  "status": "published",
   "title": "audit-website (squirrelscan) Review: Broad Crawl, One Big Miss",
   "description": "We ran squirrelscan's audit-website skill on a real site, with a quick pass and a 500-page crawl. It found broken links, missing security headers and schema gaps, and mapped them to source files. It did not flag the site-wide canonical error that simpler skills caught.",
   "skillSlug": "audit-website",

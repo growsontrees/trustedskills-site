@@ -1,6 +1,6 @@
 {
   "slug": "core-web-vitals",
-  "status": "draft",
+  "status": "published",
   "title": "core-web-vitals Review: Evidence First, and It Uses INP",
   "description": "We ran Addy Osmani's core-web-vitals skill on a real homepage. It measured before advising, labelled lab and field data correctly, and traced each metric to a specific element. It leans on a sibling skill that isn't installed with it.",
   "skillSlug": "core-web-vitals",

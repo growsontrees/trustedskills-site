@@ -1,6 +1,6 @@
 {
   "slug": "technical-seo-checker",
-  "status": "draft",
+  "status": "published",
   "title": "technical-seo-checker Review: Found Our Worst Bug, Needs Its Whole Bundle",
   "description": "We ran aaron-he-zhu's technical-seo-checker on a real site. It found a site-wide canonical error, missing sitemap dates and missing security headers. It has moved repositories, and installed on its own it loses its helper scripts.",
   "skillSlug": "technical-seo-checker",

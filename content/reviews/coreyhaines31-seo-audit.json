@@ -1,6 +1,6 @@
 {
   "slug": "coreyhaines31-seo-audit",
-  "status": "draft",
+  "status": "published",
   "title": "seo-audit (marketingskills) Review: Found Two Indexing Bugs With Nothing but curl",
   "description": "We ran coreyhaines31's seo-audit skill on a real site with no paid SEO tools. It found a site-wide canonical error and a canonical-to-404 chain, both confirmed. It can't give you Core Web Vitals or backlinks on its own.",
   "skillSlug": "coreyhaines31-seo-audit",

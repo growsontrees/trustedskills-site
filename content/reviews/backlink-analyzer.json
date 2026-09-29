@@ -1,6 +1,6 @@
 {
   "slug": "backlink-analyzer",
-  "status": "draft",
+  "status": "published",
   "title": "backlink-analyzer Review: Honest About Having No Data, and Frozen",
   "description": "We ran aaron-he-zhu's backlink-analyzer on a real site with no backlink database connected. It refused to invent numbers, which is right, and produced very little. The skill is also frozen: its author merged it into a different skill.",
   "skillSlug": "backlink-analyzer",
