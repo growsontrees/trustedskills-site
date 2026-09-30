@@ -189,11 +189,10 @@ jobs:
         if: success() && steps.deploy.outputs.uuid != ''
         env:
           ZONE: ${{ secrets.CF_ZONE_ID }}
-          EMAIL: ${{ secrets.CF_EMAIL }}
-          GLOBAL_KEY: ${{ secrets.CF_API_KEY }}
+          TOKEN: ${{ secrets.CF_API_TOKEN }}
         run: |
           if [ -z "$ZONE" ]; then echo "CF_ZONE_ID not set - skipping purge."; exit 0; fi
           curl -s -X POST "https://api.cloudflare.com/client/v4/zones/$ZONE/purge_cache" \
-            -H "X-Auth-Email: $EMAIL" -H "X-Auth-Key: $GLOBAL_KEY" \
+            -H "Authorization: Bearer $TOKEN" \
             -H "Content-Type: application/json" --data '{"purge_everything":true}' \
             | jq -r 'if .success then "cache purged" else "purge failed: \(.errors)" end'

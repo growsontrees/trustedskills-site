@@ -22,8 +22,6 @@ jobs:
     env:
       ZONE: ${{ secrets.CF_ZONE_ID }}
       TOKEN: ${{ secrets.CF_API_TOKEN }}
-      GLOBAL_KEY: ${{ secrets.CF_API_KEY }}
-      EMAIL: ${{ secrets.CF_EMAIL }}
       APPLY: ${{ inputs.apply }}
       TARGET_IP: ${{ inputs.target_ip }}
     steps:
@@ -32,20 +30,13 @@ jobs:
           set -euo pipefail
           API=https://api.cloudflare.com/client/v4
 
-          # Pick whichever credential this zone actually accepts. Bearer token
-          # first; fall back to the legacy global key + email pair.
-          auth_bearer=(-H "Authorization: Bearer ${TOKEN}")
-          auth_global=(-H "X-Auth-Email: ${EMAIL}" -H "X-Auth-Key: ${GLOBAL_KEY}")
-
-          probe() { curl -s "${@}" "$API/zones/$ZONE" | jq -r '.success'; }
-
-          if [ "$(probe "${auth_bearer[@]}")" = "true" ]; then
-            AUTH=("${auth_bearer[@]}"); echo "auth: API token"
-          elif [ "$(probe "${auth_global[@]}")" = "true" ]; then
-            AUTH=("${auth_global[@]}"); echo "auth: global key"
-          else
-            echo "Neither credential could read zone $ZONE"; exit 1
+          # Only the scoped "TrustedSkills" API token. The account-wide Global
+          # API Key is not used.
+          AUTH=(-H "Authorization: Bearer ${TOKEN}")
+          if [ "$(curl -s "${AUTH[@]}" "$API/zones/$ZONE" | jq -r '.success')" != "true" ]; then
+            echo "CF_API_TOKEN could not read zone $ZONE"; exit 1
           fi
+          echo "auth: API token"
 
           cf() { curl -s "${AUTH[@]}" -H "Content-Type: application/json" "$@"; }
 

@@ -17,10 +17,9 @@ log "Restarting PM2 app 0 with correct PM2_HOME"
 PM2_HOME=/root/.pm2 pm2 restart 0
 
 log "Purging Cloudflare cache"
-CF_KEY=$(cat /opt/app/openclaw/credentials/cloudflare-api-key)
+: "${CF_API_TOKEN:?set CF_API_TOKEN to the TrustedSkills Cloudflare API token}"
 curl -sS -X POST "https://api.cloudflare.com/client/v4/zones/6768c255376b65f261dac167b948880c/purge_cache" \
-  -H "X-Auth-Email: peterd@xtopia.com.au" \
-  -H "X-Auth-Key: ${CF_KEY}" \
+  -H "Authorization: Bearer ${CF_API_TOKEN}" \
   -H "Content-Type: application/json" \
   --data '{"purge_everything":true}' >/tmp/trustedskills-cf-purge.json
 
