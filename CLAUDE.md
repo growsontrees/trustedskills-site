@@ -6,6 +6,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Read `TASKS.md` in the repo root before starting work.** It contains the current prioritized task list with context, root cause analysis, affected files, and dependencies. When you complete a task, update TASKS.md to mark it done with the date.
 
+## WLDM canary test: 52 frozen pages
+
+From 2026-09-30 until Peter says it is over (planned about 25 Nov 2026), a Cloudflare Worker (`trustedskills-canary`) reads 52 pages as they pass and compares two groups. A change to any of them can break the 8-week test. Full rules: Paperclip task ONE-139. If you are not sure, ask Peter on ONE-139 before you ship.
+
+**Frozen pages.** `/collections/seo-skills-worth-installing`, `/reviews/claude-seo`, and `/skills/<slug>` for:
+- Fixed group: coreyhaines31-seo-audit, audit-website, technical-seo-checker, core-web-vitals, on-page-seo-auditor, seo-meta, schema-markup, find-keywords, target-serp, backlink-analyzer, ai-seo, analytics-tracking, claude-seo, web-scraping, data-quality-frameworks, polars, exploratory-data-analysis, duckdb, database-schema-designer, sql-optimization, xlsx, data-visualization, developing-with-streamlit, data-storytelling, github-actions-templates, n8n-workflow-patterns
+- Control group: planner, using-git-worktrees, test-driven-development, webapp-testing, systematic-debugging, refactor, code-review-expert, differential-review, dependency-upgrade, commit-work, changelog-generator, create-readme, doc-coauthoring, create-architectural-decision-record, mermaid-diagrams, jsdoc-typescript-docs, api-documentation-generator, documentation-writer, developer-onboarding, create-agentsmd, obra-writing-clearly-and-concisely, humanizer, copy-editing, quality-documentation-manager
+
+Do not change what these pages show, their links, URL or redirects. The normal registry refresh (stars, installs, tier, dates) is fine.
+
+**OK without asking:** publish reviews of skills not in the list; update live reviews except `claude-seo`; write `status: draft` reviews for any skill; change home, `/reviews`, `/collections`, `/docs`, `/submit` and every other skill page.
+
+**Needs Peter's written go on ONE-139:**
+1. Publishing a review of any listed skill (a live review changes its skill page). The 12 SEO reviews stay `draft`.
+2. Any change to `content/collections/seo-skills-worth-installing.json`, including the ONE-137 swap.
+3. Publishing the draft collections `data-and-automation-skills`, `claude-code-dev-workflow-skills`, `software-documentation-skills`.
+4. Any change to `content/reviews/claude-seo.json`.
+5. ONE-128 phase C (`PUBLISHER_DESCRIPTIONS_ONLY`), or anything else that changes which `description` the listed skills carry.
+6. Changes to `app/skills/[slug]/`, `app/reviews/[slug]/`, `app/collections/[slug]/`, or shared parts they render inside `<main>`. The Worker reads `main h1`, `main h2`, `main aside` (`dl`, `dt`, `dd`, `time`, `p`), the install panel `<pre>` and selected tab, links in `<main>`, `meta name="description"` and the JSON-LD block.
+7. Anything under `/id/` or `/id/` in a sitemap; `robots.txt` rules for AI bots; `ETag`, `Last-Modified` or cache headers on these pages.
+8. The Worker, its 54 routes, the D1 database `trustedskills-canary-log`, or the Cloudflare bot settings.
+
 ## Commands
 
 ```bash

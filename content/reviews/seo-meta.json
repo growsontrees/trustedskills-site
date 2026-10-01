@@ -1,6 +1,6 @@
 {
   "slug": "seo-meta",
-  "status": "published",
+  "status": "draft",
   "title": "seo-meta Review: Deleted Upstream, and Built for Plumbers",
   "description": "We tried to install jezweb's seo-meta skill and ran its last published copy against a real site. It no longer installs, and its templates assume every site is a local trade business.",
   "skillSlug": "seo-meta",

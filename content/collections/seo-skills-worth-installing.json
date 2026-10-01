@@ -5,75 +5,75 @@
   "description": "A working SEO stack for agent-assisted sites — ordered by the stage of the job you'd actually use each one at, not by download count.",
   "emoji": "🔍",
   "publishedAt": "2026-09-27",
-  "lastUpdated": "2026-09-29",
+  "lastUpdated": "2026-09-27",
   "targetKeyword": "best SEO skills for Claude Code",
   "curator": {
     "name": "TrustedSkills Editorial",
     "bio": "Curated with input from a decade of hands-on agency SEO work across technical audits, content strategy and programmatic builds."
   },
   "intro": "There are close to 400 skills in this registry that mention SEO somewhere. Almost none of that is useful as a shopping list, because SEO isn't one job — it's six or seven different jobs that happen in a rough order, and a skill that's excellent at the fourth one is useless if you haven't done the first.\n\nSo this list isn't \"the 12 most installed SEO skills\". It's a stack: one or two picks per stage of an actual SEO engagement, in the order you'd reach for them. If you install all twelve you have coverage from first crawl to measurement. If you install the first three you have the 80% that matters on a site nobody has audited yet.\n\nThe stages, in order: **diagnose → fix the technical floor → fix the page → structure the data → find the demand → study the competition → earn authority → optimise for AI search → measure**.",
-  "criteria": "**How the twelve were chosen.** Each pick had to (1) be present in this registry with a resolvable source repository, (2) do one clearly-defined job rather than being a general marketing assistant, and (3) occupy a distinct stage in the workflow above — no two picks doing the same job.\n\nWhere two skills competed for the same slot, the tiebreak was publisher track record and install base, both visible on each card below.\n\n**What changed after testing.** We ran the original twelve on our own site in September 2026. Three got a Not Recommended verdict: `on-page-seo-auditor` and `backlink-analyzer` no longer install under their listed names, and their author has frozen them in favour of renamed skills; `seo-meta` was deleted by its author, and its templates only fit a local trade business. A list called \"worth installing\" should not include skills we tell you not to install, so we replaced them. Their reviews are still published, so you can read why.\n\n**What we deliberately left off.**\n\n- **Programmatic SEO skills.** There's a well-installed `programmatic-seo` skill in the registry and it is genuinely capable. It's off this list on purpose: pointing an agent at page generation before you've fixed a site's technical floor is the fastest way to manufacture an index-bloat problem. It belongs in a later collection, not a starter twelve.\n- **All-in-one marketing suites.** Several broad suites include an SEO module. They're reasonable buys, but they make it hard to tell which part of the toolchain you're actually using.\n- **Niche vertical skills.** App-store optimisation and research-lab-specific SEO skills are both in the registry and both fine at their job — just not part of a general web SEO stack.\n- **Anything we couldn't trace to a source.** If we couldn't open the repository, it didn't make the list.",
-  "evidenceNote": "**Nine of the twelve were hands-on tested by us, once each, on the same site (trustedskills.dev) in September 2026.** Each of those cards links to its full review, and the verdict and score on the card come from that run. One run on one site is one data point, not a benchmark.\n\n**The other three are replacement picks and have not been tested yet**: `agricidaniel-seo-page`, `seo` and `build-links`. We chose them from their source and documentation, publisher and install base, the same basis the whole list started from. They are next in our review queue, and their cards will carry a 🧪 **Reviewed** badge once they have been run.\n\nThree of the tested picks were renamed or moved upstream, so the registry's install command for them no longer works. Those cards carry a warning, and each note below gives the command that worked for us.",
+  "criteria": "**How the twelve were chosen.** Each pick had to (1) be present in this registry with a resolvable source repository, (2) do one clearly-defined job rather than being a general marketing assistant, and (3) occupy a distinct stage in the workflow above — no two picks doing the same job.\n\nWhere two skills competed for the same slot, the tiebreak was publisher track record and install base, both visible on each card below.\n\n**What we deliberately left off.**\n\n- **Programmatic SEO skills.** There's a well-installed `programmatic-seo` skill in the registry and it is genuinely capable. It's off this list on purpose: pointing an agent at page generation before you've fixed a site's technical floor is the fastest way to manufacture an index-bloat problem. It belongs in a later collection, not a starter twelve.\n- **All-in-one marketing suites.** Several broad suites include an SEO module. They're reasonable buys, but they make it hard to tell which part of the toolchain you're actually using.\n- **Niche vertical skills.** App-store optimisation and research-lab-specific SEO skills are both in the registry and both fine at their job — just not part of a general web SEO stack.\n- **Anything we couldn't trace to a source.** If we couldn't open the repository, it didn't make the list.",
+  "evidenceNote": "**None of the twelve has been hands-on tested by us yet.** This is a curated shortlist, not a benchmark. Each pick is based on what the skill's source and documentation say it does, its publisher, and its install base in this registry — all of which you can check yourself from the cards below.\n\nThat distinction matters and we'd rather be boring about it than imply work we haven't done. As our hands-on review programme works through these, each entry that gets run against real work will carry a 🧪 **Reviewed** badge linking to the review, and the note here will shrink accordingly. Nothing on this page reports a measured result.",
   "entries": [
     {
       "skillSlug": "coreyhaines31-seo-audit",
       "role": "Stage 1 — Diagnose",
-      "note": "The most-installed SEO skill in the registry, and it earned its place. Working from nothing but page fetches and a web search, it found two separate indexing bugs on our site and put them at the top of its list, where they belonged. It is current (INP, not FID) and says where its own checks can fail. It can't do Core Web Vitals, backlinks or a full-site crawl on its own, which is what the rest of this list is for."
+      "note": "The most-installed SEO skill in the registry by a wide margin, and the right first move on a site nobody has looked at properly. It's part of `coreyhaines31/marketingskills`, a large and heavily-adopted marketing skill suite, so the audit sits alongside adjacent skills you'll likely want later. Start here to get a map of what's wrong before you spend effort anywhere else."
     },
     {
       "skillSlug": "audit-website",
       "role": "Stage 1 — Diagnose (crawl level)",
-      "note": "Where the previous pick gives you a strategic read, this one puts a real crawler behind your agent: 260-plus rules across SEO, performance, security and accessibility. On our site it found things the page-fetch skills missed, such as a broken docs link and missing security headers. It also missed the canonical error that four simpler skills caught, and one of the three findings we checked was a false positive. Run it alongside stage 1, not instead of it."
+      "note": "Where the previous pick gives you a strategic read, this one goes after the concrete crawl-level breakage: SEO issues, broken links and content gaps. Published by Squirrelscan from its own skills repository. Run both — they disagree often enough to be worth the five minutes, and broken links are the cheapest win on any established site."
     },
     {
       "skillSlug": "technical-seo-checker",
       "role": "Stage 2 — Technical floor",
-      "note": "Crawl, indexing, speed and mobile checks with clear P0/P1/P2 severities. In our run it found the most damaging defect of all twelve: a site-wide canonical tag pointing every page at the homepage. It uses INP, not FID, and it won't invent metrics it can't measure. The skill has moved repositories, so the listed command fails; `npx skills add aaron-he-zhu/aaron-marketing-skills -s technical-seo-checker` worked for us. Installed alone, its helper scripts are missing."
+      "note": "Crawl errors, site speed problems and mobile usability — the unglamorous floor that has to be solid before content work returns anything. Part of `aaron-he-zhu/seo-geo-claude-skills`, a focused SEO-and-GEO suite rather than a general marketing kit, which is why three of its skills earn slots here."
     },
     {
       "skillSlug": "core-web-vitals",
       "role": "Stage 2 — Technical floor (performance)",
-      "note": "The most disciplined skill we tested. It measures before it advises, keeps lab and field numbers apart, uses INP rather than the retired FID, and won't call a metric failing without evidence. On our homepage it traced LCP, layout shift and main-thread cost to specific elements and scripts. It points to measurement guides in a sibling `performance` skill from the same publisher, Addy Osmani, so install both."
+      "note": "Targeted analysis of Core Web Vitals with specific optimisation suggestions. Published by Addy Osmani as part of `web-quality-skills` — the strongest publisher signal on this list, given his long track record on web performance specifically. One thing to check on any performance skill, this one included: that it works in INP rather than FID, since Google replaced the latter in 2024. Our own summary of this skill still says FID, which is a gap in our registry data rather than a judgement on the skill."
     },
     {
-      "skillSlug": "agricidaniel-seo-page",
+      "skillSlug": "on-page-seo-auditor",
       "role": "Stage 3 — Fix the page",
-      "note": "Once the site-wide floor is solid, the work becomes page by page. This is the single-page module of the claude-seo suite: title, meta, headings, internal links, content quality, schema and images for one URL. We have run the full claude-seo audit, and its review is published, but we have not yet tested this module installed on its own. Its checks call the suite's helper scripts, so expect some to be skipped if you install only this skill. Not yet tested by us."
+      "note": "Once the site-wide floor is solid, the work becomes page-by-page: content and structure analysis with actionable recommendations for the page in front of you. This is the pick you'll run most often over the life of a site, which is why it's worth having even though the audit skills above overlap it slightly."
     },
     {
-      "skillSlug": "seo",
-      "role": "Stage 3 — Fix the page (titles, meta and headings)",
-      "note": "Titles and meta descriptions are still some of the highest-leverage lines on a page. This skill from Addy Osmani's `web-quality-skills` covers them, plus headings, images and internal links, and it starts from Lighthouse evidence rather than rules of thumb. Its guidance treats the 50–60 character title length as a rough proxy, not a hard limit, and it tells the agent not to promise ranking changes. Same publisher as the stage 2 performance pick. Not yet tested by us."
+      "skillSlug": "seo-meta",
+      "role": "Stage 3 — Fix the page (titles and meta)",
+      "note": "Narrow on purpose: titles and meta descriptions, optimised for ranking and click-through. Titles are still one of the highest-leverage things on a page and they're tedious to do well at volume, which makes this exactly the kind of small job worth handing to an agent. From `jezweb/claude-skills`."
     },
     {
       "skillSlug": "schema-markup",
       "role": "Stage 4 — Structure the data",
-      "note": "It only marked up what the page actually shows, which is the most important thing a schema generator can do. The JSON-LD it wrote was valid, it caught a redirect bug in our existing markup, and it declined to add ratings or prices we don't have. It was renamed upstream: install it with `npx skills add coreyhaines31/marketingskills --skill schema`. It lists FAQPage and HowTo with no warning about Google's rich-result limits on them, so check before you ship those."
+      "note": "Generates Schema.org markup for rich-snippet eligibility. Well-installed, and structured data is genuinely a place where generation beats hand-writing JSON-LD. One caution from experience: always validate generated markup against the page it describes before shipping it — schema that misdescribes its page is worse than no schema, and no generator can check that for you."
     },
     {
       "skillSlug": "find-keywords",
       "role": "Stage 5 — Find the demand",
-      "note": "A sound keyword-research method in one file: intent, tiers, clusters, and a cannibalisation check before you build anything. It installed first time and ran cleanly. But its output is built around search volume and difficulty, and it doesn't tell you where to get them. With no data source connected you get a well-structured list with the numbers missing. Worth it if you already have a volume source behind an MCP server."
+      "note": "Extracts relevant keywords from a body of text — useful for working out what a page you already have is actually about, which is a different and often more valuable question than what you wish it ranked for. Part of `calm-north/seojuice-skills`. Note this is text-derived keyword extraction, not search-volume data; for volume you still need a data provider behind an MCP server."
     },
     {
       "skillSlug": "target-serp",
       "role": "Stage 6 — Study the competition",
-      "note": "A tidy playbook for featured snippets, People Also Ask and rich results. The page-level advice it gave us was concrete. But its first step assumes you can see a live Google results page, and it has no fallback. Without a SERP data source you get good formatting advice and no evidence about which features are really there. This is still the step most people skip, so it keeps its slot. Connect a SERP source before you rely on it."
+      "note": "Identifies what's currently ranking for a keyword so you can see the shape of what you're up against before writing anything. This is the step most people skip, and it's the reason a lot of otherwise-good content never ranks — it was written to a brief rather than to a SERP."
     },
     {
-      "skillSlug": "build-links",
+      "skillSlug": "backlink-analyzer",
       "role": "Stage 7 — Earn authority",
-      "note": "Our test of the previous pick taught us that backlink analysis without a paid link database has nothing to analyse. This skill does the other half of the job: it diagnoses which kind of authority a site is short of, then designs a campaign around linkable assets, prospects and outreach. That work doesn't need a link database to start. Calibrate expectations: it plans link acquisition, it doesn't do it. From `calm-north/seojuice-skills`, the same publisher as stage 5. Not yet tested by us."
+      "note": "Analyses a site's backlink profile for authority, risk and opportunity. Off-page is the hardest stage to automate honestly, so calibrate expectations: this is analysis to direct your effort, not link acquisition. Depth here depends heavily on what backlink data source you can connect."
     },
     {
       "skillSlug": "ai-seo",
       "role": "Stage 8 — Optimise for AI search",
-      "note": "The most useful AI search skill we tested. It separates Google's stated position (write for people, no special AI markup) from what ChatGPT, Perplexity and agents actually reward. Its audit found real problems on our site, and the free scanner it names worked as written. Two cautions: several headline statistics in the skill have no source, and no skill can tell you whether you are being cited without access to the AI platforms themselves."
+      "note": "AI search is now a meaningful share of how people find things, and being cited by an assistant follows different rules from ranking blue links. This pick covers that stage from the same widely-adopted `marketingskills` suite as the stage 1 audit. Fair warning: our own registry summary for this one is auto-generated and thin, so treat the source repository as the real documentation before relying on it."
     },
     {
       "skillSlug": "analytics-tracking",
       "role": "Stage 9 — Measure",
-      "note": "Last on the list and not optional: without measurement the other stages are opinion. On our site it produced a practical GA4 event plan, and found that our two most important user actions were not tracked at all. It was renamed upstream: install it with `npx skills add coreyhaines31/marketingskills --skill analytics`. It has no workflow for auditing a site whose dashboards you can't open, so pair it with Search Console access."
+      "note": "Conversions, bounce rate and user flow. Last on the list and non-negotiable: without measurement the other eleven stages are opinion. Pair it with Search Console data — analytics tells you what happened on the site, only Search Console tells you what happened in the results."
     }
   ]
 }
