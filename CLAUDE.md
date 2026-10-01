@@ -23,10 +23,12 @@ Do not change what these pages show, their links, URL or redirects. The normal r
 2. Any change to `content/collections/seo-skills-worth-installing.json`, including the ONE-137 swap.
 3. Publishing the draft collections `data-and-automation-skills`, `claude-code-dev-workflow-skills`, `software-documentation-skills`.
 4. Any change to `content/reviews/claude-seo.json`.
-5. ONE-128 phase C (`PUBLISHER_DESCRIPTIONS_ONLY`), or anything else that changes which `description` the listed skills carry.
+5. ONE-128 phase C (`PUBLISHER_DESCRIPTIONS_ONLY`), or anything else that changes which `description` the listed skills carry. Registry PR #160 stays unmerged until the test ends (Peter, 2026-10-01).
 6. Changes to `app/skills/[slug]/`, `app/reviews/[slug]/`, `app/collections/[slug]/`, or shared parts they render inside `<main>`. The Worker reads `main h1`, `main h2`, `main aside` (`dl`, `dt`, `dd`, `time`, `p`), the install panel `<pre>` and selected tab, links in `<main>`, `meta name="description"` and the JSON-LD block.
 7. Anything under `/id/` or `/id/` in a sitemap; `robots.txt` rules for AI bots; `ETag`, `Last-Modified` or cache headers on these pages.
 8. The Worker, its 54 routes, the D1 database `trustedskills-canary-log`, or the Cloudflare bot settings.
+
+Auto-unlisting (`isUnlisted()`) skips the 50 frozen slugs in `lib/canary-frozen-slugs.json`. Empty that list when the test ends.
 
 ## Commands
 

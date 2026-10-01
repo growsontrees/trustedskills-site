@@ -1,6 +1,6 @@
 {
   "slug": "seo",
-  "status": "draft",
+  "status": "published",
   "title": "seo Review: Lighthouse First, and No Ranking Promises",
   "description": "We ran Addy Osmani's seo skill on our homepage and a skill page. It used Lighthouse as evidence, treated title length as a guide rather than a rule, and wrote fixes against our source. Its schema reference still shows an FAQ example with no warning.",
   "skillSlug": "seo",

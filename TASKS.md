@@ -11,7 +11,9 @@ Read the "WLDM canary test" section in `CLAUDE.md` before any change that could 
 
 - The 12 SEO reviews (`8b48651`, reverted before push) and the ONE-137 collection swap.
 - Publishing the draft collections `data-and-automation-skills`, `claude-code-dev-workflow-skills`, `software-documentation-skills`.
-- ONE-128 phase C (`PUBLISHER_DESCRIPTIONS_ONLY`), and registry PR #160 too: once it merges, `sync-index.mjs` (already live) rewrites `description` on 48 of the 50 test skills, and that field renders in the header, meta description and JSON-LD with the flag off. Waiting on Peter's answer on ONE-139.
+- ONE-128 phase C (`PUBLISHER_DESCRIPTIONS_ONLY`), and registry PR #160 too: once it merges, `sync-index.mjs` (already live) rewrites `description` on 48 of the 50 test skills, and that field renders in the header, meta description and JSON-LD with the flag off. Peter decided 2026-10-01: #160 stays unmerged until the test ends.
+- Auto-unlisting skips the 50 frozen slugs (`lib/canary-frozen-slugs.json`, Peter 2026-10-01). Empty that list when the test ends.
+- Done 2026-10-01: the 3 ONE-137 replacement reviews (`agricidaniel-seo-page`, `seo`, `build-links`) are `published` and go live with the next deploy (Peter's go on ONE-139). They are not test pages, and the SEO collection does not change.
 
 ---
 

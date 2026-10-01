@@ -11,6 +11,7 @@ import {
   Shield,
   type IconComponent,
 } from "../components/icons";
+import canaryFrozen from "./canary-frozen-slugs.json";
 
 export type VerificationTier = "unverified" | "community" | "checked" | "verified" | "featured" | "official";
 
@@ -254,11 +255,17 @@ export const TIER_CONFIG: Record<VerificationTier, {
  * An unlisted skill is left out of listings, search, counts and the sitemap.
  * Its page still loads, is marked noindex, and shows UNLISTED_NOTICE.
  * scripts/discovery-routes.cjs mirrors this rule for the sitemap.
+ *
+ * The WLDM canary test's 50 frozen skill pages (lib/canary-frozen-slugs.json,
+ * ONE-139) are never unlisted while the test runs.
  */
+const CANARY_FROZEN_SLUGS = new Set<string>(canaryFrozen.slugs);
+
 export function isUnlisted(
-  skill: Pick<Skill, "skill_path_status" | "skill_path_checked_sha" | "install_status" | "install_checked_sha">
+  skill: Pick<Skill, "slug" | "skill_path_status" | "skill_path_checked_sha" | "install_status" | "install_checked_sha">
 ): boolean {
   return (
+    !CANARY_FROZEN_SLUGS.has(skill.slug) &&
     skill.skill_path_status === "not_found" &&
     skill.install_status === "missing" &&
     !!skill.install_checked_sha &&

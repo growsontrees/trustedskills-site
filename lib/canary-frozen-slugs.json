@@ -1,0 +1,15 @@
+{
+  "_comment": "WLDM canary test (ONE-139): the 50 skill pages frozen from 2026-09-30 until Peter ends the test (about 25 Nov 2026). isUnlisted() never unlists these, so a crawl cannot turn their pages noindex during the test. Empty this list when the test ends.",
+  "slugs": [
+    "coreyhaines31-seo-audit", "audit-website", "technical-seo-checker", "core-web-vitals", "on-page-seo-auditor",
+    "seo-meta", "schema-markup", "find-keywords", "target-serp", "backlink-analyzer", "ai-seo", "analytics-tracking",
+    "claude-seo", "web-scraping", "data-quality-frameworks", "polars", "exploratory-data-analysis", "duckdb",
+    "database-schema-designer", "sql-optimization", "xlsx", "data-visualization", "developing-with-streamlit",
+    "data-storytelling", "github-actions-templates", "n8n-workflow-patterns",
+    "planner", "using-git-worktrees", "test-driven-development", "webapp-testing", "systematic-debugging", "refactor",
+    "code-review-expert", "differential-review", "dependency-upgrade", "commit-work", "changelog-generator",
+    "create-readme", "doc-coauthoring", "create-architectural-decision-record", "mermaid-diagrams",
+    "jsdoc-typescript-docs", "api-documentation-generator", "documentation-writer", "developer-onboarding",
+    "create-agentsmd", "obra-writing-clearly-and-concisely", "humanizer", "copy-editing", "quality-documentation-manager"
+  ]
+}

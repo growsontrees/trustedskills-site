@@ -152,9 +152,13 @@ function addPaginatedRoutes(routes, basePath, itemCount) {
 
 // Mirrors isUnlisted() in lib/skill-config.ts: both registry checks could not
 // find the skill in its repository, at the same commit. Those pages are
-// noindex, so the sitemap must not list them.
+// noindex, so the sitemap must not list them. The canary test's frozen slugs
+// are never unlisted (ONE-139).
+const CANARY_FROZEN_SLUGS = new Set(require("../lib/canary-frozen-slugs.json").slugs);
+
 function isUnlisted(skill) {
   return (
+    !CANARY_FROZEN_SLUGS.has(skill.slug) &&
     skill.skill_path_status === "not_found" &&
     skill.install_status === "missing" &&
     !!skill.install_checked_sha &&
