@@ -51,7 +51,15 @@ const CURATED_TIERS = new Set(["official", "featured", "verified"]);
 // and then the site's existing description and source are left alone. So a
 // capture run that comes back empty cannot wipe a description that is already
 // there.
+//
+// Off until the WLDM canary test ends (about 25 Nov 2026). Most of its 50 test
+// skill pages carry a generated description, and this merge would replace it,
+// changing their header line, meta description and JSON-LD. Turn on with
+// SYNC_PUBLISHER_DESCRIPTIONS=1 only after Peter's go on ONE-139.
+const APPLY_PUBLISHER_DESCRIPTIONS = process.env.SYNC_PUBLISHER_DESCRIPTIONS === "1";
+
 function publisherDescription(fresh) {
+  if (!APPLY_PUBLISHER_DESCRIPTIONS) return null;
   const text = fresh.skill_md_description;
   return typeof text === "string" && text.trim() !== "" ? text : null;
 }
@@ -121,7 +129,11 @@ const dropped = site.skills.length - kept;
 site.skills = skills;
 writeFileSync(SITE_INDEX, JSON.stringify(site, null, 2));
 console.log(`Merged: ${kept} kept, ${added} new, ${dropped} no longer in the registry.`);
-console.log(`Descriptions: ${publisher} from the publisher's SKILL.md this run.`);
+console.log(
+  APPLY_PUBLISHER_DESCRIPTIONS
+    ? `Descriptions: ${publisher} from the publisher's SKILL.md this run.`
+    : "Descriptions: publisher SKILL.md text not applied (SYNC_PUBLISHER_DESCRIPTIONS is off)."
+);
 
 // Same passes the March import used. None of them call an LLM.
 const run = (script, ...args) =>
