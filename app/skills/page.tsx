@@ -35,6 +35,7 @@ const PAGE_SIZE = 24;
 const PLATFORMS = ["claudecode", "openclaw", "claude", "mcp", "cursor", "openai"];
 const SORTS = {
   ranked: "Top ranked",
+  signal: "Signal Score",
   installs: "Most installed",
   updated: "Recently updated",
   name: "A–Z",
@@ -53,6 +54,10 @@ function updatedAt(skill: Skill): number {
   return Number.isFinite(time) ? time : 0;
 }
 
+function signalSortKey(skill: Skill): number {
+  return skill.signal?.rankable ? skill.signal.score : -1;
+}
+
 // Each full sort of ~26k skills is done once per process and reused.
 const sortedCache = new Map<SortKey, Skill[]>();
 function sortedSkills(sort: SortKey): Skill[] {
@@ -60,6 +65,8 @@ function sortedSkills(sort: SortKey): Skill[] {
   if (!list) {
     const all = [...getAllSkills()];
     if (sort === "ranked") all.sort((a, b) => scoreSkill(b) - scoreSkill(a));
+    // Unrankable skills (too little measured) go after every scored one.
+    if (sort === "signal") all.sort((a, b) => signalSortKey(b) - signalSortKey(a) || (b.installs || 0) - (a.installs || 0));
     if (sort === "installs") all.sort((a, b) => (b.installs || 0) - (a.installs || 0));
     if (sort === "updated") all.sort((a, b) => updatedAt(b) - updatedAt(a));
     if (sort === "name") all.sort((a, b) => a.name.localeCompare(b.name));
@@ -98,6 +105,7 @@ export default async function SkillsPage({ searchParams }: { searchParams: Promi
 
   const categories = getCategories();
   const stats = getStats();
+  const hasSignal = !!stats.signal;
 
   const q = params.q?.toLowerCase();
   const filtered = sortedSkills(sort).filter(
@@ -147,6 +155,13 @@ export default async function SkillsPage({ searchParams }: { searchParams: Promi
         <p className="mt-2 text-sm text-ink-450">
           {stats.total_skills.toLocaleString("en-GB")} listings from across the agent ecosystem.
           None of them have been code-reviewed — check the source before you install.
+        </p>
+        <p className="mt-1 text-sm text-ink-450">
+          Looking for what&apos;s new?{" "}
+          <Link href="/trending" className="text-accent-400 transition-colors hover:text-accent-300">
+            See the repos gaining stars fastest
+          </Link>
+          .
         </p>
       </header>
 
@@ -259,7 +274,7 @@ export default async function SkillsPage({ searchParams }: { searchParams: Promi
             </p>
             <div className="flex items-center gap-1">
               <span className="mr-1 text-xs text-ink-500">Sort</span>
-              {(Object.keys(SORTS) as SortKey[]).map((key) => (
+              {(Object.keys(SORTS) as SortKey[]).filter((key) => key !== "signal" || hasSignal).map((key) => (
                 <Link key={key} href={href({ sort: key })} className={chip(sort === key)}>
                   {SORTS[key]}
                 </Link>

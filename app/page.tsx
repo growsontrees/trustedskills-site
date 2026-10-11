@@ -20,12 +20,14 @@ import {
   Boxes,
   Search as SearchIcon,
   Sliders,
+  Award,
   Terminal,
   TrendingUp,
   categoryIcon,
 } from "../components/icons";
 import { ButtonLink, Eyebrow, Panel, SectionHeading, Stat, cx } from "../components/ui";
-import { canonicalUrl } from "../lib/site-url";
+import { canonicalUrl, skillPath } from "../lib/site-url";
+import { getTrendingRepos } from "../lib/trending";
 
 export const metadata: Metadata = {
   alternates: { canonical: canonicalUrl("/") },
@@ -33,6 +35,7 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   const featured = getTopRankedSkills(6);
+  const trending = getTrendingRepos().slice(0, 6);
   const categories = getCategories();
   const stats = getStats();
   const tierCounts = getTierCounts();
@@ -211,7 +214,7 @@ export default function HomePage() {
       {/* ── Top skills ────────────────────────────────────────────────── */}
       <section className="mx-auto max-w-page px-4 pb-section sm:px-6 lg:px-8">
         <SectionHeading
-          icon={TrendingUp}
+          icon={Award}
           title="Top skills"
           description="Ranked by install count, publisher and listing quality, capped at two per publisher."
           action={{ href: "/skills", label: "Browse all" }}
@@ -222,6 +225,43 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      {/* ── Trending ──────────────────────────────────────────────────── */}
+      {trending.length > 0 ? (
+        <section className="mx-auto max-w-page px-4 pb-section sm:px-6 lg:px-8">
+          <SectionHeading
+            icon={TrendingUp}
+            title="Trending"
+            description={`Skill repos that gained the most GitHub stars in the last ${trending[0].days} days.`}
+            action={{ href: "/trending", label: "See all trending" }}
+          />
+          <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {trending.map((repo) => (
+              <li key={repo.repo}>
+                <Panel className="h-full" padded>
+                  <p className="truncate text-sm font-semibold text-ink-50">{repo.repo}</p>
+                  <p className="tabular mt-1 text-xs text-ink-450">
+                    +{repo.starsGained.toLocaleString("en-GB")} stars in {repo.days} days
+                  </p>
+                  <p className="mt-3 flex items-baseline gap-1.5 text-sm">
+                    <Link
+                      href={skillPath(repo.skills[0].slug)}
+                      className="truncate text-ink-300 transition-colors hover:text-ink-50"
+                    >
+                      {repo.skills[0].name}
+                    </Link>
+                    {repo.skills.length > 1 ? (
+                      <span className="shrink-0 text-xs text-ink-500">
+                        and {repo.skills.length - 1} more
+                      </span>
+                    ) : null}
+                  </p>
+                </Panel>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ) : null}
 
       {/* ── Categories ────────────────────────────────────────────────── */}
       <section className="mx-auto max-w-page px-4 pb-section sm:px-6 lg:px-8">
