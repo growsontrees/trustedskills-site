@@ -80,8 +80,21 @@ export interface Skill {
   published_at: string;
   updated_at: string;
   installs: number;
-  /** Upstream repository stars. Present for ~1% of the index. */
+  /**
+   * Stars of the repo that backs this skill (registry crawl). A repo number, not
+   * a skill number: every skill in a bundled repo carries the same value.
+   */
   stars?: number;
+  /** Canonical `owner/repo` of the backing GitHub repo, following renames. */
+  repo_github?: string;
+  /** Set when the backing repo ships more than 10 skills. */
+  bundled_in?: string;
+  bundle_size?: number;
+  /** Stars the backing repo gained over `stars_delta_days` (not always 30). */
+  stars_30d_delta?: number;
+  stars_delta_days?: number;
+  /** Signal Score from the registry (signal-score.mjs). See `SignalMeta`. */
+  signal?: SkillSignal;
   /** Primary language of the upstream repository, when known. */
   language?: string;
   verified: VerificationTier;
@@ -142,7 +155,35 @@ export interface SkillsIndex {
     total_installs: number;
     total_authors: number;
     last_updated: string;
+    signal?: SignalMeta;
   };
+}
+
+/** The components the registry can measure today, in display order. */
+export const SIGNAL_PARTS = ["velocity", "stars", "recency", "installs"] as const;
+export type SignalPart = (typeof SIGNAL_PARTS)[number];
+
+export interface SkillSignal {
+  /** 0-100, out of the weight the crawl can measure today. */
+  score: number;
+  /** Share of the intended weight measured for this skill; at most `SignalMeta.max_coverage`. */
+  coverage: number;
+  /** False when coverage is too thin to compare. Keep these out of ranked lists. */
+  rankable: boolean;
+  /** 0-1 per component; null when this skill had no data for it. */
+  parts: Record<SignalPart, number | null>;
+}
+
+/** Index-level facts about the Signal Score run, the same for every skill. */
+export interface SignalMeta {
+  version: number;
+  scored_at: string;
+  weights: Record<string, number>;
+  max_coverage: number;
+  min_coverage: number;
+  /** Components not crawled yet, with the reason. Missing for every skill alike. */
+  not_yet_measured: Record<string, string>;
+  rankable: number;
 }
 
 /**

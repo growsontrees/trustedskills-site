@@ -155,6 +155,9 @@ final.stats = {
   total_installs: final.skills.reduce((sum, skill) => sum + (skill.installs || 0), 0),
   total_authors: new Set(final.skills.map((skill) => skill.author)).size,
   last_updated: registry.stats?.last_updated ?? final.generated_at,
+  // Signal Score weights and coverage limits (registry signal-score.mjs). The
+  // per-skill scores travel on each skill; /trending reads these to explain them.
+  ...(registry.stats?.signal ? { signal: registry.stats.signal } : {}),
 };
 writeFileSync(SITE_INDEX, JSON.stringify(final, null, 2));
 console.log(`Wrote ${final.stats.total_skills} skills (${final.stats.total_authors} authors).`);
