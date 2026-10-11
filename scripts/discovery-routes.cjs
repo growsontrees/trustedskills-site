@@ -24,6 +24,7 @@ const CANONICAL_ROUTE_FAMILIES = Object.freeze([
   "/reviews/:slug",
   "/collections",
   "/collections/:slug",
+  "/trending",
   "/submit",
   "/contact",
 ]);
@@ -57,6 +58,7 @@ const STATIC_ROUTES = Object.freeze([
   "/docs",
   "/reviews",
   "/collections",
+  "/trending",
   "/submit",
   "/contact",
 ]);
