@@ -149,6 +149,21 @@ export const KNOWN_HOSTS = Object.freeze({
   "www.apache.org": "standards",
   "creativecommons.org": "standards",
   "unlicense.org": "standards",
+
+  // XML namespace and grantee URIs. These appear as identifiers in xmlns
+  // attributes, ElementTree maps and S3 ACLs, and are never fetched. purl.org
+  // is left out: it is a redirector, so a real fetch through it could land
+  // anywhere.
+  "schemas.openxmlformats.org": "namespace identifier",
+  "schemas.microsoft.com": "namespace identifier",
+  "schemas.android.com": "namespace identifier",
+  "schemas.openid.net": "namespace identifier",
+  "schemas.xmlsoap.org": "namespace identifier",
+  "www.sitemaps.org": "namespace identifier",
+  "soap.sforce.com": "namespace identifier",
+  "maven.apache.org": "namespace identifier",
+  "acs.amazonaws.com": "namespace identifier",
+  "xmlns.com": "namespace identifier",
 });
 
 /** Host suffixes treated the same way as KNOWN_HOSTS entries. */
