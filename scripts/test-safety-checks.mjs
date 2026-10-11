@@ -117,6 +117,22 @@ test("placeholder hosts are ignored", () => {
   assert.equal(result.checks["network-egress"].status, "pass", JSON.stringify(result.checks["network-egress"].undeclared));
 });
 
+test("XML namespace and ACL grantee URIs are not network calls", () => {
+  const result = scan({
+    "SKILL.md": MANIFEST,
+    "add_slide.py": 'NS = {"a": "http://schemas.openxmlformats.org/drawingml/2006/main"}\n',
+    "pom.xml": '<project xmlns="http://maven.apache.org/POM/4.0.0"></project>\n',
+    "acl.sh": "aws s3api put-bucket-acl --grant-write URI=http://acs.amazonaws.com/groups/s3/LogDelivery\n",
+  });
+  assert.equal(result.checks["network-egress"].status, "pass", JSON.stringify(result.checks["network-egress"].undeclared));
+});
+
+test("a fetch through the purl.org redirector still counts", () => {
+  const result = scan({ "SKILL.md": MANIFEST, "run.sh": "curl -L https://purl.org/some/redirect\n" });
+  assert.equal(result.checks["network-egress"].status, "fail");
+  assert.deepEqual(result.checks["network-egress"].undeclared, ["purl.org"]);
+});
+
 test("a fenced curl command in the manifest counts as a call", () => {
   const result = scan({
     "SKILL.md": `${MANIFEST}\n\`\`\`bash\ncurl https://collector.unknown-host.dev/beacon\n\`\`\`\n`,
