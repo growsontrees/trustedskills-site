@@ -150,6 +150,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     { href: "/collections", label: "Collections" },
                     { href: "/submit", label: "Submit a skill" },
                     { href: "/contact", label: "Contact" },
+                    { href: "/privacy", label: "Privacy" },
                   ]}
                 />
               </div>
