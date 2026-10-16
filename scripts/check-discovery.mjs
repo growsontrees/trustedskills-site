@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const require = createRequire(import.meta.url);
 const {
+  CANARY_FROZEN_SLUGS,
   CANONICAL_ROUTE_FAMILIES,
   INTENTIONAL_EXCLUSIONS,
   SITE_URL,
@@ -32,6 +33,28 @@ function routeFromUrl(value) {
 const expectedRoutes = getCanonicalRoutes();
 const expectedSet = new Set(expectedRoutes);
 assert.equal(expectedSet.size, expectedRoutes.length, "Canonical route inventory contains duplicates.");
+
+// The sitemap lists only strong skill pages. Too many URLs means the cut has
+// stopped working; too few skill pages means the index lost its Signal Scores
+// or long descriptions (an unsynced index has neither).
+const MAX_SITEMAP_URLS = 6000;
+const MIN_SKILL_URLS = 1000;
+const skillRouteCount = expectedRoutes.filter((route) => /^\/skills\/[^/]+$/.test(route)).length;
+assert.ok(
+  expectedRoutes.length <= MAX_SITEMAP_URLS,
+  `Sitemap would list ${expectedRoutes.length} URLs, over the ${MAX_SITEMAP_URLS} cap. Check isStrongSkill in discovery-routes.cjs.`
+);
+assert.ok(
+  skillRouteCount >= MIN_SKILL_URLS,
+  `Sitemap would list only ${skillRouteCount} skill pages (minimum ${MIN_SKILL_URLS}). ` +
+    "Is data/skills-index.json synced from the registry, with Signal Scores?"
+);
+for (const slug of CANARY_FROZEN_SLUGS) {
+  assert.ok(
+    expectedSet.has(`/skills/${encodeURIComponent(slug)}`),
+    `Canary skill ${slug} is missing from the sitemap (ONE-139 freezes these pages).`
+  );
+}
 
 // next-sitemap writes public/sitemap*.xml after `npm run build`. The committed
 // copies fall behind whenever routes change, so on a fresh clone this check
