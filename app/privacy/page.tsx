@@ -163,8 +163,8 @@ export default function PrivacyPage() {
           Questions about any of this, or a request to have something removed, go to{" "}
           <Link href="/contact" className="text-accent-400 transition-colors hover:text-accent-300">
             Contact
-          </Link>{" "}
-          — or write to [contact address here].
+          </Link>
+          .
         </Note>
       </section>
     </div>
