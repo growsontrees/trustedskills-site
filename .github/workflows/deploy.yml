@@ -138,25 +138,43 @@ jobs:
             echo "COOLIFY_WEBHOOK not set - image pushed, skipping deploy trigger."
             exit 0
           fi
-          # Reaching the VPS from a hosted runner is occasionally flaky, and the
-          # image is already published by this point - retry rather than leave
-          # the server sitting on the previous image.
+          # Hosted runners sometimes cannot open a connection to the VPS on port
+          # 8000 for several minutes at a time (curl exit 28), while the box
+          # itself is up and serving. Five tries over four minutes was not
+          # enough and failed the run about once a week. Retry for ~15 minutes
+          # with jitter instead.
+          #
+          # If the network path still never opens, the run ends as a warning,
+          # not a failure: the image is already in GHCR, the live site keeps the
+          # previous container, and the next run (at worst the daily rebuild)
+          # deploys it. An HTTP error is different - Coolify answered and said
+          # no (bad token, wrong uuid) - so that still fails the run at once.
           RESP=""
-          for attempt in 1 2 3 4 5; do
-            if RESP=$(curl -fsSL --connect-timeout 20 --max-time 60 \
-                        -X GET "$COOLIFY_WEBHOOK" -H "Authorization: Bearer $COOLIFY_TOKEN"); then
+          MAX=10
+          for attempt in $(seq 1 "$MAX"); do
+            RC=0
+            RESP=$(curl -fsSL --connect-timeout 15 --max-time 60 \
+                     -X GET "$COOLIFY_WEBHOOK" -H "Authorization: Bearer $COOLIFY_TOKEN") || RC=$?
+            if [ "$RC" -eq 0 ]; then
               echo "triggered on attempt $attempt"
               break
             fi
-            echo "attempt $attempt failed; retrying in $((attempt * 15))s"
-            sleep $((attempt * 15))
             RESP=""
+            if [ "$RC" -eq 22 ]; then
+              echo "::error::Coolify answered with an HTTP error. Check COOLIFY_TOKEN and COOLIFY_WEBHOOK."
+              exit 1
+            fi
+            [ "$attempt" -eq "$MAX" ] && break
+            WAIT=$(( (attempt * 20 < 90 ? attempt * 20 : 90) + RANDOM % 30 ))
+            echo "attempt $attempt/$MAX failed (curl exit $RC); retrying in ${WAIT}s"
+            sleep "$WAIT"
           done
 
           if [ -z "$RESP" ]; then
-            echo "Could not reach Coolify after 5 attempts. Image is pushed;"
-            echo "redeploy from the Coolify dashboard to pick it up."
-            exit 1
+            MSG="Could not reach Coolify after $MAX attempts (network path from the runner to the VPS). Image is pushed to GHCR; the next run deploys it, or redeploy from the Coolify dashboard."
+            echo "::warning::$MSG"
+            echo ":warning: $MSG" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
           fi
 
           echo "$RESP"
